@@ -20,9 +20,9 @@ export function AboutPreview() {
             <span className="t-label" style={{ display: "block", marginBottom: "1rem" }}>Where I work</span>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
               {[
-                ["Tech Policy & Startup Law", "IP, contracts, data privacy, regulatory mapping"],
-                ["Founder Legal", "Incorporation, equity, co-founder agreements"],
-                ["The 1000", "Tech harm research & policy advocacy"],
+                ["Legal Consulting", "Startups, NGOs & founders — tax, incorporation, compliance, expansion"],
+                ["The 1000", "Tech harm research. Real stories. On Spotify."],
+                ["AI Engineering", "Deployed through Entrora Systems"],
               ].map(([title, sub]) => (
                 <div key={title} style={{ border: "1px solid rgba(248,246,241,0.10)", borderRadius: "8px", padding: "0.85rem 1rem" }}>
                   <p style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.8rem", color: "rgba(248,246,241,0.9)" }}>{title}</p>
@@ -47,12 +47,12 @@ export function AboutPreview() {
             <span style={{ display: "inline-block", width: "1.5rem", height: "1px", background: "var(--c-gold)" }} />
             <span className="t-label">About</span>
           </div>
-          <h2 className="t-display t-display-lg" style={{ marginBottom: "1.25rem" }}>Two degrees. One practice.</h2>
+          <h2 className="t-display t-display-lg" style={{ marginBottom: "1.25rem" }}>Three practices. One person.</h2>
           <p className="t-body" style={{ marginBottom: "0.9rem" }}>
-            Law and computer science aren't the typical combination — but they're the one that makes this advisory rare. Most legal challenges in tech can't be solved by law alone, and most technical decisions carry legal consequences nobody tracks.
+            Legal consulting for entrepreneurs and organizations navigating Africa's regulatory landscape. Research through The 1000, which documents tech-enabled harm. AI engineering through Entrora Systems.
           </p>
           <p className="t-body" style={{ marginBottom: "2rem" }}>
-            I built a practice at that intersection: tech policy and startup law for companies, founder legal for the people building them.
+            Each practice is distinct. What connects them is a background in both law and computer science — and the recognition that the most consequential decisions sit at that intersection.
           </p>
           <Link href="/about" className="btn-text">
             About & selected work <ArrowRight size={12} />

@@ -6,18 +6,18 @@ import { ContactBubble } from "@/components/layout/ContactBubble";
 
 export const metadata: Metadata = {
   title: {
-    default: "Decra — AI, Law & Entrepreneurial Advisory",
+    default: "Decra Kerubo — Legal Consulting, The 1000 & AI Engineering",
     template: "%s | Decra",
   },
   description:
-    "I help startups, NGOs, and ambitious organizations build AI systems, navigate technology law, and make sound legal decisions throughout the entrepreneurial journey.",
-  keywords: ["AI Consultant Kenya", "AI Strategy Consultant Africa", "Technology Law Advisor Kenya", "Startup Legal Advisor Kenya", "AI for NGOs Africa", "Entrepreneurial Legal Consultant"],
+    "Legal consulting for startups, NGOs, and entrepreneurs across East Africa. Tech harm research through The 1000. AI engineering through Entrora Systems.",
+  keywords: ["Legal Consulting Kenya", "Startup Legal Advisor Kenya", "NGO Legal Advisory Africa", "Tech Law Kenya", "Tax Compliance Kenya", "Company Incorporation Kenya", "AI Engineering Kenya"],
   authors: [{ name: "Decra Kerubo" }],
   creator: "Decra",
   openGraph: {
     type: "website", locale: "en_KE", url: "https://decrakero.com", siteName: "Decra",
-    title: "Decra — AI, Law & Entrepreneurial Advisory",
-    description: "Helping startups, NGOs, and growth-focused organizations navigate AI, law, and the entrepreneurial journey.",
+    title: "Decra Kerubo — Legal Consulting, The 1000 & AI Engineering",
+    description: "Legal consulting for startups, NGOs, and entrepreneurs. Tech harm research. AI engineering.",
   },
   robots: { index: true, follow: true },
 };
