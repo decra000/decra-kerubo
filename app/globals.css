@@ -5,63 +5,48 @@
   --font-manjari: 'Manjari', sans-serif;
   --font-serif:   'DM Serif Display', serif;
 
-  /* Room-inspired palette */
-  --c-bg:         #F2EDE4;   /* warm linen — left wall */
-  --c-surface:    #FAF7F2;   /* off-white — bed frame/whites */
-  --c-sage-light: #C8D4C8;   /* lightest sage — pillow tones */
-  --c-sage:       #8FA898;   /* mid sage-grey — wall colour */
+  /* Room-inspired — warm linen + sage-grey + wood */
+  --c-bg:         #F5F0EB;   /* warm linen */
+  --c-surface:    #FDFCFA;   /* near white */
+  --c-sage-light: #C8D4CC;   /* lightest sage */
+  --c-sage:       #8FA898;   /* mid sage-grey wall */
   --c-sage-dark:  #6B8C7A;   /* deeper sage */
-  --c-sage-deep:  #4A6B58;   /* darkest sage — primary UI */
+  --c-sage-deep:  #4A6B58;   /* darkest sage */
   --c-ink:        #2A2820;   /* warm near-black */
-  --c-ink-mid:    #4A4840;   /* body text */
+  --c-ink-mid:    #4A4840;   /* body */
   --c-ink-muted:  #8A8478;   /* muted warm grey */
-  --c-gold:       #B07D3A;   /* warm wood / rattan tone */
-  --c-border:     rgba(74,107,88,0.12);
+  --c-gold:       #B07D3A;   /* rattan/wood */
+  --c-border:     rgba(42,40,32,0.10);
 
-  /* Spacing */
   --space-page-x:  clamp(1.5rem, 5vw, 7rem);
   --space-section: clamp(4rem, 8vw, 9rem);
   --max-w:         74rem;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 html { scroll-behavior: smooth; font-size: 16px; }
-
 body {
-  background: var(--c-bg);
-  color: var(--c-ink);
-  font-family: var(--font-manjari);
-  font-weight: 400;
-  -webkit-font-smoothing: antialiased;
-  line-height: 1.7;
+  background: var(--c-bg); color: var(--c-ink);
+  font-family: var(--font-manjari); font-weight: 400;
+  -webkit-font-smoothing: antialiased; line-height: 1.7;
 }
 
 /* ─── Typography ─── */
 .t-label {
-  font-size: 0.675rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--c-sage);
+  font-size: 0.675rem; font-weight: 700; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--c-sage);
 }
-
 .t-display {
-  font-family: var(--font-serif);
-  font-weight: 400;
-  line-height: 1.08;
-  letter-spacing: -0.01em;
-  color: var(--c-sage-deep);
+  font-family: var(--font-serif); font-weight: 400;
+  line-height: 1.08; color: var(--c-ink);
 }
-
-.t-display-xl  { font-size: clamp(2.8rem, 6vw, 5.2rem); }
+.t-display-xl  { font-size: clamp(2.8rem, 6vw, 5rem); }
 .t-display-lg  { font-size: clamp(2.1rem, 4vw, 3.4rem); }
 .t-display-md  { font-size: clamp(1.5rem, 2.5vw, 2.1rem); }
 .t-display-sm  { font-size: clamp(1.15rem, 1.8vw, 1.45rem); }
-
-.t-body    { font-size: 1rem;    color: var(--c-ink-mid); line-height: 1.8; }
-.t-body-sm { font-size: 0.875rem; color: var(--c-ink-muted); line-height: 1.75; }
-.t-caption { font-size: 0.75rem;  color: var(--c-ink-muted); }
+.t-body        { font-size: 1.05rem; color: var(--c-ink-mid); line-height: 1.85; }
+.t-body-sm     { font-size: 0.875rem; color: var(--c-ink-muted); line-height: 1.75; }
+.t-caption     { font-size: 0.75rem; color: var(--c-ink-muted); }
 
 /* ─── Layout ─── */
 .page-x  { padding-left: var(--space-page-x); padding-right: var(--space-page-x); }
@@ -71,50 +56,48 @@ body {
 /* ─── Buttons ─── */
 .btn-primary {
   display: inline-flex; align-items: center; gap: 0.45rem;
-  background: var(--c-sage-deep); color: var(--c-bg);
-  font-family: var(--font-manjari); font-size: 0.8rem; font-weight: 700;
-  letter-spacing: 0.07em; padding: 0.8rem 1.75rem; border-radius: 100px;
-  border: none; cursor: pointer; text-decoration: none;
-  transition: background 0.2s, transform 0.15s;
+  background: var(--c-sage-deep); color: var(--c-surface);
+  font-family: var(--font-manjari); font-size: 0.78rem; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 0.85rem 1.85rem; border-radius: 100px; border: none;
+  cursor: pointer; text-decoration: none;
+  transition: background 0.22s, transform 0.15s;
 }
 .btn-primary:hover { background: var(--c-sage-dark); transform: translateY(-1px); }
 
 .btn-outline {
   display: inline-flex; align-items: center; gap: 0.45rem;
-  background: transparent; color: var(--c-sage-deep);
-  font-family: var(--font-manjari); font-size: 0.8rem; font-weight: 700;
-  letter-spacing: 0.07em; padding: 0.8rem 1.75rem; border-radius: 100px;
-  border: 1.5px solid rgba(74,107,88,0.28); cursor: pointer; text-decoration: none;
-  transition: border-color 0.2s, background 0.2s;
+  background: transparent; color: var(--c-ink);
+  font-family: var(--font-manjari); font-size: 0.78rem; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 0.85rem 1.85rem; border-radius: 100px;
+  border: 1px solid var(--c-ink); cursor: pointer; text-decoration: none;
+  transition: background 0.22s, color 0.22s;
 }
-.btn-outline:hover { border-color: var(--c-sage-deep); background: rgba(74,107,88,0.05); }
+.btn-outline:hover { background: var(--c-ink); color: var(--c-bg); }
 
 .btn-text {
   display: inline-flex; align-items: center; gap: 0.35rem;
-  color: var(--c-sage-deep); font-family: var(--font-manjari);
-  font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em;
-  text-decoration: none; border-bottom: 1px solid var(--c-gold); padding-bottom: 2px;
+  color: var(--c-ink-mid); font-family: var(--font-manjari);
+  font-size: 0.85rem; text-decoration: none;
+  border-bottom: 1px solid var(--c-border); padding-bottom: 1px;
   transition: color 0.2s;
 }
-.btn-text:hover { color: var(--c-gold); }
+.btn-text:hover { color: var(--c-sage-deep); }
 
 /* ─── Cards ─── */
 .card {
   background: var(--c-surface); border: 1px solid var(--c-border);
-  border-radius: 14px; padding: 1.85rem;
+  border-radius: 16px; padding: 2rem;
   transition: border-color 0.25s, box-shadow 0.25s;
 }
-.card:hover { border-color: rgba(74,107,88,0.20); box-shadow: 0 6px 28px rgba(74,107,88,0.08); }
-
-/* ─── Reveal ─── */
-.reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.6s ease, transform 0.6s ease; }
-.reveal.visible { opacity: 1; transform: translateY(0); }
+.card:hover { border-color: rgba(74,107,88,0.20); box-shadow: 0 6px 28px rgba(42,40,32,0.07); }
 
 /* ─── Form ─── */
 .field {
   width: 100%; background: transparent; border: 1px solid var(--c-border);
-  border-radius: 8px; padding: 0.7rem 1rem;
-  font-family: var(--font-manjari); font-size: 0.9rem; color: var(--c-ink);
+  border-radius: 8px; padding: 0.75rem 1rem;
+  font-family: var(--font-manjari); font-size: 0.95rem; color: var(--c-ink);
   outline: none; transition: border-color 0.2s;
 }
 .field::placeholder { color: var(--c-ink-muted); }
