@@ -5,7 +5,7 @@ import { Menu, X, ExternalLink } from "lucide-react";
 
 const links = [
   { href: "/services",  label: "Services" },
-  { href: "/about",     label: "About & Work" },
+  { href: "/about",     label: "About" },
   { href: "/the-1000",  label: "The 1000" },
 ];
 
@@ -28,7 +28,7 @@ export function Navbar() {
     <header style={{
       position: "fixed", top: 0, left: 0, right: 0, zIndex: 50,
       transition: "background 0.4s, border-color 0.4s, padding 0.3s",
-      background: scrolled ? "rgba(248,246,241,0.96)" : "transparent",
+      background: scrolled ? "rgba(244,245,240,0.96)" : "transparent",
       backdropFilter: scrolled ? "blur(12px)" : "none",
       borderBottom: scrolled ? "1px solid var(--c-border)" : "1px solid transparent",
       paddingTop: scrolled ? "0.9rem" : "1.4rem",
@@ -38,27 +38,26 @@ export function Navbar() {
     }}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <Link href="/" style={{ textDecoration: "none" }}>
-          <span style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.95rem", letterSpacing: "-0.01em", color: "var(--c-forest)" }}>
+          <span style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "1.05rem", color: "var(--c-sage-deep)" }}>
             Decra
           </span>
         </Link>
 
-        {/* Desktop */}
         <nav style={{ display: "flex", alignItems: "center", gap: "2rem" }} className="nav-desktop">
           {links.map(l => (
             <Link key={l.href} href={l.href} className="nav-link">{l.label}</Link>
           ))}
           <a href="https://entrorasystems.com" target="_blank" rel="noopener noreferrer"
-            style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem", background: "var(--c-forest)", color: "var(--c-bg)", fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.7rem", letterSpacing: "0.06em", padding: "0.5rem 1rem", borderRadius: "100px", textDecoration: "none" }}>
-            AI & Tech Services <ExternalLink size={11} />
+            style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem", color: "var(--c-sage)", fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.72rem", letterSpacing: "0.05em", textDecoration: "none" }}>
+            Entrora <ExternalLink size={11} />
           </a>
-          <Link href="/book" className="btn-primary" style={{ fontSize: "0.7rem", padding: "0.55rem 1.25rem" }}>
+          <Link href="/book" className="btn-primary" style={{ fontSize: "0.72rem", padding: "0.6rem 1.3rem" }}>
             Book a Call
           </Link>
         </nav>
 
         <button className="nav-mobile-btn" onClick={() => setOpen(!open)}
-          style={{ background: "none", border: "none", cursor: "pointer", color: "var(--c-forest)" }} aria-label="Toggle menu">
+          style={{ background: "none", border: "none", cursor: "pointer", color: "var(--c-sage-deep)" }} aria-label="Toggle menu">
           {open ? <X size={20} /> : <Menu size={20} />}
         </button>
       </div>
@@ -67,13 +66,13 @@ export function Navbar() {
         <div style={{ background: "var(--c-bg)", borderTop: "1px solid var(--c-border)", padding: "1.5rem var(--space-page-x)" }}>
           {links.map(l => (
             <Link key={l.href} href={l.href} onClick={() => setOpen(false)}
-              style={{ display: "block", fontFamily: "var(--font-manjari)", fontSize: "0.875rem", color: "var(--c-ink-mid)", textDecoration: "none", padding: "0.65rem 0", borderBottom: "1px solid var(--c-border)" }}>
+              style={{ display: "block", fontFamily: "var(--font-manjari)", fontSize: "0.925rem", color: "var(--c-ink-mid)", textDecoration: "none", padding: "0.65rem 0", borderBottom: "1px solid var(--c-border)" }}>
               {l.label}
             </Link>
           ))}
           <a href="https://entrorasystems.com" target="_blank" rel="noopener noreferrer"
-            style={{ display: "flex", alignItems: "center", gap: "0.3rem", fontFamily: "var(--font-manjari)", fontSize: "0.875rem", color: "var(--c-ink-mid)", textDecoration: "none", padding: "0.65rem 0", borderBottom: "1px solid var(--c-border)" }}>
-            AI & Tech Services <ExternalLink size={12} />
+            style={{ display: "flex", alignItems: "center", gap: "0.3rem", fontFamily: "var(--font-manjari)", fontSize: "0.925rem", color: "var(--c-ink-mid)", textDecoration: "none", padding: "0.65rem 0", borderBottom: "1px solid var(--c-border)" }}>
+            Entrora Systems <ExternalLink size={12} />
           </a>
           <Link href="/book" className="btn-primary" onClick={() => setOpen(false)} style={{ marginTop: "1.25rem", display: "inline-flex" }}>
             Book a Call
@@ -82,8 +81,8 @@ export function Navbar() {
       )}
 
       <style>{`
-        .nav-link { font-family: var(--font-manjari); font-size: 0.75rem; font-weight: 400; color: var(--c-ink-mid); text-decoration: none; letter-spacing: 0.01em; transition: color 0.2s; }
-        .nav-link:hover { color: var(--c-forest); }
+        .nav-link { font-family: var(--font-manjari); font-size: 0.8rem; font-weight: 400; color: var(--c-ink-mid); text-decoration: none; letter-spacing: 0.01em; transition: color 0.2s; }
+        .nav-link:hover { color: var(--c-sage-deep); }
         @media (min-width: 768px) { .nav-desktop { display: flex !important; } .nav-mobile-btn { display: none !important; } }
         @media (max-width: 767px) { .nav-desktop { display: none !important; } .nav-mobile-btn { display: block !important; } }
       `}</style>

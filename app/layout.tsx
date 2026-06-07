@@ -6,12 +6,12 @@ import { ContactBubble } from "@/components/layout/ContactBubble";
 
 export const metadata: Metadata = {
   title: {
-    default: "Decra — AI, Law & Entrepreneurial Advisory",
+    default: "Decra — Technology Law & Entrepreneurial Advisory",
     template: "%s | Decra",
   },
   description:
-    "I help startups, NGOs, and ambitious organizations build AI systems, navigate technology law, and make sound legal decisions throughout the entrepreneurial journey.",
-  keywords: ["AI Consultant Kenya", "AI Strategy Consultant Africa", "Technology Law Advisor Kenya", "Startup Legal Advisor Kenya", "AI for NGOs Africa", "Entrepreneurial Legal Consultant"],
+    "Technology law and entrepreneurial legal consulting for startups, NGOs, and founders in Kenya and across Africa. Incorporation, tax, compliance, contracts, IP, and international expansion.",
+  keywords: ["Technology Law Kenya", "Startup Legal Advisor Kenya", "Entrepreneurial Law Nairobi", "Data Privacy Compliance Kenya", "Incorporation Kenya", "NGO Legal Advisor Africa"],
   authors: [{ name: "Decra Kerubo" }],
   creator: "Decra",
   openGraph: {
@@ -28,7 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Manjari:wght@100;400;700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Manjari:wght@100;400;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
       </head>
       <body>
         <div id="reading-progress" style={{ width: "0%" }} />

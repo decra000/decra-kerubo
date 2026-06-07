@@ -1,35 +1,32 @@
-@import url('https://fonts.googleapis.com/css2?family=Manjari:wght@100;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manjari:wght@100;400;700&family=DM+Serif+Display:ital@0;1&display=swap');
 @import "tailwindcss";
 
 :root {
   --font-manjari: 'Manjari', sans-serif;
+  --font-serif:   'DM Serif Display', serif;
 
-  /* Palette */
-  --c-bg:       #F8F6F1;
-  --c-surface:  #FFFFFF;
-  --c-ink:      #1C1C1A;
-  --c-ink-mid:  #4A4A46;
-  --c-ink-muted:#8C8C86;
-  --c-forest:   #0E3D32;
-  --c-gold:     #B8944A;
-  --c-border:   rgba(28,28,26,0.10);
+  /* Sage palette — exact from reference */
+  --c-bg:         #D2E5C4;
+  --c-surface:    #E2EDD8;
+  --c-sage-light: #B2C69E;
+  --c-sage:       #95B07B;
+  --c-sage-dark:  #79955D;
+  --c-sage-deep:  #5A743C;
+  --c-ink:        #243318;
+  --c-ink-mid:    #3A4D28;
+  --c-ink-muted:  #617548;
+  --c-gold:       #8B6C20;
+  --c-border:     rgba(90,116,60,0.18);
 
-  /* Spacing scale */
-  --space-page-x:   clamp(1.5rem, 5vw, 7rem);
-  --space-section:  clamp(4rem, 8vw, 9rem);
-  --max-w:          72rem;
+  /* Spacing */
+  --space-page-x:  clamp(1.5rem, 5vw, 7rem);
+  --space-section: clamp(4rem, 8vw, 9rem);
+  --max-w:         74rem;
 }
 
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html {
-  scroll-behavior: smooth;
-  font-size: 15px;
-}
+html { scroll-behavior: smooth; font-size: 16px; }
 
 body {
   background: var(--c-bg);
@@ -37,146 +34,99 @@ body {
   font-family: var(--font-manjari);
   font-weight: 400;
   -webkit-font-smoothing: antialiased;
-  line-height: 1.65;
+  line-height: 1.7;
 }
 
-/* ─── Typography system ─────────────────────────── */
+/* ─── Typography ─── */
 .t-label {
-  font-size: 0.65rem;
+  font-size: 0.675rem;
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--c-gold);
+  color: var(--c-sage);
 }
 
 .t-display {
-  font-family: var(--font-manjari);
-  font-weight: 700;
-  line-height: 1.10;
-  letter-spacing: -0.02em;
-  color: var(--c-forest);
+  font-family: var(--font-serif);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  color: var(--c-sage-deep);
 }
 
-.t-display-xl  { font-size: clamp(2.6rem, 6vw, 5rem); }
-.t-display-lg  { font-size: clamp(2rem,  4vw, 3.2rem); }
-.t-display-md  { font-size: clamp(1.4rem, 2.5vw, 2rem); }
-.t-display-sm  { font-size: clamp(1.1rem, 1.8vw, 1.4rem); }
+.t-display-xl  { font-size: clamp(2.8rem, 6vw, 5.2rem); }
+.t-display-lg  { font-size: clamp(2.1rem, 4vw, 3.4rem); }
+.t-display-md  { font-size: clamp(1.5rem, 2.5vw, 2.1rem); }
+.t-display-sm  { font-size: clamp(1.15rem, 1.8vw, 1.45rem); }
 
-.t-body        { font-size: 0.875rem; color: var(--c-ink-mid); line-height: 1.75; }
-.t-body-sm     { font-size: 0.775rem; color: var(--c-ink-muted); line-height: 1.65; }
-.t-caption     { font-size: 0.7rem;   color: var(--c-ink-muted); }
+.t-body    { font-size: 1rem;    color: var(--c-ink-mid); line-height: 1.8; }
+.t-body-sm { font-size: 0.875rem; color: var(--c-ink-muted); line-height: 1.75; }
+.t-caption { font-size: 0.75rem;  color: var(--c-ink-muted); }
 
-/* ─── Layout helpers ────────────────────────────── */
+/* ─── Layout ─── */
 .page-x  { padding-left: var(--space-page-x); padding-right: var(--space-page-x); }
 .inner   { max-width: var(--max-w); margin-inline: auto; }
 .section { padding-top: var(--space-section); padding-bottom: var(--space-section); }
 
-/* ─── Divider ───────────────────────────────────── */
-.divider { width: 2rem; height: 1px; background: var(--c-gold); display: inline-block; }
-
-/* ─── Buttons ───────────────────────────────────── */
+/* ─── Buttons ─── */
 .btn-primary {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  background: var(--c-forest);
-  color: var(--c-bg);
-  font-family: var(--font-manjari);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  padding: 0.75rem 1.6rem;
-  border-radius: 100px;
-  border: none;
-  cursor: pointer;
+  display: inline-flex; align-items: center; gap: 0.45rem;
+  background: var(--c-sage-deep); color: var(--c-bg);
+  font-family: var(--font-manjari); font-size: 0.8rem; font-weight: 700;
+  letter-spacing: 0.07em; padding: 0.8rem 1.75rem; border-radius: 100px;
+  border: none; cursor: pointer; text-decoration: none;
   transition: background 0.2s, transform 0.15s;
-  text-decoration: none;
 }
-.btn-primary:hover { background: #1a5c4a; transform: translateY(-1px); }
+.btn-primary:hover { background: #4a6332; transform: translateY(-1px); }
 
 .btn-outline {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  background: transparent;
-  color: var(--c-forest);
-  font-family: var(--font-manjari);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  padding: 0.75rem 1.6rem;
-  border-radius: 100px;
-  border: 1px solid rgba(14,61,50,0.25);
-  cursor: pointer;
+  display: inline-flex; align-items: center; gap: 0.45rem;
+  background: transparent; color: var(--c-sage-deep);
+  font-family: var(--font-manjari); font-size: 0.8rem; font-weight: 700;
+  letter-spacing: 0.07em; padding: 0.8rem 1.75rem; border-radius: 100px;
+  border: 1.5px solid rgba(90,116,60,0.30); cursor: pointer; text-decoration: none;
   transition: border-color 0.2s, background 0.2s;
-  text-decoration: none;
 }
-.btn-outline:hover { border-color: var(--c-forest); background: rgba(14,61,50,0.04); }
+.btn-outline:hover { border-color: var(--c-sage-deep); background: rgba(90,116,60,0.06); }
 
 .btn-text {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  color: var(--c-forest);
-  font-family: var(--font-manjari);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-decoration: none;
-  border-bottom: 1px solid var(--c-gold);
-  padding-bottom: 2px;
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  color: var(--c-sage-deep); font-family: var(--font-manjari);
+  font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em;
+  text-decoration: none; border-bottom: 1px solid var(--c-gold); padding-bottom: 2px;
   transition: color 0.2s;
 }
 .btn-text:hover { color: var(--c-gold); }
 
-/* ─── Cards ─────────────────────────────────────── */
+/* ─── Cards ─── */
 .card {
-  background: var(--c-surface);
-  border: 1px solid var(--c-border);
-  border-radius: 12px;
-  padding: 1.75rem;
+  background: var(--c-surface); border: 1px solid var(--c-border);
+  border-radius: 14px; padding: 1.85rem;
   transition: border-color 0.25s, box-shadow 0.25s;
 }
-.card:hover {
-  border-color: rgba(14,61,50,0.18);
-  box-shadow: 0 4px 24px rgba(14,61,50,0.06);
-}
+.card:hover { border-color: rgba(90,116,60,0.22); box-shadow: 0 6px 28px rgba(90,116,60,0.10); }
 
-/* ─── Reveal animation ──────────────────────────── */
-.reveal {
-  opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
+/* ─── Reveal ─── */
+.reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.6s ease, transform 0.6s ease; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
-/* ─── Form inputs ───────────────────────────────── */
+/* ─── Form ─── */
 .field {
-  width: 100%;
-  background: transparent;
-  border: 1px solid var(--c-border);
-  border-radius: 8px;
-  padding: 0.65rem 1rem;
-  font-family: var(--font-manjari);
-  font-size: 0.825rem;
-  color: var(--c-ink);
-  outline: none;
-  transition: border-color 0.2s;
+  width: 100%; background: transparent; border: 1px solid var(--c-border);
+  border-radius: 8px; padding: 0.7rem 1rem;
+  font-family: var(--font-manjari); font-size: 0.9rem; color: var(--c-ink);
+  outline: none; transition: border-color 0.2s;
 }
 .field::placeholder { color: var(--c-ink-muted); }
-.field:focus { border-color: var(--c-forest); }
+.field:focus { border-color: var(--c-sage-dark); }
 
-/* ─── Scrollbar ─────────────────────────────────── */
+/* ─── Scrollbar ─── */
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--c-gold); border-radius: 2px; }
+::-webkit-scrollbar-thumb { background: var(--c-sage); border-radius: 2px; }
 
-/* ─── Reading progress ──────────────────────────── */
+/* ─── Reading progress ─── */
 #reading-progress {
-  position: fixed;
-  top: 0; left: 0;
-  height: 1.5px;
-  background: var(--c-gold);
-  z-index: 9999;
-  transition: width 0.1s linear;
+  position: fixed; top: 0; left: 0; height: 1.5px;
+  background: var(--c-sage); z-index: 9999; transition: width 0.1s linear;
 }

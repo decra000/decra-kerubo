@@ -82,7 +82,7 @@ export function ContactBubble() {
         .bubble-panel {
           position: fixed; bottom: 5.5rem; right: 1.5rem; width: 360px;
           background: #fff; border-radius: 20px; border: 1px solid var(--c-border);
-          box-shadow: 0 24px 60px rgba(14,61,50,0.14), 0 4px 16px rgba(14,61,50,0.06);
+          box-shadow: 0 24px 60px rgba(90,116,60,0.14), 0 4px 16px rgba(90,116,60,0.06);
           z-index: 9000; overflow: hidden; transform-origin: bottom right;
           transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), opacity 0.2s ease;
           display: flex; flex-direction: column; max-height: 520px;
@@ -94,10 +94,10 @@ export function ContactBubble() {
           width: 3.25rem; height: 3.25rem; border-radius: 50%;
           background: var(--c-forest); color: white; border: none; cursor: pointer;
           display: flex; align-items: center; justify-content: center;
-          z-index: 9001; box-shadow: 0 8px 24px rgba(14,61,50,0.30);
+          z-index: 9001; box-shadow: 0 8px 24px rgba(90,116,60,0.30);
           transition: transform 0.2s, box-shadow 0.2s;
         }
-        .bubble-btn:hover { transform: scale(1.08); box-shadow: 0 12px 32px rgba(14,61,50,0.38); }
+        .bubble-btn:hover { transform: scale(1.08); box-shadow: 0 12px 32px rgba(90,116,60,0.38); }
         .bubble-field {
           width: 100%; background: var(--c-bg); border: 1px solid var(--c-border);
           border-radius: 8px; padding: 0.55rem 0.85rem;
@@ -110,8 +110,8 @@ export function ContactBubble() {
         .chat-msg-ai { background: var(--c-bg); border: 1px solid var(--c-border); border-radius: 14px 14px 14px 4px; padding: 0.55rem 0.85rem; font-size: 0.78rem; line-height: 1.55; color: var(--c-ink-mid); max-width: 85%; align-self: flex-start; }
         .mode-tab { flex: 1; padding: 0.5rem; font-family: var(--font-manjari); font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; border: none; cursor: pointer; transition: background 0.2s, color 0.2s; }
         .mode-tab.active { background: var(--c-forest); color: rgba(248,246,241,0.9); }
-        .mode-tab.inactive { background: rgba(14,61,50,0.04); color: var(--c-ink-muted); }
-        .mode-tab.inactive:hover { background: rgba(14,61,50,0.08); }
+        .mode-tab.inactive { background: rgba(90,116,60,0.04); color: var(--c-ink-muted); }
+        .mode-tab.inactive:hover { background: rgba(90,116,60,0.08); }
         @keyframes bounce { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-5px); } }
         @media(max-width:420px) { .bubble-panel { width: calc(100vw - 2rem); right: 1rem; } }
       `}</style>
@@ -190,7 +190,7 @@ export function ContactBubble() {
           <div style={{ flex: 1, overflowY: "auto", padding: "1.25rem 1.5rem" }}>
             {submitted ? (
               <div style={{ textAlign: "center", padding: "2rem 0" }}>
-                <div style={{ width: "2.5rem", height: "2.5rem", borderRadius: "50%", background: "rgba(14,61,50,0.08)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 0.75rem" }}>
+                <div style={{ width: "2.5rem", height: "2.5rem", borderRadius: "50%", background: "rgba(90,116,60,0.08)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 0.75rem" }}>
                   <span style={{ fontSize: "1.1rem" }}>✓</span>
                 </div>
                 <p style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.9rem", color: "var(--c-forest)", marginBottom: "0.3rem" }}>Message received.</p>
