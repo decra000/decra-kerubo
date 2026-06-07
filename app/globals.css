@@ -5,18 +5,18 @@
   --font-manjari: 'Manjari', sans-serif;
   --font-serif:   'DM Serif Display', serif;
 
-  /* Sage palette — exact from reference */
-  --c-bg:         #D2E5C4;
-  --c-surface:    #E2EDD8;
-  --c-sage-light: #B2C69E;
-  --c-sage:       #95B07B;
-  --c-sage-dark:  #79955D;
-  --c-sage-deep:  #5A743C;
-  --c-ink:        #243318;
-  --c-ink-mid:    #3A4D28;
-  --c-ink-muted:  #617548;
-  --c-gold:       #8B6C20;
-  --c-border:     rgba(90,116,60,0.18);
+  /* Room-inspired palette */
+  --c-bg:         #F2EDE4;   /* warm linen — left wall */
+  --c-surface:    #FAF7F2;   /* off-white — bed frame/whites */
+  --c-sage-light: #C8D4C8;   /* lightest sage — pillow tones */
+  --c-sage:       #8FA898;   /* mid sage-grey — wall colour */
+  --c-sage-dark:  #6B8C7A;   /* deeper sage */
+  --c-sage-deep:  #4A6B58;   /* darkest sage — primary UI */
+  --c-ink:        #2A2820;   /* warm near-black */
+  --c-ink-mid:    #4A4840;   /* body text */
+  --c-ink-muted:  #8A8478;   /* muted warm grey */
+  --c-gold:       #B07D3A;   /* warm wood / rattan tone */
+  --c-border:     rgba(74,107,88,0.12);
 
   /* Spacing */
   --space-page-x:  clamp(1.5rem, 5vw, 7rem);
@@ -77,17 +77,17 @@ body {
   border: none; cursor: pointer; text-decoration: none;
   transition: background 0.2s, transform 0.15s;
 }
-.btn-primary:hover { background: #4a6332; transform: translateY(-1px); }
+.btn-primary:hover { background: var(--c-sage-dark); transform: translateY(-1px); }
 
 .btn-outline {
   display: inline-flex; align-items: center; gap: 0.45rem;
   background: transparent; color: var(--c-sage-deep);
   font-family: var(--font-manjari); font-size: 0.8rem; font-weight: 700;
   letter-spacing: 0.07em; padding: 0.8rem 1.75rem; border-radius: 100px;
-  border: 1.5px solid rgba(90,116,60,0.30); cursor: pointer; text-decoration: none;
+  border: 1.5px solid rgba(74,107,88,0.28); cursor: pointer; text-decoration: none;
   transition: border-color 0.2s, background 0.2s;
 }
-.btn-outline:hover { border-color: var(--c-sage-deep); background: rgba(90,116,60,0.06); }
+.btn-outline:hover { border-color: var(--c-sage-deep); background: rgba(74,107,88,0.05); }
 
 .btn-text {
   display: inline-flex; align-items: center; gap: 0.35rem;
@@ -104,7 +104,7 @@ body {
   border-radius: 14px; padding: 1.85rem;
   transition: border-color 0.25s, box-shadow 0.25s;
 }
-.card:hover { border-color: rgba(90,116,60,0.22); box-shadow: 0 6px 28px rgba(90,116,60,0.10); }
+.card:hover { border-color: rgba(74,107,88,0.20); box-shadow: 0 6px 28px rgba(74,107,88,0.08); }
 
 /* ─── Reveal ─── */
 .reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.6s ease, transform 0.6s ease; }

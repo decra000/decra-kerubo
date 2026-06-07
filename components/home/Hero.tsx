@@ -39,19 +39,19 @@ export function Hero() {
       paddingRight: "var(--space-page-x)", paddingTop: "8rem", paddingBottom: "6rem",
       position: "relative", overflow: "hidden",
     }}>
-      {/* Animated orb */}
+      {/* Warm ambient orb */}
       <div style={{
         position: "absolute", pointerEvents: "none", zIndex: 0,
         width: "55vw", height: "55vw", borderRadius: "50%",
-        background: "radial-gradient(circle, rgba(124,140,110,0.13) 0%, transparent 70%)",
+        background: "radial-gradient(circle, rgba(143,168,152,0.15) 0%, transparent 70%)",
         left: `${mousePos.x * 0.5 + 25}%`, top: `${mousePos.y * 0.3 + 10}%`,
         transform: "translate(-50%, -50%)",
         transition: "left 1.2s cubic-bezier(0.25,0.46,0.45,0.94), top 1.2s cubic-bezier(0.25,0.46,0.45,0.94)",
       }} />
-      {/* Grid lines */}
+      {/* Subtle grid */}
       <div style={{
         position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0,
-        backgroundImage: "linear-gradient(rgba(44,59,40,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(44,59,40,0.04) 1px, transparent 1px)",
+        backgroundImage: "linear-gradient(rgba(74,107,88,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(74,107,88,0.05) 1px, transparent 1px)",
         backgroundSize: "4rem 4rem",
       }} />
 
