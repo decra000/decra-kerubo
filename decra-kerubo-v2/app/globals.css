@@ -1,0 +1,132 @@
+@import url('https://fonts.googleapis.com/css2?family=Manjari:wght@100;400;700&family=DM+Serif+Display:ital@0;1&display=swap');
+@import "tailwindcss";
+
+:root {
+  --font-manjari: 'Manjari', sans-serif;
+  --font-serif:   'DM Serif Display', serif;
+
+  /* Sage palette */
+  --c-bg:         #F4F5F0;
+  --c-surface:    #FAFAF7;
+  --c-sage:       #7C8C6E;
+  --c-sage-dark:  #4A5C3E;
+  --c-sage-deep:  #2C3B28;
+  --c-sage-light: #E8EDE3;
+  --c-ink:        #1E2018;
+  --c-ink-mid:    #4A4D42;
+  --c-ink-muted:  #8A8D80;
+  --c-gold:       #A67C45;
+  --c-border:     rgba(44,59,40,0.10);
+
+  /* Spacing */
+  --space-page-x:  clamp(1.5rem, 5vw, 7rem);
+  --space-section: clamp(4rem, 8vw, 9rem);
+  --max-w:         74rem;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  background: var(--c-bg);
+  color: var(--c-ink);
+  font-family: var(--font-manjari);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.7;
+}
+
+/* ─── Typography ─── */
+.t-label {
+  font-size: 0.675rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--c-sage);
+}
+
+.t-display {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  color: var(--c-sage-deep);
+}
+
+.t-display-xl  { font-size: clamp(2.8rem, 6vw, 5.2rem); }
+.t-display-lg  { font-size: clamp(2.1rem, 4vw, 3.4rem); }
+.t-display-md  { font-size: clamp(1.5rem, 2.5vw, 2.1rem); }
+.t-display-sm  { font-size: clamp(1.15rem, 1.8vw, 1.45rem); }
+
+.t-body    { font-size: 1rem;    color: var(--c-ink-mid); line-height: 1.8; }
+.t-body-sm { font-size: 0.875rem; color: var(--c-ink-muted); line-height: 1.75; }
+.t-caption { font-size: 0.75rem;  color: var(--c-ink-muted); }
+
+/* ─── Layout ─── */
+.page-x  { padding-left: var(--space-page-x); padding-right: var(--space-page-x); }
+.inner   { max-width: var(--max-w); margin-inline: auto; }
+.section { padding-top: var(--space-section); padding-bottom: var(--space-section); }
+
+/* ─── Buttons ─── */
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 0.45rem;
+  background: var(--c-sage-deep); color: var(--c-bg);
+  font-family: var(--font-manjari); font-size: 0.8rem; font-weight: 700;
+  letter-spacing: 0.07em; padding: 0.8rem 1.75rem; border-radius: 100px;
+  border: none; cursor: pointer; text-decoration: none;
+  transition: background 0.2s, transform 0.15s;
+}
+.btn-primary:hover { background: var(--c-sage-dark); transform: translateY(-1px); }
+
+.btn-outline {
+  display: inline-flex; align-items: center; gap: 0.45rem;
+  background: transparent; color: var(--c-sage-deep);
+  font-family: var(--font-manjari); font-size: 0.8rem; font-weight: 700;
+  letter-spacing: 0.07em; padding: 0.8rem 1.75rem; border-radius: 100px;
+  border: 1.5px solid rgba(44,59,40,0.25); cursor: pointer; text-decoration: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+.btn-outline:hover { border-color: var(--c-sage-deep); background: rgba(44,59,40,0.04); }
+
+.btn-text {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  color: var(--c-sage-deep); font-family: var(--font-manjari);
+  font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em;
+  text-decoration: none; border-bottom: 1px solid var(--c-gold); padding-bottom: 2px;
+  transition: color 0.2s;
+}
+.btn-text:hover { color: var(--c-gold); }
+
+/* ─── Cards ─── */
+.card {
+  background: var(--c-surface); border: 1px solid var(--c-border);
+  border-radius: 14px; padding: 1.85rem;
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+.card:hover { border-color: rgba(44,59,40,0.18); box-shadow: 0 6px 28px rgba(44,59,40,0.07); }
+
+/* ─── Reveal ─── */
+.reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ─── Form ─── */
+.field {
+  width: 100%; background: transparent; border: 1px solid var(--c-border);
+  border-radius: 8px; padding: 0.7rem 1rem;
+  font-family: var(--font-manjari); font-size: 0.9rem; color: var(--c-ink);
+  outline: none; transition: border-color 0.2s;
+}
+.field::placeholder { color: var(--c-ink-muted); }
+.field:focus { border-color: var(--c-sage-dark); }
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--c-sage); border-radius: 2px; }
+
+/* ─── Reading progress ─── */
+#reading-progress {
+  position: fixed; top: 0; left: 0; height: 1.5px;
+  background: var(--c-sage); z-index: 9999; transition: width 0.1s linear;
+}

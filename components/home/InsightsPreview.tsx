@@ -11,10 +11,10 @@ export function InsightsPreview() {
           </div>
           <h2 className="t-display t-display-lg" style={{ marginBottom: "1.25rem" }}>Tech harm has faces.</h2>
           <p className="t-body" style={{ marginBottom: "0.9rem" }}>
-            The 1000 features people whose lives have been affected by ungoverned technology — their stories, in their own words.
+            The 1000 is a research and advocacy initiative documenting real cases of tech-enabled harm across Africa — to build the policy argument from the ground up.
           </p>
           <p className="t-body" style={{ marginBottom: "2rem" }}>
-            Not a blog. Not reports. Available on Spotify.
+            Stories, not statistics. Available on Spotify.
           </p>
           <a href="https://open.spotify.com/show/placeholder" target="_blank" rel="noopener noreferrer"
             style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "#1DB954", color: "#000", fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.78rem", padding: "0.65rem 1.25rem", borderRadius: "100px", textDecoration: "none" }}>

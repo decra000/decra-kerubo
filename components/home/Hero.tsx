@@ -22,11 +22,11 @@ export function Hero() {
         </div>
 
         <h1 className="t-display t-display-xl" style={{ maxWidth: "32rem", marginBottom: "1.75rem" }}>
-          Law, research, and AI engineering — three distinct practices.
+          Protecting what you build — legally and technically.
         </h1>
 
         <p className="t-body" style={{ maxWidth: "30rem", marginBottom: "3.5rem" }}>
-          Legal advisory for startups, NGOs, and founders across East Africa. Tech harm research through The 1000 initiative. AI systems through Entrora Systems.
+          Legal advisory for startups, NGOs, and founders navigating tech law, company structure, tax compliance, and international expansion. Based in Nairobi, operating across Africa.
         </p>
 
         {/* Three tracks — clean, direct */}
@@ -34,20 +34,20 @@ export function Hero() {
           {[
             {
               label: "Legal Consulting",
-              desc: "For entrepreneurs, startups, and NGOs. Tax, incorporation, structuring, compliance, and international expansion.",
+              desc: "Incorporation, tax, compliance, structuring, international expansion.",
               href: "/services",
-              cta: "View services →",
+              cta: "For startups, NGOs & founders",
             },
             {
               label: "The 1000",
-              desc: "Tech-enabled harm has faces. A Spotify initiative featuring real stories of people affected by ungoverned technology.",
+              desc: "Tech harm research & policy. Stories of people affected by ungoverned technology.",
               href: "https://open.spotify.com/show/placeholder",
               cta: "Listen on Spotify →",
               external: true,
             },
             {
               label: "AI Engineering",
-              desc: "Building and deploying AI systems. This is handled through Entrora Systems.",
+              desc: "Building and deploying AI systems through Entrora Systems.",
               href: "https://entrorasystems.com",
               cta: "entrorasystems.com →",
               external: true,
