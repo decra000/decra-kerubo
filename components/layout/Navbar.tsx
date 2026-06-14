@@ -67,7 +67,7 @@ export function Navbar() {
       <header style={{
         position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
         padding: `${scrolled ? "1rem" : "1.5rem"} var(--space-page-x)`,
-        background: scrolled ? (theme === "dark" ? "rgba(17,17,17,0.94)" : "rgba(247,247,245,0.94)") : "transparent",
+        background: scrolled ? (theme === "dark" ? "rgba(15,13,10,0.94)" : "rgba(245,237,216,0.94)") : "transparent",
         backdropFilter: scrolled ? "blur(20px)" : "none",
         borderBottom: scrolled ? "1px solid var(--c-border)" : "none",
         transition: "all 0.3s ease",
