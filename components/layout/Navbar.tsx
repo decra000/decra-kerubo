@@ -11,7 +11,7 @@ const langs = [
 ];
 
 const navLinks = [
-  { href: "/services", label: "Services" },
+  { href: "/#services", label: "Services" },
   { href: "/about",    label: "About" },
   { href: "/the-1000", label: "The 1000" },
   { href: "/book",     label: "Book a Call" },

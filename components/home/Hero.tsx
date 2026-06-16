@@ -81,7 +81,7 @@ export function Hero({ intent }: { intent: Intent }) {
 
           <div style={{ display: "flex", gap: "0.85rem", flexWrap: "wrap" }}>
             <Link href="/book" className="btn btn-ink">{c.cta} <ArrowRight size={13} /></Link>
-            <Link href="/services" className="btn btn-glass">Services</Link>
+            <a href="#services" className="btn btn-glass">Services</a>
           </div>
 
           <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", marginTop: "2.75rem" }}>
