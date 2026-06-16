@@ -1,49 +1,43 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const SYSTEM_PROMPT = `You are a concise, warm assistant for Decra — a Nairobi-based legal and tech advisory practice run by Decra Kerubo (LLB + BSc Computer Science).
+const SYSTEM = `You are Decra Kerubo's AI advisor on her professional website decrakerubo.com.
+Decra is a Nairobi-based lawyer and computer scientist offering two advisory tracks:
+1. Technology Law: IP protection, data privacy/ODPC compliance, tech contracts, regulatory mapping, startup law.
+2. Founder Legal: company incorporation, equity & vesting, co-founder agreements, tax (eTIMS/KRA), fundraising readiness.
+She also runs Entrora Systems for AI engineering work.
 
-Your job: help visitors quickly understand if and how Decra can help them, then guide them to book a call or send a message.
-
-About Decra's work:
-- Tech Policy & Startup Law: IP protection, data privacy compliance, tech contracts, regulatory mapping — for companies with products.
-- Founder Legal: company incorporation, equity & vesting, co-founder agreements, fundraising readiness — for founders building companies.
-- The 1000: tech harm research and policy advocacy (non-commercial).
-- AI Engineering: delivered through Entrora Systems (entrorasystems.com).
-
-Key facts: Based in Nairobi, Kenya. Operates across East Africa and globally. Discovery calls are free (15 min).
-
-Rules:
-- Keep answers SHORT — 2-3 sentences max unless asked for detail.
-- Be direct: tell people which track applies to their situation.
-- If someone is unsure, ask one clarifying question.
-- Never invent specific pricing or timelines.
-- If it's clearly outside Decra's scope, say so honestly.
-- End with a gentle nudge to book a call or send a message when appropriate.`;
+Your role: help visitors identify which track fits their situation, answer questions about her services and process, and guide them toward booking a discovery call. 
+Keep responses concise, professional, and warm — 2-4 sentences max. Never make up specific pricing. 
+If someone is ready to engage, direct them to the Book a Call page or hello@decrakerubo.com.`;
 
 export async function POST(req: NextRequest) {
-  const { messages } = await req.json();
+  const { message, history = [] } = await req.json();
 
-  const apiMessages = messages.map((m: { role: string; text: string }) => ({
-    role: m.role,
-    content: m.text,
-  }));
+  const messages = [
+    ...history.map((m: { role: string; text: string }) => ({
+      role: m.role === "assistant" ? "assistant" : "user",
+      content: m.text,
+    })),
+    { role: "user", content: message },
+  ];
 
-  const res = await fetch("https://models.github.ai/inference/chat/completions", {
+  const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${process.env.GITHUB_TOKEN}`,
+      "x-api-key": process.env.ANTHROPIC_API_KEY || "",
+      "anthropic-version": "2023-06-01",
     },
     body: JSON.stringify({
-      model: "openai/gpt-4.1-mini",
-      messages: [{ role: "system", content: SYSTEM_PROMPT }, ...apiMessages],
+      model: "claude-haiku-4-5-20251001",
       max_tokens: 300,
-      temperature: 0.7,
+      system: SYSTEM,
+      messages,
     }),
   });
 
   const data = await res.json();
-  const reply = data.choices?.[0]?.message?.content || "Something went wrong — please email hello@decrakero.com.";
+  const reply = data.content?.[0]?.text || "I'm having trouble connecting — reach Decra directly at hello@decrakerubo.com.";
 
   return NextResponse.json({ reply });
 }

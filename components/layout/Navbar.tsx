@@ -13,8 +13,6 @@ const langs = [
 const navLinks = [
   { href: "/#services", label: "Services" },
   { href: "/about",    label: "About" },
-  { href: "/the-1000", label: "The 1000" },
-  { href: "/book",     label: "Book a Call" },
 ];
 
 export function Navbar() {
@@ -38,7 +36,6 @@ export function Navbar() {
   const selectLang = (lang: typeof langs[0]) => {
     setActiveLang(lang.label);
     setLangOpen(false);
-    // Google Translate — inject if not already there
     if (typeof window !== "undefined") {
       const el = document.querySelector(".goog-te-combo") as HTMLSelectElement | null;
       if (el) { el.value = lang.code; el.dispatchEvent(new Event("change")); }
@@ -66,40 +63,43 @@ export function Navbar() {
       <div id="google_translate_element" style={{ display: "none" }} />
       <header style={{
         position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
-        padding: `${scrolled ? "1rem" : "1.5rem"} var(--space-page-x)`,
-        background: scrolled ? (theme === "dark" ? "rgba(15,13,10,0.94)" : "rgba(245,237,216,0.94)") : "transparent",
-        backdropFilter: scrolled ? "blur(20px)" : "none",
-        borderBottom: scrolled ? "1px solid var(--c-border)" : "none",
-        transition: "all 0.3s ease",
+        padding: `${scrolled ? "0.85rem" : "1.5rem"} var(--space-page-x)`,
+        background: scrolled
+          ? "var(--c-glass)"
+          : "transparent",
+        backdropFilter: scrolled ? "blur(24px) saturate(1.6)" : "none",
+        WebkitBackdropFilter: scrolled ? "blur(24px) saturate(1.6)" : "none",
+        borderBottom: scrolled ? "1px solid var(--c-glass-border)" : "none",
+        transition: "all 0.35s ease",
       }}>
         <div style={{ maxWidth: "var(--max-w)", margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
 
           {/* Logo */}
           <Link href="/" style={{ textDecoration: "none", display: "flex", flexDirection: "column", gap: "1px" }}>
-            <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "1.2rem", color: "var(--c-ink)", lineHeight: 1 }}>Decra</span>
-            <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.55rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--c-ink-muted)" }}>Legal & Tech Advisory</span>
+            <span style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "1.25rem", color: "var(--c-ink)", lineHeight: 1, letterSpacing: "0.02em" }}>Decra</span>
+            <span style={{ fontFamily: "var(--font-manjari)", fontSize: "0.55rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--c-ink-muted)" }}>Legal & Tech Advisory</span>
           </Link>
 
           {/* Desktop nav */}
-          <nav style={{ display: "flex", alignItems: "center", gap: "2rem" }} className="nav-desktop">
-            {navLinks.slice(0, 3).map(l => (
-              <Link key={l.href} href={l.href} style={{ fontFamily: "var(--font-sans)", fontSize: "0.82rem", color: "var(--c-ink-mid)", textDecoration: "none", letterSpacing: "0.01em", transition: "color 0.2s" }}
+          <nav style={{ display: "flex", alignItems: "center", gap: "2.25rem" }} className="nav-desktop">
+            {navLinks.map(l => (
+              <Link key={l.href} href={l.href} style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.78rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--c-ink-muted)", textDecoration: "none", transition: "color 0.2s" }}
                 onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"}
-                onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink-mid)"}>
+                onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink-muted)"}>
                 {l.label}
               </Link>
             ))}
 
             {/* Language selector */}
             <div style={{ position: "relative" }}>
-              <button onClick={() => setLangOpen(v => !v)} style={{ display: "flex", alignItems: "center", gap: "0.3rem", background: "none", border: "none", cursor: "pointer", fontFamily: "var(--font-sans)", fontSize: "0.78rem", fontWeight: 600, color: "var(--c-ink-muted)", letterSpacing: "0.05em" }}>
-                <Globe size={13} /> {activeLang}
+              <button onClick={() => setLangOpen(v => !v)} style={{ display: "flex", alignItems: "center", gap: "0.3rem", background: "none", border: "none", cursor: "pointer", fontFamily: "var(--font-manjari)", fontSize: "0.72rem", fontWeight: 700, color: "var(--c-ink-muted)", letterSpacing: "0.1em" }}>
+                <Globe size={12} /> {activeLang}
               </button>
               {langOpen && (
-                <div style={{ position: "absolute", top: "calc(100% + 0.5rem)", right: 0, background: "var(--c-surface)", border: "1px solid var(--c-border)", borderRadius: "4px", overflow: "hidden", boxShadow: "var(--shadow-lg)", minWidth: "80px", zIndex: 200 }}>
+                <div className="glass" style={{ position: "absolute", top: "calc(100% + 0.6rem)", right: 0, borderRadius: "6px", overflow: "hidden", minWidth: "80px", zIndex: 200 }}>
                   {langs.map(l => (
-                    <button key={l.code} onClick={() => selectLang(l)} style={{ display: "block", width: "100%", padding: "0.55rem 1rem", background: "none", border: "none", cursor: "pointer", fontFamily: "var(--font-sans)", fontSize: "0.78rem", fontWeight: 600, color: activeLang === l.label ? "var(--c-accent)" : "var(--c-ink-mid)", textAlign: "left", letterSpacing: "0.06em", transition: "background 0.15s" }}
-                      onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = "var(--c-surface2)"}
+                    <button key={l.code} onClick={() => selectLang(l)} style={{ display: "block", width: "100%", padding: "0.5rem 1rem", background: "none", border: "none", cursor: "pointer", fontFamily: "var(--font-manjari)", fontSize: "0.72rem", fontWeight: 700, color: activeLang === l.label ? "var(--c-accent)" : "var(--c-ink-mid)", textAlign: "left", letterSpacing: "0.1em", transition: "background 0.15s" }}
+                      onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = "rgba(196,162,101,0.08)"}
                       onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = "none"}>
                       {l.label}
                     </button>
@@ -109,11 +109,11 @@ export function Navbar() {
             </div>
 
             {/* Theme toggle */}
-            <button onClick={toggle} style={{ background: "var(--c-surface2)", border: "1px solid var(--c-border)", borderRadius: "100px", padding: "0.4rem 0.5rem", cursor: "pointer", display: "flex", alignItems: "center", color: "var(--c-ink-muted)", transition: "background 0.2s" }}>
-              {theme === "dark" ? <Sun size={14} /> : <Moon size={14} />}
+            <button onClick={toggle} style={{ background: "var(--c-glass)", border: "1px solid var(--c-glass-border)", borderRadius: "100px", padding: "0.4rem 0.5rem", cursor: "pointer", display: "flex", alignItems: "center", color: "var(--c-ink-muted)", transition: "all 0.2s", backdropFilter: "blur(8px)" }}>
+              {theme === "dark" ? <Sun size={13} /> : <Moon size={13} />}
             </button>
 
-            <Link href="/book" className="btn btn-ink" style={{ fontSize: "0.72rem", padding: "0.7rem 1.4rem" }}>Book a Call</Link>
+            <Link href="/book" className="btn btn-accent" style={{ fontSize: "0.7rem", padding: "0.65rem 1.4rem" }}>Book a Call</Link>
           </nav>
 
           <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }} className="nav-mobile-controls">
@@ -128,21 +128,14 @@ export function Navbar() {
 
         {/* Mobile menu */}
         {mobileOpen && (
-          <div style={{ background: "var(--c-surface)", borderTop: "1px solid var(--c-border)", padding: "1.5rem var(--space-page-x)" }}>
+          <div className="glass" style={{ marginTop: "0.5rem", borderRadius: "8px", padding: "1.25rem var(--space-page-x)" }}>
             {navLinks.map(l => (
               <Link key={l.href} href={l.href} onClick={() => setMobileOpen(false)}
-                style={{ display: "block", fontFamily: "var(--font-sans)", fontSize: "1rem", color: "var(--c-ink-mid)", textDecoration: "none", padding: "0.75rem 0", borderBottom: "1px solid var(--c-border)" }}>
+                style={{ display: "block", fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.85rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--c-ink-mid)", textDecoration: "none", padding: "0.75rem 0", borderBottom: "1px solid var(--c-border)" }}>
                 {l.label}
               </Link>
             ))}
-            <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", marginTop: "1.25rem" }}>
-              {langs.map(l => (
-                <button key={l.code} onClick={() => { selectLang(l); setMobileOpen(false); }}
-                  style={{ padding: "0.4rem 0.75rem", borderRadius: "2px", border: "1px solid var(--c-border)", background: activeLang === l.label ? "var(--c-accent)" : "transparent", color: activeLang === l.label ? "#fff" : "var(--c-ink-muted)", fontFamily: "var(--font-sans)", fontSize: "0.72rem", fontWeight: 600, cursor: "pointer", letterSpacing: "0.08em" }}>
-                  {l.label}
-                </button>
-              ))}
-            </div>
+            <Link href="/book" className="btn btn-accent" onClick={() => setMobileOpen(false)} style={{ marginTop: "1.25rem", width: "100%", justifyContent: "center" }}>Book a Call</Link>
           </div>
         )}
       </header>

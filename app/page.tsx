@@ -3,6 +3,7 @@ import { useState } from "react";
 import { IntentPopup } from "@/components/home/IntentPopup";
 import { Hero } from "@/components/home/Hero";
 import { ServicesPreview } from "@/components/home/ServicesPreview";
+import { Collaborators } from "@/components/home/Collaborators";
 import { AlsoBuilding } from "@/components/home/AlsoBuilding";
 import { BookingCTA } from "@/components/home/BookingCTA";
 
@@ -21,6 +22,7 @@ export default function Home() {
     <>
       {!popupDone && <IntentPopup onSelect={handleIntent} />}
       <Hero intent={intent} />
+      <Collaborators />
       <ServicesPreview intent={intent} />
       <AlsoBuilding />
       <BookingCTA />

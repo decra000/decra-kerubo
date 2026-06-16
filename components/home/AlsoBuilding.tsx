@@ -1,48 +1,53 @@
 "use client";
 import { ArrowUpRight } from "lucide-react";
-
-const items = [
-  {
-    label: "AI Engineering",
-    name: "Entrora Systems",
-    desc: "Building and deploying AI systems for organisations across Africa.",
-    href: "https://entrorasystems.com",
-    tag: "entrorasystems.com",
-  },
-  {
-    label: "Tech Harm Research",
-    name: "The 1000",
-    desc: "Documenting real cases of tech-enabled harm across Africa. Stories, not statistics.",
-    href: "https://open.spotify.com",
-    tag: "Listen on Spotify",
-  },
-];
+import { useEffect, useRef, useState } from "react";
 
 export function AlsoBuilding() {
+  const [vis, setVis] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const o = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVis(true); }, { threshold: 0.1 });
+    if (ref.current) o.observe(ref.current);
+    return () => o.disconnect();
+  }, []);
+
   return (
-    <section className="page-x" style={{ background: "var(--c-bg)", borderTop: "1px solid var(--c-border)", padding: "4rem var(--space-page-x)" }}>
+    <section ref={ref} className="page-x section" style={{ background: "var(--c-surface)", borderTop: "1px solid var(--c-border)" }}>
       <div className="inner">
-        <p className="t-label" style={{ marginBottom: "2rem" }}>Also building</p>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "var(--c-border)" }} id="also-grid">
-          {items.map(item => (
-            <a key={item.name} href={item.href} target="_blank" rel="noopener noreferrer"
-              style={{ display: "block", padding: "2rem 2.25rem", background: "var(--c-surface)", textDecoration: "none", transition: "background 0.22s", position: "relative", overflow: "hidden" }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "var(--c-surface2)"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "var(--c-surface)"; }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "0.85rem" }}>
-                <div>
-                  <p style={{ fontSize: "0.62rem", fontWeight: 600, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--c-accent)", marginBottom: "0.35rem", fontFamily: "var(--font-sans)" }}>{item.label}</p>
-                  <p style={{ fontFamily: "var(--font-serif)", fontSize: "1.3rem", color: "var(--c-ink)" }}>{item.name}</p>
-                </div>
-                <ArrowUpRight size={16} color="var(--c-ink-muted)" />
-              </div>
-              <p style={{ fontSize: "0.875rem", color: "var(--c-ink-muted)", lineHeight: 1.7, marginBottom: "1rem", fontFamily: "var(--font-sans)" }}>{item.desc}</p>
-              <span style={{ fontSize: "0.72rem", fontWeight: 600, color: "var(--c-ink-muted)", letterSpacing: "0.05em", borderBottom: "1px solid var(--c-border)", paddingBottom: "1px", fontFamily: "var(--font-sans)" }}>{item.tag} ↗</span>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "5rem", alignItems: "center" }} id="also-grid">
+          <div style={{ opacity: vis ? 1 : 0, transform: vis ? "none" : "translateY(20px)", transition: "all 0.6s ease" }}>
+            <p className="t-label" style={{ marginBottom: "1.25rem" }}>Also building</p>
+            <h2 className="t-display t-display-lg" style={{ marginBottom: "1.25rem" }}>Entrora<br /><em style={{ fontStyle: "italic", color: "var(--c-accent)" }}>Systems.</em></h2>
+            <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.9rem", color: "var(--c-ink-muted)", lineHeight: 1.8, maxWidth: "26rem", marginBottom: "2rem" }}>
+              AI engineering, software development, and tech consulting for organisations that need real technical depth — not just advice. Separate from the legal practice.
+            </p>
+            <a href="https://entrorasystems.com" target="_blank" rel="noopener noreferrer"
+              className="btn btn-ghost"
+              style={{ display: "inline-flex" }}>
+              Visit Entrora Systems <ArrowUpRight size={13} />
             </a>
-          ))}
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: "1rem", opacity: vis ? 1 : 0, transform: vis ? "none" : "translateY(20px)", transition: "all 0.6s ease 0.15s" }}>
+            {[
+              { num: "01", label: "AI Document Systems", body: "Custom AI pipelines for document classification, extraction, and review at scale." },
+              { num: "02", label: "Legal Tech Development", body: "Software built for legal workflows — designed by someone who understands both sides." },
+              { num: "03", label: "Advisory on AI Adoption", body: "Scoping, readiness assessment, and implementation — without enterprise budgets." },
+            ].map(item => (
+              <div key={item.num} style={{ display: "flex", gap: "1.5rem", alignItems: "flex-start", padding: "1.25rem 0", borderBottom: "1px solid var(--c-border)" }}>
+                <span style={{ fontFamily: "var(--font-serif)", fontSize: "0.75rem", color: "var(--c-accent)", minWidth: "2rem", paddingTop: "0.1rem" }}>{item.num}</span>
+                <div>
+                  <p style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.82rem", letterSpacing: "0.04em", color: "var(--c-ink)", marginBottom: "0.35rem" }}>{item.label}</p>
+                  <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.8rem", color: "var(--c-ink-muted)", lineHeight: 1.65 }}>{item.body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-      <style>{`@media(max-width:600px){#also-grid{grid-template-columns:1fr!important}}`}</style>
+
+      <style>{`@media(max-width:768px){#also-grid{grid-template-columns:1fr!important;gap:2.5rem!important}}`}</style>
     </section>
   );
 }

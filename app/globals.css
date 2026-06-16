@@ -1,19 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&family=Manjari:wght@100;400;700&display=swap');
 @import "tailwindcss";
 
 :root {
-  --font-sans:  'Inter', sans-serif;
-  --font-serif: 'DM Serif Display', serif;
+  --font-sans:   'Inter', sans-serif;
+  --font-serif:  'DM Serif Display', serif;
+  --font-manjari:'Manjari', sans-serif;
 
-  /* Light — warm gold palette from image */
-  --c-bg:         #F5EDD8;   /* warm cream */
-  --c-surface:    #FBF7EF;   /* near white cream */
-  --c-surface2:   #EDE3CC;   /* deeper cream */
-  --c-ink:        #1A1410;   /* deep warm black */
-  --c-ink-mid:    #3D3020;   /* warm dark brown */
-  --c-ink-muted:  #8A7A60;   /* warm muted */
-  --c-silver:     #C4B49A;   /* warm silver/tan */
-  --c-accent:     #C4A265;   /* warm gold — from image frame */
+  /* Light palette */
+  --c-bg:         #F5EDD8;
+  --c-surface:    #FBF7EF;
+  --c-surface2:   #EDE3CC;
+  --c-ink:        #1A1410;
+  --c-ink-mid:    #3D3020;
+  --c-ink-muted:  #8A7A60;
+  --c-silver:     #C4B49A;
+  --c-accent:     #C4A265;
   --c-accent-hover: #A8883F;
   --c-border:     rgba(26,20,16,0.10);
   --c-border-strong: rgba(26,20,16,0.22);
@@ -31,24 +32,24 @@
 }
 
 [data-theme="dark"] {
-  --c-bg:         #0F0D0A;   /* near black warm */
-  --c-surface:    #1A1610;   /* deep warm dark */
-  --c-surface2:   #242018;   /* slightly lighter */
-  --c-ink:        #F5EDD8;   /* cream text */
-  --c-ink-mid:    #C4B49A;   /* warm mid */
-  --c-ink-muted:  #6A5E48;   /* muted warm */
+  --c-bg:         #0C0A08;
+  --c-surface:    #141210;
+  --c-surface2:   #1E1A14;
+  --c-ink:        #F5EDD8;
+  --c-ink-mid:    #C4B49A;
+  --c-ink-muted:  #6A5E48;
   --c-silver:     #48402E;
   --c-accent:     #C4A265;
   --c-accent-hover: #D4B275;
-  --c-border:     rgba(245,237,216,0.08);
-  --c-border-strong: rgba(245,237,216,0.16);
-  --c-glass:      rgba(26,22,16,0.65);
-  --c-glass-border: rgba(196,162,101,0.20);
+  --c-border:     rgba(245,237,216,0.07);
+  --c-border-strong: rgba(245,237,216,0.14);
+  --c-glass:      rgba(20,18,16,0.70);
+  --c-glass-border: rgba(196,162,101,0.18);
 
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.40);
-  --shadow-md: 0 4px 20px rgba(0,0,0,0.50);
-  --shadow-lg: 0 16px 48px rgba(0,0,0,0.60);
-  --shadow-glass: 0 8px 32px rgba(0,0,0,0.40);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.50);
+  --shadow-md: 0 4px 20px rgba(0,0,0,0.55);
+  --shadow-lg: 0 16px 48px rgba(0,0,0,0.70);
+  --shadow-glass: 0 8px 32px rgba(0,0,0,0.50);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -61,12 +62,14 @@ body {
   transition: background 0.3s, color 0.3s;
 }
 
-.t-label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--c-ink-muted); }
+.t-label { font-family: var(--font-manjari); font-size: 0.65rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--c-ink-muted); }
 .t-display { font-family: var(--font-serif); font-weight: 400; line-height: 1.06; }
 .t-display-xl { font-size: clamp(3rem, 6.5vw, 5.5rem); }
 .t-display-lg { font-size: clamp(2.2rem, 4.5vw, 3.8rem); }
 .t-display-md { font-size: clamp(1.6rem, 2.8vw, 2.4rem); }
+.t-display-sm { font-size: clamp(1.2rem, 2vw, 1.6rem); }
 .t-body  { font-size: 1.0625rem; line-height: 1.85; color: var(--c-ink-mid); }
+.t-body-sm { font-size: 0.875rem; line-height: 1.75; color: var(--c-ink-muted); }
 .t-small { font-size: 0.875rem; line-height: 1.75; color: var(--c-ink-muted); }
 
 .page-x { padding-left: var(--space-page-x); padding-right: var(--space-page-x); }
@@ -76,16 +79,24 @@ body {
 /* Glassmorphism */
 .glass {
   background: var(--c-glass);
-  backdrop-filter: blur(16px) saturate(1.4);
-  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  backdrop-filter: blur(20px) saturate(1.6);
+  -webkit-backdrop-filter: blur(20px) saturate(1.6);
   border: 1px solid var(--c-glass-border);
   box-shadow: var(--shadow-glass);
 }
 
+.glass-dark {
+  background: rgba(12,10,8,0.72);
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  border: 1px solid rgba(196,162,101,0.16);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+}
+
 .btn {
   display: inline-flex; align-items: center; gap: 0.4rem;
-  font-family: var(--font-sans); font-size: 0.78rem; font-weight: 600;
-  letter-spacing: 0.07em; text-transform: uppercase;
+  font-family: var(--font-manjari); font-size: 0.8rem; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
   padding: 0.875rem 2rem; border-radius: 2px;
   border: none; cursor: pointer; text-decoration: none;
   transition: all 0.22s ease;
@@ -95,7 +106,7 @@ body {
 .btn-ink:hover { box-shadow: var(--shadow-md); }
 .btn-ghost { background: transparent; color: var(--c-ink); border: 1px solid var(--c-border-strong); }
 .btn-ghost:hover { background: var(--c-surface2); }
-.btn-accent { background: var(--c-accent); color: #fff; }
+.btn-accent { background: var(--c-accent); color: #0C0A08; }
 .btn-accent:hover { background: var(--c-accent-hover); box-shadow: 0 4px 20px rgba(196,162,101,0.35); }
 .btn-glass {
   background: var(--c-glass); color: var(--c-ink);
@@ -121,11 +132,23 @@ body {
 .field::placeholder { color: var(--c-ink-muted); }
 .field:focus { border-color: var(--c-accent); }
 
+/* Scroll reveal utility */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--c-accent); }
 
 #reading-progress {
   position: fixed; top: 0; left: 0; height: 2px;
-  background: var(--c-accent); z-index: 9999; transition: width 0.1s linear;
+  background: linear-gradient(90deg, var(--c-accent), rgba(196,162,101,0.4));
+  z-index: 9999; transition: width 0.1s linear;
 }
