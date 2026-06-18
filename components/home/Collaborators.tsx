@@ -2,14 +2,14 @@
 import { useEffect, useRef, useState } from "react";
 
 const collaborators = [
-  { name: "IFC / World Bank Group",  abbr: "IFC" },
-  { name: "Strathmore University",   abbr: "SU" },
-  { name: "GIZ Kenya",               abbr: "GIZ" },
-  { name: "Nairobi Innovation Hub",  abbr: "NiHub" },
-  { name: "LawTech Kenya",           abbr: "LTK" },
-  { name: "iHub Nairobi",            abbr: "iHub" },
-  { name: "KEPSA",                   abbr: "KEPSA" },
-  { name: "Onfon Media",             abbr: "Onfon" },
+  "IFC / World Bank",
+  "Strathmore University",
+  "GIZ Kenya",
+  "iHub Nairobi",
+  "LawTech Kenya",
+  "KEPSA",
+  "Onfon Media",
+  "Nairobi Innovation Hub",
 ];
 
 export function Collaborators() {
@@ -23,44 +23,52 @@ export function Collaborators() {
   }, []);
 
   return (
-    <section ref={ref} style={{ background: "var(--c-surface)", borderTop: "1px solid var(--c-border)", borderBottom: "1px solid var(--c-border)", padding: "3.5rem var(--space-page-x)" }}>
-      <div className="inner">
-        <p className="t-label" style={{
-          textAlign: "center", marginBottom: "2.5rem",
-          opacity: vis ? 1 : 0, transition: "opacity 0.6s ease",
-        }}>Past clients & collaborators</p>
+    <section ref={ref} style={{
+      background: "var(--c-bg)",
+      borderTop: "1px solid var(--c-border)",
+      padding: "4rem var(--space-page-x)",
+    }}>
+      <p style={{
+        fontFamily: "var(--font-manjari)", fontWeight: 700,
+        fontSize: "0.55rem", letterSpacing: "0.28em", textTransform: "uppercase",
+        color: "var(--c-ink-muted)", textAlign: "center", marginBottom: "2.5rem",
+        opacity: vis ? 1 : 0, transition: "opacity 0.6s ease",
+      }}>
+        Past clients &amp; collaborators
+      </p>
 
-        <div style={{
-          display: "flex", flexWrap: "wrap", gap: "0",
-          justifyContent: "center", alignItems: "center",
-          opacity: vis ? 1 : 0, transition: "opacity 0.6s ease 0.15s",
-        }}>
-          {collaborators.map((c, i) => (
-            <div key={c.name} style={{
-              padding: "1rem 2.25rem",
-              borderRight: i < collaborators.length - 1 ? "1px solid var(--c-border)" : "none",
-              opacity: vis ? 1 : 0,
-              transform: vis ? "none" : "translateY(8px)",
-              transition: `opacity 0.5s ease ${0.1 + i * 0.07}s, transform 0.5s ease ${0.1 + i * 0.07}s`,
-            }}>
-              <p style={{
-                fontFamily: "var(--font-manjari)", fontWeight: 700,
-                fontSize: "0.8rem", letterSpacing: "0.06em",
-                color: "var(--c-ink-muted)", whiteSpace: "nowrap",
-                transition: "color 0.2s",
-              }}
-                onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"}
-                onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink-muted)"}
-              >{c.name}</p>
-            </div>
-          ))}
-        </div>
+      <div style={{
+        display: "flex", flexWrap: "wrap",
+        justifyContent: "center", alignItems: "center",
+        gap: "0",
+        opacity: vis ? 1 : 0, transition: "opacity 0.6s ease 0.1s",
+      }}>
+        {collaborators.map((name, i) => (
+          <span key={name} style={{
+            display: "inline-flex", alignItems: "center",
+            padding: "0 2rem",
+            borderRight: i < collaborators.length - 1 ? "1px solid var(--c-border)" : "none",
+            fontFamily: "var(--font-manjari)", fontWeight: 700,
+            fontSize: "0.72rem", letterSpacing: "0.08em",
+            color: "var(--c-ink-muted)",
+            opacity: vis ? 0.6 : 0,
+            transition: `opacity 0.5s ease ${0.12 + i * 0.06}s`,
+            whiteSpace: "nowrap",
+          }}
+            onMouseEnter={e => (e.currentTarget as HTMLElement).style.opacity = "1"}
+            onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = "0.6"}
+          >
+            {name}
+          </span>
+        ))}
       </div>
 
       <style>{`
         @media(max-width:768px){
-          section div div { gap: 0 !important; }
-          section div div > div { border-right: none !important; padding: 0.75rem 1.25rem !important; }
+          section > div:last-child > span {
+            border-right: none !important;
+            padding: 0.5rem 1rem !important;
+          }
         }
       `}</style>
     </section>
