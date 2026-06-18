@@ -1,6 +1,6 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
-import { Send, ArrowRight } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ArrowRight, Send } from "lucide-react";
 import Link from "next/link";
 
 type Msg = { role: "user" | "assistant"; text: string };
@@ -8,23 +8,24 @@ type Msg = { role: "user" | "assistant"; text: string };
 const STARTERS = [
   "I need help with startup incorporation",
   "I have an IP exposure issue",
-  "I want to raise capital — where do I start?",
+  "I want to fundraise — where do I start?",
   "I need a data privacy review",
 ];
 
 export function BookingCTA() {
   const [msgs, setMsgs] = useState<Msg[]>([
-    { role: "assistant", text: "What are you working on? I'll point you in the right direction." }
+    { role: "assistant", text: "What are you working on?" }
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [vis, setVis] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const o = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVis(true); }, { threshold: 0.1 });
-    if (sectionRef.current) o.observe(sectionRef.current);
+    if (ref.current) o.observe(ref.current);
     return () => o.disconnect();
   }, []);
 
@@ -44,144 +45,135 @@ export function BookingCTA() {
       const data = await res.json();
       setMsgs(prev => [...prev, { role: "assistant", text: data.reply || "Book a call and Decra will be in touch." }]);
     } catch {
-      setMsgs(prev => [...prev, { role: "assistant", text: "Connection issue — book a call directly below." }]);
+      setMsgs(prev => [...prev, { role: "assistant", text: "Connection issue — book a call directly." }]);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <section style={{
-      background: "var(--c-bg)",
+    <section ref={ref} style={{
       borderTop: "1px solid var(--c-border)",
-      paddingTop: "var(--space-section)",
-      paddingBottom: "var(--space-section)",
-      paddingLeft: "var(--space-page-x)",
-      paddingRight: "var(--space-page-x)",
-    }} ref={sectionRef}>
+      padding: `var(--space-section) var(--space-x)`,
+    }}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
 
-        {/* Header */}
         <div style={{
-          textAlign: "center", marginBottom: "4rem",
+          display: "grid", gridTemplateColumns: "1fr 1.2fr", gap: "8rem", alignItems: "start",
           opacity: vis ? 1 : 0, transform: vis ? "none" : "translateY(16px)",
-          transition: "all 0.7s ease",
-        }}>
-          <p style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.55rem", letterSpacing: "0.28em", textTransform: "uppercase", color: "var(--c-ink-muted)", marginBottom: "1.25rem" }}>Get Started</p>
-          <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontStyle: "italic", fontSize: "clamp(1.8rem,3.5vw,2.8rem)", color: "var(--c-ink)", lineHeight: 1.1 }}>
-            Not sure where to start?
-          </h2>
-        </div>
+          transition: "all 0.8s cubic-bezier(0.16,1,0.3,1)",
+        }} id="cta-g">
 
-        {/* Chat */}
-        <div style={{
-          maxWidth: "44rem", margin: "0 auto",
-          opacity: vis ? 1 : 0, transform: vis ? "none" : "translateY(20px)",
-          transition: "all 0.7s ease 0.1s",
-        }}>
-          {/* Messages */}
-          <div style={{
-            background: "var(--c-surface)", border: "1px solid var(--c-border)",
-            minHeight: "220px", maxHeight: "320px", overflowY: "auto",
-            padding: "1.75rem 2rem",
-            display: "flex", flexDirection: "column", gap: "0.85rem",
-          }}>
-            {msgs.map((m, i) => (
-              <div key={i} style={{ display: "flex", justifyContent: m.role === "user" ? "flex-end" : "flex-start" }}>
-                <div style={{
+          {/* Left: heading */}
+          <div>
+            <p className="label" style={{ marginBottom: "1.5rem" }}>Get started</p>
+            <h2 style={{
+              fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400,
+              fontSize: "clamp(2rem, 3.5vw, 3rem)", color: "var(--c-ink)",
+              lineHeight: 1.05, marginBottom: "1.5rem",
+            }}>Not sure<br />where to start?</h2>
+            <p style={{
+              fontFamily: "var(--font-sans)", fontWeight: 300,
+              fontSize: "0.85rem", color: "var(--c-ink-muted)", lineHeight: 1.85,
+              maxWidth: "20rem", marginBottom: "2.5rem",
+            }}>
+              Ask the AI — it knows Decra's practice areas and can guide you to the right track.
+            </p>
+            <Link href="/book" style={{
+              display: "inline-flex", alignItems: "center", gap: "0.5rem",
+              fontFamily: "var(--font-manjari)", fontWeight: 700,
+              fontSize: "0.58rem", letterSpacing: "0.2em", textTransform: "uppercase",
+              color: "var(--c-ink)", textDecoration: "none",
+              borderBottom: "1px solid var(--c-ink)", paddingBottom: "2px",
+              transition: "color 0.2s, border-color 0.2s",
+            }}
+              onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.color = "var(--c-accent)"; (e.currentTarget as HTMLAnchorElement).style.borderColor = "var(--c-accent)"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.color = "var(--c-ink)"; (e.currentTarget as HTMLAnchorElement).style.borderColor = "var(--c-ink)"; }}>
+              Or book directly <ArrowRight size={10} strokeWidth={1.5} />
+            </Link>
+          </div>
+
+          {/* Right: chat */}
+          <div>
+            {/* Messages */}
+            <div style={{
+              minHeight: "180px", maxHeight: "280px", overflowY: "auto",
+              display: "flex", flexDirection: "column", gap: "1rem",
+              paddingBottom: "1rem",
+              borderBottom: "1px solid var(--c-border)",
+              marginBottom: "0",
+            }}>
+              {msgs.map((m, i) => (
+                <div key={i} style={{
+                  alignSelf: m.role === "user" ? "flex-end" : "flex-start",
                   maxWidth: "80%",
-                  padding: "0.65rem 1rem",
-                  background: m.role === "user" ? "var(--c-ink)" : "transparent",
-                  border: m.role === "assistant" ? "1px solid var(--c-border)" : "none",
-                  fontFamily: "var(--font-sans)", fontSize: "0.85rem", lineHeight: 1.7,
-                  color: m.role === "user" ? "var(--c-bg)" : "var(--c-ink-mid)",
                 }}>
                   {m.role === "assistant" && (
-                    <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "0.7rem", color: "var(--c-accent)", display: "block", marginBottom: "0.3rem" }}>Decra AI</span>
+                    <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "0.65rem", color: "var(--c-accent)", marginBottom: "0.25rem" }}>Decra AI</p>
                   )}
-                  {m.text}
+                  <p style={{
+                    fontFamily: "var(--font-sans)", fontWeight: 300,
+                    fontSize: "0.875rem", lineHeight: 1.75,
+                    color: m.role === "user" ? "var(--c-ink)" : "var(--c-ink-mid)",
+                  }}>{m.text}</p>
                 </div>
-              </div>
-            ))}
-            {loading && (
-              <div style={{ display: "flex", gap: "4px", padding: "0.5rem 0" }}>
-                {[0,1,2].map(j => <span key={j} style={{ width: "4px", height: "4px", borderRadius: "50%", background: "var(--c-accent)", animation: `pulse-dot 1.2s ease ${j*0.2}s infinite` }} />)}
+              ))}
+              {loading && (
+                <div style={{ alignSelf: "flex-start" }}>
+                  <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "0.65rem", color: "var(--c-accent)", marginBottom: "0.25rem" }}>Decra AI</p>
+                  <div style={{ display: "flex", gap: "3px" }}>
+                    {[0,1,2].map(j => <span key={j} style={{ width: "4px", height: "4px", borderRadius: "50%", background: "var(--c-ink-muted)", animation: `bd 1.2s ease ${j*0.2}s infinite` }} />)}
+                  </div>
+                </div>
+              )}
+              <div ref={bottomRef} />
+            </div>
+
+            {/* Starters */}
+            {msgs.length <= 1 && (
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", padding: "1rem 0" }}>
+                {STARTERS.map(s => (
+                  <button key={s} onClick={() => send(s)} style={{
+                    fontFamily: "var(--font-sans)", fontWeight: 300,
+                    fontSize: "0.72rem", color: "var(--c-ink-muted)",
+                    background: "none", border: "1px solid var(--c-border)",
+                    padding: "0.3rem 0.7rem", cursor: "pointer", transition: "all 0.2s",
+                  }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "var(--c-ink-muted)"; (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "var(--c-border)"; (e.currentTarget as HTMLElement).style.color = "var(--c-ink-muted)"; }}>
+                    {s}
+                  </button>
+                ))}
               </div>
             )}
-            <div ref={bottomRef} />
-          </div>
 
-          {/* Starter prompts */}
-          {msgs.length <= 1 && (
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", padding: "1rem 0 0.5rem", borderTop: "1px solid var(--c-border)" }}>
-              {STARTERS.map(s => (
-                <button key={s} onClick={() => send(s)} style={{
-                  padding: "0.3rem 0.75rem",
-                  border: "1px solid var(--c-border-strong)", background: "none",
-                  fontFamily: "var(--font-sans)", fontSize: "0.72rem",
-                  color: "var(--c-ink-muted)", cursor: "pointer", transition: "all 0.2s",
-                }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"; (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "var(--c-border-strong)"; (e.currentTarget as HTMLElement).style.color = "var(--c-ink-muted)"; }}>
-                  {s}
-                </button>
-              ))}
+            {/* Input */}
+            <div style={{ display: "flex", alignItems: "center", borderBottom: "1px solid var(--c-border-strong)", paddingTop: msgs.length > 1 ? "1rem" : "0" }}>
+              <input ref={inputRef} value={input}
+                onChange={e => setInput(e.target.value)}
+                onKeyDown={e => e.key === "Enter" && send(input)}
+                placeholder="Ask anything..."
+                style={{
+                  flex: 1, background: "none", border: "none",
+                  fontFamily: "var(--font-sans)", fontWeight: 300,
+                  fontSize: "0.875rem", color: "var(--c-ink)",
+                  padding: "0.85rem 0", outline: "none",
+                }} />
+              <button onClick={() => send(input)} disabled={loading || !input.trim()} style={{
+                background: "none", border: "none", cursor: input.trim() ? "pointer" : "default",
+                color: input.trim() ? "var(--c-accent)" : "var(--c-ink-muted)",
+                transition: "color 0.2s", lineHeight: 0, padding: "0 0 0 0.5rem",
+              }}>
+                <Send size={13} strokeWidth={1.5} />
+              </button>
             </div>
-          )}
-
-          {/* Input */}
-          <div style={{ display: "flex", gap: "0", borderTop: "1px solid var(--c-border)", marginTop: msgs.length > 1 ? "0" : "0" }}>
-            <input
-              value={input}
-              onChange={e => setInput(e.target.value)}
-              onKeyDown={e => e.key === "Enter" && !e.shiftKey && send(input)}
-              placeholder="Ask about services, process, or your situation..."
-              style={{
-                flex: 1, background: "var(--c-surface)", border: "1px solid var(--c-border)", borderTop: "none", borderRight: "none",
-                padding: "1rem 1.25rem",
-                fontFamily: "var(--font-sans)", fontSize: "0.85rem", color: "var(--c-ink)",
-                outline: "none",
-              }}
-              onFocus={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"}
-              onBlur={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--c-border)"}
-            />
-            <button onClick={() => send(input)} disabled={loading || !input.trim()} style={{
-              width: "3.25rem", background: input.trim() ? "var(--c-accent)" : "var(--c-surface)",
-              border: "1px solid var(--c-border)", borderTop: "none", borderLeft: "none",
-              cursor: input.trim() ? "pointer" : "default",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              transition: "background 0.2s", flexShrink: 0,
-            }}>
-              <Send size={13} color={input.trim() ? "#0C0A08" : "var(--c-ink-muted)"} />
-            </button>
-          </div>
-
-          {/* CTA */}
-          <div style={{
-            marginTop: "2.5rem", display: "flex", alignItems: "center",
-            justifyContent: "space-between", paddingTop: "2rem",
-            borderTop: "1px solid var(--c-border)",
-          }}>
-            <div>
-              <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "1rem", color: "var(--c-ink)", marginBottom: "0.25rem" }}>Ready for a real conversation?</p>
-              <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.78rem", color: "var(--c-ink-muted)" }}>Free 15-minute discovery call.</p>
-            </div>
-            <Link href="/book" style={{
-              display: "inline-flex", alignItems: "center", gap: "0.4rem",
-              fontFamily: "var(--font-manjari)", fontWeight: 700,
-              fontSize: "0.62rem", letterSpacing: "0.18em", textTransform: "uppercase",
-              color: "var(--c-accent)", textDecoration: "none", transition: "color 0.2s",
-              flexShrink: 0,
-            }}
-              onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"}
-              onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-accent)"}>
-              Book a Call <ArrowRight size={11} />
-            </Link>
           </div>
         </div>
       </div>
-
-      <style>{`@keyframes pulse-dot { 0%,100%{opacity:1}50%{opacity:0.25} }`}</style>
+      <style>{`
+        @keyframes bd { 0%,100%{opacity:0.3}50%{opacity:1} }
+        @media(max-width:700px){#cta-g{grid-template-columns:1fr!important;gap:3rem!important}}
+      `}</style>
     </section>
   );
 }

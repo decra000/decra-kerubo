@@ -1,74 +1,62 @@
 "use client";
-import { useState, useEffect } from "react";
-import { X } from "lucide-react";
+import { useEffect, useState } from "react";
 
 type Intent = "legal" | "founder" | "exploring" | null;
 
 export function IntentPopup({ onSelect }: { onSelect: (i: Intent) => void }) {
-  const [visible, setVisible] = useState(false);
-  const [closing, setClosing] = useState(false);
+  const [vis, setVis] = useState(false);
+  const [out, setOut] = useState(false);
 
   useEffect(() => {
     const seen = sessionStorage.getItem("intent");
-    if (!seen) setTimeout(() => setVisible(true), 1200);
+    if (!seen) setTimeout(() => setVis(true), 1000);
     else onSelect(seen as Intent);
   }, []);
 
   const choose = (intent: Intent) => {
     sessionStorage.setItem("intent", intent || "exploring");
-    setClosing(true);
-    setTimeout(() => { setVisible(false); onSelect(intent); }, 350);
+    setOut(true);
+    setTimeout(() => { setVis(false); onSelect(intent); }, 300);
   };
 
-  if (!visible) return null;
+  if (!vis) return null;
 
   return (
     <div style={{
       position: "fixed", inset: 0, zIndex: 999,
-      background: "rgba(12,10,8,0.6)", backdropFilter: "blur(12px)",
-      display: "flex", alignItems: "center", justifyContent: "center",
-      padding: "1.5rem",
-      opacity: closing ? 0 : 1, transition: "opacity 0.35s ease",
-    }}>
+      background: "rgba(8,8,8,0.7)", backdropFilter: "blur(10px)",
+      display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem",
+      opacity: out ? 0 : 1, transition: "opacity 0.3s",
+    }} onClick={() => choose("exploring")}>
       <div style={{
-        background: "var(--c-surface)", border: "1px solid var(--c-border)",
-        padding: "3rem 3.5rem", maxWidth: "380px", width: "100%",
-        transform: closing ? "translateY(8px) scale(0.97)" : "none",
-        transition: "transform 0.35s ease", position: "relative",
-      }}>
-        <button onClick={() => choose("exploring")} style={{
-          position: "absolute", top: "1.25rem", right: "1.25rem",
-          background: "none", border: "none", cursor: "pointer",
-          color: "var(--c-ink-muted)", lineHeight: 0,
-        }}>
-          <X size={14} />
-        </button>
+        background: "var(--c-bg)", border: "1px solid var(--c-border)",
+        padding: "3rem", maxWidth: "360px", width: "100%",
+        transform: out ? "translateY(10px)" : "none", transition: "transform 0.3s",
+      }} onClick={e => e.stopPropagation()}>
 
-        <p style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.55rem", letterSpacing: "0.25em", textTransform: "uppercase", color: "var(--c-ink-muted)", marginBottom: "1.5rem" }}>Welcome</p>
+        <p className="label" style={{ marginBottom: "1.5rem" }}>Welcome</p>
+        <h2 style={{
+          fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400,
+          fontSize: "1.5rem", color: "var(--c-ink)", lineHeight: 1.15, marginBottom: "2rem",
+        }}>What brings you here?</h2>
 
-        <h2 style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "1.6rem", color: "var(--c-ink)", lineHeight: 1.15, marginBottom: "0.5rem" }}>
-          What brings you here?
-        </h2>
-        <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.8rem", color: "var(--c-ink-muted)", lineHeight: 1.7, marginBottom: "2rem" }}>
-          One click — I'll show you what's most relevant.
-        </p>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: "1px", background: "var(--c-border)" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "1px" }}>
           {[
-            { intent: "legal" as Intent,     label: "I need legal help",        sub: "Startup, NGO, or tech compliance" },
-            { intent: "founder" as Intent,   label: "I'm a founder or builder", sub: "Structure, fundraising, growth" },
-            { intent: "exploring" as Intent, label: "Just exploring your work",  sub: "Get the full picture" },
+            { v: "legal"    as Intent, l: "I need legal help",        s: "Startup, NGO, or tech compliance" },
+            { v: "founder"  as Intent, l: "I'm a founder or builder", s: "Structure, fundraising, growth" },
+            { v: "exploring"as Intent, l: "Just exploring",            s: "Get the full picture" },
           ].map(opt => (
-            <button key={opt.intent} onClick={() => choose(opt.intent)} style={{
+            <button key={opt.v} onClick={() => choose(opt.v)} style={{
               display: "flex", flexDirection: "column", alignItems: "flex-start",
-              padding: "1.1rem 1.25rem",
-              background: "var(--c-bg)", border: "none", cursor: "pointer",
-              textAlign: "left", width: "100%", transition: "background 0.2s",
+              padding: "1.1rem 0", background: "none", border: "none",
+              borderBottom: "1px solid var(--c-border)",
+              cursor: "pointer", textAlign: "left",
+              transition: "padding-left 0.2s",
             }}
-              onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = "var(--c-surface2)"}
-              onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = "var(--c-bg)"}>
-              <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.875rem", fontWeight: 500, color: "var(--c-ink)", marginBottom: "0.15rem" }}>{opt.label}</span>
-              <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.72rem", color: "var(--c-ink-muted)" }}>{opt.sub}</span>
+              onMouseEnter={e => (e.currentTarget as HTMLElement).style.paddingLeft = "0.5rem"}
+              onMouseLeave={e => (e.currentTarget as HTMLElement).style.paddingLeft = "0"}>
+              <span style={{ fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.875rem", color: "var(--c-ink)", marginBottom: "0.15rem" }}>{opt.l}</span>
+              <span style={{ fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "0.72rem", color: "var(--c-ink-muted)" }}>{opt.s}</span>
             </button>
           ))}
         </div>

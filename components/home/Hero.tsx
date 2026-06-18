@@ -1,16 +1,12 @@
 "use client";
-import Link from "next/link";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 type Intent = "legal" | "founder" | "exploring" | null;
 
 export function Hero({ intent }: { intent: Intent }) {
   const [vis, setVis] = useState(false);
-
-  useEffect(() => {
-    const t = setTimeout(() => setVis(true), 80);
-    return () => clearTimeout(t);
-  }, []);
+  useEffect(() => { const t = setTimeout(() => setVis(true), 60); return () => clearTimeout(t); }, []);
 
   return (
     <section style={{
@@ -21,87 +17,74 @@ export function Hero({ intent }: { intent: Intent }) {
       alignItems: "center",
       justifyContent: "center",
       position: "relative",
-      padding: "8rem var(--space-page-x) 5rem",
       overflow: "hidden",
     }}>
 
-      {/* Photo — centre stage */}
+      {/* Photo — nearly full viewport height */}
       <div style={{
-        width: "clamp(260px, 36vw, 460px)",
-        aspectRatio: "3/4",
-        borderRadius: "6px",
+        width: "clamp(240px, 32vw, 420px)",
+        aspectRatio: "4/5",
         overflow: "hidden",
         position: "relative",
-        marginBottom: "2.5rem",
         opacity: vis ? 1 : 0,
-        transform: vis ? "none" : "translateY(16px)",
-        transition: "opacity 0.9s ease, transform 0.9s ease",
+        transform: vis ? "none" : "translateY(20px)",
+        transition: "opacity 1.1s cubic-bezier(0.16,1,0.3,1), transform 1.1s cubic-bezier(0.16,1,0.3,1)",
+        marginBottom: "2.75rem",
       }}>
-        <img
-          src="/decra-hero.png"
-          alt="Decra Kerubo"
-          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top", display: "block" }}
-        />
+        <img src="/decra-hero.png" alt="Decra Kerubo"
+          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top", display: "block" }} />
       </div>
 
-      {/* Name */}
+      {/* Identity — minimal, centred */}
       <div style={{
         textAlign: "center",
         opacity: vis ? 1 : 0,
         transform: vis ? "none" : "translateY(10px)",
-        transition: "opacity 0.9s ease 0.15s, transform 0.9s ease 0.15s",
+        transition: "opacity 1.1s cubic-bezier(0.16,1,0.3,1) 0.1s, transform 1.1s cubic-bezier(0.16,1,0.3,1) 0.1s",
       }}>
-        <h1 style={{
+        <p style={{
           fontFamily: "var(--font-serif)",
-          fontWeight: 400,
           fontStyle: "italic",
-          fontSize: "clamp(2rem, 3.5vw, 3rem)",
+          fontSize: "clamp(1.75rem, 3vw, 2.5rem)",
           color: "var(--c-ink)",
           letterSpacing: "-0.01em",
           lineHeight: 1,
-          marginBottom: "0.6rem",
-        }}>
-          Decra Kerubo
-        </h1>
+          marginBottom: "0.85rem",
+          fontWeight: 400,
+        }}>Decra Kerubo</p>
+
         <p style={{
           fontFamily: "var(--font-manjari)",
+          fontSize: "0.58rem",
           fontWeight: 700,
-          fontSize: "0.6rem",
-          letterSpacing: "0.25em",
+          letterSpacing: "0.26em",
           textTransform: "uppercase",
           color: "var(--c-ink-muted)",
-          marginBottom: "2rem",
-        }}>
-          Lawyer &nbsp;&middot;&nbsp; Computer Scientist &nbsp;&middot;&nbsp; Nairobi
-        </p>
+          marginBottom: "2.25rem",
+        }}>Lawyer &nbsp;&middot;&nbsp; Computer Scientist &nbsp;&middot;&nbsp; Nairobi</p>
 
-        {/* Two links only */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "2.5rem" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "2rem" }}>
           <a href="#services" style={{
             fontFamily: "var(--font-manjari)", fontWeight: 700,
-            fontSize: "0.65rem", letterSpacing: "0.2em", textTransform: "uppercase",
+            fontSize: "0.58rem", letterSpacing: "0.22em", textTransform: "uppercase",
             color: "var(--c-ink-muted)", textDecoration: "none", transition: "color 0.2s",
           }}
-            onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"}
-            onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink-muted)"}>
+            onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.color = "var(--c-ink)"}
+            onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.color = "var(--c-ink-muted)"}>
             Services
           </a>
-          <span style={{ width: "1px", height: "12px", background: "var(--c-border-strong)", display: "inline-block" }} />
+          <span style={{ display: "block", width: "1px", height: "10px", background: "var(--c-border-strong)" }} />
           <Link href="/book" style={{
             fontFamily: "var(--font-manjari)", fontWeight: 700,
-            fontSize: "0.65rem", letterSpacing: "0.2em", textTransform: "uppercase",
+            fontSize: "0.58rem", letterSpacing: "0.22em", textTransform: "uppercase",
             color: "var(--c-accent)", textDecoration: "none", transition: "color 0.2s",
           }}
-            onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"}
-            onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-accent)"}>
+            onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.color = "var(--c-ink)"}
+            onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.color = "var(--c-accent)"}>
             Book a Call
           </Link>
         </div>
       </div>
-
-      <style>{`
-        @keyframes pulse-dot { 0%,100%{opacity:1}50%{opacity:0.35} }
-      `}</style>
     </section>
   );
 }
