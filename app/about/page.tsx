@@ -1,191 +1,212 @@
-import type { Metadata } from "next";
-import Image from "next/image";
+"use client";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Instagram, Linkedin } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "About & Work",
-  description: "Decra — Lawyer, Computer Scientist, AI Engineer and Entrepreneur. Selected case studies.",
+function useReveal() {
+  const ref = useRef<HTMLElement>(null);
+  const [vis, setVis] = useState(false);
+  useEffect(() => {
+    const o = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVis(true); }, { threshold: 0.06 });
+    if (ref.current) o.observe(ref.current);
+    return () => o.disconnect();
+  }, []);
+  return { ref, vis };
+}
+
+const fade = (vis: boolean, delay = 0): React.CSSProperties => ({
+  opacity: vis ? 1 : 0,
+  transform: vis ? "none" : "translateY(18px)",
+  transition: `opacity 0.85s cubic-bezier(0.16,1,0.3,1) ${delay}s, transform 0.85s cubic-bezier(0.16,1,0.3,1) ${delay}s`,
+});
+
+const LBL: React.CSSProperties = {
+  fontFamily: "var(--font-manjari)", fontWeight: 700,
+  fontSize: "0.55rem", letterSpacing: "0.24em", textTransform: "uppercase",
+  color: "var(--c-ink-muted)",
+};
+const SERIF = (sz = "clamp(2rem,3.5vw,3rem)"): React.CSSProperties => ({
+  fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400,
+  fontSize: sz, color: "var(--c-ink)", lineHeight: 1.05,
+});
+const BODY: React.CSSProperties = {
+  fontFamily: "var(--font-sans)", fontWeight: 300,
+  fontSize: "0.875rem", color: "var(--c-ink-muted)", lineHeight: 1.85,
+};
+const SEC: React.CSSProperties = {
+  borderTop: "1px solid var(--c-border)",
+  padding: "var(--space-section) var(--space-x)",
 };
 
-const values = [
-  { title: "Clarity over complexity.",               body: "The best advice simplifies. If you leave a consultation more confused than when you arrived, something went wrong." },
-  { title: "Decisions have downstream consequences.", body: "Company structure, IP registration, AI adoption — these are not administrative tasks. They shape what becomes possible later." },
-  { title: "The intersection is the value.",         body: "Technology without legal grounding is fragile. Law without technical understanding is blind. The combination is rare — that's where I operate." },
-];
-
-const cases = [
-  {
-    tag: "Tech Policy & Startup Law",
-    title: "IP Strategy for a Kenyan EdTech Startup Pre-Fundraise",
-    challenge: "A Kenyan EdTech startup preparing for a seed round. Investors flagged IP ownership gaps — the core product had been built by contractors with no IP assignment clauses.",
-    approach: "Audited all existing contracts, identified IP exposure, drafted retroactive IP assignment agreements, and established a forward-looking IP policy.",
-    outcome: "IP position cleaned up before due diligence. Fundraise proceeded. Founders left with a clear IP governance framework.",
-    lessons: "IP conversations are uncomfortable to have early and expensive to fix late.",
-  },
-  {
-    tag: "Founder Legal",
-    title: "Founder Structure Advisory for a Multi-Country Social Enterprise",
-    challenge: "Two co-founders launching across Kenya and Uganda. No formal agreement on equity, roles, IP, or exit scenarios.",
-    approach: "Facilitated a structured founder conversation, defined equity splits and vesting schedules, drafted a co-founder agreement, and identified the right incorporation structure for multi-country operations.",
-    outcome: "Clear legal foundation established before operations commenced. Entity structure tax-efficient for both jurisdictions.",
-    lessons: "Founder agreements are not a sign of distrust — they are a sign of respect.",
-  },
-  {
-    tag: "Tech Policy & Startup Law",
-    title: "AI Document Review System for a Legal NGO",
-    challenge: "A Nairobi-based legal NGO was spending 60% of staff time manually reviewing documents for case eligibility with a limited budget and no technical team.",
-    approach: "Conducted an AI readiness assessment, identified open-source tools, and built a lightweight document classification system via Entrora Systems.",
-    outcome: "Document review time reduced by 70%. Staff redirected to higher-value case management. Zero ongoing licensing costs.",
-    lessons: "AI adoption doesn't require enterprise budgets. Right scoping matters more than investment size.",
-  },
-];
-
-export default function AboutPage() {
+/* ── S1: Cover ── */
+function Cover() {
+  const [vis, setVis] = useState(false);
+  useEffect(() => { const t = setTimeout(() => setVis(true), 80); return () => clearTimeout(t); }, []);
   return (
-    <div style={{ background: "var(--c-bg)", paddingTop: "6rem" }}>
+    <section style={{ minHeight: "100svh", background: "var(--c-bg)", position: "relative", overflow: "hidden", display: "flex", alignItems: "flex-end" }}>
+      {/* Full bleed image */}
+      <div style={{ position: "absolute", inset: 0 }}>
+        <img src="/decra-about.jpg" alt="Decra Kerubo"
+          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top", display: "block" }} />
+        {/* Dark gradient from bottom */}
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, var(--c-bg) 0%, rgba(8,8,8,0.55) 40%, transparent 70%)" }} />
+      </div>
+      {/* Text over image bottom */}
+      <div style={{ position: "relative", zIndex: 2, padding: "4rem var(--space-x) 5rem", maxWidth: "var(--max-w)", margin: "0 auto", width: "100%" }}>
+        <div style={fade(vis, 0.2)}>
+          <p style={{ ...LBL, color: "rgba(240,238,233,0.5)", marginBottom: "1rem" }}>About</p>
+          <h1 style={{ ...SERIF("clamp(2.5rem,5vw,4.5rem)"), color: "#F0EEE9", marginBottom: "1rem" }}>Decra Kerubo.</h1>
+          <p style={{ fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "1rem", color: "rgba(240,238,233,0.55)", maxWidth: "28rem", lineHeight: 1.75 }}>
+            Lawyer. Computer Scientist. Technology Law Consultant. Nairobi.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
 
-      {/* ── About header ── */}
-      <section className="section page-x">
-        <div className="inner about-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "5rem", alignItems: "center" }}>
+/* ── S2: Bio + Education ── */
+function Bio() {
+  const { ref, vis } = useReveal();
+  return (
+    <section ref={ref as React.RefObject<HTMLElement>} style={SEC}>
+      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1.4fr", gap: "7rem", alignItems: "start" }} className="bio-g">
+
           {/* Photo */}
-          <div style={{ position: "relative" }}>
-            <div style={{ borderRadius: "16px", overflow: "hidden", aspectRatio: "3/4", position: "relative", background: "rgba(14,61,50,0.04)", border: "1px solid var(--c-border)" }}>
-              <Image
-                src="/decra-about.jpg"
-                alt="Decra"
-                fill
-                style={{ objectFit: "cover", objectPosition: "top center" }}
-              />
+          <div style={fade(vis)}>
+            <div style={{ aspectRatio: "3/4", overflow: "hidden", marginBottom: "1.5rem" }}>
+              <img src="/decra-about.jpg" alt="Decra Kerubo"
+                style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top", display: "block" }} />
             </div>
-            {/* Credential tag */}
-            <div style={{ position: "absolute", bottom: "1.25rem", left: "1.25rem", right: "1.25rem", background: "rgba(14,61,50,0.88)", backdropFilter: "blur(8px)", borderRadius: "10px", padding: "1rem 1.1rem" }}>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
-                {[["LLB", "Bachelor of Laws"], ["BSc", "Computer Science"]].map(([d, s]) => (
-                  <div key={d}>
-                    <p style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.9rem", color: "var(--c-gold)" }}>{d}</p>
-                    <p style={{ fontSize: "0.6rem", color: "rgba(248,246,241,0.45)", marginTop: "0.15rem" }}>{s}</p>
+            {/* Credentials */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "0" }}>
+              {[
+                ["LLB", "Bachelor of Laws", "University of Nairobi"],
+                ["BSc", "Computer Science", "University of Nairobi"],
+              ].map(([deg, full, uni]) => (
+                <div key={deg} style={{ display: "flex", gap: "1.5rem", alignItems: "flex-start", padding: "1rem 0", borderBottom: "1px solid var(--c-border)" }}>
+                  <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "0.8rem", color: "var(--c-accent)", minWidth: "2.5rem" }}>{deg}</span>
+                  <div>
+                    <p style={{ fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "0.82rem", color: "var(--c-ink)", marginBottom: "0.15rem" }}>{full}</p>
+                    <p style={{ ...LBL, fontSize: "0.5rem" }}>{uni}</p>
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
           </div>
 
           {/* Copy */}
-          <div>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "1.5rem" }}>
-              <span style={{ display: "inline-block", width: "1.5rem", height: "1px", background: "var(--c-gold)" }} />
-              <span className="t-label">About Decra</span>
-            </div>
-            <h1 className="t-display t-display-xl" style={{ marginBottom: "1.5rem" }}>Two degrees. One practice.</h1>
-            <p className="t-body" style={{ marginBottom: "0.9rem" }}>
-              A law degree and a computer science degree aren't the typical combination — but they're the combination that makes this advisory rare. Most legal challenges in tech can't be solved by law alone, and most technical decisions have legal consequences nobody tracks.
+          <div style={fade(vis, 0.1)}>
+            <p style={{ ...LBL, marginBottom: "1.5rem" }}>Background</p>
+            <h2 style={{ ...SERIF("clamp(1.6rem,3vw,2.4rem)"), marginBottom: "2rem" }}>Two degrees. One rare intersection.</h2>
+
+            <p style={{ ...BODY, marginBottom: "1.25rem" }}>
+              A law degree and a computer science degree aren't the typical combination — but they're the combination that makes this practice rare. Most legal challenges in technology can't be solved by law alone, and most technical decisions carry legal consequences nobody tracks until it's too late.
             </p>
-            <p className="t-body" style={{ marginBottom: "0.9rem" }}>
-              I built a practice at that intersection: tech policy and startup law for companies, and founder legal for the people building them. For AI engineering and tech development, I run Entrora Systems separately.
+            <p style={{ ...BODY, marginBottom: "1.25rem" }}>
+              I built a practice at that intersection: technology law consulting for companies, products, and platforms — and startup advisory for the people building them. For AI engineering and technical development, I run Entrora Systems separately.
             </p>
-            <div style={{ borderTop: "1px solid var(--c-border)", paddingTop: "1.5rem", marginTop: "1.5rem", display: "flex", flexDirection: "column", gap: "0.9rem" }}>
+            <p style={{ ...BODY, marginBottom: "3rem" }}>
+              My work is grounded in the belief that legal clarity is a competitive advantage — not a compliance box. The founders and companies I work with move faster because they've done it right the first time.
+            </p>
+
+            {/* Inspiration */}
+            <p style={{ ...LBL, marginBottom: "1.25rem" }}>Inspiration</p>
+            <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "1.1rem", color: "var(--c-ink)", lineHeight: 1.6, marginBottom: "3rem", maxWidth: "28rem", borderLeft: "1px solid var(--c-accent)", paddingLeft: "1.5rem" }}>
+              "Technology without legal grounding is fragile. Law without technical understanding is blind. The combination is rare — that's where I operate."
+            </p>
+
+            {/* Partnership anticipation */}
+            <p style={{ ...LBL, marginBottom: "1.25rem" }}>Partnership anticipations</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0" }}>
               {[
-                { label: "Based in",    value: "Nairobi, Kenya" },
-                { label: "Serving",     value: "Startups, NGOs, Founders, SMEs" },
-                { label: "Also via",    value: "Entrora Systems — AI & tech development" },
-              ].map(item => (
-                <div key={item.label} style={{ display: "flex", gap: "2rem" }}>
-                  <span style={{ fontSize: "0.62rem", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--c-ink-muted)", minWidth: "5rem", paddingTop: "0.15rem" }}>{item.label}</span>
-                  <span style={{ fontSize: "0.8rem", color: "var(--c-ink)" }}>{item.value}</span>
+                "Law firms seeking technology law capacity",
+                "Tech companies needing embedded legal advisory",
+                "Investors looking for portfolio legal support",
+                "Accelerators and incubators for startup programming",
+                "International firms expanding into East Africa",
+              ].map((item, i) => (
+                <div key={i} style={{ display: "flex", gap: "1rem", padding: "0.85rem 0", borderBottom: "1px solid var(--c-border)", ...BODY, color: "var(--c-ink-mid)" }}>
+                  <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "0.7rem", color: "var(--c-accent)", flexShrink: 0, paddingTop: "0.1rem" }}>{String(i + 1).padStart(2, "0")}</span>
+                  {item}
                 </div>
               ))}
             </div>
-            <div style={{ marginTop: "2rem" }}>
-              <Link href="/book" className="btn-primary">Work with Decra <ArrowRight size={13} /></Link>
+
+            <div style={{ marginTop: "2.5rem" }}>
+              <Link href="/partner" style={{
+                display: "inline-flex", alignItems: "center", gap: "0.5rem",
+                fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.55rem",
+                letterSpacing: "0.2em", textTransform: "uppercase",
+                color: "var(--c-ink)", textDecoration: "none",
+                borderBottom: "1px solid var(--c-ink)", paddingBottom: "2px",
+                transition: "color 0.2s, border-color 0.2s",
+              }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-accent)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-ink)"; }}>
+                Start a partnership <ArrowRight size={10} strokeWidth={1.5} />
+              </Link>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+      <style>{`@media(max-width:700px){.bio-g{grid-template-columns:1fr!important;gap:3rem!important}}`}</style>
+    </section>
+  );
+}
 
-      {/* ── Values ── */}
-      <section className="section page-x" style={{ background: "var(--c-surface)", borderTop: "1px solid var(--c-border)" }}>
-        <div className="inner">
-          <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "3rem" }}>
-            <span style={{ display: "inline-block", width: "1.5rem", height: "1px", background: "var(--c-gold)" }} />
-            <span className="t-label">What I Believe</span>
+/* ── S3: Social ── */
+function Social() {
+  const { ref, vis } = useReveal();
+  return (
+    <section ref={ref as React.RefObject<HTMLElement>} style={{ ...SEC, background: "var(--c-surface)" }}>
+      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6rem", alignItems: "center" }} className="social-g">
+          <div style={fade(vis)}>
+            <p style={{ ...LBL, marginBottom: "1.25rem" }}>Follow the work</p>
+            <h2 style={{ ...SERIF(), marginBottom: "1.5rem" }}>Stay connected.</h2>
+            <p style={{ ...BODY, maxWidth: "22rem" }}>
+              Insights on technology law, startup advisory, and African legal tech — shared regularly across platforms.
+            </p>
           </div>
-          <div className="values-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "2.5rem" }}>
-            {values.map(v => (
-              <div key={v.title} style={{ borderTop: "2px solid var(--c-gold)", paddingTop: "1.5rem" }}>
-                <h3 className="t-display t-display-sm" style={{ marginBottom: "0.75rem" }}>{v.title}</h3>
-                <p className="t-body-sm">{v.body}</p>
-              </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: "0", ...fade(vis, 0.1) }}>
+            {[
+              { icon: Instagram, label: "Instagram", handle: "@decrakerubo", url: "https://instagram.com/decrakerubo", desc: "Visual storytelling — life at the intersection of law and tech" },
+              { icon: Linkedin, label: "LinkedIn", handle: "Decra Kerubo", url: "https://linkedin.com/in/decrakerubo", desc: "Professional insights, case studies, and technology law commentary" },
+            ].map(({ icon: Icon, label, handle, url, desc }) => (
+              <a key={label} href={url} target="_blank" rel="noopener noreferrer" style={{
+                display: "flex", gap: "1.5rem", alignItems: "flex-start",
+                padding: "1.75rem 0", borderBottom: "1px solid var(--c-border)",
+                textDecoration: "none", transition: "opacity 0.2s",
+              }}
+                onMouseEnter={e => (e.currentTarget as HTMLElement).style.opacity = "0.6"}
+                onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = "1"}>
+                <div style={{ width: "2rem", height: "2rem", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, paddingTop: "0.1rem" }}>
+                  <Icon size={18} strokeWidth={1.5} style={{ color: "var(--c-ink-muted)" }} />
+                </div>
+                <div>
+                  <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "1rem", color: "var(--c-ink)", marginBottom: "0.2rem" }}>{label}</p>
+                  <p style={{ ...LBL, fontSize: "0.5rem", marginBottom: "0.5rem" }}>{handle}</p>
+                  <p style={{ ...BODY, fontSize: "0.78rem" }}>{desc}</p>
+                </div>
+              </a>
             ))}
+            <div style={{ borderTop: "none" }} />
           </div>
         </div>
-      </section>
+      </div>
+      <style>{`@media(max-width:700px){.social-g{grid-template-columns:1fr!important;gap:3rem!important}}`}</style>
+    </section>
+  );
+}
 
-      {/* ── Work divider ── */}
-      <div id="work" />
-
-      {/* ── Work header ── */}
-      <section className="section page-x" style={{ background: "var(--c-forest)", borderBottom: "1px solid var(--c-border)" }}>
-        <div className="inner work-header" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "5rem", alignItems: "center" }}>
-          <div>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "1.5rem" }}>
-              <span style={{ display: "inline-block", width: "1.5rem", height: "1px", background: "var(--c-gold)" }} />
-              <span className="t-label">Selected Work</span>
-            </div>
-            <h2 className="t-display t-display-lg" style={{ color: "rgba(248,246,241,0.9)" }}>Real engagements, real outcomes.</h2>
-          </div>
-          <div style={{ position: "relative", borderRadius: "12px", overflow: "hidden", aspectRatio: "4/3" }}>
-            <Image
-              src="/decra-services.jpg"
-              alt="Decra at work"
-              fill
-              style={{ objectFit: "cover", objectPosition: "top center", opacity: 0.7 }}
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* ── Cases ── */}
-      <section className="page-x" style={{ paddingBottom: "var(--space-section)", background: "var(--c-bg)" }}>
-        <div className="inner">
-          {cases.map((c, i) => (
-            <div key={i} style={{ display: "grid", gridTemplateColumns: "2fr 3fr", gap: "4rem", borderTop: "1px solid var(--c-border)", paddingTop: "3rem", paddingBottom: "3rem" }}>
-              <div style={{ paddingTop: "0.25rem" }}>
-                <span className="t-label" style={{ display: "block", marginBottom: "0.75rem" }}>{c.tag}</span>
-                <h3 className="t-display t-display-md">{c.title}</h3>
-              </div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.9rem" }}>
-                {[{ label: "Challenge", text: c.challenge }, { label: "Approach", text: c.approach }, { label: "Outcome", text: c.outcome }, { label: "Lesson", text: c.lessons }].map(block => (
-                  <div key={block.label} className="card">
-                    <p className="t-label" style={{ marginBottom: "0.5rem" }}>{block.label}</p>
-                    <p className="t-body-sm">{block.text}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── CTA ── */}
-      <section className="section page-x" style={{ background: "var(--c-forest)" }}>
-        <div className="inner" style={{ maxWidth: "36rem" }}>
-          <h2 className="t-display t-display-lg" style={{ color: "rgba(248,246,241,0.9)", marginBottom: "0.75rem" }}>Ready to have a real conversation?</h2>
-          <p style={{ fontSize: "0.825rem", color: "rgba(248,246,241,0.45)", marginBottom: "2rem" }}>Book a free discovery call — 15 minutes, no obligation.</p>
-          <Link href="/book" style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem", background: "var(--c-gold)", color: "var(--c-forest)", fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.75rem", letterSpacing: "0.08em", padding: "0.75rem 1.6rem", borderRadius: "100px", textDecoration: "none" }}>
-            Book a Discovery Call <ArrowRight size={13} />
-          </Link>
-        </div>
-      </section>
-
-      <style>{`
-        @media(max-width: 768px) {
-          .about-grid, .work-header { grid-template-columns: 1fr !important; gap: 2.5rem !important; }
-          .values-grid { grid-template-columns: 1fr !important; }
-          .inner > div { grid-template-columns: 1fr !important; }
-          .inner > div > div { grid-template-columns: 1fr !important; }
-        }
-      `}</style>
-    </div>
+export default function AboutPage() {
+  return (
+    <>
+      <Cover />
+      <Bio />
+      <Social />
+    </>
   );
 }
