@@ -52,14 +52,14 @@ function Hero() {
         transition: "opacity 1.4s cubic-bezier(0.16,1,0.3,1)",
       }}>
         <img src="/decra-hero.jpg" alt=""
-          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 50%", display: "block" }} />
+          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "80% 38%", display: "block" }} />
       </div>
       {/* Gradient overlay */}
       <div style={{
         position: "absolute", inset: 0,
         background: `
-          linear-gradient(to top, rgba(8,8,8,0.88) 0%, rgba(8,8,8,0.25) 38%, transparent 62%),
-          linear-gradient(to right, rgba(8,8,8,0.22) 0%, transparent 55%)
+          linear-gradient(to top, rgba(8,8,8,0.9) 0%, rgba(8,8,8,0.3) 32%, transparent 58%),
+          linear-gradient(to right, rgba(8,8,8,0.82) 0%, rgba(8,8,8,0.45) 40%, transparent 68%)
         `,
       }} />
       {/* Text — bottom anchored */}
@@ -291,36 +291,14 @@ function Impact() {
 
   return (
     <section ref={ref as React.RefObject<HTMLElement>} style={{ ...SEC, background: "var(--c-surface)" }}>
-      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6rem", alignItems: "center" }} className="impact-g">
-          <div style={fade(vis)}>
-            <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "clamp(4rem,10vw,9rem)", color: "var(--c-ink)", lineHeight: 1, marginBottom: "0" }}>
-              {count}+
-            </p>
-            <p style={{ ...LBL, marginTop: "0.75rem" }}>Startup founders & tech developers assisted</p>
-          </div>
-          <div style={fade(vis, 0.1)}>
-            <p style={{ ...SERIF("1.6rem"), marginBottom: "1.5rem" }}>Real work. Real outcomes.</p>
-            <p style={{ ...BODY, marginBottom: "2.5rem" }}>
-              From pre-incorporation advisory to post-fundraise compliance — helping founders navigate the legal infrastructure that determines what becomes possible later.
-            </p>
-            <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-              {[
-                ["IP strategy", "before investors flag the gaps"],
-                ["Data privacy", "before regulators arrive"],
-                ["Founder equity", "before co-founder disputes"],
-                ["Compliance review", "before product launch"],
-              ].map(([bold, rest]) => (
-                <p key={bold} style={{ ...BODY, color: "var(--c-ink-mid)" }}>
-                  <strong style={{ fontWeight: 400, color: "var(--c-ink)", fontFamily: "var(--font-serif)", fontStyle: "italic" }}>{bold}</strong>
-                  {" — "}{rest}
-                </p>
-              ))}
-            </div>
-          </div>
+      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto", display: "flex", alignItems: "center", gap: "3rem", flexWrap: "wrap" }}>
+        <div style={{ ...fade(vis), flex: "none" }}>
+          <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "clamp(4rem,10vw,9rem)", color: "var(--c-ink)", lineHeight: 1 }}>
+            {count}+
+          </p>
+          <p style={{ ...LBL, marginTop: "0.75rem" }}>Startup founders &amp; tech developers assisted</p>
         </div>
       </div>
-      <style>{`@media(max-width:700px){.impact-g{grid-template-columns:1fr!important;gap:3rem!important}}`}</style>
     </section>
   );
 }
@@ -337,9 +315,9 @@ function The1000() {
   const { ref, vis } = useReveal();
   return (
     <section ref={ref as React.RefObject<HTMLElement>} style={{
-      borderTop: "1px solid var(--c-border)",
+      borderTop: "none",
       padding: "clamp(3rem,5vw,5.5rem) var(--space-x)",
-      background: "var(--c-surface)",
+      background: "#0F3320",
     }}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
         <a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer"
@@ -362,20 +340,76 @@ function The1000() {
               <p style={{
                 fontFamily: "'Circular Std', 'Circular', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif",
                 fontWeight: 700, fontSize: "clamp(1.4rem,2.5vw,2rem)",
-                color: "var(--c-ink)", letterSpacing: "-0.01em", lineHeight: 1.1,
+                color: "#FFFFFF", letterSpacing: "-0.01em", lineHeight: 1.1,
                 marginBottom: "0.35rem",
               }}>The 1000</p>
               <p style={{
                 fontFamily: "var(--font-sans)", fontWeight: 400,
-                fontSize: "0.78rem", color: "var(--c-ink-muted)",
+                fontSize: "0.78rem", color: "rgba(255,255,255,0.55)",
               }}>Technology law in Africa — on Spotify</p>
             </div>
           </div>
 
           {/* Right: arrow */}
-          <ArrowRight size={16} strokeWidth={1.5} style={{ color: "var(--c-ink-muted)", flexShrink: 0 }} />
+          <ArrowRight size={16} strokeWidth={1.5} style={{ color: "rgba(255,255,255,0.45)", flexShrink: 0 }} />
         </a>
       </div>
+    </section>
+  );
+}
+
+
+/* ── Section 6: Start Your Business ── */
+function StartBusiness() {
+  const { ref, vis } = useReveal();
+  return (
+    <section ref={ref as React.RefObject<HTMLElement>} style={{ ...SEC }}>
+      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
+        <div style={{
+          display: "grid", gridTemplateColumns: "1fr 1fr",
+          gap: "6rem", alignItems: "center",
+        }} className="sb-g">
+          <div style={fade(vis)}>
+            <p style={{ ...LBL, marginBottom: "1.25rem" }}>Ready to build</p>
+            <h2 style={{ ...SERIF("clamp(2rem,3.8vw,3.2rem)"), marginBottom: "1.5rem" }}>
+              Start your business<br /><em style={{ color: "var(--c-accent)" }}>with me.</em>
+            </h2>
+            <p style={{ ...BODY, maxWidth: "24rem", marginBottom: "2.5rem" }}>
+              From incorporation to fundraising readiness — full-spectrum startup advisory. Tell me where you are and where you want to go.
+            </p>
+            <Link href="/start" style={{
+              display: "inline-flex", alignItems: "center", gap: "0.5rem",
+              fontFamily: "var(--font-manjari)", fontWeight: 700,
+              fontSize: "0.6rem", letterSpacing: "0.2em", textTransform: "uppercase",
+              color: "var(--c-bg)", background: "var(--c-ink)",
+              padding: "0.85rem 1.75rem", textDecoration: "none",
+              transition: "background 0.2s",
+            }}
+              onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = "var(--c-accent)"}
+              onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = "var(--c-ink)"}>
+              Let&apos;s talk <ArrowRight size={11} strokeWidth={1.5} />
+            </Link>
+          </div>
+          <div style={{ ...fade(vis, 0.1), display: "flex", flexDirection: "column" }}>
+            {[
+              ["Incorporation & structure", "Right entity type, shareholding, constitutional documents"],
+              ["Equity & founder agreements", "Cap tables, vesting, co-founder terms that hold up"],
+              ["Tax & compliance", "eTIMS, KRA, VAT, PAYE — from day one"],
+              ["Fundraising readiness", "Term sheets, investor agreements, due diligence prep"],
+            ].map(([title, body], i) => (
+              <div key={title} style={{
+                padding: "1.25rem 0", borderBottom: "1px solid var(--c-border)",
+                opacity: vis ? 1 : 0,
+                transition: `opacity 0.55s ease ${0.1 + i * 0.08}s`,
+              }}>
+                <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "0.95rem", color: "var(--c-ink)", marginBottom: "0.3rem" }}>{title}</p>
+                <p style={{ fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.82rem", color: "var(--c-ink-muted)", lineHeight: 1.65 }}>{body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <style>{`@media(max-width:700px){.sb-g{grid-template-columns:1fr!important;gap:3rem!important}}`}</style>
     </section>
   );
 }
@@ -388,6 +422,7 @@ export default function Home() {
       <Services />
       <Partners />
       <Impact />
+      <StartBusiness />
       <The1000 />
     </>
   );

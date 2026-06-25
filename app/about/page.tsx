@@ -142,7 +142,7 @@ function Bio() {
                 alt="Decra Kerubo"
                 style={{
                   width: "100%", height: "100%",
-                  objectFit: "cover", objectPosition: "center 22%",
+                  objectFit: "cover", objectPosition: "center 18%",
                   display: "block", filter: "saturate(0.95)",
                   transition: "transform 0.7s cubic-bezier(0.16,1,0.3,1)",
                 }}
@@ -258,12 +258,12 @@ function EditorialBreak() {
   const { ref, vis } = useReveal(0.1);
   return (
     <section ref={ref as React.RefObject<HTMLElement>} style={{
-      height: "clamp(380px, 62vh, 700px)",
+      height: "clamp(280px, 40vh, 480px)",
       position: "relative", overflow: "hidden", background: "#0A0A0A",
     }}>
-      <img src="/decra-editorial.jpg" alt="" style={{
+      <img src="/decra-texture.jpg" alt="" style={{
         width: "100%", height: "100%",
-        objectFit: "cover", objectPosition: "center 28%",
+        objectFit: "cover", objectPosition: "center 40%",
         display: "block",
         filter: "saturate(0.75)",
         opacity: vis ? 0.85 : 0,
