@@ -31,7 +31,7 @@ const SERIF = (sz = "clamp(2rem,3.5vw,3rem)"): React.CSSProperties => ({
   fontSize: sz, color: "var(--c-ink)", lineHeight: 1.05,
 });
 const BODY: React.CSSProperties = {
-  fontFamily: "var(--font-sans)", fontWeight: 300,
+  fontFamily: "var(--font-sans)", fontWeight: 400,
   fontSize: "0.875rem", color: "var(--c-ink-muted)", lineHeight: 1.85,
 };
 const SEC: React.CSSProperties = {
@@ -52,7 +52,7 @@ function Hero() {
         transition: "opacity 1.4s cubic-bezier(0.16,1,0.3,1)",
       }}>
         <img src="/decra-hero.jpg" alt=""
-          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 35%", display: "block" }} />
+          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 50%", display: "block" }} />
       </div>
       {/* Gradient overlay */}
       <div style={{
@@ -294,7 +294,7 @@ function Impact() {
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6rem", alignItems: "center" }} className="impact-g">
           <div style={fade(vis)}>
-            <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "clamp(5rem,12vw,10rem)", color: "var(--c-ink)", lineHeight: 1, marginBottom: "0" }}>
+            <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "clamp(4rem,10vw,9rem)", color: "var(--c-ink)", lineHeight: 1, marginBottom: "0" }}>
               {count}+
             </p>
             <p style={{ ...LBL, marginTop: "0.75rem" }}>Startup founders & tech developers assisted</p>
@@ -337,7 +337,8 @@ function The1000() {
   const { ref, vis } = useReveal();
   return (
     <section ref={ref as React.RefObject<HTMLElement>} style={{
-      ...SEC,
+      borderTop: "1px solid var(--c-border)",
+      padding: "clamp(3rem,5vw,5.5rem) var(--space-x)",
       background: "var(--c-surface)",
     }}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
@@ -365,7 +366,7 @@ function The1000() {
                 marginBottom: "0.35rem",
               }}>The 1000</p>
               <p style={{
-                fontFamily: "var(--font-sans)", fontWeight: 300,
+                fontFamily: "var(--font-sans)", fontWeight: 400,
                 fontSize: "0.78rem", color: "var(--c-ink-muted)",
               }}>Technology law in Africa — on Spotify</p>
             </div>

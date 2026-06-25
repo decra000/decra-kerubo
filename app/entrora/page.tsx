@@ -20,7 +20,7 @@ const fade = (vis: boolean, delay = 0): React.CSSProperties => ({
 });
 const LBL: React.CSSProperties = { fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.55rem", letterSpacing: "0.24em", textTransform: "uppercase", color: "var(--c-ink-muted)" };
 const SERIF = (sz = "clamp(2rem,3.5vw,3rem)"): React.CSSProperties => ({ fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400, fontSize: sz, color: "var(--c-ink)", lineHeight: 1.05 });
-const BODY: React.CSSProperties = { fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "0.875rem", color: "var(--c-ink-muted)", lineHeight: 1.85 };
+const BODY: React.CSSProperties = { fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.875rem", color: "var(--c-ink-mid)", lineHeight: 1.85 };
 const SEC: React.CSSProperties = { borderTop: "1px solid var(--c-border)", padding: "var(--space-section) var(--space-x)" };
 
 function Hero() {

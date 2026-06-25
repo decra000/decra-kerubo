@@ -14,7 +14,7 @@ const links = [
 const lk: React.CSSProperties = {
   fontFamily: "var(--font-manjari)", fontWeight: 700,
   fontSize: "0.58rem", letterSpacing: "0.2em", textTransform: "uppercase",
-  color: "var(--c-ink-muted)", textDecoration: "none", transition: "color 0.2s",
+  color: "var(--c-ink-mid)", textDecoration: "none", transition: "color 0.2s",
 };
 
 export function Navbar() {
@@ -59,13 +59,13 @@ export function Navbar() {
             {links.map(l => (
               <Link key={l.href} href={l.href} style={lk}
                 onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"}
-                onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink-muted)"}>
+                onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink-mid)"}>
                 {l.label}
               </Link>
             ))}
             <button onClick={toggle} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--c-ink-muted)", lineHeight: 0, transition: "color 0.2s" }}
               onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"}
-              onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink-muted)"}>
+              onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink-mid)"}>
               {theme === "dark" ? <Sun size={13} strokeWidth={1.5} /> : <Moon size={13} strokeWidth={1.5} />}
             </button>
           </nav>
@@ -85,7 +85,7 @@ export function Navbar() {
             {links.map(l => (
               <Link key={l.href} href={l.href} onClick={() => setMob(false)} style={{ ...lk, fontSize: "0.75rem" }}
                 onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"}
-                onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink-muted)"}>
+                onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink-mid)"}>
                 {l.label}
               </Link>
             ))}

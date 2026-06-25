@@ -30,8 +30,8 @@ const SERIF = (sz = "clamp(2rem,3.5vw,3rem)"): React.CSSProperties => ({
   fontSize: sz, color: "var(--c-ink)", lineHeight: 1.05,
 });
 const BODY: React.CSSProperties = {
-  fontFamily: "var(--font-sans)", fontWeight: 300,
-  fontSize: "0.875rem", color: "var(--c-ink-muted)", lineHeight: 1.85,
+  fontFamily: "var(--font-sans)", fontWeight: 400,
+  fontSize: "0.875rem", color: "var(--c-ink-mid)", lineHeight: 1.85,
 };
 const SEC: React.CSSProperties = {
   borderTop: "1px solid var(--c-border)",
@@ -62,7 +62,7 @@ function InquiryForm({ subject }: { subject: string }) {
   const inp: React.CSSProperties = {
     width: "100%", background: "none", border: "none",
     borderBottom: "1px solid var(--c-border)",
-    padding: "0.75rem 0", fontFamily: "var(--font-sans)", fontWeight: 300,
+    padding: "0.75rem 0", fontFamily: "var(--font-sans)", fontWeight: 400,
     fontSize: "0.875rem", color: "var(--c-ink)", outline: "none",
     transition: "border-color 0.2s",
   };
@@ -127,7 +127,7 @@ function Hero() {
           <div style={{ display: "flex", flexWrap: "wrap", gap: "0" }}>
             {paths.map(({ label, anchor }, i) => (
               <a key={anchor} href={anchor} style={{
-                fontFamily: "var(--font-sans)", fontWeight: 300,
+                fontFamily: "var(--font-sans)", fontWeight: 400,
                 fontSize: "0.82rem", color: "var(--c-ink-muted)",
                 textDecoration: "none",
                 padding: "0.6rem 0",
@@ -166,7 +166,7 @@ function Speaking() {
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: "0", marginBottom: "2.5rem" }}>
               {["Keynote addresses", "Panel discussions", "Workshop facilitation", "Corporate training", "University lectures", "Podcast appearances"].map((item, i) => (
-                <div key={i} style={{ padding: "0.75rem 0", borderBottom: "1px solid var(--c-border)", fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "0.82rem", color: "var(--c-ink-mid)", display: "flex", gap: "1rem" }}>
+                <div key={i} style={{ padding: "0.75rem 0", borderBottom: "1px solid var(--c-border)", fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.82rem", color: "var(--c-ink-mid)", display: "flex", gap: "1rem" }}>
                   <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "0.7rem", color: "var(--c-accent)" }}>{String(i + 1).padStart(2, "0")}</span>
                   {item}
                 </div>
@@ -208,7 +208,7 @@ function ComplianceReview() {
               ].map(([k, v]) => (
                 <div key={k} style={{ display: "flex", gap: "2rem", padding: "0.85rem 0", borderBottom: "1px solid var(--c-border)" }}>
                   <span style={{ ...LBL, fontSize: "0.5rem", minWidth: "5rem", paddingTop: "0.15rem" }}>{k}</span>
-                  <span style={{ fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "0.82rem", color: "var(--c-ink-mid)" }}>{v}</span>
+                  <span style={{ fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.82rem", color: "var(--c-ink-mid)" }}>{v}</span>
                 </div>
               ))}
             </div>
@@ -248,7 +248,7 @@ function StartBusiness() {
                 "Regulatory licensing & approvals",
                 "Investor readiness & fundraising legal prep",
               ].map((item, i) => (
-                <div key={i} style={{ padding: "0.75rem 0", borderBottom: "1px solid var(--c-border)", fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "0.82rem", color: "var(--c-ink-mid)", display: "flex", gap: "1rem" }}>
+                <div key={i} style={{ padding: "0.75rem 0", borderBottom: "1px solid var(--c-border)", fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.82rem", color: "var(--c-ink-mid)", display: "flex", gap: "1rem" }}>
                   <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "0.7rem", color: "var(--c-accent)" }}>{String(i + 1).padStart(2, "0")}</span>
                   {item}
                 </div>

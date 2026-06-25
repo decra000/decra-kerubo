@@ -21,12 +21,12 @@ const fade = (vis: boolean, delay = 0): React.CSSProperties => ({
 
 const LBL: React.CSSProperties = { fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.55rem", letterSpacing: "0.24em", textTransform: "uppercase", color: "var(--c-ink-muted)" };
 const SERIF = (sz = "clamp(2rem,3.5vw,3rem)"): React.CSSProperties => ({ fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400, fontSize: sz, color: "var(--c-ink)", lineHeight: 1.05 });
-const BODY: React.CSSProperties = { fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "0.875rem", color: "var(--c-ink-muted)", lineHeight: 1.85 };
+const BODY: React.CSSProperties = { fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.875rem", color: "var(--c-ink-mid)", lineHeight: 1.85 };
 
 const inp: React.CSSProperties = {
   width: "100%", background: "none", border: "none",
   borderBottom: "1px solid var(--c-border)",
-  padding: "0.85rem 0", fontFamily: "var(--font-sans)", fontWeight: 300,
+  padding: "0.85rem 0", fontFamily: "var(--font-sans)", fontWeight: 400,
   fontSize: "0.95rem", color: "var(--c-ink)", outline: "none",
   transition: "border-color 0.2s",
 };
@@ -69,7 +69,7 @@ export default function TalkPage() {
               ].map(([k, v]) => (
                 <div key={k} style={{ display: "flex", gap: "2rem", padding: "1rem 0", borderBottom: "1px solid var(--c-border)" }}>
                   <span style={{ ...LBL, fontSize: "0.5rem", minWidth: "5rem", paddingTop: "0.15rem" }}>{k}</span>
-                  <span style={{ fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "0.82rem", color: "var(--c-ink-mid)" }}>{v}</span>
+                  <span style={{ fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.82rem", color: "var(--c-ink-mid)" }}>{v}</span>
                 </div>
               ))}
             </div>
