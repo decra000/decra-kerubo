@@ -42,26 +42,65 @@ const SEC: React.CSSProperties = {
 /* ── Section 1: Hero ── */
 function Hero() {
   const [vis, setVis] = useState(false);
-  useEffect(() => { const t = setTimeout(() => setVis(true), 80); return () => clearTimeout(t); }, []);
+  useEffect(() => { const t = setTimeout(() => setVis(true), 60); return () => clearTimeout(t); }, []);
   return (
-    <section style={{ minHeight: "100svh", background: "var(--c-bg)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
-      <div style={{ width: "clamp(220px,30vw,400px)", aspectRatio: "4/5", overflow: "hidden", marginBottom: "2.75rem", ...fade(vis) }}>
-        <img src="/decra-hero.png" alt="Decra Kerubo" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top", display: "block" }} />
+    <section style={{ height: "100svh", position: "relative", overflow: "hidden", background: "#080808" }}>
+      {/* Full-bleed portrait */}
+      <div style={{
+        position: "absolute", inset: 0,
+        opacity: vis ? 1 : 0,
+        transition: "opacity 1.4s cubic-bezier(0.16,1,0.3,1)",
+      }}>
+        <img src="/decra-hero.jpg" alt=""
+          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 12%", display: "block" }} />
       </div>
-      <div style={{ textAlign: "center", ...fade(vis, 0.1) }}>
-        <h1 style={{ ...SERIF("clamp(1.75rem,3vw,2.5rem)"), marginBottom: "0.75rem" }}>Decra Kerubo</h1>
-        <p style={{ ...LBL, marginBottom: "2rem" }}>Technology Law Consulting &nbsp;&middot;&nbsp; Nairobi</p>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "2rem" }}>
-          <a href="#services" style={{ ...LBL, textDecoration: "none", transition: "color 0.2s" }}
-            onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"}
-            onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink-muted)"}>Services</a>
-          <span style={{ width: "1px", height: "10px", background: "var(--c-border-strong)", display: "block" }} />
-          <Link href="/partner" style={{ ...LBL, color: "var(--c-accent)", textDecoration: "none", transition: "color 0.2s" }}
-            onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"}
-            onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-accent)"}>Work Together</Link>
+      {/* Gradient overlay */}
+      <div style={{
+        position: "absolute", inset: 0,
+        background: `
+          linear-gradient(to top, rgba(8,8,8,0.88) 0%, rgba(8,8,8,0.25) 38%, transparent 62%),
+          linear-gradient(to right, rgba(8,8,8,0.22) 0%, transparent 55%)
+        `,
+      }} />
+      {/* Text — bottom anchored */}
+      <div style={{
+        position: "absolute", bottom: 0, left: 0, right: 0,
+        padding: "3.5rem var(--space-x) 5rem",
+        maxWidth: "calc(var(--max-w) + (var(--space-x) * 2))", margin: "0 auto",
+        opacity: vis ? 1 : 0,
+        transform: vis ? "none" : "translateY(22px)",
+        transition: "opacity 1s cubic-bezier(0.16,1,0.3,1) 0.45s, transform 1s cubic-bezier(0.16,1,0.3,1) 0.45s",
+      }}>
+        <h1 style={{
+          fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400,
+          fontSize: "clamp(2.5rem,5.5vw,5rem)",
+          color: "#F0EEE9", lineHeight: 1.02, letterSpacing: "-0.01em",
+          marginBottom: "1.75rem",
+        }}>
+          Decra Kerubo.
+        </h1>
+        <div style={{ display: "flex", alignItems: "center", gap: "1.75rem" }}>
+          <a href="#services" style={{
+            fontFamily: "var(--font-manjari)", fontWeight: 700,
+            fontSize: "0.52rem", letterSpacing: "0.24em", textTransform: "uppercase",
+            color: "rgba(240,238,233,0.42)", textDecoration: "none", transition: "color 0.25s",
+          }}
+            onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#F0EEE9"}
+            onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "rgba(240,238,233,0.42)"}>
+            Services
+          </a>
+          <span style={{ width: "1px", height: "10px", background: "rgba(240,238,233,0.16)", display: "block" }} />
+          <Link href="/about" style={{
+            fontFamily: "var(--font-manjari)", fontWeight: 700,
+            fontSize: "0.52rem", letterSpacing: "0.24em", textTransform: "uppercase",
+            color: "rgba(196,160,106,0.8)", textDecoration: "none", transition: "color 0.25s",
+          }}
+            onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#C4A06A"}
+            onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "rgba(196,160,106,0.8)"}>
+            About
+          </Link>
         </div>
       </div>
-      <style>{`@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:0.3}}`}</style>
     </section>
   );
 }

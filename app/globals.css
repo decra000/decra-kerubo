@@ -6,39 +6,36 @@
   --font-serif:   'DM Serif Display', serif;
   --font-manjari: 'Manjari', sans-serif;
 
-  /* ── LIGHT: true off-white, not warm cream ── */
-  --c-bg:       #F8F7F5;
-  --c-surface:  #FFFFFF;
-  --c-ink:      #0A0A0A;
-  --c-ink-mid:  #3A3A3A;
-  --c-ink-muted:#8C8C8C;
-  --c-accent:   #B8966E;
-  --c-border:   rgba(10,10,10,0.08);
-  --c-border-strong: rgba(10,10,10,0.16);
+  /* Light */
+  --c-bg:            #F7F6F3;
+  --c-surface:       #FFFFFF;
+  --c-ink:           #0A0A0A;
+  --c-ink-mid:       #383838;
+  --c-ink-muted:     #8A8A8A;
+  --c-accent:        #B8966E;
+  --c-border:        rgba(10,10,10,0.07);
+  --c-border-strong: rgba(10,10,10,0.14);
 
-  --space-x: clamp(1.25rem, 5vw, 6rem);
+  --space-x:       clamp(1.25rem, 5.5vw, 7rem);
   --space-section: clamp(6rem, 11vw, 12rem);
-  --max-w: 68rem;
+  --max-w:         68rem;
 }
 
 [data-theme="dark"] {
-  /* ── DARK: pure near-black, not brown ── */
-  --c-bg:       #080808;
-  --c-surface:  #111111;
-  --c-ink:      #F0EEE9;
-  --c-ink-mid:  #A8A39A;
-  --c-ink-muted:#4A4542;
-  --c-accent:   #C4A06A;
-  --c-border:   rgba(240,238,233,0.06);
-  --c-border-strong: rgba(240,238,233,0.12);
+  /* Pure dark — no brown, no warm cast */
+  --c-bg:            #080808;
+  --c-surface:       #101010;
+  --c-ink:           #EEECE7;
+  --c-ink-mid:       #A0998F;
+  --c-ink-muted:     #484440;
+  --c-accent:        #C4A06A;
+  --c-border:        rgba(238,236,231,0.055);
+  --c-border-strong: rgba(238,236,231,0.11);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html {
-  scroll-behavior: smooth;
-  font-size: 16px;
-}
+html { scroll-behavior: smooth; font-size: 16px; }
 
 body {
   background: var(--c-bg);
@@ -51,30 +48,34 @@ body {
   transition: background 0.4s, color 0.4s;
 }
 
-/* ── Typography scale ── */
+/* Typography helpers */
 .label {
   font-family: var(--font-manjari);
-  font-size: 0.6rem;
+  font-size: 0.52rem;
   font-weight: 700;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.26em;
   text-transform: uppercase;
   color: var(--c-ink-muted);
 }
 
-/* ── Layout ── */
-.px { padding-left: var(--space-x); padding-right: var(--space-x); }
-.wrap { max-width: var(--max-w); margin-inline: auto; }
+/* Subtle scroll-driven parallax feel via will-change hint */
+img { display: block; }
 
-/* ── Thin scrollbar ── */
+/* Thin scrollbar */
 ::-webkit-scrollbar { width: 2px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--c-accent); }
+::-webkit-scrollbar-thumb { background: var(--c-accent); border-radius: 1px; }
 
-/* ── Reading progress ── */
+/* Reading progress */
 #rp {
   position: fixed; top: 0; left: 0; height: 1px;
-  background: var(--c-accent);
-  z-index: 9999;
+  background: linear-gradient(to right, var(--c-accent), rgba(196,160,106,0.3));
+  z-index: 9999; pointer-events: none;
   transition: width 0.08s linear;
-  pointer-events: none;
+}
+
+/* Subtle entrance animation — used by page sections */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: none; }
 }
