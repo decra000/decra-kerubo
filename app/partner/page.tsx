@@ -108,13 +108,40 @@ function InquiryForm({ subject }: { subject: string }) {
 function Hero() {
   const [vis, setVis] = useState(false);
   useEffect(() => { const t = setTimeout(() => setVis(true), 80); return () => clearTimeout(t); }, []);
+
+  const paths = [
+    { label: "Speak", anchor: "#speak" },
+    { label: "Compliance review", anchor: "#compliance" },
+    { label: "Start a business", anchor: "#startup" },
+    { label: "Tech development", anchor: "#entrora" },
+  ];
+
   return (
     <section style={{ minHeight: "60svh", background: "var(--c-bg)", display: "flex", alignItems: "flex-end", padding: "0 var(--space-x) 5rem", paddingTop: "10rem" }}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto", width: "100%" }}>
         <div style={fade(vis)}>
           <p style={{ ...LBL, marginBottom: "1.25rem" }}>Partner</p>
-          <h1 style={{ ...SERIF("clamp(2.5rem,5vw,4.5rem)"), maxWidth: "26rem", marginBottom: "1.5rem" }}>How to work with Decra.</h1>
-          <p style={{ ...BODY, maxWidth: "28rem" }}>Four engagement paths. Each designed for a specific kind of collaboration. Choose the one that fits.</p>
+          <h1 style={{ ...SERIF("clamp(2.5rem,5vw,4.5rem)"), maxWidth: "26rem", marginBottom: "2.5rem" }}>How to work with Decra.</h1>
+
+          {/* Quick-jump shortcuts */}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "0" }}>
+            {paths.map(({ label, anchor }, i) => (
+              <a key={anchor} href={anchor} style={{
+                fontFamily: "var(--font-sans)", fontWeight: 300,
+                fontSize: "0.82rem", color: "var(--c-ink-muted)",
+                textDecoration: "none",
+                padding: "0.6rem 0",
+                paddingRight: i < paths.length - 1 ? "2rem" : 0,
+                marginRight: i < paths.length - 1 ? "2rem" : 0,
+                borderRight: i < paths.length - 1 ? "1px solid var(--c-border)" : "none",
+                transition: "color 0.2s",
+              }}
+                onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"}
+                onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink-muted)"}>
+                {label}
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -125,7 +152,7 @@ function Hero() {
 function Speaking() {
   const { ref, vis } = useReveal();
   return (
-    <section ref={ref as React.RefObject<HTMLElement>} style={SEC}>
+    <section ref={ref as React.RefObject<HTMLElement>} id="speak" style={SEC}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "7rem" }} className="pg">
           <div style={fade(vis)}>
@@ -160,7 +187,7 @@ function Speaking() {
 function ComplianceReview() {
   const { ref, vis } = useReveal();
   return (
-    <section ref={ref as React.RefObject<HTMLElement>} style={{ ...SEC, background: "var(--c-surface)" }}>
+    <section id="compliance" ref={ref as React.RefObject<HTMLElement>} style={{ ...SEC, background: "var(--c-surface)" }}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "7rem" }} className="pg">
           <div style={fade(vis)}>
@@ -200,7 +227,7 @@ function ComplianceReview() {
 function StartBusiness() {
   const { ref, vis } = useReveal();
   return (
-    <section ref={ref as React.RefObject<HTMLElement>} style={SEC}>
+    <section ref={ref as React.RefObject<HTMLElement>} id="startup" style={SEC}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "7rem" }} className="pg">
           <div style={fade(vis)}>
@@ -242,7 +269,7 @@ function StartBusiness() {
 function EntroraSection() {
   const { ref, vis } = useReveal();
   return (
-    <section ref={ref as React.RefObject<HTMLElement>} style={{ ...SEC, background: "var(--c-surface)" }}>
+    <section id="entrora" ref={ref as React.RefObject<HTMLElement>} style={{ ...SEC, background: "var(--c-surface)" }}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "7rem", alignItems: "center" }} className="pg">
           <div style={fade(vis)}>

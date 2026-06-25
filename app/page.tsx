@@ -52,7 +52,7 @@ function Hero() {
         transition: "opacity 1.4s cubic-bezier(0.16,1,0.3,1)",
       }}>
         <img src="/decra-hero.jpg" alt=""
-          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 12%", display: "block" }} />
+          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 35%", display: "block" }} />
       </div>
       {/* Gradient overlay */}
       <div style={{
@@ -326,56 +326,55 @@ function Impact() {
 }
 
 /* ── Section 5: The 1000 ── */
+/* Spotify SVG logo — official green */
+const SpotifyLogo = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="#1DB954">
+    <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+  </svg>
+);
+
 function The1000() {
   const { ref, vis } = useReveal();
   return (
-    <section ref={ref as React.RefObject<HTMLElement>} style={SEC}>
+    <section ref={ref as React.RefObject<HTMLElement>} style={{
+      ...SEC,
+      background: "var(--c-surface)",
+    }}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6rem", alignItems: "center" }} className="k-g">
-          <div style={fade(vis)}>
-            <p style={{ ...LBL, marginBottom: "1.25rem" }}>The 1000</p>
-            <h2 style={{ ...SERIF(), marginBottom: "1.5rem" }}>A podcast. A movement.</h2>
-            <p style={{ ...BODY, maxWidth: "22rem", marginBottom: "2.5rem" }}>
-              Conversations with the founders, lawyers, engineers, and policy thinkers shaping technology law in Africa. On Spotify.
-            </p>
-            <a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer" style={{
-              display: "inline-flex", alignItems: "center", gap: "0.6rem",
-              fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.55rem",
-              letterSpacing: "0.2em", textTransform: "uppercase",
-              color: "var(--c-ink)", textDecoration: "none",
-              borderBottom: "1px solid var(--c-ink)", paddingBottom: "2px",
-              transition: "color 0.2s, border-color 0.2s",
-            }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-accent)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-ink)"; }}>
-              Listen on Spotify <ArrowRight size={10} strokeWidth={1.5} />
-            </a>
+        <a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer"
+          style={{
+            display: "flex", alignItems: "center", justifyContent: "space-between",
+            gap: "3rem", textDecoration: "none",
+            opacity: vis ? 1 : 0,
+            transform: vis ? "none" : "translateY(16px)",
+            transition: "opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1), filter 0.25s",
+            filter: "none",
+          }}
+          onMouseEnter={e => (e.currentTarget as HTMLElement).style.filter = "opacity(0.6)"}
+          onMouseLeave={e => (e.currentTarget as HTMLElement).style.filter = "none"}>
+
+          {/* Left: Spotify mark + podcast name */}
+          <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
+            <SpotifyLogo />
+            <div>
+              {/* Circular — Spotify's official typeface */}
+              <p style={{
+                fontFamily: "'Circular Std', 'Circular', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif",
+                fontWeight: 700, fontSize: "clamp(1.4rem,2.5vw,2rem)",
+                color: "var(--c-ink)", letterSpacing: "-0.01em", lineHeight: 1.1,
+                marginBottom: "0.35rem",
+              }}>The 1000</p>
+              <p style={{
+                fontFamily: "var(--font-sans)", fontWeight: 300,
+                fontSize: "0.78rem", color: "var(--c-ink-muted)",
+              }}>Technology law in Africa — on Spotify</p>
+            </div>
           </div>
-          <div style={{ ...fade(vis, 0.1), display: "flex", flexDirection: "column", gap: "0" }}>
-            {[
-              { ep: "001", title: "Why African startups get IP wrong", dur: "38 min" },
-              { ep: "002", title: "Data privacy in Kenya — what the ODPC actually wants", dur: "42 min" },
-              { ep: "003", title: "Fundraising legal traps no one tells you about", dur: "35 min" },
-              { ep: "004", title: "Building compliant AI in Africa", dur: "51 min" },
-            ].map((ep, i) => (
-              <div key={ep.ep} style={{
-                display: "flex", alignItems: "center", justifyContent: "space-between",
-                gap: "2rem", padding: "1.25rem 0",
-                borderBottom: "1px solid var(--c-border)",
-                opacity: vis ? 1 : 0,
-                transition: `opacity 0.5s ease ${0.08 * i}s`,
-              }}>
-                <div style={{ display: "flex", gap: "1.5rem", alignItems: "baseline" }}>
-                  <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "0.7rem", color: "var(--c-accent)" }}>{ep.ep}</span>
-                  <span style={{ fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "0.82rem", color: "var(--c-ink-mid)" }}>{ep.title}</span>
-                </div>
-                <span style={{ fontFamily: "var(--font-manjari)", fontSize: "0.52rem", letterSpacing: "0.1em", color: "var(--c-ink-muted)", flexShrink: 0 }}>{ep.dur}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+
+          {/* Right: arrow */}
+          <ArrowRight size={16} strokeWidth={1.5} style={{ color: "var(--c-ink-muted)", flexShrink: 0 }} />
+        </a>
       </div>
-      <style>{`@media(max-width:700px){.k-g{grid-template-columns:1fr!important;gap:3rem!important}}`}</style>
     </section>
   );
 }

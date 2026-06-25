@@ -3,16 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
-const IgIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-  </svg>
-);
-const LiIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>
-  </svg>
-);
 
 function useReveal(threshold = 0.06) {
   const ref = useRef<HTMLElement>(null);
@@ -48,7 +38,7 @@ function Hero() {
           alt=""
           style={{
             width: "100%", height: "100%",
-            objectFit: "cover", objectPosition: "center 15%",
+            objectFit: "cover", objectPosition: "center 28%",
             display: "block",
           }}
         />
@@ -152,7 +142,7 @@ function Bio() {
                 alt="Decra Kerubo"
                 style={{
                   width: "100%", height: "100%",
-                  objectFit: "cover", objectPosition: "center 15%",
+                  objectFit: "cover", objectPosition: "center 28%",
                   display: "block",
                   filter: "saturate(0.92)",
                   transition: "transform 0.8s cubic-bezier(0.16,1,0.3,1)",
@@ -307,7 +297,7 @@ function EditorialBreak() {
         alt=""
         style={{
           width: "100%", height: "100%",
-          objectFit: "cover", objectPosition: "center 20%",
+          objectFit: "cover", objectPosition: "center 18%",
           display: "block",
           opacity: vis ? 0.88 : 0,
           transform: vis ? "scale(1)" : "scale(1.04)",
@@ -325,109 +315,80 @@ function EditorialBreak() {
   );
 }
 
-/* ─── S4: SOCIAL — minimal, breathing ─── */
+/* ─── S4: SOCIAL — icon links only ─── */
 function Social() {
   const { ref, vis } = useReveal();
+
+  const socials = [
+    {
+      label: "Instagram",
+      url: "https://instagram.com/decrakerubo",
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+        </svg>
+      ),
+    },
+    {
+      label: "LinkedIn",
+      url: "https://linkedin.com/in/decrakerubo",
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>
+        </svg>
+      ),
+    },
+    {
+      label: "Spotify",
+      url: "https://open.spotify.com",
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+        </svg>
+      ),
+    },
+  ];
+
   return (
     <section ref={ref as React.RefObject<HTMLElement>} style={{
-      padding: "clamp(6rem,11vw,12rem) var(--space-x)",
+      padding: "clamp(5rem,9vw,10rem) var(--space-x)",
       background: "var(--c-bg)",
       borderTop: "1px solid var(--c-border)",
     }}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
         <div style={{
-          display: "grid", gridTemplateColumns: "1fr 1fr",
-          gap: "clamp(3rem,7vw,8rem)", alignItems: "start",
-        }} id="social-grid">
+          display: "flex", alignItems: "center",
+          justifyContent: "space-between", gap: "3rem",
+          flexWrap: "wrap",
+          opacity: vis ? 1 : 0,
+          transform: vis ? "none" : "translateY(16px)",
+          transition: "opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1)",
+        }}>
+          <p style={{
+            fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400,
+            fontSize: "clamp(1.1rem,1.8vw,1.4rem)", color: "var(--c-ink-muted)",
+          }}>Follow the work.</p>
 
-          {/* Left — heading */}
-          <div style={{
-            opacity: vis ? 1 : 0,
-            transform: vis ? "none" : "translateY(20px)",
-            transition: "opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1)",
-          }}>
-            <p style={{
-              fontFamily: "var(--font-manjari)", fontWeight: 700,
-              fontSize: "0.52rem", letterSpacing: "0.26em", textTransform: "uppercase",
-              color: "var(--c-ink-muted)", marginBottom: "1.5rem",
-            }}>Follow the work</p>
-            <h2 style={{
-              fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400,
-              fontSize: "clamp(2rem,3.2vw,2.8rem)",
-              color: "var(--c-ink)", lineHeight: 1.06,
-              marginBottom: "1.5rem",
-            }}>Stay<br />connected.</h2>
-            <p style={{
-              fontFamily: "var(--font-sans)", fontWeight: 300,
-              fontSize: "0.85rem", color: "var(--c-ink-muted)",
-              lineHeight: 1.85, maxWidth: "20rem",
-            }}>
-              Technology law insights, case studies, and African legal tech — across platforms.
-            </p>
-          </div>
-
-          {/* Right — social links */}
-          <div style={{
-            display: "flex", flexDirection: "column",
-            opacity: vis ? 1 : 0,
-            transform: vis ? "none" : "translateY(20px)",
-            transition: "opacity 0.9s cubic-bezier(0.16,1,0.3,1) 0.1s, transform 0.9s cubic-bezier(0.16,1,0.3,1) 0.1s",
-          }}>
-            {[
-              {
-                Icon: IgIcon,
-                label: "Instagram",
-                handle: "@decrakerubo",
-                url: "https://instagram.com/decrakerubo",
-                desc: "Life at the intersection of law and tech",
-              },
-              {
-                Icon: LiIcon,
-                label: "LinkedIn",
-                handle: "Decra Kerubo",
-                url: "https://linkedin.com/in/decrakerubo",
-                desc: "Professional insights and technology law commentary",
-              },
-            ].map(({ Icon, label, handle, url, desc }, i) => (
-              <a key={label} href={url} target="_blank" rel="noopener noreferrer" style={{
-                display: "flex", gap: "1.75rem", alignItems: "flex-start",
-                padding: "2rem 0",
-                borderBottom: "1px solid var(--c-border)",
-                textDecoration: "none",
-                opacity: vis ? 1 : 0,
-                transition: `opacity 0.6s ease ${0.15 + i * 0.1}s, filter 0.25s`,
-                filter: "none",
-              }}
-                onMouseEnter={e => (e.currentTarget as HTMLElement).style.filter = "opacity(0.55)"}
-                onMouseLeave={e => (e.currentTarget as HTMLElement).style.filter = "none"}>
-                <div style={{
-                  width: "2.25rem", height: "2.25rem",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  flexShrink: 0, color: "var(--c-ink-muted)", paddingTop: "0.15rem",
-                }}>
-                  <Icon />
-                </div>
-                <div>
-                  <p style={{
-                    fontFamily: "var(--font-serif)", fontStyle: "italic",
-                    fontSize: "1.05rem", color: "var(--c-ink)", marginBottom: "0.2rem",
-                  }}>{label}</p>
-                  <p style={{
-                    fontFamily: "var(--font-manjari)", fontWeight: 700,
-                    fontSize: "0.5rem", letterSpacing: "0.18em", textTransform: "uppercase",
-                    color: "var(--c-ink-muted)", marginBottom: "0.55rem",
-                  }}>{handle}</p>
-                  <p style={{
-                    fontFamily: "var(--font-sans)", fontWeight: 300,
-                    fontSize: "0.8rem", color: "var(--c-ink-muted)", lineHeight: 1.7,
-                  }}>{desc}</p>
-                </div>
+          <div style={{ display: "flex", alignItems: "center", gap: "1.75rem" }}>
+            {socials.map(({ label, url, icon }, i) => (
+              <a key={label} href={url} target="_blank" rel="noopener noreferrer"
+                aria-label={label}
+                style={{
+                  color: "var(--c-ink-muted)",
+                  textDecoration: "none",
+                  lineHeight: 0,
+                  opacity: vis ? 1 : 0,
+                  transition: `opacity 0.5s ease ${0.1 + i * 0.08}s, color 0.2s, transform 0.2s`,
+                  display: "block",
+                } as React.CSSProperties}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"; (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-ink-muted)"; (e.currentTarget as HTMLElement).style.transform = "none"; }}>
+                {icon}
               </a>
             ))}
           </div>
         </div>
       </div>
-      <style>{`@media(max-width:720px){#social-grid{grid-template-columns:1fr!important;gap:3rem!important}}`}</style>
     </section>
   );
 }
