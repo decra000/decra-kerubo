@@ -166,92 +166,52 @@ function Services() {
   );
 }
 
-/* ── Section 2.5: Research ── */
-const RESEARCH = [
-  {
-    id: "ai-democratization",
-    title: "Democratization and Decarbonization of AI Solutions",
-    range: "May 2024 — Present",
-    body: "Addresses two crucial challenges: the failure of many AI solutions to reach their intended users due to poor accessibility, and the significant environmental toll of AI development. Despite AI's transformative potential, much of its promise remains unrealized for those who need it most, as deployment practices often overlook inclusivity. At the same time, the data centers powering AI consume vast amounts of energy and clean water, contributing heavily to carbon emissions and resource depletion. This paper advocates for greener AI technologies and explores edge computing as a key solution — performing AI inference closer to the data source to cut energy consumption while enhancing accessibility, ensuring AI's benefits reach broader and more diverse communities.",
-  },
-  {
-    id: "merger-regulation",
-    title: "Merger Regulation in the Digital Ecosystem",
-    range: "Sep 2025 — Dec 2025",
-    body: "",
-  },
-  {
-    id: "ai-regulation",
-    title: "AI-Enabled Regulation as a Means to Digital Safety",
-    range: "Aug 2023 — Apr 2024",
-    body: "An in-depth study establishing the effectiveness of current technical and legal measures for social media regulation. The weaknesses identified inform a proposed strategy combining real-time detection and alleviation with pre-interaction, AI-assisted intervention. Concludes with an AI-powered Chrome extension that actively listens to, evaluates, and controls information flow on social media.",
-  },
-  {
-    id: "cross-border-data",
-    title: "Analyzing Inefficiencies in Current Cross-Border Data Transfer Laws",
-    range: "Jan 2022 — Nov 2022",
-    body: "Examines the legal framework governing cross-border data transfers, focusing on key regulations including the GDPR and DPA. Explores the dynamic nature of data transfer driven by evolving digital and business needs — AI research and training data, software-shared data, and the extensive collection practices of companies like Worldcoin — alongside how long data is retained beyond its primary purpose. Time, purpose, duration, type, and licensing emerge as the pivotal factors, with recommendations proposed for strengthening existing frameworks.",
-  },
-  {
-    id: "unbiased-hiring",
-    title: "Unbiased Hiring Algorithms",
-    range: "Aug 2021 — Dec 2021",
-    body: "As organizations increasingly adopt automated solutions, many are turning to AI for hiring. While this simplifies recruitment and is seen as reducing human bias, algorithmic discrimination remains a significant concern, risking unfair outcomes and legal liability. This research develops a tool that addresses discriminatory elements while maintaining efficiency — working toward a more equitable and compliant hiring process.",
-  },
-];
-
+/* ── Section 2.5: Research teaser ── */
 function Research() {
   const { ref, vis } = useReveal();
-  const [open, setOpen] = useState<string | null>(null);
-
   return (
     <section ref={ref as React.RefObject<HTMLElement>} style={SEC}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-        <div style={{ marginBottom: "3.5rem", ...fade(vis) }}>
-          <p style={{ ...LBL, marginBottom: "1.25rem" }}>Research</p>
-          <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(2rem,3.5vw,3rem)", color: "var(--c-ink)", lineHeight: 1.05 }}>Projects.</h2>
-        </div>
-
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "1px", background: "var(--c-border)", border: "1px solid var(--c-border)" }} className="rsc-grid">
-          {RESEARCH.map((r, i) => {
-            const isOpen = open === r.id;
-            const hasBody = r.body.length > 0;
-            return (
-              <div key={r.id} style={{ background: "var(--c-bg)", padding: "2rem", display: "flex", flexDirection: "column", ...fade(vis, 0.04 * i) }}>
-                <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "1rem", marginBottom: "0.9rem" }}>
-                  <span style={{ fontFamily: "var(--font-sans)", fontWeight: 600, fontSize: "0.7rem", color: "var(--c-ink-muted)" }}>{String(i + 1).padStart(2, "0")}</span>
-                  <span style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.55rem", letterSpacing: "0.08em", color: "var(--c-ink-muted)", whiteSpace: "nowrap" }}>{r.range}</span>
-                </div>
-                <h3 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(1rem,1.5vw,1.15rem)", color: "var(--c-ink)", lineHeight: 1.3, marginBottom: hasBody ? "1rem" : 0 }}>{r.title}</h3>
-                {hasBody && (
-                  <>
-                    <p style={{
-                      ...BODY, fontSize: "0.82rem",
-                      display: "-webkit-box",
-                      WebkitLineClamp: isOpen ? "unset" : 3,
-                      WebkitBoxOrient: "vertical",
-                      overflow: isOpen ? "visible" : "hidden",
-                      marginBottom: "1rem",
-                    } as React.CSSProperties}>{r.body}</p>
-                    <button onClick={() => setOpen(isOpen ? null : r.id)} style={{
-                      display: "inline-flex", alignItems: "center", gap: "0.4rem",
-                      fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.55rem",
-                      letterSpacing: "0.15em", textTransform: "uppercase",
-                      color: "var(--c-accent)", background: "none", border: "none", cursor: "pointer",
-                      padding: 0, marginTop: "auto", alignSelf: "flex-start",
-                    }}
-                      onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"}
-                      onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-accent)"}>
-                      {isOpen ? "Show less" : "Read more"}
-                    </button>
-                  </>
-                )}
-              </div>
-            );
-          })}
+        <div style={{
+          display: "grid", gridTemplateColumns: "1fr 1fr",
+          gap: "6rem", alignItems: "end",
+        }} className="rsc-teaser-g">
+          <div style={fade(vis)}>
+            <p style={{ ...LBL, marginBottom: "1.25rem" }}>Current Project</p>
+            <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(2rem,3.5vw,3rem)", color: "var(--c-ink)", lineHeight: 1.05, marginBottom: "1.5rem" }}>
+              Democratization and Decarbonization of AI Solutions.
+            </h2>
+            <p style={{ ...BODY, maxWidth: "30rem", marginBottom: "2rem" }}>
+              Exploring how edge computing can close the accessibility gap for AI — while cutting the environmental cost of the data centres that power it.
+            </p>
+            <Link href="/about#research" style={{
+              fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.55rem",
+              letterSpacing: "0.2em", textTransform: "uppercase",
+              color: "var(--c-ink)", textDecoration: "none",
+              borderBottom: "1px solid var(--c-ink)", paddingBottom: "2px",
+              display: "inline-flex", alignItems: "center", gap: "0.4rem",
+              transition: "color 0.2s, border-color 0.2s",
+            }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-accent)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-ink)"; }}>
+              See all research <ArrowRight size={10} strokeWidth={1.5} />
+            </Link>
+          </div>
+          <div style={{ ...fade(vis, 0.1) }}>
+            <span style={{
+              display: "inline-block",
+              fontFamily: "var(--font-manjari)", fontWeight: 700,
+              fontSize: "0.5rem", letterSpacing: "0.18em", textTransform: "uppercase",
+              color: "var(--c-accent)", border: "1px solid var(--c-accent)",
+              padding: "0.35rem 0.8rem", marginBottom: "1.25rem",
+            }}>May 2024 — Present</span>
+            <p style={{ ...BODY, fontSize: "0.84rem", color: "var(--c-ink-muted)" }}>
+              Despite AI&apos;s transformative potential, much of its promise remains unrealized for those who need it most. At the same time, the data centres powering AI consume vast amounts of energy and clean water. This paper advocates for greener AI and edge inference as a dual solution.
+            </p>
+          </div>
         </div>
       </div>
-      <style>{`@media(max-width:760px){.rsc-grid{grid-template-columns:1fr!important}}`}</style>
+      <style>{`@media(max-width:760px){.rsc-teaser-g{grid-template-columns:1fr!important;gap:2.5rem!important}}`}</style>
     </section>
   );
 }
@@ -527,11 +487,11 @@ export default function Home() {
     <>
       <Hero />
       <Services />
+      <The1000 />
       <Research />
       <Partners />
       <Impact />
       <StartBusiness />
-      <The1000 />
     </>
   );
 }
