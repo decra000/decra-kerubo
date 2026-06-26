@@ -58,8 +58,8 @@ function Cover() {
       <div style={{
         position: "absolute", inset: 0,
         background: `
-          linear-gradient(to top, rgba(10,10,10,0.96) 0%, rgba(10,10,10,0.55) 30%, rgba(10,10,10,0.1) 55%, transparent 75%),
-          linear-gradient(to right, rgba(10,10,10,0.35) 0%, transparent 60%)
+          linear-gradient(to top, rgba(10,10,10,0.96) 0%, rgba(10,10,10,0.4) 32%, rgba(10,10,10,0.05) 55%, transparent 72%),
+          linear-gradient(to right, rgba(10,10,10,0.75) 0%, rgba(10,10,10,0.3) 40%, transparent 65%)
         `,
       }} />
 
@@ -326,17 +326,11 @@ function Social() {
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
         <div style={{
           display: "flex", alignItems: "center",
-          justifyContent: "space-between", gap: "2rem", flexWrap: "wrap",
+          justifyContent: "center", gap: "2.5rem", flexWrap: "wrap",
           opacity: vis ? 1 : 0,
           transform: vis ? "none" : "translateY(14px)",
           transition: "opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1)",
         }}>
-          <p style={{
-            fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400,
-            fontSize: "clamp(1.1rem, 1.8vw, 1.4rem)",
-            color: "var(--c-ink-mid)",
-          }}>Follow the work.</p>
-
           <div style={{ display: "flex", alignItems: "center", gap: "2rem" }}>
             {socials.map(({ label, url, icon }, i) => (
               <a key={label} href={url} target="_blank" rel="noopener noreferrer"

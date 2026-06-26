@@ -52,14 +52,14 @@ function Hero() {
         transition: "opacity 1.4s cubic-bezier(0.16,1,0.3,1)",
       }}>
         <img src="/decra-hero.jpg" alt=""
-          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "80% 38%", display: "block" }} />
+          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "72% 28%", display: "block" }} />
       </div>
       {/* Gradient overlay */}
       <div style={{
         position: "absolute", inset: 0,
         background: `
-          linear-gradient(to top, rgba(8,8,8,0.9) 0%, rgba(8,8,8,0.3) 32%, transparent 58%),
-          linear-gradient(to right, rgba(8,8,8,0.82) 0%, rgba(8,8,8,0.45) 40%, transparent 68%)
+          linear-gradient(to top, rgba(8,8,8,0.92) 0%, rgba(8,8,8,0.2) 35%, transparent 55%),
+          linear-gradient(to right, rgba(8,8,8,0.88) 0%, rgba(8,8,8,0.5) 38%, rgba(8,8,8,0.1) 62%, transparent 75%)
         `,
       }} />
       {/* Text — bottom anchored */}
@@ -291,12 +291,12 @@ function Impact() {
 
   return (
     <section ref={ref as React.RefObject<HTMLElement>} style={{ ...SEC, background: "var(--c-surface)" }}>
-      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto", display: "flex", alignItems: "center", gap: "3rem", flexWrap: "wrap" }}>
-        <div style={{ ...fade(vis), flex: "none" }}>
-          <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "clamp(4rem,10vw,9rem)", color: "var(--c-ink)", lineHeight: 1 }}>
+      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto", textAlign: "center" }}>
+        <div style={fade(vis)}>
+          <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "clamp(5rem,12vw,11rem)", color: "var(--c-ink)", lineHeight: 1 }}>
             {count}+
           </p>
-          <p style={{ ...LBL, marginTop: "0.75rem" }}>Startup founders &amp; tech developers assisted</p>
+          <p style={{ ...LBL, marginTop: "1rem" }}>Startup founders &amp; tech developers assisted</p>
         </div>
       </div>
     </section>
@@ -319,10 +319,10 @@ function The1000() {
       padding: "clamp(3rem,5vw,5.5rem) var(--space-x)",
       background: "#0F3320",
     }}>
-      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
+      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto", display: "flex", justifyContent: "center" }}>
         <a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer"
           style={{
-            display: "flex", alignItems: "center", justifyContent: "space-between",
+            display: "flex", alignItems: "center", justifyContent: "center",
             gap: "3rem", textDecoration: "none",
             opacity: vis ? 1 : 0,
             transform: vis ? "none" : "translateY(16px)",
@@ -350,8 +350,6 @@ function The1000() {
             </div>
           </div>
 
-          {/* Right: arrow */}
-          <ArrowRight size={16} strokeWidth={1.5} style={{ color: "rgba(255,255,255,0.45)", flexShrink: 0 }} />
         </a>
       </div>
     </section>
@@ -396,6 +394,7 @@ function StartBusiness() {
               ["Equity & founder agreements", "Cap tables, vesting, co-founder terms that hold up"],
               ["Tax & compliance", "eTIMS, KRA, VAT, PAYE — from day one"],
               ["Fundraising readiness", "Term sheets, investor agreements, due diligence prep"],
+            ["Foreign branches & PBOs", "Kenyan registration for international orgs, foreign companies, and Public Benefit Organizations"],
             ].map(([title, body], i) => (
               <div key={title} style={{
                 padding: "1.25rem 0", borderBottom: "1px solid var(--c-border)",
