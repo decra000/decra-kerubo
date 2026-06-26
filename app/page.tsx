@@ -216,8 +216,7 @@ const PARTNERS = {
 
 function Partners() {
   const { ref, vis } = useReveal();
-  const cats = Object.keys(PARTNERS) as (keyof typeof PARTNERS)[];
-  const [active, setActive] = useState<keyof typeof PARTNERS>("Law Firms");
+  const categories = Object.keys(PARTNERS);
 
   return (
     <section ref={ref as React.RefObject<HTMLElement>} style={SEC}>
@@ -225,51 +224,35 @@ function Partners() {
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6rem", alignItems: "start" }} className="partners-g">
           <div style={fade(vis)}>
             <p style={{ ...LBL, marginBottom: "1.25rem" }}>Partners</p>
-            <h2 style={{ ...SERIF(), marginBottom: "1.5rem" }}>Who we work with.</h2>
-            <p style={{ ...BODY, maxWidth: "22rem" }}>Across law firms, technology companies, and individual founders — building a network that connects legal rigour with technical execution.</p>
+            <h2 style={{ ...SERIF(), marginBottom: "2rem" }}>Who I work with.</h2>
+            <Link href="/partner" style={{
+              fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.55rem",
+              letterSpacing: "0.2em", textTransform: "uppercase",
+              color: "var(--c-ink)", textDecoration: "none",
+              borderBottom: "1px solid var(--c-ink)", paddingBottom: "2px",
+              display: "inline-flex", alignItems: "center", gap: "0.4rem",
+              transition: "color 0.2s, border-color 0.2s",
+            }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-accent)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-ink)"; }}>
+              Partner with Decra <ArrowRight size={10} strokeWidth={1.5} />
+            </Link>
           </div>
-          <div style={fade(vis, 0.1)}>
-            {/* Category tabs */}
-            <div style={{ display: "flex", gap: "0", borderBottom: "1px solid var(--c-border)", marginBottom: "2.5rem" }}>
-              {cats.map(cat => (
-                <button key={cat} onClick={() => setActive(cat)} style={{
-                  fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.55rem",
-                  letterSpacing: "0.2em", textTransform: "uppercase",
-                  padding: "0.75rem 1.25rem 0.75rem 0", marginRight: "1.5rem",
-                  background: "none", border: "none", cursor: "pointer",
-                  color: active === cat ? "var(--c-ink)" : "var(--c-ink-muted)",
-                  borderBottom: `1px solid ${active === cat ? "var(--c-ink)" : "transparent"}`,
-                  marginBottom: "-1px", transition: "color 0.2s, border-color 0.2s",
-                }}>{cat}</button>
-              ))}
-            </div>
-            {/* Sliding list */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "0" }}>
-              {PARTNERS[active].map((name, i) => (
-                <div key={name} style={{
-                  padding: "1rem 0", borderBottom: "1px solid var(--c-border)",
-                  fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "1rem",
-                  color: "var(--c-ink-mid)", lineHeight: 1.3,
-                  opacity: vis ? 1 : 0,
-                  transform: vis ? "none" : "translateX(-8px)",
-                  transition: `opacity 0.5s ease ${0.05 * i}s, transform 0.5s ease ${0.05 * i}s`,
-                }}>{name}</div>
-              ))}
-            </div>
-            <div style={{ marginTop: "2rem" }}>
-              <Link href="/partner" style={{
-                fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.55rem",
-                letterSpacing: "0.2em", textTransform: "uppercase",
-                color: "var(--c-ink)", textDecoration: "none",
-                borderBottom: "1px solid var(--c-ink)", paddingBottom: "2px",
-                display: "inline-flex", alignItems: "center", gap: "0.4rem",
-                transition: "color 0.2s, border-color 0.2s",
-              }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-accent)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-ink)"; }}>
-                Partner with Decra <ArrowRight size={10} strokeWidth={1.5} />
-              </Link>
-            </div>
+          <div style={{ display: "flex", flexDirection: "column", ...fade(vis, 0.1) }}>
+            {categories.map((cat, i) => (
+              <div key={cat} style={{
+                padding: "1.4rem 0",
+                borderBottom: "1px solid var(--c-border)",
+                opacity: vis ? 1 : 0,
+                transition: `opacity 0.6s ease ${0.08 * i}s`,
+              }}>
+                <p style={{
+                  fontFamily: "var(--font-serif)", fontStyle: "italic",
+                  fontSize: "clamp(1.1rem,1.8vw,1.4rem)",
+                  color: "var(--c-ink)", lineHeight: 1.1,
+                }}>{cat}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -316,10 +299,24 @@ function The1000() {
   return (
     <section ref={ref as React.RefObject<HTMLElement>} style={{
       borderTop: "none",
-      padding: "clamp(3rem,5vw,5.5rem) var(--space-x)",
+      padding: "clamp(4rem,7vw,7rem) var(--space-x)",
       background: "#0F3320",
+      position: "relative",
+      overflow: "hidden",
     }}>
-      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto", display: "flex", justifyContent: "center" }}>
+      {/* Blended portrait — green-tinted, fades into bg */}
+      <div style={{
+        position: "absolute", inset: 0, zIndex: 0,
+        background: "linear-gradient(to right, #0F3320 0%, #0F3320 35%, rgba(15,51,32,0.72) 58%, rgba(15,51,32,0.15) 100%)",
+      }} />
+      <img src="/decra-spotify-bg.jpg" alt="" style={{
+        position: "absolute", top: 0, right: 0,
+        height: "100%", width: "auto",
+        objectFit: "cover", objectPosition: "center top",
+        opacity: 0.38, mixBlendMode: "luminosity",
+        zIndex: 0, pointerEvents: "none",
+      }} />
+      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto", display: "flex", justifyContent: "center", position: "relative", zIndex: 1 }}>
         <a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer"
           style={{
             display: "flex", alignItems: "center", justifyContent: "center",
@@ -357,7 +354,7 @@ function The1000() {
 }
 
 
-/* ── Section 6: Start Your Business ── */
+/* ── Section 6: Start Your Business / Build Tech ── */
 function StartBusiness() {
   const { ref, vis } = useReveal();
   return (
@@ -365,50 +362,102 @@ function StartBusiness() {
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
         <div style={{
           display: "grid", gridTemplateColumns: "1fr 1fr",
-          gap: "6rem", alignItems: "center",
+          gap: "0", background: "var(--c-border)",
         }} className="sb-g">
-          <div style={fade(vis)}>
-            <p style={{ ...LBL, marginBottom: "1.25rem" }}>Ready to build</p>
-            <h2 style={{ ...SERIF("clamp(2rem,3.8vw,3.2rem)"), marginBottom: "1.5rem" }}>
+
+          {/* LEFT — Start your business */}
+          <div style={{
+            padding: "3.5rem 3.5rem 3.5rem 0",
+            background: "var(--c-bg)",
+            paddingRight: "3.5rem",
+            ...fade(vis),
+          }}>
+            <p style={{ ...LBL, marginBottom: "1.25rem" }}>Advisory</p>
+            <h2 style={{ ...SERIF("clamp(1.6rem,2.8vw,2.4rem)"), marginBottom: "1.25rem" }}>
               Start your business<br /><em style={{ color: "var(--c-accent)" }}>with me.</em>
             </h2>
-            <p style={{ ...BODY, maxWidth: "24rem", marginBottom: "2.5rem" }}>
-              From incorporation to fundraising readiness — full-spectrum startup advisory. Tell me where you are and where you want to go.
+            <p style={{ ...BODY, maxWidth: "22rem", marginBottom: "2.5rem", fontSize: "0.875rem" }}>
+              From incorporation to fundraising readiness — full-spectrum startup advisory.
             </p>
+            <div style={{ display: "flex", flexDirection: "column", marginBottom: "2.5rem" }}>
+              {[
+                ["Incorporation & structure", "Entity type, shareholding, constitutional documents"],
+                ["Equity & founder agreements", "Cap tables, vesting, co-founder terms"],
+                ["Tax & compliance", "eTIMS, KRA, VAT, PAYE — from day one"],
+                ["Fundraising readiness", "Term sheets, investor agreements, due diligence"],
+                ["Foreign branches & PBOs", "International orgs, foreign companies, PBO registration"],
+              ].map(([title, body], i) => (
+                <div key={title} style={{
+                  padding: "0.9rem 0", borderBottom: "1px solid var(--c-border)",
+                  opacity: vis ? 1 : 0,
+                  transition: `opacity 0.55s ease ${0.1 + i * 0.07}s`,
+                }}>
+                  <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "0.88rem", color: "var(--c-ink)", marginBottom: "0.2rem" }}>{title}</p>
+                  <p style={{ fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.78rem", color: "var(--c-ink-muted)", lineHeight: 1.6 }}>{body}</p>
+                </div>
+              ))}
+            </div>
             <Link href="/start" style={{
               display: "inline-flex", alignItems: "center", gap: "0.5rem",
               fontFamily: "var(--font-manjari)", fontWeight: 700,
               fontSize: "0.6rem", letterSpacing: "0.2em", textTransform: "uppercase",
               color: "var(--c-bg)", background: "var(--c-ink)",
-              padding: "0.85rem 1.75rem", textDecoration: "none",
+              padding: "0.8rem 1.6rem", textDecoration: "none",
               transition: "background 0.2s",
             }}
               onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = "var(--c-accent)"}
               onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = "var(--c-ink)"}>
-              Let&apos;s talk <ArrowRight size={11} strokeWidth={1.5} />
+              Start here <ArrowRight size={11} strokeWidth={1.5} />
             </Link>
           </div>
-          <div style={{ ...fade(vis, 0.1), display: "flex", flexDirection: "column" }}>
-            {[
-              ["Incorporation & structure", "Right entity type, shareholding, constitutional documents"],
-              ["Equity & founder agreements", "Cap tables, vesting, co-founder terms that hold up"],
-              ["Tax & compliance", "eTIMS, KRA, VAT, PAYE — from day one"],
-              ["Fundraising readiness", "Term sheets, investor agreements, due diligence prep"],
-            ["Foreign branches & PBOs", "Kenyan registration for international orgs, foreign companies, and Public Benefit Organizations"],
-            ].map(([title, body], i) => (
-              <div key={title} style={{
-                padding: "1.25rem 0", borderBottom: "1px solid var(--c-border)",
-                opacity: vis ? 1 : 0,
-                transition: `opacity 0.55s ease ${0.1 + i * 0.08}s`,
-              }}>
-                <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "0.95rem", color: "var(--c-ink)", marginBottom: "0.3rem" }}>{title}</p>
-                <p style={{ fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.82rem", color: "var(--c-ink-muted)", lineHeight: 1.65 }}>{body}</p>
-              </div>
-            ))}
+
+          {/* RIGHT — Build compliant tech */}
+          <div style={{
+            padding: "3.5rem 0 3.5rem 3.5rem",
+            background: "var(--c-surface)",
+            ...fade(vis, 0.12),
+          }}>
+            <p style={{ ...LBL, marginBottom: "1.25rem" }}>In partnership with Entrora Systems</p>
+            <h2 style={{ ...SERIF("clamp(1.6rem,2.8vw,2.4rem)"), marginBottom: "1.25rem" }}>
+              Build a compliant<br /><em style={{ color: "var(--c-accent)" }}>tech product.</em>
+            </h2>
+            <p style={{ ...BODY, maxWidth: "22rem", marginBottom: "2.5rem", fontSize: "0.875rem" }}>
+              AI engineering and software development with legal compliance built in from day one — not bolted on after.
+            </p>
+            <div style={{ display: "flex", flexDirection: "column", marginBottom: "2.5rem" }}>
+              {[
+                ["AI Document Systems", "Classification, extraction, and review at scale"],
+                ["Legal Tech Development", "Software built for legal workflows"],
+                ["Compliant AI Products", "Data governance and privacy from day one"],
+                ["AI Adoption Advisory", "Scoping and implementation for any budget"],
+                ["Regulatory sandbox", "Navigation for AI products in East Africa"],
+              ].map(([title, body], i) => (
+                <div key={title} style={{
+                  padding: "0.9rem 0", borderBottom: "1px solid var(--c-border)",
+                  opacity: vis ? 1 : 0,
+                  transition: `opacity 0.55s ease ${0.15 + i * 0.07}s`,
+                }}>
+                  <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "0.88rem", color: "var(--c-ink)", marginBottom: "0.2rem" }}>{title}</p>
+                  <p style={{ fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.78rem", color: "var(--c-ink-muted)", lineHeight: 1.6 }}>{body}</p>
+                </div>
+              ))}
+            </div>
+            <Link href="/entrora" style={{
+              display: "inline-flex", alignItems: "center", gap: "0.5rem",
+              fontFamily: "var(--font-manjari)", fontWeight: 700,
+              fontSize: "0.6rem", letterSpacing: "0.2em", textTransform: "uppercase",
+              color: "var(--c-ink)", textDecoration: "none",
+              borderBottom: "1px solid var(--c-ink)", paddingBottom: "2px",
+              transition: "color 0.2s, border-color 0.2s",
+            }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-accent)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-ink)"; }}>
+              Learn about Entrora <ArrowRight size={11} strokeWidth={1.5} />
+            </Link>
           </div>
         </div>
       </div>
-      <style>{`@media(max-width:700px){.sb-g{grid-template-columns:1fr!important;gap:3rem!important}}`}</style>
+      <style>{`@media(max-width:700px){.sb-g{grid-template-columns:1fr!important;}.sb-g>div{padding:2.5rem 0!important}}`}</style>
     </section>
   );
 }

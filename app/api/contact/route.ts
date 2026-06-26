@@ -1,39 +1,45 @@
-export const dynamic = "force-dynamic";
 import { NextRequest, NextResponse } from "next/server";
-import { supabaseAdmin } from "@/lib/supabase";
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
-    const { name, email, organization, message } = body;
+    const data = await req.json();
+    const { name, email, org, subject, message } = data;
 
-    const db = supabaseAdmin();
+    const body = `
+New message from decrakerubo.com
 
-    await db.from("leads").insert({ name, email, organization, source: "contact_form" });
+Name: ${name || "Not provided"}
+Email: ${email || "Not provided"}
+Organisation: ${org || "Not provided"}
+Subject: ${subject || "General enquiry"}
 
-    // Notify Decra
-    await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
-      },
-      body: JSON.stringify({
-        from: `Website <${process.env.EMAIL_FROM}>`,
-        to: [process.env.EMAIL_FROM!],
-        subject: `New message from ${name}`,
-        html: `
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Organization:</strong> ${organization || "—"}</p>
-          <p><strong>Message:</strong></p>
-          <p>${message}</p>
-        `,
-      }),
-    });
+Message:
+${message || "No message"}
+    `.trim();
 
-    return NextResponse.json({ success: true });
-  } catch (err) {
-    return NextResponse.json({ error: "Failed" }, { status: 500 });
+    const RESEND_KEY = process.env.RESEND_API_KEY;
+    const TO_EMAIL = process.env.CONTACT_EMAIL || "hello@decrakerubo.com";
+
+    if (RESEND_KEY) {
+      await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${RESEND_KEY}`,
+        },
+        body: JSON.stringify({
+          from: "contact@decrakerubo.com",
+          to: [TO_EMAIL],
+          reply_to: email || TO_EMAIL,
+          subject: `${subject || "New message"} — from ${name || "Anonymous"}`,
+          text: body,
+        }),
+      });
+    }
+
+    return NextResponse.json({ ok: true });
+  } catch (error) {
+    console.error("Contact route error:", error);
+    return NextResponse.json({ ok: false }, { status: 500 });
   }
 }
