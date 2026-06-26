@@ -134,7 +134,7 @@ function Hero() {
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto", width: "100%" }}>
         <div style={fade(vis)}>
           <p style={{ ...LBL, marginBottom: "1.25rem" }}>Collaborate</p>
-          <h1 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(2.5rem,5vw,4.5rem, color: "var(--c-ink)", lineHeight: 1.05, letterSpacing: "-0.01em""), maxWidth: "28rem", marginBottom: "2.5rem" }}>
+          <h1 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(2.5rem,5vw,4.5rem)", color: "var(--c-ink)", lineHeight: 1.05, letterSpacing: "-0.01em", maxWidth: "28rem", marginBottom: "2.5rem" }}>
             How to work with Decra.
           </h1>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "0" }}>
@@ -175,7 +175,7 @@ function EngagementSection({
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "7rem" }} className="eg-g">
           <div style={fade(vis)}>
             <p style={{ ...LBL, marginBottom: "1.25rem" }}>{num}</p>
-            <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(1.6rem,2.8vw,2.2rem, color: "var(--c-ink)", lineHeight: 1.05, letterSpacing: "-0.01em""), marginBottom: "1.5rem" }}>{title}</h2>
+            <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(1.6rem,2.8vw,2.2rem)", color: "var(--c-ink)", lineHeight: 1.05, letterSpacing: "-0.01em", marginBottom: "1.5rem" }}>{title}</h2>
             <p style={{ ...BODY, fontSize: "0.875rem", maxWidth: "24rem", marginBottom: "2rem" }}>{description}</p>
             <div style={{ display: "flex", flexDirection: "column" }}>
               {items.map((item, i) => (
@@ -233,7 +233,7 @@ function Talk() {
 
           <div style={fade(vis)}>
             <p style={{ ...LBL, marginBottom: "1.5rem" }}>Talk</p>
-            <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(1.8rem,3.2vw,2.6rem, color: "var(--c-ink)", lineHeight: 1.05, letterSpacing: "-0.01em""), marginBottom: "1.5rem" }}>
+            <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(1.8rem,3.2vw,2.6rem)", color: "var(--c-ink)", lineHeight: 1.05, letterSpacing: "-0.01em", marginBottom: "1.5rem" }}>
               Let&apos;s have a real conversation.
             </h2>
             <p style={{ ...BODY, fontSize: "0.875rem", maxWidth: "22rem", marginBottom: "3rem" }}>
