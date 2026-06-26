@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Plus, Minus, ExternalLink } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 /* ── helpers ── */
 function useReveal() {
@@ -125,84 +125,43 @@ const SERVICES = [
     body: "Practical, clear-headed legal guidance for founders and builders who need to make fast decisions with real legal consequences.",
     items: ["Company incorporation & structure", "Founder & co-founder agreements", "Equity, vesting & cap table", "Tax structuring (eTIMS, VAT, PAYE)", "Fundraising legal readiness", "Investor agreement review"],
   },
-  {
-    id: "ai",
-    label: "AI Engineering Services",
-    body: "Regulated, compliant AI development and deployment through Entrora Systems — built with the legal layer built in from day one.",
-    items: ["AI readiness assessment", "AI governance frameworks", "Compliant AI product development", "Data pipeline legal review", "AI policy advisory", "Regulatory sandbox navigation"],
-    external: "/entrora",
-    externalLabel: "Explore Entrora Systems",
-  },
-  {
-    id: "startup",
-    label: "Startup Advisory",
-    body: "From idea to operational — strategic legal and business advisory for startups at every stage of growth.",
-    items: ["Pre-incorporation strategy", "Multi-jurisdiction structuring", "NGO & social enterprise setup", "Grant & funding compliance", "Commercial partnership structuring", "Exit & acquisition preparation"],
-  },
 ];
 
 function Services() {
   const { ref, vis } = useReveal();
-  const [open, setOpen] = useState<string | null>(null);
 
   return (
     <section id="services" ref={ref as React.RefObject<HTMLElement>} style={SEC}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-        <div style={{ marginBottom: "5rem", ...fade(vis) }}>
+        <div style={{ marginBottom: "4rem", ...fade(vis) }}>
           <p style={{ ...LBL, marginBottom: "1.25rem" }}>Areas of Practice</p>
-          <h2 style={SERIF()}>Technology Law Consulting.</h2>
+          <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(2rem,3.5vw,3rem)", color: "var(--c-ink)", lineHeight: 1.05 }}>Technology Law Consulting.</h2>
         </div>
 
-        <div style={{ borderTop: "1px solid var(--c-border)" }}>
-          {SERVICES.map((s, i) => {
-            const isOpen = open === s.id;
-            return (
-              <div key={s.id} style={{ ...fade(vis, 0.05 * i) }}>
-                <button onClick={() => setOpen(isOpen ? null : s.id)} style={{
-                  width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between",
-                  gap: "2rem", padding: "2rem 0", background: "none", border: "none",
-                  borderBottom: isOpen ? "none" : "1px solid var(--c-border)",
-                  cursor: "pointer", textAlign: "left",
-                }}>
-                  <div style={{ display: "flex", alignItems: "baseline", gap: "2.5rem", flex: 1 }}>
-                    <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "0.75rem", color: "var(--c-ink-muted)", flexShrink: 0 }}>{String(i + 1).padStart(2, "0")}</span>
-                    <span style={{ ...SERIF("clamp(1.1rem,2vw,1.5rem)"), color: "var(--c-ink)" }}>{s.label}</span>
-                  </div>
-                  {isOpen ? <Minus size={13} strokeWidth={1.5} style={{ color: "var(--c-ink-muted)", flexShrink: 0 }} /> : <Plus size={13} strokeWidth={1.5} style={{ color: "var(--c-ink-muted)", flexShrink: 0 }} />}
-                </button>
-                <div style={{ maxHeight: isOpen ? "600px" : "0", overflow: "hidden", transition: "max-height 0.55s cubic-bezier(0.4,0,0.2,1)", borderBottom: "1px solid var(--c-border)" }}>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "5rem", paddingBottom: "3rem" }} className="svc-detail">
-                    <div>
-                      <p style={{ ...BODY, marginBottom: "2rem" }}>{s.body}</p>
-                      {s.external && (
-                        <Link href={s.external} style={{
-                          display: "inline-flex", alignItems: "center", gap: "0.4rem",
-                          fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.55rem",
-                          letterSpacing: "0.2em", textTransform: "uppercase",
-                          color: "var(--c-accent)", textDecoration: "none", transition: "color 0.2s",
-                        }}
-                          onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"}
-                          onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-accent)"}>
-                          {s.externalLabel} <ExternalLink size={10} strokeWidth={1.5} />
-                        </Link>
-                      )}
-                    </div>
-                    <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "0.6rem" }}>
-                      {s.items.map(item => (
-                        <li key={item} style={{ display: "flex", gap: "1rem", ...BODY }}>
-                          <span style={{ width: "3px", height: "3px", borderRadius: "50%", background: "var(--c-accent)", marginTop: "0.55rem", flexShrink: 0 }} />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "0" }} className="svc-grid">
+          {SERVICES.map((s, i) => (
+            <div key={s.id} style={{
+              padding: "2.25rem 2rem",
+              borderTop: "1px solid var(--c-border)",
+              borderLeft: i > 0 ? "1px solid var(--c-border)" : "none",
+              ...fade(vis, 0.06 * i),
+            }}>
+              <span style={{ fontFamily: "var(--font-sans)", fontWeight: 600, fontSize: "0.7rem", color: "var(--c-ink-muted)", display: "block", marginBottom: "1.25rem" }}>{String(i + 1).padStart(2, "0")}</span>
+              <h3 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(1.05rem,1.6vw,1.3rem)", color: "var(--c-ink)", lineHeight: 1.25, marginBottom: "1rem" }}>{s.label}</h3>
+              <p style={{ ...BODY, fontSize: "0.84rem", marginBottom: "1.5rem" }}>{s.body}</p>
+              <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "0.6rem" }}>
+                {s.items.map(item => (
+                  <li key={item} style={{ display: "flex", gap: "0.85rem", ...BODY, fontSize: "0.82rem" }}>
+                    <span style={{ width: "3px", height: "3px", borderRadius: "50%", background: "var(--c-accent)", marginTop: "0.5rem", flexShrink: 0 }} />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       </div>
-      <style>{`.svc-detail{@media(max-width:680px){grid-template-columns:1fr!important;gap:2rem!important}}`}</style>
+      <style>{`@media(max-width:900px){.svc-grid{grid-template-columns:1fr!important}.svc-grid>div{border-left:none!important;border-top:1px solid var(--c-border)!important}}`}</style>
     </section>
   );
 }
@@ -250,42 +209,49 @@ function Research() {
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
         <div style={{ marginBottom: "3.5rem", ...fade(vis) }}>
           <p style={{ ...LBL, marginBottom: "1.25rem" }}>Research</p>
-          <h2 style={SERIF()}>Projects.</h2>
+          <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(2rem,3.5vw,3rem)", color: "var(--c-ink)", lineHeight: 1.05 }}>Projects.</h2>
         </div>
 
-        <div style={{ borderTop: "1px solid var(--c-border)" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "1px", background: "var(--c-border)", border: "1px solid var(--c-border)" }} className="rsc-grid">
           {RESEARCH.map((r, i) => {
             const isOpen = open === r.id;
             const hasBody = r.body.length > 0;
             return (
-              <div key={r.id} style={{ ...fade(vis, 0.04 * i) }}>
-                <button
-                  onClick={() => hasBody && setOpen(isOpen ? null : r.id)}
-                  style={{
-                    width: "100%", display: "flex", alignItems: "baseline", justifyContent: "space-between",
-                    gap: "2rem", padding: "1.5rem 0", background: "none", border: "none",
-                    borderBottom: isOpen ? "none" : "1px solid var(--c-border)",
-                    cursor: hasBody ? "pointer" : "default", textAlign: "left",
-                  }}>
-                  <div style={{ display: "flex", alignItems: "baseline", gap: "2rem", flex: 1, minWidth: 0 }}>
-                    <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "0.7rem", color: "var(--c-ink-muted)", flexShrink: 0 }}>{String(i + 1).padStart(2, "0")}</span>
-                    <span style={{ fontFamily: "var(--font-sans)", fontWeight: 600, fontSize: "clamp(0.85rem,1.4vw,0.98rem)", color: "var(--c-ink)", lineHeight: 1.4 }}>{r.title}</span>
-                  </div>
-                  <div style={{ display: "flex", alignItems: "baseline", gap: "1.5rem", flexShrink: 0 }}>
-                    <span style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.55rem", letterSpacing: "0.08em", color: "var(--c-ink-muted)", whiteSpace: "nowrap" }}>{r.range}</span>
-                    {hasBody && (isOpen ? <Minus size={11} strokeWidth={1.5} style={{ color: "var(--c-ink-muted)" }} /> : <Plus size={11} strokeWidth={1.5} style={{ color: "var(--c-ink-muted)" }} />)}
-                  </div>
-                </button>
+              <div key={r.id} style={{ background: "var(--c-bg)", padding: "2rem", display: "flex", flexDirection: "column", ...fade(vis, 0.04 * i) }}>
+                <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "1rem", marginBottom: "0.9rem" }}>
+                  <span style={{ fontFamily: "var(--font-sans)", fontWeight: 600, fontSize: "0.7rem", color: "var(--c-ink-muted)" }}>{String(i + 1).padStart(2, "0")}</span>
+                  <span style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.55rem", letterSpacing: "0.08em", color: "var(--c-ink-muted)", whiteSpace: "nowrap" }}>{r.range}</span>
+                </div>
+                <h3 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(1rem,1.5vw,1.15rem)", color: "var(--c-ink)", lineHeight: 1.3, marginBottom: hasBody ? "1rem" : 0 }}>{r.title}</h3>
                 {hasBody && (
-                  <div style={{ maxHeight: isOpen ? "500px" : "0", overflow: "hidden", transition: "max-height 0.55s cubic-bezier(0.4,0,0.2,1)", borderBottom: "1px solid var(--c-border)" }}>
-                    <p style={{ ...BODY, maxWidth: "42rem", paddingBottom: "2rem" }}>{r.body}</p>
-                  </div>
+                  <>
+                    <p style={{
+                      ...BODY, fontSize: "0.82rem",
+                      display: "-webkit-box",
+                      WebkitLineClamp: isOpen ? "unset" : 3,
+                      WebkitBoxOrient: "vertical",
+                      overflow: isOpen ? "visible" : "hidden",
+                      marginBottom: "1rem",
+                    } as React.CSSProperties}>{r.body}</p>
+                    <button onClick={() => setOpen(isOpen ? null : r.id)} style={{
+                      display: "inline-flex", alignItems: "center", gap: "0.4rem",
+                      fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.55rem",
+                      letterSpacing: "0.15em", textTransform: "uppercase",
+                      color: "var(--c-accent)", background: "none", border: "none", cursor: "pointer",
+                      padding: 0, marginTop: "auto", alignSelf: "flex-start",
+                    }}
+                      onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"}
+                      onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-accent)"}>
+                      {isOpen ? "Show less" : "Read more"}
+                    </button>
+                  </>
                 )}
               </div>
             );
           })}
         </div>
       </div>
+      <style>{`@media(max-width:760px){.rsc-grid{grid-template-columns:1fr!important}}`}</style>
     </section>
   );
 }
