@@ -253,6 +253,51 @@ function Bio() {
   );
 }
 
+/* ─── S2.5: ACCREDITATIONS & TRAINING ─── */
+const ACCREDITATIONS = [
+  "World Bank",
+  "African Leadership University",
+  "Africa Nazarene University",
+  "Bevisioneers — Mercedes-Benz Fund",
+  "United Nations Academic Impact",
+  "UNESCO",
+  "Saïd Business School, Oxford",
+];
+
+function Accreditations() {
+  const { ref, vis } = useReveal();
+  return (
+    <section ref={ref as React.RefObject<HTMLElement>} style={{
+      padding: "clamp(4rem,7vw,7rem) var(--space-x)",
+      background: "var(--c-bg)",
+      borderTop: "1px solid var(--c-border)",
+    }}>
+      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
+        <div style={{ marginBottom: "3rem", ...{ opacity: vis ? 1 : 0, transform: vis ? "none" : "translateY(18px)", transition: "opacity 0.85s cubic-bezier(0.16,1,0.3,1), transform 0.85s cubic-bezier(0.16,1,0.3,1)" } }}>
+          <p style={{ ...LBL, marginBottom: "1rem" }}>Accreditations &amp; Training</p>
+        </div>
+        <div style={{
+          display: "flex", flexWrap: "wrap",
+          alignItems: "baseline", rowGap: "1.1rem", columnGap: "clamp(2rem,4vw,3.5rem)",
+        }}>
+          {ACCREDITATIONS.map((name, i) => (
+            <span key={name} style={{
+              fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400,
+              fontSize: "clamp(0.95rem,1.6vw,1.2rem)",
+              color: "var(--c-ink-mid)", lineHeight: 1.3,
+              opacity: vis ? 1 : 0,
+              transform: vis ? "none" : "translateY(10px)",
+              transition: `opacity 0.6s ease ${0.05 + i * 0.06}s, transform 0.6s ease ${0.05 + i * 0.06}s`,
+            }}>
+              {name}
+            </span>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ─── S3: EDITORIAL BREAK ─── */
 function EditorialBreak() {
   const { ref, vis } = useReveal(0.1);
@@ -359,6 +404,7 @@ export default function AboutPage() {
     <>
       <Cover />
       <Bio />
+      <Accreditations />
       <EditorialBreak />
       <Social />
     </>

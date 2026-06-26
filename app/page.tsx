@@ -207,7 +207,90 @@ function Services() {
   );
 }
 
-/* ── Section 3: Partners slider ── */
+/* ── Section 2.5: Research ── */
+const RESEARCH = [
+  {
+    id: "ai-democratization",
+    title: "Democratization and Decarbonization of AI Solutions",
+    range: "May 2024 — Present",
+    body: "Addresses two crucial challenges: the failure of many AI solutions to reach their intended users due to poor accessibility, and the significant environmental toll of AI development. Despite AI's transformative potential, much of its promise remains unrealized for those who need it most, as deployment practices often overlook inclusivity. At the same time, the data centers powering AI consume vast amounts of energy and clean water, contributing heavily to carbon emissions and resource depletion. This paper advocates for greener AI technologies and explores edge computing as a key solution — performing AI inference closer to the data source to cut energy consumption while enhancing accessibility, ensuring AI's benefits reach broader and more diverse communities.",
+  },
+  {
+    id: "merger-regulation",
+    title: "Merger Regulation in the Digital Ecosystem",
+    range: "Sep 2025 — Dec 2025",
+    body: "",
+  },
+  {
+    id: "ai-regulation",
+    title: "AI-Enabled Regulation as a Means to Digital Safety",
+    range: "Aug 2023 — Apr 2024",
+    body: "An in-depth study establishing the effectiveness of current technical and legal measures for social media regulation. The weaknesses identified inform a proposed strategy combining real-time detection and alleviation with pre-interaction, AI-assisted intervention. Concludes with an AI-powered Chrome extension that actively listens to, evaluates, and controls information flow on social media.",
+  },
+  {
+    id: "cross-border-data",
+    title: "Analyzing Inefficiencies in Current Cross-Border Data Transfer Laws",
+    range: "Jan 2022 — Nov 2022",
+    body: "Examines the legal framework governing cross-border data transfers, focusing on key regulations including the GDPR and DPA. Explores the dynamic nature of data transfer driven by evolving digital and business needs — AI research and training data, software-shared data, and the extensive collection practices of companies like Worldcoin — alongside how long data is retained beyond its primary purpose. Time, purpose, duration, type, and licensing emerge as the pivotal factors, with recommendations proposed for strengthening existing frameworks.",
+  },
+  {
+    id: "unbiased-hiring",
+    title: "Unbiased Hiring Algorithms",
+    range: "Aug 2021 — Dec 2021",
+    body: "As organizations increasingly adopt automated solutions, many are turning to AI for hiring. While this simplifies recruitment and is seen as reducing human bias, algorithmic discrimination remains a significant concern, risking unfair outcomes and legal liability. This research develops a tool that addresses discriminatory elements while maintaining efficiency — working toward a more equitable and compliant hiring process.",
+  },
+];
+
+function Research() {
+  const { ref, vis } = useReveal();
+  const [open, setOpen] = useState<string | null>(null);
+
+  return (
+    <section ref={ref as React.RefObject<HTMLElement>} style={SEC}>
+      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
+        <div style={{ marginBottom: "3.5rem", ...fade(vis) }}>
+          <p style={{ ...LBL, marginBottom: "1.25rem" }}>Research</p>
+          <h2 style={SERIF()}>Projects.</h2>
+        </div>
+
+        <div style={{ borderTop: "1px solid var(--c-border)" }}>
+          {RESEARCH.map((r, i) => {
+            const isOpen = open === r.id;
+            const hasBody = r.body.length > 0;
+            return (
+              <div key={r.id} style={{ ...fade(vis, 0.04 * i) }}>
+                <button
+                  onClick={() => hasBody && setOpen(isOpen ? null : r.id)}
+                  style={{
+                    width: "100%", display: "flex", alignItems: "baseline", justifyContent: "space-between",
+                    gap: "2rem", padding: "1.5rem 0", background: "none", border: "none",
+                    borderBottom: isOpen ? "none" : "1px solid var(--c-border)",
+                    cursor: hasBody ? "pointer" : "default", textAlign: "left",
+                  }}>
+                  <div style={{ display: "flex", alignItems: "baseline", gap: "2rem", flex: 1, minWidth: 0 }}>
+                    <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "0.7rem", color: "var(--c-ink-muted)", flexShrink: 0 }}>{String(i + 1).padStart(2, "0")}</span>
+                    <span style={{ fontFamily: "var(--font-sans)", fontWeight: 600, fontSize: "clamp(0.85rem,1.4vw,0.98rem)", color: "var(--c-ink)", lineHeight: 1.4 }}>{r.title}</span>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "baseline", gap: "1.5rem", flexShrink: 0 }}>
+                    <span style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.55rem", letterSpacing: "0.08em", color: "var(--c-ink-muted)", whiteSpace: "nowrap" }}>{r.range}</span>
+                    {hasBody && (isOpen ? <Minus size={11} strokeWidth={1.5} style={{ color: "var(--c-ink-muted)" }} /> : <Plus size={11} strokeWidth={1.5} style={{ color: "var(--c-ink-muted)" }} />)}
+                  </div>
+                </button>
+                {hasBody && (
+                  <div style={{ maxHeight: isOpen ? "500px" : "0", overflow: "hidden", transition: "max-height 0.55s cubic-bezier(0.4,0,0.2,1)", borderBottom: "1px solid var(--c-border)" }}>
+                    <p style={{ ...BODY, maxWidth: "42rem", paddingBottom: "2rem" }}>{r.body}</p>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+
 const PARTNERS = {
   "Law Firms": ["Hamilton Harrison & Mathews", "Anjarwalla & Khanna", "Kaplan & Stratton", "TripleOKLaw", "IKM Advocates"],
   "Tech Firms": ["Safaricom PLC", "Cellulant", "Onfon Media", "Africa's Talking", "Moringa School"],
@@ -478,6 +561,7 @@ export default function Home() {
     <>
       <Hero />
       <Services />
+      <Research />
       <Partners />
       <Impact />
       <StartBusiness />
