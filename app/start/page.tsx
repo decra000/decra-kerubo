@@ -152,7 +152,7 @@ export default function StartPage() {
             transition: "opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1)",
           }}>
             <p style={{ ...LBL, marginBottom: "1.5rem" }}>Start Your Business</p>
-            <h1 style={{ ...SERIF("clamp(2rem,3.8vw,3.2rem)"), marginBottom: "1.5rem" }}>
+            <h1 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(2rem,3.8vw,3.2rem, color: "var(--c-ink)", lineHeight: 1.05, letterSpacing: "-0.01em""), marginBottom: "1.5rem" }}>
               Let&apos;s build something<br />
               <em style={{ color: "var(--c-accent)" }}>legally sound.</em>
             </h1>

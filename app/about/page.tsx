@@ -176,7 +176,7 @@ function Bio() {
             paddingTop: "0.25rem",
           }}>
             <p style={{ ...LBL, marginBottom: "1.5rem" }}>Background</p>
-            <h2 style={{ ...SERIF("clamp(1.9rem,3vw,2.6rem)"), marginBottom: "2rem" }}>
+            <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(1.9rem,3vw,2.6rem, color: "var(--c-ink)", lineHeight: 1.05, letterSpacing: "-0.01em""), marginBottom: "2rem" }}>
               Two degrees.<br />One rare intersection.
             </h2>
 

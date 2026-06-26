@@ -224,7 +224,7 @@ function Partners() {
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6rem", alignItems: "start" }} className="partners-g">
           <div style={fade(vis)}>
             <p style={{ ...LBL, marginBottom: "1.25rem" }}>Partners</p>
-            <h2 style={{ ...SERIF(), marginBottom: "2rem" }}>Who I work with.</h2>
+            <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(2rem,3.5vw,3rem)", color: "var(--c-ink)", lineHeight: 1.05, letterSpacing: "-0.01em", marginBottom: "2rem" }}>Who I work with.</h2>
             <Link href="/partner" style={{
               fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.55rem",
               letterSpacing: "0.2em", textTransform: "uppercase",
@@ -238,20 +238,15 @@ function Partners() {
               Partner with Decra <ArrowRight size={10} strokeWidth={1.5} />
             </Link>
           </div>
-          <div style={{ display: "flex", flexDirection: "column", ...fade(vis, 0.1) }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "3rem", flexWrap: "wrap", paddingTop: "0.5rem", ...fade(vis, 0.1) }}>
             {categories.map((cat, i) => (
-              <div key={cat} style={{
-                padding: "1.4rem 0",
-                borderBottom: "1px solid var(--c-border)",
+              <p key={cat} style={{
+                fontFamily: "var(--font-sans)", fontWeight: 600,
+                fontSize: "clamp(0.85rem,1.4vw,1.05rem)",
+                color: "var(--c-ink)", lineHeight: 1,
                 opacity: vis ? 1 : 0,
-                transition: `opacity 0.6s ease ${0.08 * i}s`,
-              }}>
-                <p style={{
-                  fontFamily: "var(--font-serif)", fontStyle: "italic",
-                  fontSize: "clamp(1.1rem,1.8vw,1.4rem)",
-                  color: "var(--c-ink)", lineHeight: 1.1,
-                }}>{cat}</p>
-              </div>
+                transition: `opacity 0.5s ease ${0.08 * i}s`,
+              }}>{cat}</p>
             ))}
           </div>
         </div>
@@ -289,7 +284,7 @@ function Impact() {
 /* ── Section 5: The 1000 ── */
 /* Spotify SVG logo — official green */
 const SpotifyLogo = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="#1DB954">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="#1DB954">
     <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
   </svg>
 );
@@ -299,54 +294,70 @@ function The1000() {
   return (
     <section ref={ref as React.RefObject<HTMLElement>} style={{
       borderTop: "none",
-      padding: "clamp(4rem,7vw,7rem) var(--space-x)",
+      minHeight: "clamp(420px, 60vh, 680px)",
       background: "#0F3320",
       position: "relative",
       overflow: "hidden",
+      display: "flex",
+      alignItems: "center",
     }}>
-      {/* Blended portrait — green-tinted, fades into bg */}
-      <div style={{
-        position: "absolute", inset: 0, zIndex: 0,
-        background: "linear-gradient(to right, #0F3320 0%, #0F3320 35%, rgba(15,51,32,0.72) 58%, rgba(15,51,32,0.15) 100%)",
-      }} />
+      {/* Full-bleed image centred, fades out to edges */}
       <img src="/decra-spotify-bg.jpg" alt="" style={{
-        position: "absolute", top: 0, right: 0,
-        height: "100%", width: "auto",
-        objectFit: "cover", objectPosition: "center top",
-        opacity: 0.38, mixBlendMode: "luminosity",
+        position: "absolute", inset: 0,
+        width: "100%", height: "100%",
+        objectFit: "cover",
+        objectPosition: "center 22%",
+        opacity: 1,
         zIndex: 0, pointerEvents: "none",
+        display: "block",
       }} />
-      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto", display: "flex", justifyContent: "center", position: "relative", zIndex: 1 }}>
+      {/* Radial fade: centre visible, edges dissolve to #0F3320 */}
+      <div style={{
+        position: "absolute", inset: 0, zIndex: 1,
+        background: `
+          radial-gradient(ellipse 72% 88% at 50% 42%, transparent 0%, rgba(15,51,32,0.55) 52%, rgba(15,51,32,0.92) 72%, #0F3320 90%)
+        `,
+      }} />
+      {/* Top + bottom solid fade for section edge clean-up */}
+      <div style={{
+        position: "absolute", inset: 0, zIndex: 2,
+        background: `
+          linear-gradient(to bottom, #0F3320 0%, transparent 14%, transparent 86%, #0F3320 100%)
+        `,
+      }} />
+
+      {/* Content — centred over image */}
+      <div style={{
+        maxWidth: "var(--max-w)", margin: "0 auto",
+        width: "100%", padding: "clamp(5rem,9vw,9rem) var(--space-x)",
+        position: "relative", zIndex: 3,
+        display: "flex", flexDirection: "column", alignItems: "center",
+        textAlign: "center",
+        opacity: vis ? 1 : 0,
+        transform: vis ? "none" : "translateY(20px)",
+        transition: "opacity 1s cubic-bezier(0.16,1,0.3,1), transform 1s cubic-bezier(0.16,1,0.3,1)",
+      }}>
         <a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer"
           style={{
-            display: "flex", alignItems: "center", justifyContent: "center",
-            gap: "3rem", textDecoration: "none",
-            opacity: vis ? 1 : 0,
-            transform: vis ? "none" : "translateY(16px)",
-            transition: "opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1), filter 0.25s",
-            filter: "none",
+            display: "flex", flexDirection: "column", alignItems: "center",
+            gap: "1.5rem", textDecoration: "none",
+            transition: "filter 0.25s", filter: "none",
           }}
-          onMouseEnter={e => (e.currentTarget as HTMLElement).style.filter = "opacity(0.6)"}
+          onMouseEnter={e => (e.currentTarget as HTMLElement).style.filter = "opacity(0.7)"}
           onMouseLeave={e => (e.currentTarget as HTMLElement).style.filter = "none"}>
-
-          {/* Left: Spotify mark + podcast name */}
-          <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
-            <SpotifyLogo />
-            <div>
-              {/* Circular — Spotify's official typeface */}
-              <p style={{
-                fontFamily: "'Circular Std', 'Circular', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif",
-                fontWeight: 700, fontSize: "clamp(1.4rem,2.5vw,2rem)",
-                color: "#FFFFFF", letterSpacing: "-0.01em", lineHeight: 1.1,
-                marginBottom: "0.35rem",
-              }}>The 1000</p>
-              <p style={{
-                fontFamily: "var(--font-sans)", fontWeight: 400,
-                fontSize: "0.78rem", color: "rgba(255,255,255,0.55)",
-              }}>Technology law in Africa — on Spotify</p>
-            </div>
-          </div>
-
+          <SpotifyLogo />
+          <p style={{
+            fontFamily: "'Circular Std', 'Circular', -apple-system, BlinkMacSystemFont, sans-serif",
+            fontWeight: 700,
+            fontSize: "clamp(2.5rem,5vw,4.5rem)",
+            color: "#FFFFFF",
+            letterSpacing: "-0.02em", lineHeight: 1,
+          }}>The 1000</p>
+          <p style={{
+            fontFamily: "var(--font-sans)", fontWeight: 400,
+            fontSize: "0.9rem", color: "rgba(255,255,255,0.55)",
+            letterSpacing: "0.04em",
+          }}>Technology law in Africa &nbsp;&mdash;&nbsp; on Spotify</p>
         </a>
       </div>
     </section>
@@ -358,25 +369,24 @@ function The1000() {
 function StartBusiness() {
   const { ref, vis } = useReveal();
   return (
-    <section ref={ref as React.RefObject<HTMLElement>} style={{ ...SEC }}>
+    <section ref={ref as React.RefObject<HTMLElement>} style={{ borderTop: "none" }}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
         <div style={{
           display: "grid", gridTemplateColumns: "1fr 1fr",
-          gap: "0", background: "var(--c-border)",
+          gap: "0",
         }} className="sb-g">
 
           {/* LEFT — Start your business */}
           <div style={{
-            padding: "3.5rem 3.5rem 3.5rem 0",
-            background: "var(--c-bg)",
-            paddingRight: "3.5rem",
+            padding: "3.5rem",
+            background: "#0D0D0D",
             ...fade(vis),
           }}>
-            <p style={{ ...LBL, marginBottom: "1.25rem" }}>Advisory</p>
-            <h2 style={{ ...SERIF("clamp(1.6rem,2.8vw,2.4rem)"), marginBottom: "1.25rem" }}>
-              Start your business<br /><em style={{ color: "var(--c-accent)" }}>with me.</em>
+            <p style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.6rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(255,255,255,0.5)", marginBottom: "1.25rem" }}>Advisory</p>
+            <h2 style={{ fontFamily: "var(--font-sans)", fontWeight: 700, fontSize: "clamp(1.6rem,2.8vw,2.4rem)", color: "#FFFFFF", lineHeight: 1.1, letterSpacing: "-0.01em", marginBottom: "1.25rem" }}>
+              Start your business with me.
             </h2>
-            <p style={{ ...BODY, maxWidth: "22rem", marginBottom: "2.5rem", fontSize: "0.875rem" }}>
+            <p style={{ fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.875rem", color: "rgba(255,255,255,0.65)", lineHeight: 1.85, maxWidth: "22rem", marginBottom: "2.5rem" }}>
               From incorporation to fundraising readiness — full-spectrum startup advisory.
             </p>
             <div style={{ display: "flex", flexDirection: "column", marginBottom: "2.5rem" }}>
@@ -388,12 +398,12 @@ function StartBusiness() {
                 ["Foreign branches & PBOs", "International orgs, foreign companies, PBO registration"],
               ].map(([title, body], i) => (
                 <div key={title} style={{
-                  padding: "0.9rem 0", borderBottom: "1px solid var(--c-border)",
+                  padding: "0.9rem 0", borderBottom: "1px solid rgba(255,255,255,0.1)",
                   opacity: vis ? 1 : 0,
                   transition: `opacity 0.55s ease ${0.1 + i * 0.07}s`,
                 }}>
-                  <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "0.88rem", color: "var(--c-ink)", marginBottom: "0.2rem" }}>{title}</p>
-                  <p style={{ fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.78rem", color: "var(--c-ink-muted)", lineHeight: 1.6 }}>{body}</p>
+                  <p style={{ fontFamily: "var(--font-sans)", fontWeight: 600, fontSize: "0.85rem", color: "rgba(255,255,255,0.88)", marginBottom: "0.2rem" }}>{title}</p>
+                  <p style={{ fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.78rem", color: "rgba(255,255,255,0.45)", lineHeight: 1.6 }}>{body}</p>
                 </div>
               ))}
             </div>
@@ -401,27 +411,27 @@ function StartBusiness() {
               display: "inline-flex", alignItems: "center", gap: "0.5rem",
               fontFamily: "var(--font-manjari)", fontWeight: 700,
               fontSize: "0.6rem", letterSpacing: "0.2em", textTransform: "uppercase",
-              color: "var(--c-bg)", background: "var(--c-ink)",
+              color: "#0D0D0D", background: "var(--c-accent)",
               padding: "0.8rem 1.6rem", textDecoration: "none",
               transition: "background 0.2s",
             }}
-              onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = "var(--c-accent)"}
-              onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = "var(--c-ink)"}>
+              onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = "#D4B87A"}
+              onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = "var(--c-accent)"}>
               Start here <ArrowRight size={11} strokeWidth={1.5} />
             </Link>
           </div>
 
           {/* RIGHT — Build compliant tech */}
           <div style={{
-            padding: "3.5rem 0 3.5rem 3.5rem",
-            background: "var(--c-surface)",
+            padding: "3.5rem",
+            background: "#0F3320",
             ...fade(vis, 0.12),
           }}>
-            <p style={{ ...LBL, marginBottom: "1.25rem" }}>In partnership with Entrora Systems</p>
-            <h2 style={{ ...SERIF("clamp(1.6rem,2.8vw,2.4rem)"), marginBottom: "1.25rem" }}>
-              Build a compliant<br /><em style={{ color: "var(--c-accent)" }}>tech product.</em>
+            <p style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.6rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(15,51,32,0.6)", marginBottom: "1.25rem" }}>In partnership with Entrora Systems</p>
+            <h2 style={{ fontFamily: "var(--font-sans)", fontWeight: 700, fontSize: "clamp(1.6rem,2.8vw,2.4rem)", color: "#0F3320", lineHeight: 1.1, letterSpacing: "-0.01em", marginBottom: "1.25rem" }}>
+              Build a compliant tech product.
             </h2>
-            <p style={{ ...BODY, maxWidth: "22rem", marginBottom: "2.5rem", fontSize: "0.875rem" }}>
+            <p style={{ fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.875rem", color: "rgba(255,255,255,0.65)", lineHeight: 1.85, maxWidth: "22rem", marginBottom: "2.5rem" }}>
               AI engineering and software development with legal compliance built in from day one — not bolted on after.
             </p>
             <div style={{ display: "flex", flexDirection: "column", marginBottom: "2.5rem" }}>
@@ -433,12 +443,12 @@ function StartBusiness() {
                 ["Regulatory sandbox", "Navigation for AI products in East Africa"],
               ].map(([title, body], i) => (
                 <div key={title} style={{
-                  padding: "0.9rem 0", borderBottom: "1px solid var(--c-border)",
+                  padding: "0.9rem 0", borderBottom: "1px solid rgba(255,255,255,0.1)",
                   opacity: vis ? 1 : 0,
                   transition: `opacity 0.55s ease ${0.15 + i * 0.07}s`,
                 }}>
-                  <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "0.88rem", color: "var(--c-ink)", marginBottom: "0.2rem" }}>{title}</p>
-                  <p style={{ fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.78rem", color: "var(--c-ink-muted)", lineHeight: 1.6 }}>{body}</p>
+                  <p style={{ fontFamily: "var(--font-sans)", fontWeight: 600, fontSize: "0.85rem", color: "rgba(255,255,255,0.88)", marginBottom: "0.2rem" }}>{title}</p>
+                  <p style={{ fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.78rem", color: "rgba(255,255,255,0.45)", lineHeight: 1.6 }}>{body}</p>
                 </div>
               ))}
             </div>
@@ -446,12 +456,12 @@ function StartBusiness() {
               display: "inline-flex", alignItems: "center", gap: "0.5rem",
               fontFamily: "var(--font-manjari)", fontWeight: 700,
               fontSize: "0.6rem", letterSpacing: "0.2em", textTransform: "uppercase",
-              color: "var(--c-ink)", textDecoration: "none",
-              borderBottom: "1px solid var(--c-ink)", paddingBottom: "2px",
+              color: "rgba(255,255,255,0.75)", textDecoration: "none",
+              borderBottom: "1px solid rgba(255,255,255,0.3)", paddingBottom: "2px",
               transition: "color 0.2s, border-color 0.2s",
             }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-accent)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-ink)"; }}>
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#FFFFFF"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.8)"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.75)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.3)"; }}>
               Learn about Entrora <ArrowRight size={11} strokeWidth={1.5} />
             </Link>
           </div>
