@@ -11,7 +11,15 @@ About Decra:
 
 Your role: help visitors understand which service fits them, answer questions about Decra's practice, and guide them to the right next step (/partner, /start, or /talk).
 Be concise (2-3 sentences per reply), warm, and professional.
-Never mention Anthropic, Claude, or any AI company names.`;
+Never mention Anthropic, Claude, GitHub, OpenAI, or any AI company names.`;
+
+// GitHub Models (OpenAI-compatible chat completions API).
+// Docs: https://docs.github.com/en/github-models
+// Note: personal-token access to GitHub Models is rate-limited and intended
+// for prototyping — if traffic grows, this should move to a dedicated
+// service credential or a different provider.
+const GITHUB_MODELS_ENDPOINT = "https://models.github.ai/inference/chat/completions";
+const GITHUB_MODELS_MODEL = "openai/gpt-5";
 
 export async function POST(req: NextRequest) {
   try {
@@ -22,7 +30,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ reply: "What can I help you with?" });
     }
 
+    const apiKey = process.env.GITHUB_MODELS_TOKEN;
+    if (!apiKey) {
+      return NextResponse.json({ reply: "Reach Decra directly at hello@decrakerubo.com or use the Talk page." });
+    }
+
+    // OpenAI-compatible chat format: system prompt is a message, not a
+    // separate field (unlike Anthropic's API).
     const messages = [
+      { role: "system", content: system || DEFAULT_SYSTEM },
       ...history.map((m: { role: string; text: string }) => ({
         role: m.role === "assistant" ? "assistant" : "user",
         content: m.text,
@@ -30,34 +46,26 @@ export async function POST(req: NextRequest) {
       { role: "user", content: message },
     ];
 
-    const apiKey = process.env.ANTHROPIC_API_KEY;
-    if (!apiKey) {
-      return NextResponse.json({ reply: "Reach Decra directly at hello@decrakerubo.com or use the Talk page." });
-    }
-
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
+    const res = await fetch(GITHUB_MODELS_ENDPOINT, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-api-key": apiKey,
-        "anthropic-version": "2023-06-01",
+        "Authorization": `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: "claude-haiku-4-5-20251001",
-        max_tokens: 500,
-        system: system || DEFAULT_SYSTEM,
+        model: GITHUB_MODELS_MODEL,
         messages,
       }),
     });
 
     if (!res.ok) {
       const err = await res.text();
-      console.error("Anthropic API error:", res.status, err);
+      console.error("GitHub Models API error:", res.status, err);
       return NextResponse.json({ reply: "I'm having trouble connecting right now. Email hello@decrakerubo.com or use the Talk page." });
     }
 
     const data = await res.json();
-    const reply = data.content?.[0]?.text;
+    const reply = data.choices?.[0]?.message?.content;
 
     if (!reply) {
       return NextResponse.json({ reply: "Something went wrong. Email hello@decrakerubo.com or use the Talk page." });

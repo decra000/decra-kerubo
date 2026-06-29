@@ -166,56 +166,309 @@ function Services() {
   );
 }
 
-/* ── Section 2.5: Research teaser ── */
-function Research() {
-  const { ref, vis } = useReveal();
+/* ── Section 2.5: Research ───
+   Visual language: warm dusk grid (regentsantamonica) crossed with the
+   quiet, gold-on-cream product-card rhythm of Serenity+Jewels — serif
+   type set directly onto generated tonal tiles, thin hairline borders,
+   small caps metadata beneath each card instead of a price.
+*/
+type PaperStatus = "current" | "complete";
+
+interface Paper {
+  slug: string;          // must match a filename in /private/research/<slug>.pdf
+  tag: string;            // short serif overlay word, IG-grid style ("BEYOND", "GOLDEN")
+  title: string;
+  dates: string;
+  status: PaperStatus;
+  summary: string;
+  tile: { from: string; to: string; ink: string }; // generated tile palette
+  span?: "wide" | "normal";
+}
+
+const PAPERS: Paper[] = [
+  {
+    slug: "democratization-decarbonization-ai",
+    tag: "GREENER",
+    title: "Democratization and Decarbonization of AI Solutions",
+    dates: "May 2024 — Present",
+    status: "current",
+    summary: "Closing the accessibility gap for AI through edge computing, while cutting the environmental cost of the data centres that power it.",
+    tile: { from: "#C97B4A", to: "#1A1714", ink: "#F5EFE6" },
+    span: "wide",
+  },
+  {
+    slug: "merger-regulation-kenya",
+    tag: "MARKETS",
+    title: "Merger Regulation & Competition Law Analysis in Kenya",
+    dates: "Sep 2025 — Dec 2025",
+    status: "complete",
+    summary: "Evaluating the factors behind low rates of successful mergers between public limited companies in Kenya's commercial landscape.",
+    tile: { from: "#8C8073", to: "#2A2722", ink: "#F0EDE8" },
+  },
+  {
+    slug: "ai-enabled-regulation",
+    tag: "SAFETY",
+    title: "AI-Enabled Regulation as a Means to Digital Safety",
+    dates: "Aug 2023 — Apr 2024",
+    status: "complete",
+    summary: "Real-time detection and pre-interaction AI strategies for social media regulation, built into a working Chrome extension.",
+    tile: { from: "#41566B", to: "#0F1620", ink: "#EDEFF2" },
+  },
+  {
+    slug: "cross-border-data-transfer",
+    tag: "TRANSFER",
+    title: "Analyzing Inefficiencies in Current Cross-Border Data Transfer Laws",
+    dates: "Jan 2022 — Nov 2022",
+    status: "complete",
+    summary: "Examining GDPR, the DPA, and adjacent frameworks against the realities of AI training data and large-scale collection practices.",
+    tile: { from: "#B08D5B", to: "#241D12", ink: "#F5EFE2" },
+  },
+  {
+    slug: "unbiased-hiring-algorithms",
+    tag: "HIRING",
+    title: "Unbiased Hiring Algorithms",
+    dates: "Aug 2021 — Dec 2021",
+    status: "complete",
+    summary: "Addressing algorithmic discrimination in automated recruitment while preserving the efficiency that drew employers to it.",
+    tile: { from: "#5C6B57", to: "#171A14", ink: "#EFF2EC" },
+  },
+];
+
+function PaperTile({ paper }: { paper: Paper }) {
   return (
-    <section ref={ref as React.RefObject<HTMLElement>} style={SEC}>
-      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-        <div style={{
-          display: "grid", gridTemplateColumns: "1fr 1fr",
-          gap: "6rem", alignItems: "end",
-        }} className="rsc-teaser-g">
-          <div style={fade(vis)}>
-            <p style={{ ...LBL, marginBottom: "1.25rem" }}>Current Project</p>
-            <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(2rem,3.5vw,3rem)", color: "var(--c-ink)", lineHeight: 1.05, marginBottom: "1.5rem" }}>
-              Democratization and Decarbonization of AI Solutions.
-            </h2>
-            <p style={{ ...BODY, maxWidth: "30rem", marginBottom: "2rem" }}>
-              Exploring how edge computing can close the accessibility gap for AI — while cutting the environmental cost of the data centres that power it.
-            </p>
-            <Link href="/about#research" style={{
-              fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.55rem",
-              letterSpacing: "0.2em", textTransform: "uppercase",
-              color: "var(--c-ink)", textDecoration: "none",
-              borderBottom: "1px solid var(--c-ink)", paddingBottom: "2px",
-              display: "inline-flex", alignItems: "center", gap: "0.4rem",
-              transition: "color 0.2s, border-color 0.2s",
-            }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-accent)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-ink)"; }}>
-              See all research <ArrowRight size={10} strokeWidth={1.5} />
-            </Link>
-          </div>
-          <div style={{ ...fade(vis, 0.1) }}>
-            <span style={{
-              display: "inline-block",
-              fontFamily: "var(--font-manjari)", fontWeight: 700,
-              fontSize: "0.5rem", letterSpacing: "0.18em", textTransform: "uppercase",
-              color: "var(--c-accent)", border: "1px solid var(--c-accent)",
-              padding: "0.35rem 0.8rem", marginBottom: "1.25rem",
-            }}>May 2024 — Present</span>
-            <p style={{ ...BODY, fontSize: "0.84rem", color: "var(--c-ink-muted)" }}>
-              Despite AI&apos;s transformative potential, much of its promise remains unrealized for those who need it most. At the same time, the data centres powering AI consume vast amounts of energy and clean water. This paper advocates for greener AI and edge inference as a dual solution.
-            </p>
-          </div>
-        </div>
-      </div>
-      <style>{`@media(max-width:760px){.rsc-teaser-g{grid-template-columns:1fr!important;gap:2.5rem!important}}`}</style>
-    </section>
+    <div style={{
+      position: "relative", width: "100%", height: "100%",
+      overflow: "hidden",
+      background: `linear-gradient(155deg, ${paper.tile.from} 0%, ${paper.tile.to} 100%)`,
+    }}>
+      <div style={{
+        position: "absolute", inset: 0,
+        background: "radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.10), transparent 55%), radial-gradient(ellipse at 80% 90%, rgba(0,0,0,0.35), transparent 60%)",
+      }} />
+      <span style={{
+        position: "absolute", left: "1.25rem", bottom: "1.1rem",
+        fontFamily: "var(--font-serif)", fontWeight: 400,
+        fontSize: "clamp(1.4rem, 2.4vw, 2.1rem)",
+        letterSpacing: "0.01em",
+        color: paper.tile.ink,
+        lineHeight: 1,
+        textShadow: "0 2px 18px rgba(0,0,0,0.25)",
+      }}>
+        {paper.tag}
+      </span>
+      <span style={{
+        position: "absolute", top: "1rem", right: "1.1rem",
+        fontFamily: "var(--font-manjari)", fontWeight: 700,
+        fontSize: "0.55rem", letterSpacing: "0.18em",
+        color: paper.tile.ink, opacity: 0.65,
+      }}>
+        {paper.dates.split("—")[0].trim().split(" ").pop()}
+      </span>
+    </div>
   );
 }
 
+function PaperViewer({ paper, onClose }: { paper: Paper; onClose: () => void }) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => { document.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
+  }, [onClose]);
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={paper.title}
+      onClick={onClose}
+      style={{
+        position: "fixed", inset: 0, zIndex: 1000,
+        background: "rgba(10,10,10,0.82)",
+        backdropFilter: "blur(6px)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        padding: "clamp(1rem,4vw,3.5rem)",
+      }}
+    >
+      <div
+        onClick={e => e.stopPropagation()}
+        style={{
+          width: "100%", maxWidth: "62rem", height: "100%",
+          maxHeight: "92vh",
+          background: "#1A1916",
+          borderRadius: "4px",
+          overflow: "hidden",
+          display: "flex", flexDirection: "column",
+          boxShadow: "0 30px 80px rgba(0,0,0,0.5)",
+        }}
+      >
+        <div style={{
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+          padding: "1rem 1.5rem",
+          borderBottom: "1px solid rgba(240,237,232,0.1)",
+          flexShrink: 0,
+        }}>
+          <div style={{ minWidth: 0 }}>
+            <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "0.95rem", color: "#F0EDE8", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+              {paper.title}
+            </p>
+            <p style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.55rem", letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(240,237,232,0.45)", marginTop: "0.2rem" }}>
+              View only &nbsp;·&nbsp; {paper.dates}
+            </p>
+          </div>
+          <button
+            onClick={onClose}
+            aria-label="Close"
+            style={{
+              background: "none", border: "none", cursor: "pointer",
+              color: "rgba(240,237,232,0.55)",
+              fontFamily: "var(--font-manjari)", fontWeight: 700,
+              fontSize: "0.6rem", letterSpacing: "0.16em", textTransform: "uppercase",
+              padding: "0.5rem 0.75rem", flexShrink: 0,
+              transition: "color 0.2s",
+            }}
+            onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#F0EDE8"}
+            onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "rgba(240,237,232,0.55)"}
+          >
+            Close ✕
+          </button>
+        </div>
+        <div style={{ flex: 1, background: "#0A0A0A" }}>
+          <iframe
+            src={`/api/research/${paper.slug}#toolbar=0&navpanes=0`}
+            title={paper.title}
+            style={{ width: "100%", height: "100%", border: "none" }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Research() {
+  const { ref, vis } = useReveal();
+  const [active, setActive] = useState<Paper | null>(null);
+
+  return (
+    <section id="research" ref={ref as React.RefObject<HTMLElement>} style={SEC}>
+      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
+
+        {/* Header — echoes the Serenity+Jewels wordmark-over-cream treatment */}
+        <div style={{
+          marginBottom: "clamp(3rem,5vw,4.5rem)",
+          ...fade(vis),
+        }}>
+          <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", flexWrap: "wrap", gap: "1.5rem", marginBottom: "1.25rem" }}>
+            <p style={LBL}>Research</p>
+            <p style={{ ...LBL, color: "var(--c-ink-muted)" }}>{PAPERS.length} papers &nbsp;·&nbsp; 2021 — Present</p>
+          </div>
+          <h2 style={{
+            fontFamily: "var(--font-serif)", fontWeight: 400, fontStyle: "italic",
+            fontSize: "clamp(2.1rem,4.2vw,3.4rem)",
+            color: "var(--c-ink)", lineHeight: 1.05, letterSpacing: "-0.01em",
+            display: "flex", alignItems: "center", gap: "0.85rem", flexWrap: "wrap",
+          }}>
+            Law, AI &amp;
+            <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: "0.55em", height: "0.55em", border: "1px solid var(--c-accent)", borderRadius: "50%", fontSize: "0.4em", color: "var(--c-accent)" }}>+</span>
+            <span style={{ color: "var(--c-accent)" }}>Policy.</span>
+          </h2>
+          <p style={{ ...BODY, maxWidth: "34rem", marginTop: "1.25rem" }}>
+            Independent papers written at the intersection of technology, regulation, and the law — view-only, kept here as a record rather than a download.
+          </p>
+        </div>
+
+        {/* Grid — asymmetric, photo-grid rhythm */}
+        <div className="rsc-grid" style={{
+          display: "grid", gridTemplateColumns: "repeat(3, 1fr)",
+          gap: "1.1rem",
+        }}>
+          {PAPERS.map((paper, i) => (
+            <article
+              key={paper.slug}
+              style={{
+                gridColumn: paper.span === "wide" ? "span 2" : "span 1",
+                ...fade(vis, 0.08 + i * 0.07),
+              }}
+            >
+              <button
+                onClick={() => setActive(paper)}
+                aria-label={`View ${paper.title}`}
+                style={{
+                  display: "block", width: "100%", textAlign: "left",
+                  background: "none", border: "none", padding: 0, cursor: "pointer",
+                  font: "inherit", color: "inherit",
+                }}
+              >
+                <div
+                  className="rsc-tile"
+                  style={{
+                    aspectRatio: paper.span === "wide" ? "16/9" : "4/5",
+                    marginBottom: "1rem",
+                    border: "1px solid var(--c-border-strong)",
+                    transition: "transform 0.5s cubic-bezier(0.16,1,0.3,1)",
+                  }}
+                >
+                  <PaperTile paper={paper} />
+                </div>
+
+                <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "0.75rem", marginBottom: "0.5rem" }}>
+                  <span style={{
+                    fontFamily: "var(--font-manjari)", fontWeight: 700,
+                    fontSize: "0.55rem", letterSpacing: "0.16em", textTransform: "uppercase",
+                    color: paper.status === "current" ? "var(--c-accent)" : "var(--c-ink-muted)",
+                    border: paper.status === "current" ? "1px solid var(--c-accent)" : "none",
+                    padding: paper.status === "current" ? "0.2rem 0.55rem" : 0,
+                  }}>
+                    {paper.status === "current" ? "Current Project" : "Complete"}
+                  </span>
+                  <span style={{ fontFamily: "var(--font-sans)", fontSize: "0.7rem", color: "var(--c-ink-muted)", whiteSpace: "nowrap" }}>
+                    {paper.dates}
+                  </span>
+                </div>
+
+                <h3 style={{
+                  fontFamily: "var(--font-serif)", fontWeight: 400, fontStyle: "italic",
+                  fontSize: "clamp(1rem,1.6vw,1.2rem)", color: "var(--c-ink)",
+                  lineHeight: 1.3, marginBottom: "0.6rem",
+                }}>
+                  {paper.title}
+                </h3>
+
+                <p style={{ ...BODY, fontSize: "0.8rem", marginBottom: "0.85rem" }}>
+                  {paper.summary}
+                </p>
+
+                <span style={{
+                  display: "inline-flex", alignItems: "center", gap: "0.4rem",
+                  fontFamily: "var(--font-manjari)", fontWeight: 700,
+                  fontSize: "0.58rem", letterSpacing: "0.18em", textTransform: "uppercase",
+                  color: "var(--c-ink)",
+                  borderBottom: "1px solid var(--c-ink)", paddingBottom: "2px",
+                }}>
+                  View paper <ArrowRight size={10} strokeWidth={1.5} />
+                </span>
+              </button>
+            </article>
+          ))}
+        </div>
+      </div>
+
+      {active && <PaperViewer paper={active} onClose={() => setActive(null)} />}
+
+      <style>{`
+        .rsc-tile { overflow: hidden; }
+        .rsc-tile:hover { transform: translateY(-3px); }
+        @media(max-width:900px) {
+          .rsc-grid { grid-template-columns: repeat(2,1fr) !important; }
+        }
+        @media(max-width:600px) {
+          .rsc-grid { grid-template-columns: 1fr !important; }
+          .rsc-grid > article { grid-column: span 1 !important; }
+        }
+      `}</style>
+    </section>
+  );
+}
 
 const PARTNERS = {
   "Law Firms": ["Hamilton Harrison & Mathews", "Anjarwalla & Khanna", "Kaplan & Stratton", "TripleOKLaw", "IKM Advocates"],
@@ -225,15 +478,15 @@ const PARTNERS = {
 
 function Partners() {
   const { ref, vis } = useReveal();
-  const categories = Object.keys(PARTNERS);
+  const categories = Object.keys(PARTNERS) as (keyof typeof PARTNERS)[];
 
   return (
     <section ref={ref as React.RefObject<HTMLElement>} style={SEC}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6rem", alignItems: "start" }} className="partners-g">
-          <div style={fade(vis)}>
-            <p style={{ ...LBL, marginBottom: "1.25rem" }}>Partners</p>
-            <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(2rem,3.5vw,3rem)", color: "var(--c-ink)", lineHeight: 1.05, letterSpacing: "-0.01em", marginBottom: "2rem" }}>Who I work with.</h2>
+        <div style={fade(vis)}>
+          <p style={{ ...LBL, marginBottom: "1.25rem" }}>Partners</p>
+          <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", flexWrap: "wrap", gap: "1.5rem", marginBottom: "clamp(2.5rem,5vw,4rem)" }}>
+            <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(2rem,3.5vw,3rem)", color: "var(--c-ink)", lineHeight: 1.05, letterSpacing: "-0.01em" }}>Who I work with.</h2>
             <Link href="/partner" style={{
               fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.55rem",
               letterSpacing: "0.2em", textTransform: "uppercase",
@@ -247,20 +500,31 @@ function Partners() {
               Partner with Decra <ArrowRight size={10} strokeWidth={1.5} />
             </Link>
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "3rem", flexWrap: "wrap", paddingTop: "0.5rem", ...fade(vis, 0.1) }}>
-            {categories.map((cat, i) => (
-              <p key={cat} style={{
-                fontFamily: "var(--font-sans)", fontWeight: 600,
-                fontSize: "clamp(0.85rem,1.4vw,1.05rem)",
-                color: "var(--c-ink)", lineHeight: 1,
-                opacity: vis ? 1 : 0,
-                transition: `opacity 0.5s ease ${0.08 * i}s`,
+        </div>
+
+        <div className="partners-g" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "clamp(2.5rem,5vw,4rem)" }}>
+          {categories.map((cat, ci) => (
+            <div key={cat} style={fade(vis, 0.08 + ci * 0.08)}>
+              <p style={{
+                ...LBL, fontSize: "0.58rem", color: "var(--c-accent)",
+                marginBottom: "1.1rem", paddingBottom: "0.75rem",
+                borderBottom: "1px solid var(--c-border)",
               }}>{cat}</p>
-            ))}
-          </div>
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                {PARTNERS[cat].map((name, i) => (
+                  <p key={name} style={{
+                    fontFamily: "var(--font-sans)", fontWeight: 400,
+                    fontSize: "0.85rem", color: "var(--c-ink-mid)",
+                    lineHeight: 1.5, padding: "0.55rem 0",
+                    borderBottom: i < PARTNERS[cat].length - 1 ? "1px solid var(--c-border)" : "none",
+                  }}>{name}</p>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
-      <style>{`@media(max-width:700px){.partners-g{grid-template-columns:1fr!important;gap:3rem!important}}`}</style>
+      <style>{`@media(max-width:760px){.partners-g{grid-template-columns:1fr!important;gap:2.5rem!important}}`}</style>
     </section>
   );
 }

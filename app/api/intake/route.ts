@@ -1,24 +1,35 @@
 import { NextRequest, NextResponse } from "next/server";
 
+const ENGAGEMENT_LABELS: Record<string, string> = {
+  speak: "Speaking engagement",
+  compliance: "Compliance review",
+  startup: "Start a business",
+  entrora: "Tech development — Entrora",
+};
+
 export async function POST(req: NextRequest) {
   const data = await req.json();
 
-  const { name, email, stage, business, need, summary } = data;
+  const { engagement, name, email, summary, stage, ...rest } = data;
+  const label = ENGAGEMENT_LABELS[engagement] || engagement || (stage ? "Startup intake" : "General inquiry");
+
+  // Render any remaining structured fields (varies per engagement type)
+  const detailLines = Object.entries({ stage, ...rest })
+    .filter(([, v]) => v !== undefined && v !== null && v !== "")
+    .map(([k, v]) => `${k.charAt(0).toUpperCase() + k.slice(1)}: ${v}`)
+    .join("\n");
 
   const body = `
-New startup intake from decrakerubo.com/start
+New ${label} inquiry from decrakerubo.com${engagement ? "/partner" : "/start"}
 
 Name: ${name || "Not provided"}
 Email: ${email || "Not provided"}
-Stage: ${stage || "Not provided"}
-Business: ${business || "Not provided"}
-Main need: ${need || "Not provided"}
+${detailLines}
 
 Summary:
 ${summary || "No summary generated"}
   `.trim();
 
-  // Send via Resend (or fallback to fetch if not configured)
   const RESEND_KEY = process.env.RESEND_API_KEY;
   const TO_EMAIL = process.env.CONTACT_EMAIL || "hello@decrakerubo.com";
 
@@ -33,7 +44,7 @@ ${summary || "No summary generated"}
         from: "advisor@decrakerubo.com",
         to: [TO_EMAIL],
         reply_to: email || TO_EMAIL,
-        subject: `New startup intake: ${name || "Anonymous"} — ${stage || "Unknown stage"}`,
+        subject: `New ${label}: ${name || "Anonymous"}${stage ? ` — ${stage}` : ""}`,
         text: body,
       }),
     });
