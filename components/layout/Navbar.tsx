@@ -7,7 +7,7 @@ import { useTheme } from "./ThemeProvider";
 const links = [
   { href: "/about",       label: "About" },
   { href: "/#services",   label: "Services" },
-  { href: "/partner",     label: "Collaborate" },
+  { href: "/#collaborate", label: "Collaborate" },
 ];
 
 const lk: React.CSSProperties = {

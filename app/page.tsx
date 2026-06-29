@@ -333,73 +333,48 @@ function Research() {
   const [active, setActive] = useState<Paper | null>(null);
 
   return (
-    <section id="research" ref={ref as React.RefObject<HTMLElement>} style={SEC}>
+    <section id="research" ref={ref as React.RefObject<HTMLElement>} style={{ ...SEC, padding: "3rem var(--space-x)" }}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-        <div style={{ marginBottom: "clamp(2.5rem,4vw,3.5rem)", ...fade(vis) }}>
-          <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", flexWrap: "wrap", gap: "1.5rem" }}>
+
+        {/* Compact header row */}
+        <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: "1.5rem", ...fade(vis) }}>
+          <div style={{ display: "flex", alignItems: "baseline", gap: "1.5rem" }}>
             <p style={LBL}>Research</p>
-            <p style={{ ...LBL, color: "var(--c-ink-muted)" }}>{PAPERS.length} papers &nbsp;·&nbsp; 2021 — Present</p>
+            <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontStyle: "italic", fontSize: "clamp(1rem,1.8vw,1.25rem)", color: "var(--c-ink)", lineHeight: 1 }}>
+              Law, AI & <span style={{ color: "var(--c-accent)" }}>Policy.</span>
+            </h2>
           </div>
-          <h2 style={{
-            fontFamily: "var(--font-serif)", fontWeight: 400, fontStyle: "italic",
-            fontSize: "clamp(2rem,4vw,3.2rem)",
-            color: "var(--c-ink)", lineHeight: 1.05, letterSpacing: "-0.01em",
-            marginTop: "1rem",
-          }}>
-            Law, AI & <span style={{ color: "var(--c-accent)" }}>Policy.</span>
-          </h2>
+          <p style={{ ...LBL, color: "var(--c-ink-muted)" }}>{PAPERS.length} papers · 2021—Present</p>
         </div>
 
-        {/* Pure image grid — hover reveals title */}
-        <div className="rsc-grid" style={{
-          display: "grid", gridTemplateColumns: "repeat(3, 1fr)",
-          gap: "0.75rem",
-        }}>
+        {/* Single row of 5 equal tiles, landscape aspect */}
+        <div className="rsc-row" style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "0.5rem" }}>
           {PAPERS.map((paper, i) => (
-            <article key={paper.slug} style={{
-              gridColumn: paper.span === "wide" ? "span 2" : "span 1",
-              ...fade(vis, 0.06 + i * 0.06),
-            }}>
-              <button
-                onClick={() => setActive(paper)}
-                aria-label={`View ${paper.title}`}
-                style={{
-                  display: "block", width: "100%", textAlign: "left",
-                  background: "none", border: "none", padding: 0, cursor: "pointer",
-                  font: "inherit", color: "inherit",
-                }}
-                onMouseEnter={e => {
-                  const el = e.currentTarget.querySelector(".paper-hover-title") as HTMLElement;
-                  if (el) el.style.opacity = "1";
-                }}
-                onMouseLeave={e => {
-                  const el = e.currentTarget.querySelector(".paper-hover-title") as HTMLElement;
-                  if (el) el.style.opacity = "0";
-                }}
-              >
-                <div className="rsc-tile" style={{
-                  aspectRatio: paper.span === "wide" ? "21/9" : "3/4",
-                  border: "1px solid var(--c-border-strong)",
-                  transition: "transform 0.4s cubic-bezier(0.16,1,0.3,1)",
-                  overflow: "hidden",
-                }}>
-                  <PaperTile paper={paper} />
-                </div>
-              </button>
-            </article>
+            <button
+              key={paper.slug}
+              onClick={() => setActive(paper)}
+              aria-label={paper.title}
+              style={{
+                display: "block", background: "none", border: "none", padding: 0,
+                cursor: "pointer", textAlign: "left",
+                ...fade(vis, 0.04 + i * 0.05),
+              }}
+              onMouseEnter={e => { const el = e.currentTarget.querySelector(".paper-hover-title") as HTMLElement; if (el) el.style.opacity = "1"; }}
+              onMouseLeave={e => { const el = e.currentTarget.querySelector(".paper-hover-title") as HTMLElement; if (el) el.style.opacity = "0"; }}
+            >
+              <div className="rsc-tile" style={{ aspectRatio: "4/3", border: "1px solid var(--c-border-strong)", overflow: "hidden", transition: "transform 0.4s cubic-bezier(0.16,1,0.3,1)" }}>
+                <PaperTile paper={paper} />
+              </div>
+            </button>
           ))}
         </div>
       </div>
 
       {active && <PaperViewer paper={active} onClose={() => setActive(null)} />}
-
       <style>{`
         .rsc-tile:hover { transform: translateY(-2px); }
-        @media(max-width:900px) { .rsc-grid { grid-template-columns: repeat(2,1fr) !important; } }
-        @media(max-width:600px) {
-          .rsc-grid { grid-template-columns: 1fr !important; }
-          .rsc-grid > article { grid-column: span 1 !important; }
-        }
+        @media(max-width:900px) { .rsc-row { grid-template-columns: repeat(3,1fr) !important; } }
+        @media(max-width:540px) { .rsc-row { grid-template-columns: repeat(2,1fr) !important; } }
       `}</style>
     </section>
   );
@@ -472,7 +447,7 @@ function WorkWithDecra() {
   };
 
   return (
-    <section ref={ref as React.RefObject<HTMLElement>} style={SEC}>
+    <section id="collaborate" ref={ref as React.RefObject<HTMLElement>} style={SEC}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
         <div style={{ ...fade(vis), marginBottom: "clamp(2.5rem,5vw,4rem)" }}>
           <p style={{ ...LBL, marginBottom: "1.25rem" }}>Collaborate</p>

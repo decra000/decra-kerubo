@@ -101,7 +101,7 @@ function Cover() {
             Read more
           </a>
           <span style={{ width: "1px", height: "10px", background: "rgba(240,237,232,0.2)", display: "block" }} />
-          <Link href="/partner" style={{
+          <Link href="/#collaborate" style={{
             fontFamily: "var(--font-manjari)", fontWeight: 700,
             fontSize: "0.6rem", letterSpacing: "0.2em", textTransform: "uppercase",
             color: "rgba(196,160,106,0.9)", textDecoration: "none", transition: "color 0.2s",
@@ -234,7 +234,7 @@ function Bio() {
               ))}
             </div>
 
-            <Link href="/partner" style={{
+            <Link href="/#collaborate" style={{
               display: "inline-flex", alignItems: "center", gap: "0.5rem",
               fontFamily: "var(--font-manjari)", fontWeight: 700,
               fontSize: "0.6rem", letterSpacing: "0.18em", textTransform: "uppercase",

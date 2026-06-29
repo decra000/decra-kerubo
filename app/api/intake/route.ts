@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
     .join("\n");
 
   const body = `
-New ${label} inquiry from decrakerubo.com${engagement ? "/partner" : "/start"}
+New ${label} inquiry from decrakerubo.com${engagement ? "/#collaborate" : "/start"}
 
 Name: ${name || "Not provided"}
 Email: ${email || "Not provided"}
