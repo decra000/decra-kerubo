@@ -405,56 +405,140 @@ function Research() {
   );
 }
 
-/* ── Section 3: Partners — groups only, no individuals ── */
-const PARTNER_GROUPS = [
-  {
-    category: "Law Firms",
-    names: ["Hamilton Harrison & Mathews", "Anjarwalla & Khanna", "Kaplan & Stratton", "TripleOKLaw", "IKM Advocates"],
-  },
-  {
-    category: "Tech Firms",
-    names: ["Safaricom PLC", "Cellulant", "Onfon Media", "Africa's Talking", "Moringa School"],
-  },
-  {
-    category: "Techpreneurs",
-    names: ["Startup founders", "Digital product teams", "NGO directors", "Policy researchers", "AI builders"],
-  },
+
+/* ── Section 3+7: Who I work with & How to work with Decra — unified ── */
+type ChatMsg = { role: "user" | "assistant"; text: string };
+
+const ENGAGE_GROUPS = [
+  { key: "law-firms", label: "Law Firms", opening: "Hi, I represent a law firm interested in working with Decra on technology law advisory or compliance." },
+  { key: "tech-firms", label: "Tech Firms", opening: "Hi, I work at a tech company and need support with regulatory compliance, data protection, or product legal review." },
+  { key: "techpreneurs", label: "Techpreneurs", opening: "Hi, I'm a founder or builder looking for help with incorporation, equity, fundraising, or startup advisory." },
 ];
 
-function Partners() {
+const ENGAGE_SYSTEM = `You are Decra Kerubo's AI intake advisor on decrakerubo.com.
+Decra is a Nairobi-based lawyer and computer scientist specialising in technology law and startup legal advisory in Kenya and East Africa.
+She works with: law firms needing tech law support or compliance; tech companies needing ODPC/data protection, product legal review, tech contracts; founders needing incorporation, equity, co-founder agreements, eTIMS/KRA tax, fundraising, foreign branches, PBO registration.
+Your job: warm natural conversation, ONE question at a time. Gather over 4-6 exchanges: what they need, their context/stage, name, email.
+If they mention NGO, nonprofit, or international branch, ask: PBO (local Kenyan entity) or foreign company branch?
+Once done say exactly: "Perfect — I have everything Decra needs. She'll be in touch within 48 hours." Then on a new line:
+<intake_complete>
+{"name":"...","email":"...","summary":"2-3 sentence briefing for Decra"}
+</intake_complete>
+Style: 2 sentences per reply. Warm and direct. Never mention Anthropic, Claude, GitHub, or any AI company.`;
+
+function WorkWithDecra() {
   const { ref, vis } = useReveal();
+  const [active, setActive] = useState<string | null>(null);
+  const [msgs, setMsgs] = useState<{ role: "user" | "assistant"; text: string }[]>([]);
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [done, setDone] = useState(false);
+  const bottomRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [msgs, loading]);
+
+  const startGroup = async (groupKey: string, opening: string) => {
+    setActive(groupKey); setMsgs([]); setDone(false); setInput(""); setLoading(true);
+    try {
+      const res = await fetch("/api/chat", { method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: opening, history: [], system: ENGAGE_SYSTEM }) });
+      const data = await res.json();
+      setMsgs([{ role: "assistant", text: data.reply || "Something went wrong. Email hello@decrakerubo.com." }]);
+    } catch { setMsgs([{ role: "assistant", text: "Something went wrong. Email hello@decrakerubo.com." }]); }
+    setLoading(false);
+    setTimeout(() => inputRef.current?.focus(), 150);
+  };
+
+  const send = async () => {
+    if (!input.trim() || loading || done) return;
+    const userText = input.trim(); setInput("");
+    const next = [...msgs, { role: "user" as const, text: userText }];
+    setMsgs(next); setLoading(true);
+    try {
+      const res = await fetch("/api/chat", { method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: userText, history: msgs, system: ENGAGE_SYSTEM }) });
+      const data = await res.json();
+      let reply: string = data.reply || "";
+      if (reply.includes("<intake_complete>")) {
+        const m = reply.match(/<intake_complete>([\s\S]*?)<\/intake_complete>/);
+        if (m) { try { const p = JSON.parse(m[1].trim()); await fetch("/api/intake", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...p, engagement: active }) }); } catch {} }
+        reply = reply.replace(/<intake_complete>[\s\S]*?<\/intake_complete>/, "").trim();
+        setDone(true);
+      }
+      setMsgs([...next, { role: "assistant", text: reply }]);
+    } catch { setMsgs([...next, { role: "assistant", text: "Something went wrong. Email hello@decrakerubo.com." }]); }
+    setLoading(false);
+  };
 
   return (
     <section ref={ref as React.RefObject<HTMLElement>} style={SEC}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-        <div style={fade(vis)}>
-          <p style={{ ...LBL, marginBottom: "1.25rem" }}>Partners</p>
-          <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(2rem,3.5vw,3rem)", color: "var(--c-ink)", lineHeight: 1.05, letterSpacing: "-0.01em", marginBottom: "clamp(2.5rem,5vw,4rem)" }}>Who I work with.</h2>
+        <div style={{ ...fade(vis), marginBottom: "clamp(2.5rem,5vw,4rem)" }}>
+          <p style={{ ...LBL, marginBottom: "1.25rem" }}>Collaborate</p>
+          <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(2rem,3.5vw,3rem)", color: "var(--c-ink)", lineHeight: 1.05, letterSpacing: "-0.01em" }}>Who I work with.</h2>
         </div>
-
-        <div className="partners-g" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "clamp(2.5rem,5vw,4rem)" }}>
-          {PARTNER_GROUPS.map((group, ci) => (
-            <div key={group.category} style={fade(vis, 0.08 + ci * 0.08)}>
-              <p style={{
-                ...LBL, fontSize: "0.58rem", color: "var(--c-accent)",
-                marginBottom: "1.1rem", paddingBottom: "0.75rem",
-                borderBottom: "1px solid var(--c-border)",
-              }}>{group.category}</p>
-              <div style={{ display: "flex", flexDirection: "column" }}>
-                {group.names.map((name, i) => (
-                  <p key={name} style={{
-                    fontFamily: "var(--font-sans)", fontWeight: 400,
-                    fontSize: "0.85rem", color: "var(--c-ink-mid)",
-                    lineHeight: 1.5, padding: "0.55rem 0",
-                    borderBottom: i < group.names.length - 1 ? "1px solid var(--c-border)" : "none",
-                  }}>{name}</p>
-                ))}
+        <div className="wwd-g" style={{ display: "grid", gridTemplateColumns: "1fr 1.6fr", gap: "clamp(3rem,6vw,6rem)", alignItems: "start" }}>
+          <div style={fade(vis, 0.06)}>
+            {ENGAGE_GROUPS.map((g, i) => {
+              const isActive = active === g.key;
+              return (
+                <button key={g.key} onClick={() => startGroup(g.key, g.opening)} style={{
+                  display: "flex", alignItems: "center", justifyContent: "space-between",
+                  width: "100%", background: "none", border: "none",
+                  borderBottom: "1px solid var(--c-border)", padding: "1.25rem 0",
+                  cursor: "pointer", textAlign: "left",
+                  opacity: vis ? 1 : 0, transition: `opacity 0.6s ease ${0.08 + i * 0.08}s`,
+                }}>
+                  <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400, fontSize: "clamp(1.2rem,2vw,1.5rem)", color: isActive ? "var(--c-ink)" : "var(--c-ink-mid)", transition: "color 0.2s" }}>{g.label}</span>
+                  <ArrowRight size={14} strokeWidth={1.5} style={{ color: isActive ? "var(--c-accent)" : "var(--c-ink-muted)", transform: isActive ? "rotate(-45deg)" : "none", transition: "transform 0.3s, color 0.2s", flexShrink: 0 } as React.CSSProperties} />
+                </button>
+              );
+            })}
+            <p style={{ ...BODY, fontSize: "0.78rem", marginTop: "1.5rem" }}>Select your group — the AI will ask a few questions so Decra can reach out with exactly what you need.</p>
+          </div>
+          <div style={{ ...fade(vis, 0.12), border: "1px solid var(--c-border)", minHeight: "22rem", display: "flex", flexDirection: "column" }}>
+            {!active ? (
+              <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "3rem 2rem", textAlign: "center" }}>
+                <p style={{ ...LBL, marginBottom: "0.75rem" }}>How to work with Decra</p>
+                <p style={{ ...BODY, fontSize: "0.82rem", maxWidth: "20rem" }}>Select a group on the left — the AI will guide you through a short conversation so Decra can reach out with exactly what you need.</p>
               </div>
-            </div>
-          ))}
+            ) : (
+              <>
+                <div style={{ flex: 1, overflowY: "auto", padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1rem", maxHeight: "28rem" }}>
+                  {msgs.map((m, i) => (
+                    <div key={i} style={{ display: "flex", justifyContent: m.role === "user" ? "flex-end" : "flex-start" }}>
+                      <div style={{ maxWidth: "80%", padding: "0.7rem 1rem", background: m.role === "user" ? "var(--c-accent)" : "var(--c-surface)", color: m.role === "user" ? "#0A0A0A" : "var(--c-ink)", fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.84rem", lineHeight: 1.7 }}>{m.text}</div>
+                    </div>
+                  ))}
+                  {loading && (
+                    <div style={{ display: "flex", justifyContent: "flex-start" }}>
+                      <div style={{ padding: "0.7rem 1rem", background: "var(--c-surface)", display: "flex", gap: "4px", alignItems: "center" }}>
+                        {[0,1,2].map(i => <span key={i} style={{ width: "4px", height: "4px", borderRadius: "50%", background: "var(--c-ink-muted)", animation: `dot-pulse 1.2s ease-in-out ${i*0.2}s infinite` }} />)}
+                      </div>
+                    </div>
+                  )}
+                  <div ref={bottomRef} />
+                </div>
+                {!done ? (
+                  <div style={{ borderTop: "1px solid var(--c-border)", display: "flex", alignItems: "center", padding: "0.75rem 1rem", gap: "0.75rem" }}>
+                    <input ref={inputRef} value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); }}} placeholder="Type your reply…" style={{ flex: 1, background: "none", border: "none", outline: "none", fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.875rem", color: "var(--c-ink)" }} />
+                    <button onClick={send} disabled={!input.trim() || loading} style={{ background: "none", border: "none", cursor: "pointer", padding: "0.25rem", opacity: input.trim() ? 1 : 0.3, transition: "opacity 0.2s", color: "var(--c-ink)", display: "flex", alignItems: "center" }}>
+                      <ArrowRight size={15} strokeWidth={1.5} />
+                    </button>
+                  </div>
+                ) : (
+                  <div style={{ borderTop: "1px solid var(--c-border)", padding: "1rem 1.5rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                    <p style={{ ...LBL, color: "var(--c-accent)", fontSize: "0.52rem" }}>Message sent to Decra</p>
+                    <button onClick={() => { setActive(null); setMsgs([]); setDone(false); }} style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.52rem", letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--c-ink-muted)", transition: "color 0.2s" }} onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"} onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink-muted)"}>Start over</button>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
         </div>
       </div>
-      <style>{`@media(max-width:760px){.partners-g{grid-template-columns:1fr!important;gap:2.5rem!important}}`}</style>
+      <style>{`@media(max-width:760px){.wwd-g{grid-template-columns:1fr!important;gap:2rem!important}}@keyframes dot-pulse{0%,100%{opacity:0.3;transform:translateY(0)}50%{opacity:1;transform:translateY(-3px)}}`}</style>
     </section>
   );
 }
@@ -636,58 +720,6 @@ function StartBusiness() {
   );
 }
 
-/* ── Section 7: Collaborate — replaces /partner page as homepage section ── */
-function Collaborate() {
-  const { ref, vis } = useReveal();
-
-  const ways = [
-    { label: "Speak on technology law", href: "/partner#speak" },
-    { label: "Tech law compliance review", href: "/partner#compliance" },
-    { label: "Start your business", href: "/start" },
-    { label: "Build compliant tech", href: "/entrora" },
-    { label: "Get in touch", href: "/talk" },
-  ];
-
-  return (
-    <section ref={ref as React.RefObject<HTMLElement>} style={{
-      ...SEC,
-      minHeight: "52svh",
-      display: "flex", alignItems: "flex-end",
-      paddingBottom: "5rem",
-    }}>
-      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto", width: "100%" }}>
-        <div style={fade(vis)}>
-          <p style={{ ...LBL, marginBottom: "1.25rem" }}>Collaborate</p>
-          <h2 style={{
-            fontFamily: "var(--font-serif)", fontWeight: 400,
-            fontSize: "clamp(2.5rem,5vw,4.5rem)",
-            color: "var(--c-ink)", lineHeight: 1.05, letterSpacing: "-0.01em",
-            maxWidth: "28rem", marginBottom: "2.5rem",
-          }}>
-            How to work with Decra.
-          </h2>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "0" }}>
-            {ways.map(({ label, href }, i) => (
-              <Link key={href} href={href} style={{
-                fontFamily: "var(--font-sans)", fontWeight: 400,
-                fontSize: "0.85rem", color: "var(--c-ink-muted)",
-                textDecoration: "none", padding: "0.5rem 0",
-                paddingRight: i < ways.length - 1 ? "2rem" : 0,
-                marginRight: i < ways.length - 1 ? "2rem" : 0,
-                borderRight: i < ways.length - 1 ? "1px solid var(--c-border)" : "none",
-                transition: "color 0.2s",
-              }}
-                onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"}
-                onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink-muted)"}>
-                {label}
-              </Link>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
 
 /* ── Page ── */
 export default function Home() {
@@ -697,10 +729,9 @@ export default function Home() {
       <Services />
       <The1000 />
       <Research />
-      <Partners />
+      <WorkWithDecra />
       <Impact />
       <StartBusiness />
-      <Collaborate />
     </>
   );
 }

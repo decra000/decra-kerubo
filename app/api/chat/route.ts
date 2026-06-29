@@ -19,7 +19,7 @@ Never mention Anthropic, Claude, GitHub, OpenAI, or any AI company names.`;
 // for prototyping — if traffic grows, this should move to a dedicated
 // service credential or a different provider.
 const GITHUB_MODELS_ENDPOINT = "https://models.github.ai/inference/chat/completions";
-const GITHUB_MODELS_MODEL = "openai/gpt-5";
+const GITHUB_MODELS_MODEL = "openai/gpt-4o-mini";
 
 export async function POST(req: NextRequest) {
   try {
