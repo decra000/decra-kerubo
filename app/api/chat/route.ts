@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ reply: "What can I help you with?" });
     }
 
-    const apiKey = process.env.GITHUB_MODELS_TOKEN;
+    const apiKey = process.env.GITHUB_MODELS_TOKEN || process.env.GITHUB_TOKEN;
     if (!apiKey) {
       return NextResponse.json({ reply: "Reach Decra directly at hello@decrakerubo.com or use the Talk page." });
     }
