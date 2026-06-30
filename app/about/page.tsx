@@ -116,6 +116,175 @@ function Cover() {
   );
 }
 
+/* ─── Research data ─── */
+type PaperStatus = "current" | "complete";
+interface Paper {
+  slug: string;
+  title: string;
+  partner: string;
+  dates: string;
+  status: PaperStatus;
+}
+
+const PAPERS: Paper[] = [
+  {
+    slug: "democratization-decarbonization-ai",
+    title: "Democratization and Decarbonization of AI Solutions",
+    partner: "In association with the Visionaries Mercedes-Benz Program",
+    dates: "May 2024 — Present",
+    status: "current",
+  },
+  {
+    slug: "merger-regulation-kenya",
+    title: "Merger Regulation & Competition Law",
+    partner: "In association with the Kenya School of Law",
+    dates: "Sep — Dec 2025",
+    status: "complete",
+  },
+  {
+    slug: "ai-enabled-regulation",
+    title: "AI-Enabled Regulation & Digital Safety",
+    partner: "In association with the African Leadership University",
+    dates: "Aug 2023 — Apr 2024",
+    status: "complete",
+  },
+  {
+    slug: "cross-border-data-transfer",
+    title: "Cross-Border Data Transfer Laws",
+    partner: "In association with Africa Nazarene University",
+    dates: "Jan — Nov 2022",
+    status: "complete",
+  },
+  {
+    slug: "unbiased-hiring-algorithms",
+    title: "Unbiased Hiring Algorithms",
+    partner: "In association with the United Nations Academic Impact",
+    dates: "Aug — Dec 2021",
+    status: "complete",
+  },
+];
+
+function PaperViewer({ paper, onClose }: { paper: Paper; onClose: () => void }) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => { document.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
+  }, [onClose]);
+
+  return (
+    <div
+      role="dialog" aria-modal="true" aria-label={paper.title}
+      onClick={onClose}
+      style={{
+        position: "fixed", inset: 0, zIndex: 1000,
+        background: "rgba(10,10,10,0.82)", backdropFilter: "blur(6px)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        padding: "clamp(1rem,4vw,3.5rem)",
+      }}
+    >
+      <div onClick={e => e.stopPropagation()} style={{
+        width: "100%", maxWidth: "62rem", height: "100%", maxHeight: "92vh",
+        background: "#1A1916", borderRadius: "4px", overflow: "hidden",
+        display: "flex", flexDirection: "column",
+        boxShadow: "0 30px 80px rgba(0,0,0,0.5)",
+      }}>
+        <div style={{
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+          padding: "1rem 1.5rem", borderBottom: "1px solid rgba(240,237,232,0.1)", flexShrink: 0,
+        }}>
+          <div style={{ minWidth: 0 }}>
+            <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "0.95rem", color: "#F0EDE8", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+              {paper.title}
+            </p>
+            <p style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.55rem", letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(240,237,232,0.45)", marginTop: "0.2rem" }}>
+              View only &nbsp;·&nbsp; {paper.dates}
+            </p>
+          </div>
+          <button onClick={onClose} aria-label="Close" style={{
+            background: "none", border: "none", cursor: "pointer",
+            color: "rgba(240,237,232,0.55)",
+            fontFamily: "var(--font-manjari)", fontWeight: 700,
+            fontSize: "0.6rem", letterSpacing: "0.16em", textTransform: "uppercase",
+            padding: "0.5rem 0.75rem", flexShrink: 0, transition: "color 0.2s",
+          }}
+            onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#F0EDE8"}
+            onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "rgba(240,237,232,0.55)"}>
+            Close ✕
+          </button>
+        </div>
+        <div style={{ flex: 1, background: "#0A0A0A" }}>
+          <iframe src={`/api/research/${paper.slug}#toolbar=0&navpanes=0`} title={paper.title}
+            style={{ width: "100%", height: "100%", border: "none" }} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── S2.7: RESEARCH — Services-style grid, no card art ─── */
+function Research() {
+  const { ref, vis } = useReveal();
+  const [active, setActive] = useState<Paper | null>(null);
+
+  return (
+    <section id="research" ref={ref as React.RefObject<HTMLElement>} style={{
+      padding: "clamp(5rem,9vw,10rem) var(--space-x)",
+      background: "var(--c-bg)",
+      borderTop: "1px solid var(--c-border)",
+    }}>
+      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
+        <div style={{ marginBottom: "4rem", ...{ opacity: vis ? 1 : 0, transform: vis ? "none" : "translateY(18px)", transition: "opacity 0.85s cubic-bezier(0.16,1,0.3,1), transform 0.85s cubic-bezier(0.16,1,0.3,1)" } }}>
+          <p style={{ ...LBL, marginBottom: "1.25rem" }}>Research</p>
+          <h2 style={SERIF()}>Law, AI & Policy.</h2>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "0" }} className="rsc-grid">
+          {PAPERS.map((paper, i) => (
+            <button
+              key={paper.slug}
+              onClick={() => setActive(paper)}
+              style={{
+                display: "block", width: "100%", textAlign: "left",
+                background: "none", border: "none", cursor: "pointer",
+                padding: "1.75rem 1.25rem",
+                borderTop: "1px solid var(--c-border)",
+                borderLeft: i > 0 ? "1px solid var(--c-border)" : "none",
+                opacity: vis ? 1 : 0,
+                transition: `opacity 0.6s ease ${0.06 * i}s`,
+              }}
+            >
+              <span style={{ fontFamily: "var(--font-sans)", fontWeight: 600, fontSize: "0.65rem", color: "var(--c-ink-muted)", display: "block", marginBottom: "1rem" }}>{String(i + 1).padStart(2, "0")}</span>
+              {paper.status === "current" && (
+                <span style={{
+                  display: "inline-block",
+                  fontFamily: "var(--font-manjari)", fontWeight: 700,
+                  fontSize: "0.42rem", letterSpacing: "0.16em", textTransform: "uppercase",
+                  color: "var(--c-accent)",
+                  border: "1px solid var(--c-accent)",
+                  padding: "0.12rem 0.35rem", marginBottom: "0.75rem",
+                }}>Current</span>
+              )}
+              <h3 style={{
+                fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400,
+                fontSize: "0.85rem", color: "var(--c-ink)", lineHeight: 1.3,
+                marginBottom: "0.6rem",
+              }}>{paper.title}</h3>
+              <p style={{
+                fontFamily: "var(--font-sans)", fontWeight: 400,
+                fontSize: "0.66rem", color: "var(--c-ink-muted)", lineHeight: 1.5,
+              }}>{paper.partner}</p>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {active && <PaperViewer paper={active} onClose={() => setActive(null)} />}
+      <style>{`@media(max-width:900px){.rsc-grid{grid-template-columns:repeat(2,1fr)!important}.rsc-grid>button:nth-child(odd){border-left:none!important}.rsc-grid>button:nth-child(n+3){border-top:1px solid var(--c-border)!important}}@media(max-width:560px){.rsc-grid{grid-template-columns:1fr!important}.rsc-grid>button{border-left:none!important;border-top:1px solid var(--c-border)!important}}`}</style>
+    </section>
+  );
+}
+
 /* ─── S2: BIO ─── */
 function Bio() {
   const { ref, vis } = useReveal();
@@ -180,11 +349,8 @@ function Bio() {
               Two degrees.<br />One rare intersection.
             </h2>
 
-            <p style={{ ...BODY, marginBottom: "1.25rem" }}>
-              A law degree and a computer science degree aren't the typical combination — but they're the combination that makes this practice rare. Most legal challenges in technology can't be solved by law alone, and most technical decisions carry legal consequences nobody tracks until it's too late.
-            </p>
             <p style={{ ...BODY, marginBottom: "3rem" }}>
-              I built a practice at that intersection: technology law consulting for companies, products, and platforms — and startup advisory for the people building them.
+              A rare intersection — technology law consulting for companies and platforms, and startup advisory for the people building them.
             </p>
 
             {/* Pullquote */}
@@ -406,6 +572,7 @@ export default function AboutPage() {
     <>
       <Cover />
       <Bio />
+      <Research />
       <Accreditations />
       <EditorialBreak />
       <Social />
