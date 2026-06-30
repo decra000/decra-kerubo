@@ -170,11 +170,12 @@ const ENGAGE_GROUPS = [
   { key: "law-firms", label: "Law Firms", opening: "Hi, I represent a law firm interested in working with Decra on technology law advisory or compliance." },
   { key: "tech-firms", label: "Tech Firms", opening: "Hi, I work at a tech company and need support with regulatory compliance, data protection, or product legal review." },
   { key: "techpreneurs", label: "Techpreneurs", opening: "Hi, I'm a founder or builder looking for help with incorporation, equity, fundraising, or startup advisory." },
+  { key: "tech-law-events", label: "Tech Law Events", opening: "Hi, I'm organizing or partnering on a technology law event and would like to discuss having Decra speak or participate." },
 ];
 
 const ENGAGE_SYSTEM = `You are Decra Kerubo's AI intake advisor on decrakerubo.com.
 Decra is a Nairobi-based lawyer and computer scientist specialising in technology law and startup legal advisory in Kenya and East Africa.
-She works with: law firms needing tech law support or compliance; tech companies needing ODPC/data protection, product legal review, tech contracts; founders needing incorporation, equity, co-founder agreements, eTIMS/KRA tax, fundraising, foreign branches, PBO registration.
+She works with: law firms needing tech law support or compliance; tech companies needing ODPC/data protection, product legal review, tech contracts; founders needing incorporation, equity, co-founder agreements, eTIMS/KRA tax, fundraising, foreign branches, PBO registration; and tech law event organizers seeking speakers, panelists, or partnership.
 Your job: warm natural conversation, ONE question at a time. Gather over 4-6 exchanges: what they need, their context/stage, name, email.
 If they mention NGO, nonprofit, or international branch, ask: PBO (local Kenyan entity) or foreign company branch?
 Once done say exactly: "Perfect — I have everything Decra needs. She'll be in touch within 48 hours." Then on a new line:
@@ -237,7 +238,7 @@ function WorkWithDecra() {
         </div>
 
         {/* One row, Services-style numbered cards */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "0" }} className="wwd-grid">
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "0" }} className="wwd-grid">
           {ENGAGE_GROUPS.map((g, i) => {
             const isActive = active === g.key;
             return (
@@ -302,7 +303,7 @@ function WorkWithDecra() {
           </div>
         )}
       </div>
-      <style>{`@media(max-width:900px){.wwd-grid{grid-template-columns:1fr!important}.wwd-grid>button{border-left:none!important;border-top:1px solid var(--c-border)!important}}@keyframes dot-pulse{0%,100%{opacity:0.3;transform:translateY(0)}50%{opacity:1;transform:translateY(-3px)}}`}</style>
+      <style>{`@media(max-width:900px){.wwd-grid{grid-template-columns:repeat(2,1fr)!important}.wwd-grid>button:nth-child(odd){border-left:none!important}.wwd-grid>button:nth-child(n+3){border-top:1px solid var(--c-border)!important}}@media(max-width:560px){.wwd-grid{grid-template-columns:1fr!important}.wwd-grid>button{border-left:none!important;border-top:1px solid var(--c-border)!important}}@keyframes dot-pulse{0%,100%{opacity:0.3;transform:translateY(0)}50%{opacity:1;transform:translateY(-3px)}}`}</style>
     </section>
   );
 }
@@ -351,7 +352,7 @@ function The1000() {
     }}>
       <img src="/decra-spotify-bg.jpg" alt="" style={{
         position: "absolute", inset: 0, width: "100%", height: "100%",
-        objectFit: "cover", objectPosition: "center 22%",
+        objectFit: "cover", objectPosition: "62% 28%",
         opacity: 1, zIndex: 0, pointerEvents: "none", display: "block",
       }} />
       <div style={{
