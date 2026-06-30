@@ -168,55 +168,47 @@ type PaperStatus = "current" | "complete";
 
 interface Paper {
   slug: string;
-  tag: string;
   title: string;
+  partner: string;
   dates: string;
   status: PaperStatus;
-  tile: { from: string; to: string; ink: string };
-  span?: "wide" | "normal";
 }
 
 const PAPERS: Paper[] = [
   {
     slug: "democratization-decarbonization-ai",
-    tag: "GREENER",
     title: "Democratization and Decarbonization of AI Solutions",
+    partner: "In association with the Visionaries Mercedes-Benz Program",
     dates: "May 2024 — Present",
     status: "current",
-    tile: { from: "#C97B4A", to: "#1A1714", ink: "#F5EFE6" },
-    span: "wide",
   },
   {
     slug: "merger-regulation-kenya",
-    tag: "MARKETS",
     title: "Merger Regulation & Competition Law",
+    partner: "In association with the Kenya School of Law",
     dates: "Sep — Dec 2025",
     status: "complete",
-    tile: { from: "#8C8073", to: "#2A2722", ink: "#F0EDE8" },
   },
   {
     slug: "ai-enabled-regulation",
-    tag: "SAFETY",
     title: "AI-Enabled Regulation & Digital Safety",
+    partner: "In association with the African Leadership University",
     dates: "Aug 2023 — Apr 2024",
     status: "complete",
-    tile: { from: "#41566B", to: "#0F1620", ink: "#EDEFF2" },
   },
   {
     slug: "cross-border-data-transfer",
-    tag: "TRANSFER",
     title: "Cross-Border Data Transfer Laws",
+    partner: "In association with Africa Nazarene University",
     dates: "Jan — Nov 2022",
     status: "complete",
-    tile: { from: "#B08D5B", to: "#241D12", ink: "#F5EFE2" },
   },
   {
     slug: "unbiased-hiring-algorithms",
-    tag: "HIRING",
     title: "Unbiased Hiring Algorithms",
+    partner: "In association with the United Nations Academic Impact",
     dates: "Aug — Dec 2021",
     status: "complete",
-    tile: { from: "#5C6B57", to: "#171A14", ink: "#EFF2EC" },
   },
 ];
 
@@ -224,47 +216,37 @@ function PaperTile({ paper }: { paper: Paper }) {
   return (
     <div style={{
       position: "relative", width: "100%", height: "100%",
-      overflow: "hidden",
-      background: `linear-gradient(155deg, ${paper.tile.from} 0%, ${paper.tile.to} 100%)`,
+      overflow: "hidden", background: "#141414",
+      display: "flex", flexDirection: "column", justifyContent: "space-between",
+      padding: "0.85rem 0.9rem",
     }}>
-      <div style={{
-        position: "absolute", inset: 0,
-        background: "radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.10), transparent 55%), radial-gradient(ellipse at 80% 90%, rgba(0,0,0,0.35), transparent 60%)",
-      }} />
-      <span style={{
-        position: "absolute", left: "1.25rem", bottom: "1.1rem",
-        fontFamily: "var(--font-serif)", fontWeight: 400,
-        fontSize: "clamp(1.4rem, 2.4vw, 2.1rem)",
-        color: paper.tile.ink, lineHeight: 1,
-        textShadow: "0 2px 18px rgba(0,0,0,0.25)",
-      }}>
-        {paper.tag}
-      </span>
       {paper.status === "current" && (
         <span style={{
-          position: "absolute", top: "1rem", left: "1.25rem",
           fontFamily: "var(--font-manjari)", fontWeight: 700,
-          fontSize: "0.48rem", letterSpacing: "0.18em", textTransform: "uppercase",
-          color: paper.tile.ink,
-          border: `1px solid ${paper.tile.ink}`,
-          padding: "0.2rem 0.5rem", opacity: 0.8,
+          fontSize: "0.42rem", letterSpacing: "0.16em", textTransform: "uppercase",
+          color: "rgba(240,237,232,0.55)",
+          border: "1px solid rgba(240,237,232,0.3)",
+          padding: "0.15rem 0.4rem", alignSelf: "flex-start",
         }}>
           Current
         </span>
       )}
-      {/* Hover: show title */}
-      <div className="paper-hover-title" style={{
-        position: "absolute", inset: 0,
-        background: "rgba(0,0,0,0.55)",
-        display: "flex", alignItems: "flex-end",
-        padding: "1.25rem",
-        opacity: 0,
-        transition: "opacity 0.3s",
-      }}>
+      <div style={{ marginTop: paper.status === "current" ? 0 : "auto" }}>
         <p style={{
           fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400,
-          fontSize: "clamp(0.85rem,1.3vw,1rem)", color: "#F0EDE8", lineHeight: 1.35,
-        }}>{paper.title}</p>
+          fontSize: "clamp(0.68rem, 0.95vw, 0.8rem)",
+          color: "rgba(240,237,232,0.92)", lineHeight: 1.3,
+          marginBottom: "0.4rem",
+        }}>
+          {paper.title}
+        </p>
+        <p style={{
+          fontFamily: "var(--font-sans)", fontWeight: 400,
+          fontSize: "0.56rem", letterSpacing: "0.01em",
+          color: "rgba(240,237,232,0.4)", lineHeight: 1.4,
+        }}>
+          {paper.partner}
+        </p>
       </div>
     </div>
   );
@@ -359,8 +341,6 @@ function Research() {
                 cursor: "pointer", textAlign: "left",
                 ...fade(vis, 0.04 + i * 0.05),
               }}
-              onMouseEnter={e => { const el = e.currentTarget.querySelector(".paper-hover-title") as HTMLElement; if (el) el.style.opacity = "1"; }}
-              onMouseLeave={e => { const el = e.currentTarget.querySelector(".paper-hover-title") as HTMLElement; if (el) el.style.opacity = "0"; }}
             >
               <div className="rsc-tile" style={{ aspectRatio: "4/3", border: "1px solid var(--c-border-strong)", overflow: "hidden", transition: "transform 0.4s cubic-bezier(0.16,1,0.3,1)" }}>
                 <PaperTile paper={paper} />
@@ -446,15 +426,53 @@ function WorkWithDecra() {
     setLoading(false);
   };
 
+  const [panelOpen, setPanelOpen] = useState(false);
+
   return (
     <section id="collaborate" ref={ref as React.RefObject<HTMLElement>} style={SEC}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-        <div style={{ ...fade(vis), marginBottom: "clamp(2.5rem,5vw,4rem)" }}>
+        <div style={{ ...fade(vis), marginBottom: "clamp(2rem,4vw,3rem)" }}>
           <p style={{ ...LBL, marginBottom: "1.25rem" }}>Collaborate</p>
           <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(2rem,3.5vw,3rem)", color: "var(--c-ink)", lineHeight: 1.05, letterSpacing: "-0.01em" }}>Who I work with.</h2>
         </div>
+
+        {/* Horizontal listing of groups + Partner with me CTA */}
+        <div style={{
+          ...fade(vis, 0.06),
+          display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between",
+          gap: "1.5rem", paddingBottom: "1.5rem", borderBottom: "1px solid var(--c-border)",
+          marginBottom: panelOpen ? "2.5rem" : 0,
+        }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "0" }}>
+            {ENGAGE_GROUPS.map((g, i) => (
+              <span key={g.key} style={{
+                fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400,
+                fontSize: "clamp(1.1rem,1.8vw,1.4rem)", color: "var(--c-ink-mid)",
+                paddingRight: i < ENGAGE_GROUPS.length - 1 ? "1.5rem" : 0,
+                marginRight: i < ENGAGE_GROUPS.length - 1 ? "1.5rem" : 0,
+                borderRight: i < ENGAGE_GROUPS.length - 1 ? "1px solid var(--c-border)" : "none",
+              }}>{g.label}</span>
+            ))}
+          </div>
+          <button
+            onClick={() => setPanelOpen(v => !v)}
+            style={{
+              display: "inline-flex", alignItems: "center", gap: "0.5rem",
+              fontFamily: "var(--font-manjari)", fontWeight: 700,
+              fontSize: "0.6rem", letterSpacing: "0.2em", textTransform: "uppercase",
+              color: panelOpen ? "#0A0A0A" : "var(--c-ink)",
+              background: panelOpen ? "var(--c-accent)" : "transparent",
+              border: panelOpen ? "1px solid var(--c-accent)" : "1px solid var(--c-ink)",
+              padding: "0.7rem 1.4rem", cursor: "pointer", transition: "all 0.2s",
+            }}
+          >
+            Partner with me <ArrowRight size={11} strokeWidth={1.5} style={{ transform: panelOpen ? "rotate(90deg)" : "none", transition: "transform 0.3s" }} />
+          </button>
+        </div>
+
+        {panelOpen && (
         <div className="wwd-g" style={{ display: "grid", gridTemplateColumns: "1fr 1.6fr", gap: "clamp(3rem,6vw,6rem)", alignItems: "start" }}>
-          <div style={fade(vis, 0.06)}>
+          <div>
             {ENGAGE_GROUPS.map((g, i) => {
               const isActive = active === g.key;
               return (
@@ -463,7 +481,6 @@ function WorkWithDecra() {
                   width: "100%", background: "none", border: "none",
                   borderBottom: "1px solid var(--c-border)", padding: "1.25rem 0",
                   cursor: "pointer", textAlign: "left",
-                  opacity: vis ? 1 : 0, transition: `opacity 0.6s ease ${0.08 + i * 0.08}s`,
                 }}>
                   <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400, fontSize: "clamp(1.2rem,2vw,1.5rem)", color: isActive ? "var(--c-ink)" : "var(--c-ink-mid)", transition: "color 0.2s" }}>{g.label}</span>
                   <ArrowRight size={14} strokeWidth={1.5} style={{ color: isActive ? "var(--c-accent)" : "var(--c-ink-muted)", transform: isActive ? "rotate(-45deg)" : "none", transition: "transform 0.3s, color 0.2s", flexShrink: 0 } as React.CSSProperties} />
@@ -472,7 +489,7 @@ function WorkWithDecra() {
             })}
             <p style={{ ...BODY, fontSize: "0.78rem", marginTop: "1.5rem" }}>Select your group — the AI will ask a few questions so Decra can reach out with exactly what you need.</p>
           </div>
-          <div style={{ ...fade(vis, 0.12), border: "1px solid var(--c-border)", minHeight: "22rem", display: "flex", flexDirection: "column" }}>
+          <div style={{ border: "1px solid var(--c-border)", minHeight: "22rem", display: "flex", flexDirection: "column" }}>
             {!active ? (
               <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "3rem 2rem", textAlign: "center" }}>
                 <p style={{ ...LBL, marginBottom: "0.75rem" }}>How to work with Decra</p>
@@ -512,6 +529,7 @@ function WorkWithDecra() {
             )}
           </div>
         </div>
+        )}
       </div>
       <style>{`@media(max-width:760px){.wwd-g{grid-template-columns:1fr!important;gap:2rem!important}}@keyframes dot-pulse{0%,100%{opacity:0.3;transform:translateY(0)}50%{opacity:1;transform:translateY(-3px)}}`}</style>
     </section>
@@ -650,8 +668,8 @@ function StartBusiness() {
           </div>
 
           <div style={{ padding: "3.5rem", background: "#0F3320", ...fade(vis, 0.12) }}>
-            <p style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.6rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(15,51,32,0.6)", marginBottom: "1.25rem" }}>In partnership with Entrora Systems</p>
-            <h2 style={{ fontFamily: "var(--font-sans)", fontWeight: 700, fontSize: "clamp(1.6rem,2.8vw,2.4rem)", color: "#0F3320", lineHeight: 1.1, letterSpacing: "-0.01em", marginBottom: "1.25rem" }}>
+            <p style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.6rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(255,255,255,0.55)", marginBottom: "1.25rem" }}>In partnership with Entrora Systems</p>
+            <h2 style={{ fontFamily: "var(--font-sans)", fontWeight: 700, fontSize: "clamp(1.6rem,2.8vw,2.4rem)", color: "#FFFFFF", lineHeight: 1.1, letterSpacing: "-0.01em", marginBottom: "1.25rem" }}>
               Build a compliant tech product.
             </h2>
             <p style={{ fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.875rem", color: "rgba(255,255,255,0.65)", lineHeight: 1.85, maxWidth: "22rem", marginBottom: "2.5rem" }}>
