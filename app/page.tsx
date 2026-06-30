@@ -315,21 +315,19 @@ function Research() {
   const [active, setActive] = useState<Paper | null>(null);
 
   return (
-    <section id="research" ref={ref as React.RefObject<HTMLElement>} style={{ ...SEC, padding: "3rem var(--space-x)" }}>
+    <section id="research" ref={ref as React.RefObject<HTMLElement>} style={SEC}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
 
-        {/* Compact header row */}
-        <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: "1.5rem", ...fade(vis) }}>
-          <div style={{ display: "flex", alignItems: "baseline", gap: "1.5rem" }}>
-            <p style={LBL}>Research</p>
-            <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontStyle: "italic", fontSize: "clamp(1rem,1.8vw,1.25rem)", color: "var(--c-ink)", lineHeight: 1 }}>
-              Law, AI & <span style={{ color: "var(--c-accent)" }}>Policy.</span>
+        <div style={{ marginBottom: "4rem", display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "1.5rem", ...fade(vis) }}>
+          <div>
+            <p style={{ ...LBL, marginBottom: "1.25rem" }}>Research</p>
+            <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(2rem,3.5vw,3rem)", color: "var(--c-ink)", lineHeight: 1.05 }}>
+              Law, AI & <span style={{ fontStyle: "italic", color: "var(--c-accent)" }}>Policy.</span>
             </h2>
           </div>
           <p style={{ ...LBL, color: "var(--c-ink-muted)" }}>{PAPERS.length} papers · 2021—Present</p>
         </div>
 
-        {/* Single row of 5 equal tiles, landscape aspect */}
         <div className="rsc-row" style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "0.5rem" }}>
           {PAPERS.map((paper, i) => (
             <button
@@ -426,112 +424,81 @@ function WorkWithDecra() {
     setLoading(false);
   };
 
-  const [panelOpen, setPanelOpen] = useState(false);
-
   return (
     <section id="collaborate" ref={ref as React.RefObject<HTMLElement>} style={SEC}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-        <div style={{ ...fade(vis), marginBottom: "clamp(2rem,4vw,3rem)" }}>
+        <div style={{ marginBottom: "4rem", ...fade(vis) }}>
           <p style={{ ...LBL, marginBottom: "1.25rem" }}>Collaborate</p>
-          <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(2rem,3.5vw,3rem)", color: "var(--c-ink)", lineHeight: 1.05, letterSpacing: "-0.01em" }}>Who I work with.</h2>
+          <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(2rem,3.5vw,3rem)", color: "var(--c-ink)", lineHeight: 1.05 }}>Who I work with.</h2>
         </div>
 
-        {/* Horizontal listing of groups + Partner with me CTA */}
-        <div style={{
-          ...fade(vis, 0.06),
-          display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between",
-          gap: "1.5rem", paddingBottom: "1.5rem", borderBottom: "1px solid var(--c-border)",
-          marginBottom: panelOpen ? "2.5rem" : 0,
-        }}>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "0" }}>
-            {ENGAGE_GROUPS.map((g, i) => (
-              <span key={g.key} style={{
-                fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400,
-                fontSize: "clamp(1.1rem,1.8vw,1.4rem)", color: "var(--c-ink-mid)",
-                paddingRight: i < ENGAGE_GROUPS.length - 1 ? "1.5rem" : 0,
-                marginRight: i < ENGAGE_GROUPS.length - 1 ? "1.5rem" : 0,
-                borderRight: i < ENGAGE_GROUPS.length - 1 ? "1px solid var(--c-border)" : "none",
-              }}>{g.label}</span>
-            ))}
-          </div>
-          <button
-            onClick={() => setPanelOpen(v => !v)}
-            style={{
-              display: "inline-flex", alignItems: "center", gap: "0.5rem",
-              fontFamily: "var(--font-manjari)", fontWeight: 700,
-              fontSize: "0.6rem", letterSpacing: "0.2em", textTransform: "uppercase",
-              color: panelOpen ? "#0A0A0A" : "var(--c-ink)",
-              background: panelOpen ? "var(--c-accent)" : "transparent",
-              border: panelOpen ? "1px solid var(--c-accent)" : "1px solid var(--c-ink)",
-              padding: "0.7rem 1.4rem", cursor: "pointer", transition: "all 0.2s",
-            }}
-          >
-            Partner with me <ArrowRight size={11} strokeWidth={1.5} style={{ transform: panelOpen ? "rotate(90deg)" : "none", transition: "transform 0.3s" }} />
-          </button>
-        </div>
-
-        {panelOpen && (
-        <div className="wwd-g" style={{ display: "grid", gridTemplateColumns: "1fr 1.6fr", gap: "clamp(3rem,6vw,6rem)", alignItems: "start" }}>
-          <div>
-            {ENGAGE_GROUPS.map((g, i) => {
-              const isActive = active === g.key;
-              return (
-                <button key={g.key} onClick={() => startGroup(g.key, g.opening)} style={{
-                  display: "flex", alignItems: "center", justifyContent: "space-between",
-                  width: "100%", background: "none", border: "none",
-                  borderBottom: "1px solid var(--c-border)", padding: "1.25rem 0",
-                  cursor: "pointer", textAlign: "left",
+        {/* One row, Services-style numbered cards */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "0" }} className="wwd-grid">
+          {ENGAGE_GROUPS.map((g, i) => {
+            const isActive = active === g.key;
+            return (
+              <button
+                key={g.key}
+                onClick={() => startGroup(g.key, g.opening)}
+                style={{
+                  display: "block", width: "100%", textAlign: "left",
+                  background: "none", border: "none", cursor: "pointer",
+                  padding: "2.25rem 2rem",
+                  borderTop: "1px solid var(--c-border)",
+                  borderLeft: i > 0 ? "1px solid var(--c-border)" : "none",
+                  ...fade(vis, 0.06 * i),
+                }}
+              >
+                <span style={{ fontFamily: "var(--font-sans)", fontWeight: 600, fontSize: "0.7rem", color: "var(--c-ink-muted)", display: "block", marginBottom: "1.25rem" }}>{String(i + 1).padStart(2, "0")}</span>
+                <h3 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(1.05rem,1.6vw,1.3rem)", color: "var(--c-ink)", lineHeight: 1.25, marginBottom: "1rem" }}>{g.label}</h3>
+                <span style={{
+                  display: "inline-flex", alignItems: "center", gap: "0.4rem",
+                  fontFamily: "var(--font-manjari)", fontWeight: 700,
+                  fontSize: "0.6rem", letterSpacing: "0.16em", textTransform: "uppercase",
+                  color: isActive ? "var(--c-accent)" : "var(--c-ink-muted)", transition: "color 0.2s",
                 }}>
-                  <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400, fontSize: "clamp(1.2rem,2vw,1.5rem)", color: isActive ? "var(--c-ink)" : "var(--c-ink-mid)", transition: "color 0.2s" }}>{g.label}</span>
-                  <ArrowRight size={14} strokeWidth={1.5} style={{ color: isActive ? "var(--c-accent)" : "var(--c-ink-muted)", transform: isActive ? "rotate(-45deg)" : "none", transition: "transform 0.3s, color 0.2s", flexShrink: 0 } as React.CSSProperties} />
+                  Partner with me
+                  <ArrowRight size={11} strokeWidth={1.5} style={{ transform: isActive ? "rotate(90deg)" : "none", transition: "transform 0.3s" }} />
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {active && (
+          <div style={{ border: "1px solid var(--c-border)", borderTop: "none", minHeight: "20rem", display: "flex", flexDirection: "column" }}>
+            <div style={{ flex: 1, overflowY: "auto", padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1rem", maxHeight: "28rem" }}>
+              {msgs.map((m, i) => (
+                <div key={i} style={{ display: "flex", justifyContent: m.role === "user" ? "flex-end" : "flex-start" }}>
+                  <div style={{ maxWidth: "80%", padding: "0.7rem 1rem", background: m.role === "user" ? "var(--c-accent)" : "var(--c-surface)", color: m.role === "user" ? "#0A0A0A" : "var(--c-ink)", fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.84rem", lineHeight: 1.7 }}>{m.text}</div>
+                </div>
+              ))}
+              {loading && (
+                <div style={{ display: "flex", justifyContent: "flex-start" }}>
+                  <div style={{ padding: "0.7rem 1rem", background: "var(--c-surface)", display: "flex", gap: "4px", alignItems: "center" }}>
+                    {[0,1,2].map(i => <span key={i} style={{ width: "4px", height: "4px", borderRadius: "50%", background: "var(--c-ink-muted)", animation: `dot-pulse 1.2s ease-in-out ${i*0.2}s infinite` }} />)}
+                  </div>
+                </div>
+              )}
+              <div ref={bottomRef} />
+            </div>
+            {!done ? (
+              <div style={{ borderTop: "1px solid var(--c-border)", display: "flex", alignItems: "center", padding: "0.75rem 1rem", gap: "0.75rem" }}>
+                <input ref={inputRef} value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); }}} placeholder="Type your reply…" style={{ flex: 1, background: "none", border: "none", outline: "none", fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.875rem", color: "var(--c-ink)" }} />
+                <button onClick={send} disabled={!input.trim() || loading} style={{ background: "none", border: "none", cursor: "pointer", padding: "0.25rem", opacity: input.trim() ? 1 : 0.3, transition: "opacity 0.2s", color: "var(--c-ink)", display: "flex", alignItems: "center" }}>
+                  <ArrowRight size={15} strokeWidth={1.5} />
                 </button>
-              );
-            })}
-            <p style={{ ...BODY, fontSize: "0.78rem", marginTop: "1.5rem" }}>Select your group — the AI will ask a few questions so Decra can reach out with exactly what you need.</p>
-          </div>
-          <div style={{ border: "1px solid var(--c-border)", minHeight: "22rem", display: "flex", flexDirection: "column" }}>
-            {!active ? (
-              <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "3rem 2rem", textAlign: "center" }}>
-                <p style={{ ...LBL, marginBottom: "0.75rem" }}>How to work with Decra</p>
-                <p style={{ ...BODY, fontSize: "0.82rem", maxWidth: "20rem" }}>Select a group on the left — the AI will guide you through a short conversation so Decra can reach out with exactly what you need.</p>
               </div>
             ) : (
-              <>
-                <div style={{ flex: 1, overflowY: "auto", padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1rem", maxHeight: "28rem" }}>
-                  {msgs.map((m, i) => (
-                    <div key={i} style={{ display: "flex", justifyContent: m.role === "user" ? "flex-end" : "flex-start" }}>
-                      <div style={{ maxWidth: "80%", padding: "0.7rem 1rem", background: m.role === "user" ? "var(--c-accent)" : "var(--c-surface)", color: m.role === "user" ? "#0A0A0A" : "var(--c-ink)", fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.84rem", lineHeight: 1.7 }}>{m.text}</div>
-                    </div>
-                  ))}
-                  {loading && (
-                    <div style={{ display: "flex", justifyContent: "flex-start" }}>
-                      <div style={{ padding: "0.7rem 1rem", background: "var(--c-surface)", display: "flex", gap: "4px", alignItems: "center" }}>
-                        {[0,1,2].map(i => <span key={i} style={{ width: "4px", height: "4px", borderRadius: "50%", background: "var(--c-ink-muted)", animation: `dot-pulse 1.2s ease-in-out ${i*0.2}s infinite` }} />)}
-                      </div>
-                    </div>
-                  )}
-                  <div ref={bottomRef} />
-                </div>
-                {!done ? (
-                  <div style={{ borderTop: "1px solid var(--c-border)", display: "flex", alignItems: "center", padding: "0.75rem 1rem", gap: "0.75rem" }}>
-                    <input ref={inputRef} value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); }}} placeholder="Type your reply…" style={{ flex: 1, background: "none", border: "none", outline: "none", fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.875rem", color: "var(--c-ink)" }} />
-                    <button onClick={send} disabled={!input.trim() || loading} style={{ background: "none", border: "none", cursor: "pointer", padding: "0.25rem", opacity: input.trim() ? 1 : 0.3, transition: "opacity 0.2s", color: "var(--c-ink)", display: "flex", alignItems: "center" }}>
-                      <ArrowRight size={15} strokeWidth={1.5} />
-                    </button>
-                  </div>
-                ) : (
-                  <div style={{ borderTop: "1px solid var(--c-border)", padding: "1rem 1.5rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                    <p style={{ ...LBL, color: "var(--c-accent)", fontSize: "0.52rem" }}>Message sent to Decra</p>
-                    <button onClick={() => { setActive(null); setMsgs([]); setDone(false); }} style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.52rem", letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--c-ink-muted)", transition: "color 0.2s" }} onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"} onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink-muted)"}>Start over</button>
-                  </div>
-                )}
-              </>
+              <div style={{ borderTop: "1px solid var(--c-border)", padding: "1rem 1.5rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <p style={{ ...LBL, color: "var(--c-accent)", fontSize: "0.52rem" }}>Message sent to Decra</p>
+                <button onClick={() => { setActive(null); setMsgs([]); setDone(false); }} style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.52rem", letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--c-ink-muted)", transition: "color 0.2s" }} onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"} onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink-muted)"}>Start over</button>
+              </div>
             )}
           </div>
-        </div>
         )}
       </div>
-      <style>{`@media(max-width:760px){.wwd-g{grid-template-columns:1fr!important;gap:2rem!important}}@keyframes dot-pulse{0%,100%{opacity:0.3;transform:translateY(0)}50%{opacity:1;transform:translateY(-3px)}}`}</style>
+      <style>{`@media(max-width:900px){.wwd-grid{grid-template-columns:1fr!important}.wwd-grid>button{border-left:none!important;border-top:1px solid var(--c-border)!important}}@keyframes dot-pulse{0%,100%{opacity:0.3;transform:translateY(0)}50%{opacity:1;transform:translateY(-3px)}}`}</style>
     </section>
   );
 }
