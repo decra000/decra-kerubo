@@ -49,7 +49,17 @@ const PRODUCT_COUNSEL_GROUP = {
 const SPOTIFY_GROUP = {
   key: "the-1000",
   label: "The 1000 — Podcast",
-  opening: "Hi, I'd like to be notified when The 1000 launches on Spotify.",
+  opening: "Hi, I'm interested in The 1000 podcast and would like to explore how I can be involved.",
+};
+const PACK_GROUP = {
+  key: "startup-pack",
+  label: "Full Startup Advisory Pack",
+  opening: "Hi, tell me about the Full Startup Advisory Pack — what's included and how it works.",
+};
+const EVENTS_GROUP = {
+  key: "events-conferences",
+  label: "Events & Conferences",
+  opening: "Hi, I'm organizing or partnering on an event or conference and would like to discuss having Decra speak, participate, or partner.",
 };
 
 /* Shared "line button" style — outline only, no fill, used for every CTA on the page */
@@ -172,14 +182,14 @@ const SERVICES = [
     id: "regulatory",
     label: "Technology & Regulatory Law",
     body: "The legal architecture technology companies operate inside — Kenyan and pan-African regulation, translated into clear positions.",
-    items: ["Data protection & ODPC compliance", "Cybersecurity law", "Digital commerce & platform regulation", "Licensing & policy engagement"],
-    opening: "Hi, I need help with technology & regulatory law — data protection, cybersecurity, or digital commerce compliance.",
+    items: ["Data protection & ODPC compliance", "Data controller & processor licensing", "Cybersecurity law", "Digital commerce & platform regulation", "Licensing & policy engagement"],
+    opening: "Hi, I need help with technology & regulatory law — data protection, data controller/processor licensing, cybersecurity, or digital commerce compliance.",
   },
   {
     id: "product-counsel",
     label: "Product Counsel",
     body: "Embedded legal partnership with your product and engineering team — in the room as things get built, not called in after they ship.",
-    items: ["Pre-launch legal review", "Privacy-by-design & data flow review", "Terms of service & policy drafting", "Ongoing embedded advisory"],
+    items: ["Pre-launch legal review", "Privacy-by-design & data flow review", "Intellectual property protection & licensing", "Terms of service & policy drafting", "Ongoing embedded advisory"],
     opening: PRODUCT_COUNSEL_GROUP.opening,
   },
   {
@@ -216,6 +226,24 @@ function Services() {
                   </li>
                 ))}
               </ul>
+              {s.id === "founder-advisory" && (
+                <button
+                  onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: PACK_GROUP }))}
+                  style={{
+                    display: "block", background: "none", border: "none",
+                    padding: 0, marginBottom: "1.5rem", cursor: "pointer",
+                    textAlign: "left",
+                    fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400,
+                    fontSize: "0.82rem", color: "var(--c-accent)",
+                    textDecoration: "underline", textUnderlineOffset: "3px",
+                    textDecorationColor: "var(--c-border)",
+                  }}
+                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.textDecorationColor = "var(--c-accent)"}
+                  onMouseLeave={e => (e.currentTarget as HTMLElement).style.textDecorationColor = "var(--c-border)"}
+                >
+                  See the full Startup Advisory Pack →
+                </button>
+              )}
               <button
                 onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: { key: s.id, label: s.label, opening: s.opening } }))}
                 style={{
@@ -250,9 +278,18 @@ const ENGAGE_GROUPS = [
   { key: "innovation-ecosystems", label: "Innovation Ecosystems", opening: "Hi, I'm with an investor, incubator, accelerator, or ecosystem body and would like to discuss legal support or partnership opportunities." },
 ];
 
+/* Full set offered inside the Partner modal picker — includes Events & Conferences,
+   which is intentionally left off the "Who I work with" pill row on the homepage. */
+const PARTNER_GROUPS = [...ENGAGE_GROUPS, EVENTS_GROUP];
+
 const ENGAGE_SYSTEM = `You are Decra Kerubo's AI intake advisor on decrakerubo.com.
 Decra is a Nairobi-based lawyer and computer scientist specialising in technology law and startup legal advisory in Kenya and East Africa.
-She works with: startup founders needing incorporation, equity, co-founder agreements, eTIMS/KRA tax, fundraising, foreign branches, PBO registration; technology companies needing ODPC/data protection, product legal review, tech contracts; law firms needing tech law support or compliance; and innovation ecosystem players — investors, incubators, accelerators, and event organizers — seeking legal support, partnership, or speaking engagements.
+She works with: startup founders needing incorporation, equity, co-founder agreements, eTIMS/KRA tax, fundraising, foreign branches, PBO registration; technology companies needing ODPC/data protection, product legal review, tech contracts; law firms needing tech law support or compliance; innovation ecosystem players — investors, incubators, and accelerators — seeking legal support or partnership; and event/conference organizers seeking Decra as a speaker, panelist, or partner.
+
+The Full Startup Advisory Pack is a bundled engagement covering: company incorporation & structure, founder & co-founder agreements, equity/vesting/cap table setup, tax structuring (eTIMS, VAT, PAYE), fundraising legal readiness, and foreign branch/PBO registration — the complete legal foundation from formation through fundraising. If someone asks about "the pack" or the Full Startup Advisory Pack, briefly explain what's included in 2-3 sentences FIRST, before moving into intake questions.
+
+The 1000 is Decra's upcoming podcast on technology law in Africa, launching soon on Spotify — not yet live. If someone expresses interest in The 1000, first find out how they'd like to be involved (e.g. featured guest, topic suggestion, sponsor/partner, or just notified when it launches), then continue normal intake gathering name and email.
+
 Your job: warm natural conversation, ONE question at a time. Gather over 4-6 exchanges: what they need, their context/stage, name, email.
 If they mention NGO, nonprofit, or international branch, ask: PBO (local Kenyan entity) or foreign company branch?
 Once done say exactly: "Perfect — I have everything Decra needs. She'll be in touch within 48 hours." Then on a new line:
@@ -407,7 +444,7 @@ function WorkWithDecra() {
                 <p style={{ ...LBL, marginBottom: "0.35rem" }}>Partner with Decra</p>
                 {active && (
                   <p style={{ fontFamily: "var(--font-serif)", fontSize: "1rem", color: "var(--c-ink)" }}>
-                    {[...ENGAGE_GROUPS, PRODUCT_COUNSEL_GROUP].find(g => g.key === active)?.label}
+                    {[...PARTNER_GROUPS, PRODUCT_COUNSEL_GROUP, SPOTIFY_GROUP, PACK_GROUP].find(g => g.key === active)?.label}
                   </p>
                 )}
               </div>
@@ -419,7 +456,7 @@ function WorkWithDecra() {
             {!active ? (
               <div style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: "0.75rem" }}>
                 <p style={{ ...BODY, fontSize: "0.82rem", marginBottom: "0.5rem" }}>Tell me a bit about who you are, so I can point you the right way:</p>
-                {ENGAGE_GROUPS.map(g => (
+                {PARTNER_GROUPS.map(g => (
                   <button
                     key={g.key}
                     onClick={() => startGroup(g.key, g.opening)}
@@ -523,13 +560,14 @@ function The1000() {
         objectFit: "cover", objectPosition: "50% 30%",
         opacity: 1, zIndex: 0, pointerEvents: "none", display: "block",
       }} />
+      {/* Light scrim — just enough for text contrast, photo stays visible */}
       <div style={{
         position: "absolute", inset: 0, zIndex: 1,
-        background: `radial-gradient(ellipse 72% 88% at 50% 42%, transparent 0%, rgba(15,51,32,0.45) 55%, rgba(15,51,32,0.88) 75%, #0F3320 92%)`,
+        background: `radial-gradient(ellipse 70% 80% at 50% 38%, rgba(15,51,32,0.18) 0%, rgba(15,51,32,0.4) 60%, rgba(15,51,32,0.6) 100%)`,
       }} />
       <div style={{
         position: "absolute", inset: 0, zIndex: 2,
-        background: `linear-gradient(to bottom, #0F3320 0%, transparent 14%, transparent 86%, #0F3320 100%)`,
+        background: `linear-gradient(to bottom, rgba(15,51,32,0.55) 0%, transparent 20%, transparent 78%, rgba(15,51,32,0.7) 100%)`,
       }} />
       <div style={{
         maxWidth: "var(--max-w)", margin: "0 auto", width: "100%",
@@ -541,39 +579,44 @@ function The1000() {
       }}>
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1.75rem" }}>
           <SpotifyLogo />
-          <div>
-            <p style={{
-              fontFamily: "var(--font-serif)",
-              fontWeight: 400, fontSize: "clamp(2.5rem,4.6vw,4rem)",
-              color: "#FFFFFF", letterSpacing: "-0.01em", lineHeight: 1,
-              fontStyle: "italic",
-            }}>The 1000</p>
-          </div>
+          <p style={{
+            fontFamily: "var(--font-serif)",
+            fontWeight: 400, fontSize: "clamp(2.5rem,4.6vw,4rem)",
+            color: "#FFFFFF", letterSpacing: "-0.01em", lineHeight: 1,
+            fontStyle: "italic",
+          }}>The 1000</p>
           <p style={{
             fontFamily: "var(--font-manjari)", fontWeight: 700,
             fontSize: "0.68rem", letterSpacing: "0.24em", textTransform: "uppercase",
-            color: "rgba(255,255,255,0.6)",
+            color: "rgba(255,255,255,0.7)",
           }}>Technology law in Africa &nbsp;&middot;&nbsp; on Spotify</p>
-
-          <div style={{ display: "flex", alignItems: "center", gap: "0.85rem", marginTop: "0.75rem" }}>
-            <span style={{ width: "2.25rem", height: "1px", background: "rgba(196,160,106,0.5)", display: "block" }} />
-            <span style={{
-              fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400,
-              fontSize: "0.95rem", letterSpacing: "0.03em",
-              color: "#C4A06A",
-            }}>Coming soon</span>
-            <span style={{ width: "2.25rem", height: "1px", background: "rgba(196,160,106,0.5)", display: "block" }} />
-          </div>
 
           <button
             onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: SPOTIFY_GROUP }))}
-            style={{ ...lineBtn({ light: true }), marginTop: "1.5rem" }}
+            style={{ ...lineBtn({ light: true }), marginTop: "1rem" }}
             onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "#C4A06A"; (e.currentTarget as HTMLElement).style.color = "#C4A06A"; }}
             onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.3)"; (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"; }}
           >
             Express Interest
           </button>
         </div>
+      </div>
+
+      {/* Coming soon — a quiet, handwritten signature near the base of the section */}
+      <div style={{
+        position: "absolute", left: 0, right: 0, bottom: "clamp(1.5rem,4vw,2.75rem)",
+        display: "flex", justifyContent: "center",
+        zIndex: 3, pointerEvents: "none",
+      }}>
+        <span style={{
+          fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400,
+          fontSize: "1.05rem", letterSpacing: "0.01em",
+          color: "#0A0A0A",
+          background: "rgba(240,238,233,0.82)",
+          padding: "0.4rem 1.1rem",
+          borderRadius: "2px",
+          transform: "rotate(-1.5deg)",
+        }}>Coming soon</span>
       </div>
     </section>
   );
