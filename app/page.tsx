@@ -39,6 +39,14 @@ const SEC: React.CSSProperties = {
   padding: "var(--space-section) var(--space-x)",
 };
 
+/* Shared AI-intake modal trigger — used by Hero, Services, and Who I Work With */
+const OPEN_PARTNER_MODAL_EVENT = "decra:open-partner-modal";
+const PRODUCT_COUNSEL_GROUP = {
+  key: "product-counsel",
+  label: "Technical Product Counsel",
+  opening: "Hi, I'd like to retain Decra as embedded Technical Product Counsel for my product and engineering team.",
+};
+
 /* Shared "line button" style — outline only, no fill, used for every CTA on the page */
 const lineBtn = (opts?: { light?: boolean }): React.CSSProperties => ({
   display: "inline-flex", alignItems: "center", gap: "0.6rem",
@@ -72,6 +80,34 @@ function Hero() {
           linear-gradient(to right, rgba(10,10,10,0.75) 0%, rgba(10,10,10,0.3) 40%, transparent 65%)
         `,
       }} />
+      <div style={{
+        position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
+        display: "flex", alignItems: "center",
+        padding: "0 var(--space-x)",
+        maxWidth: "calc(var(--max-w) + (var(--space-x) * 2))", margin: "0 auto",
+        pointerEvents: "none",
+        opacity: vis ? 1 : 0,
+        transform: vis ? "none" : "translateY(14px)",
+        transition: "opacity 1.1s cubic-bezier(0.16,1,0.3,1) 0.3s, transform 1.1s cubic-bezier(0.16,1,0.3,1) 0.3s",
+      }}>
+        <div style={{ maxWidth: "22rem", pointerEvents: "auto" }}>
+          <h1 style={{
+            fontFamily: "var(--font-serif)", fontWeight: 400,
+            fontSize: "clamp(1.75rem,3vw,2.5rem)", color: "#F0EEE9",
+            lineHeight: 1.15, letterSpacing: "-0.01em", marginBottom: "1.75rem",
+          }}>
+            Technology Lawyer &amp; Product Counsel.
+          </h1>
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: PRODUCT_COUNSEL_GROUP }))}
+            style={lineBtn({ light: true })}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "#C4A06A"; (e.currentTarget as HTMLElement).style.color = "#C4A06A"; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.3)"; (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"; }}
+          >
+            Retain as Technical Product Counsel
+          </button>
+        </div>
+      </div>
       <div style={{
         position: "absolute", bottom: 0, left: 0, right: 0,
         padding: "3.5rem var(--space-x) 5rem",
@@ -112,20 +148,11 @@ function About() {
   return (
     <section id="about" ref={ref as React.RefObject<HTMLElement>} style={SEC}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-        <p style={{ ...LBL, marginBottom: "1.5rem", ...fade(vis) }}>About</p>
-        <h2 style={{
-          ...SERIF(),
-          letterSpacing: "-0.01em",
-          marginBottom: "1.75rem",
-          ...fade(vis, 0.05),
-        }}>
-          Technology Lawyer &amp; Product Counsel.
-        </h2>
         <p style={{
-          ...SERIF("clamp(1.1rem,1.5vw,1.3rem)"),
+          ...SERIF("clamp(1.2rem,1.7vw,1.45rem)"),
           maxWidth: "820px",
           lineHeight: 1.6,
-          ...fade(vis, 0.14),
+          ...fade(vis),
         }}>
           I am a technology lawyer and product counsel with a dual degree in Computer Science (AI) and Law. I help founders, startups, and technology companies navigate regulation while building products that scale safely.
         </p>
@@ -141,18 +168,21 @@ const SERVICES = [
     label: "Technology & Regulatory Law",
     body: "The legal architecture technology companies operate inside — Kenyan and pan-African regulation, translated into clear positions.",
     items: ["Data protection & ODPC compliance", "Cybersecurity law", "Digital commerce & platform regulation", "Licensing & policy engagement"],
+    opening: "Hi, I need help with technology & regulatory law — data protection, cybersecurity, or digital commerce compliance.",
   },
   {
     id: "product-counsel",
     label: "Product Counsel",
     body: "Embedded legal partnership with your product and engineering team — in the room as things get built, not called in after they ship.",
     items: ["Pre-launch legal review", "Privacy-by-design & data flow review", "Terms of service & policy drafting", "Ongoing embedded advisory"],
+    opening: PRODUCT_COUNSEL_GROUP.opening,
   },
   {
     id: "founder-advisory",
     label: "Founder & Startup Advisory",
     body: "Practical legal guidance for founders and builders making fast decisions with real, lasting consequences.",
     items: ["Company incorporation & structure", "Founder & co-founder agreements", "Equity, vesting & cap table", "Tax structuring (eTIMS, VAT, PAYE)", "Fundraising legal readiness"],
+    opening: "Hi, I'm a founder looking for legal advisory — incorporation, equity, tax structuring, or fundraising readiness.",
   },
 ];
 
@@ -162,10 +192,6 @@ function Services() {
   return (
     <section id="services" ref={ref as React.RefObject<HTMLElement>} style={SEC}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-        <div style={{ marginBottom: "4rem", ...fade(vis) }}>
-          <p style={{ ...LBL }}>Areas of Practice</p>
-        </div>
-
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "0" }} className="svc-grid">
           {SERVICES.map((s, i) => (
             <div key={s.id} style={{
@@ -174,10 +200,9 @@ function Services() {
               borderLeft: i > 0 ? "1px solid var(--c-border)" : "none",
               ...fade(vis, 0.06 * i),
             }}>
-              <span style={{ fontFamily: "var(--font-sans)", fontWeight: 600, fontSize: "0.7rem", color: "var(--c-ink-muted)", display: "block", marginBottom: "1.25rem" }}>{String(i + 1).padStart(2, "0")}</span>
               <h3 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(1.05rem,1.6vw,1.3rem)", color: "var(--c-ink)", lineHeight: 1.25, marginBottom: "1rem" }}>{s.label}</h3>
               <p style={{ ...BODY, fontSize: "0.84rem", marginBottom: "1.5rem" }}>{s.body}</p>
-              <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "0.6rem" }}>
+              <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "0.6rem", marginBottom: "1.5rem" }}>
                 {s.items.map(item => (
                   <li key={item} style={{ display: "flex", gap: "0.85rem", ...BODY, fontSize: "0.82rem" }}>
                     <span style={{ width: "3px", height: "3px", borderRadius: "50%", background: "var(--c-accent)", marginTop: "0.5rem", flexShrink: 0 }} />
@@ -185,19 +210,23 @@ function Services() {
                   </li>
                 ))}
               </ul>
+              <button
+                onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: { key: s.id, label: s.label, opening: s.opening } }))}
+                style={{
+                  display: "inline-flex", alignItems: "center", gap: "0.4rem",
+                  background: "none", border: "none", borderBottom: "1px solid var(--c-border)",
+                  padding: 0, paddingBottom: "0.3rem", cursor: "pointer",
+                  fontFamily: "var(--font-manjari)", fontWeight: 700,
+                  fontSize: "0.58rem", letterSpacing: "0.16em", textTransform: "uppercase",
+                  color: "var(--c-ink-muted)", transition: "color 0.2s, border-color 0.2s",
+                }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-accent)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-ink-muted)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-border)"; }}
+              >
+                Discuss this <ArrowRight size={10} strokeWidth={1.5} />
+              </button>
             </div>
           ))}
-        </div>
-
-        <div style={{ marginTop: "3rem", ...fade(vis, 0.24) }}>
-          <button
-            onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: PRODUCT_COUNSEL_GROUP }))}
-            style={lineBtn()}
-            onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"}
-            onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--c-border)"}
-          >
-            Retain as Technical Product Counsel <ArrowRight size={12} strokeWidth={1.5} />
-          </button>
         </div>
       </div>
       <style>{`@media(max-width:900px){.svc-grid{grid-template-columns:1fr!important}.svc-grid>div{border-left:none!important;border-top:1px solid var(--c-border)!important}}`}</style>
@@ -212,16 +241,9 @@ const ENGAGE_GROUPS = [
   { key: "law-firms", label: "Law Firms", opening: "Hi, I represent a law firm interested in working with Decra on technology law advisory or compliance." },
   { key: "tech-firms", label: "Tech Firms", opening: "Hi, I work at a tech company and need support with regulatory compliance, data protection, or product legal review." },
   { key: "techpreneurs", label: "Techpreneurs", opening: "Hi, I'm a founder or builder looking for help with incorporation, equity, fundraising, or startup advisory." },
+  { key: "investors-incubators", label: "Investors & Incubators", opening: "Hi, I'm with an investment fund or incubator and would like to discuss legal support for our portfolio companies or partnership opportunities." },
   { key: "tech-law-events", label: "Tech Law Events", opening: "Hi, I'm organizing or partnering on a technology law event and would like to discuss having Decra speak or participate." },
 ];
-
-const PRODUCT_COUNSEL_GROUP = {
-  key: "product-counsel",
-  label: "Technical Product Counsel",
-  opening: "Hi, I'd like to retain Decra as embedded Technical Product Counsel for my product and engineering team.",
-};
-
-const OPEN_PARTNER_MODAL_EVENT = "decra:open-partner-modal";
 
 const ENGAGE_SYSTEM = `You are Decra Kerubo's AI intake advisor on decrakerubo.com.
 Decra is a Nairobi-based lawyer and computer scientist specialising in technology law and startup legal advisory in Kenya and East Africa.
@@ -313,8 +335,6 @@ function WorkWithDecra() {
   return (
     <section id="collaborate" ref={ref as React.RefObject<HTMLElement>} style={SEC}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-        <p style={{ ...LBL, marginBottom: "1.75rem", ...fade(vis) }}>Collaborate</p>
-
         {/* One row: title · item · item · item · item ···· Partner */}
         <div style={{
           display: "flex", alignItems: "center", flexWrap: "wrap",
@@ -558,6 +578,13 @@ function ComplementaryCTA() {
       title: "Start your business with me.",
       body: "Full-spectrum startup advisory — incorporation through fundraising.",
       cta: "Start here",
+      items: [
+        ["Incorporation & structure", "Entity type, shareholding, constitutional documents"],
+        ["Equity & founder agreements", "Cap tables, vesting, co-founder terms"],
+        ["Tax & compliance", "eTIMS, KRA, VAT, PAYE — day one"],
+        ["Fundraising readiness", "Term sheets, investor agreements, due diligence"],
+        ["Foreign branches & PBOs", "International orgs, foreign companies, PBO registration"],
+      ],
     },
     {
       href: "/entrora", bg: "#0F3320",
@@ -565,6 +592,13 @@ function ComplementaryCTA() {
       title: "Build a compliant tech product.",
       body: "Legal compliance built into AI engineering from day one — not bolted on after.",
       cta: "Learn about Entrora",
+      items: [
+        ["AI Document Systems", "Classification, extraction, and review at scale"],
+        ["Legal Tech Development", "Software built for legal workflows"],
+        ["Compliant AI Products", "Data governance and privacy from day one"],
+        ["AI Adoption Advisory", "Scoping and implementation for any budget"],
+        ["Regulatory sandbox", "Navigation for AI products in East Africa"],
+      ],
     },
   ];
 
@@ -581,30 +615,39 @@ function ComplementaryCTA() {
         </button>
 
         <div style={{
-          maxHeight: open ? "40rem" : "0px",
+          maxHeight: open ? "90rem" : "0px",
           opacity: open ? 1 : 0,
           overflow: "hidden",
-          transition: "max-height 0.5s cubic-bezier(0.16,1,0.3,1), opacity 0.4s ease",
+          transition: "max-height 0.6s cubic-bezier(0.16,1,0.3,1), opacity 0.45s ease",
           marginTop: open ? "2.5rem" : "0px",
         }}>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "var(--c-border)" }} className="comp-teaser">
             {cards.map(c => (
-              <Link key={c.href} href={c.href} style={{
-                display: "block", textAlign: "left", textDecoration: "none",
-                padding: "2.5rem", background: c.bg,
-              }}>
-                <p style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.58rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.5)", marginBottom: "1rem" }}>{c.eyebrow}</p>
-                <h3 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(1.3rem,2vw,1.6rem)", color: "#FFFFFF", lineHeight: 1.2, marginBottom: "0.9rem" }}>{c.title}</h3>
-                <p style={{ fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.82rem", color: "rgba(255,255,255,0.65)", lineHeight: 1.7, marginBottom: "1.5rem" }}>{c.body}</p>
-                <span style={{
+              <div key={c.href} style={{ textAlign: "left", padding: "3rem", background: c.bg }}>
+                <p style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.58rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.5)", marginBottom: "1.25rem" }}>{c.eyebrow}</p>
+                <h3 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(1.4rem,2.2vw,1.85rem)", color: "#FFFFFF", lineHeight: 1.2, marginBottom: "1rem" }}>{c.title}</h3>
+                <p style={{ fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.84rem", color: "rgba(255,255,255,0.65)", lineHeight: 1.75, marginBottom: "2rem" }}>{c.body}</p>
+                <div style={{ display: "flex", flexDirection: "column", marginBottom: "2.25rem" }}>
+                  {c.items.map(([title, body]) => (
+                    <div key={title} style={{ padding: "0.85rem 0", borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
+                      <p style={{ fontFamily: "var(--font-sans)", fontWeight: 600, fontSize: "0.84rem", color: "rgba(255,255,255,0.88)", marginBottom: "0.2rem" }}>{title}</p>
+                      <p style={{ fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.76rem", color: "rgba(255,255,255,0.45)", lineHeight: 1.6 }}>{body}</p>
+                    </div>
+                  ))}
+                </div>
+                <Link href={c.href} style={{
                   display: "inline-flex", alignItems: "center", gap: "0.5rem",
                   fontFamily: "var(--font-manjari)", fontWeight: 700,
                   fontSize: "0.58rem", letterSpacing: "0.2em", textTransform: "uppercase",
-                  color: "rgba(255,255,255,0.85)",
-                }}>
+                  color: "rgba(255,255,255,0.85)", textDecoration: "none",
+                  borderBottom: "1px solid rgba(255,255,255,0.3)", paddingBottom: "2px",
+                  transition: "color 0.2s, border-color 0.2s",
+                }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#FFFFFF"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.8)"; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.3)"; }}>
                   {c.cta} <ArrowRight size={11} strokeWidth={1.5} />
-                </span>
-              </Link>
+                </Link>
+              </div>
             ))}
           </div>
         </div>
@@ -727,8 +770,6 @@ function ResearchSection() {
   return (
     <section id="research" ref={ref as React.RefObject<HTMLElement>} style={SEC}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-        <p style={{ ...LBL, marginBottom: "3rem", ...fade(vis) }}>Research</p>
-
         <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "0" }} className="rsc-grid">
           {PAPERS.map((paper, i) => (
             <button
@@ -883,8 +924,6 @@ function Accreditations() {
   return (
     <section ref={ref as React.RefObject<HTMLElement>} style={SEC}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-        <p style={{ ...LBL, marginBottom: "2.5rem", ...fade(vis) }}>Education &amp; Training</p>
-
         <div style={{
           display: "grid", gridTemplateColumns: "repeat(4, 1fr)",
           gap: "clamp(1.75rem,3vw,2.75rem)",
@@ -1004,9 +1043,9 @@ export default function Home() {
       <ComplementaryCTA />
       <ResearchSection />
       <Accreditations />
+      <The1000 />
       <WorkWithDecra />
       <Impact />
-      <The1000 />
       <EditorialBreak />
     </>
   );
