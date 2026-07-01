@@ -685,41 +685,128 @@ function ResearchSection() {
   );
 }
 
-/* ── Section 8: Accreditations ── */
-const ACCREDITATIONS = [
-  "World Bank",
-  "African Leadership University",
-  "Africa Nazarene University",
-  "Bevisioneers — Mercedes-Benz Fund",
-  "United Nations Academic Impact",
-  "UNESCO",
-  "Saïd Business School, Oxford",
+/* ── Section 8: Education & Training ── */
+type Cred = { key: string; src: string; name: string; detail: string; priority?: boolean };
+
+const CREDENTIALS: Cred[] = [
+  {
+    key: "oxford",
+    src: "/logos/logo-oxford.png",
+    name: "Saïd Business School, University of Oxford",
+    detail: "AI, Justice, and the Rule of Law",
+    priority: true,
+  },
+  {
+    key: "cmu",
+    src: "/logos/logo-cmu.png",
+    name: "Carnegie Mellon University",
+    detail: "Advanced Tech, IoT &amp; Robotics",
+    priority: true,
+  },
+  {
+    key: "alu",
+    src: "/logos/logo-alu.png",
+    name: "African Leadership University",
+    detail: "AI-Enabled Regulation &amp; Digital Safety",
+    priority: true,
+  },
+  {
+    key: "nazarene",
+    src: "/logos/logo-nazarene.png",
+    name: "Africa Nazarene University",
+    detail: "Cross-Border Data Transfer Laws",
+  },
+  {
+    key: "cisco",
+    src: "/logos/logo-cisco.png",
+    name: "Cisco",
+    detail: "Ethical Hacker",
+  },
+  {
+    key: "hkust",
+    src: "/logos/logo-hkust.png",
+    name: "The Hong Kong University of Science and Technology",
+    detail: "Information Systems Auditing, Controls &amp; Assurance",
+  },
+  {
+    key: "qualys",
+    src: "/logos/logo-qualys.png",
+    name: "Qualys",
+    detail: "Vulnerability Management Foundations",
+  },
 ];
+
+function CredCard({ c, i, vis, size }: { c: Cred; i: number; vis: boolean; size: "lg" | "sm" }) {
+  const h = size === "lg" ? "clamp(64px,7vw,84px)" : "clamp(44px,5vw,58px)";
+  return (
+    <div style={{
+      opacity: vis ? 1 : 0,
+      transform: vis ? "none" : "translateY(12px)",
+      transition: `opacity 0.6s ease ${0.05 + i * 0.06}s, transform 0.6s ease ${0.05 + i * 0.06}s`,
+    }}>
+      <div style={{
+        height: h,
+        display: "flex", alignItems: "center",
+        marginBottom: size === "lg" ? "1.1rem" : "0.85rem",
+      }}>
+        <img
+          src={c.src}
+          alt={c.name}
+          style={{
+            maxHeight: "100%", maxWidth: "100%",
+            width: "auto", height: "auto",
+            objectFit: "contain",
+            borderRadius: "3px",
+            filter: "grayscale(1) contrast(1.02)",
+            opacity: 0.82,
+            transition: "filter 0.35s ease, opacity 0.35s ease",
+          }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.filter = "grayscale(0)"; (e.currentTarget as HTMLElement).style.opacity = "1"; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.filter = "grayscale(1) contrast(1.02)"; (e.currentTarget as HTMLElement).style.opacity = "0.82"; }}
+        />
+      </div>
+      <p style={{
+        fontFamily: "var(--font-serif)", fontWeight: 400,
+        fontSize: size === "lg" ? "clamp(0.92rem,1.3vw,1.05rem)" : "clamp(0.82rem,1.1vw,0.92rem)",
+        color: "var(--c-ink)", lineHeight: 1.3, marginBottom: "0.3rem",
+      }}>{c.name}</p>
+      <p style={{
+        fontFamily: "var(--font-sans)", fontWeight: 400,
+        fontSize: size === "lg" ? "0.76rem" : "0.7rem",
+        color: "var(--c-ink-muted)", lineHeight: 1.5,
+      }} dangerouslySetInnerHTML={{ __html: c.detail }} />
+    </div>
+  );
+}
 
 function Accreditations() {
   const { ref, vis } = useReveal();
+  const primary = CREDENTIALS.filter(c => c.priority);
+  const secondary = CREDENTIALS.filter(c => !c.priority);
   return (
     <section ref={ref as React.RefObject<HTMLElement>} style={SEC}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-        <p style={{ ...LBL, marginBottom: "2rem", ...fade(vis) }}>Accreditations &amp; Training</p>
+        <p style={{ ...LBL, marginBottom: "2.5rem", ...fade(vis) }}>Education &amp; Training</p>
+
         <div style={{
-          display: "flex", flexWrap: "wrap",
-          alignItems: "baseline", rowGap: "1.1rem", columnGap: "clamp(2rem,4vw,3.5rem)",
-        }}>
-          {ACCREDITATIONS.map((name, i) => (
-            <span key={name} style={{
-              fontFamily: "var(--font-serif)", fontWeight: 400,
-              fontSize: "clamp(0.95rem,1.6vw,1.2rem)",
-              color: "var(--c-ink-mid)", lineHeight: 1.3,
-              opacity: vis ? 1 : 0,
-              transform: vis ? "none" : "translateY(10px)",
-              transition: `opacity 0.6s ease ${0.05 + i * 0.06}s, transform 0.6s ease ${0.05 + i * 0.06}s`,
-            }}>
-              {name}
-            </span>
-          ))}
+          display: "grid", gridTemplateColumns: "repeat(3, 1fr)",
+          gap: "clamp(2rem,4vw,3.5rem)", marginBottom: "clamp(2.5rem,4vw,3.5rem)",
+        }} className="cred-grid-lg">
+          {primary.map((c, i) => <CredCard key={c.key} c={c} i={i} vis={vis} size="lg" />)}
+        </div>
+
+        <div style={{
+          display: "grid", gridTemplateColumns: "repeat(4, 1fr)",
+          gap: "clamp(1.75rem,3vw,2.5rem)",
+          borderTop: "1px solid var(--c-border)", paddingTop: "clamp(2rem,3.5vw,2.75rem)",
+        }} className="cred-grid-sm">
+          {secondary.map((c, i) => <CredCard key={c.key} c={c} i={primary.length + i} vis={vis} size="sm" />)}
         </div>
       </div>
+      <style>{`
+        @media(max-width:820px){.cred-grid-lg{grid-template-columns:repeat(2,1fr)!important}.cred-grid-sm{grid-template-columns:repeat(2,1fr)!important}}
+        @media(max-width:480px){.cred-grid-lg{grid-template-columns:1fr!important}.cred-grid-sm{grid-template-columns:1fr!important}}
+      `}</style>
     </section>
   );
 }
@@ -825,9 +912,9 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <About />
       <Services />
       <The1000 />
+      <About />
       <WorkWithDecra />
       <Impact />
       <StartBusiness />
