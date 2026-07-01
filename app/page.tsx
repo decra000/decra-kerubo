@@ -473,12 +473,12 @@ function The1000() {
     }}>
       <img src="/decra-spotify-portrait.png" alt="" style={{
         position: "absolute", inset: 0, width: "100%", height: "100%",
-        objectFit: "cover", objectPosition: "50% 20%",
+        objectFit: "cover", objectPosition: "50% 30%",
         opacity: 1, zIndex: 0, pointerEvents: "none", display: "block",
       }} />
       <div style={{
         position: "absolute", inset: 0, zIndex: 1,
-        background: `radial-gradient(ellipse 72% 88% at 50% 42%, transparent 0%, rgba(15,51,32,0.55) 52%, rgba(15,51,32,0.92) 72%, #0F3320 90%)`,
+        background: `radial-gradient(ellipse 72% 88% at 50% 42%, transparent 0%, rgba(15,51,32,0.45) 55%, rgba(15,51,32,0.88) 75%, #0F3320 92%)`,
       }} />
       <div style={{
         position: "absolute", inset: 0, zIndex: 2,
