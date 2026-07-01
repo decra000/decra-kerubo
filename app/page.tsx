@@ -104,27 +104,18 @@ function About() {
         <h2 style={{
           ...SERIF("clamp(2rem,3.8vw,3.25rem)"),
           letterSpacing: "-0.01em",
-          marginBottom: "0.85rem",
+          marginBottom: "2rem",
           ...fade(vis, 0.05),
         }}>
           Technology Lawyer &amp; Product Counsel.
         </h2>
-        <p style={{
-          fontFamily: "var(--font-manjari)", fontWeight: 700,
-          fontSize: "0.62rem", letterSpacing: "0.22em", textTransform: "uppercase",
-          color: "var(--c-accent)",
-          marginBottom: "2.25rem",
-          ...fade(vis, 0.08),
-        }}>
-          Lawyer &nbsp;·&nbsp; Computer Scientist &nbsp;·&nbsp; Nairobi
-        </p>
         <p style={{
           ...SERIF("clamp(1.3rem,2.1vw,1.75rem)"),
           maxWidth: "820px",
           lineHeight: 1.55,
           ...fade(vis, 0.14),
         }}>
-          I am a technology lawyer and product counsel with a dual degree — a BSc in Computer Science (AI) from African Leadership University, and a Bachelor of Laws (LLB) / Juris Doctor from Africa Nazarene University. I also help startups, especially techpreneurs, build safely.
+          I am a technology lawyer and product counsel with a dual degree — a BSc in Computer Science (AI) and a Bachelor of Laws (LLB) / Juris Doctor. I also help startups, especially techpreneurs, build safely.
         </p>
       </div>
     </section>
@@ -281,22 +272,20 @@ function WorkWithDecra() {
   return (
     <section id="collaborate" ref={ref as React.RefObject<HTMLElement>} style={SEC}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-        <div style={{ marginBottom: "3rem", ...fade(vis) }}>
-          <p style={{ ...LBL, marginBottom: "1.25rem" }}>Collaborate</p>
-          <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(2rem,3.5vw,3rem)", color: "var(--c-ink)", lineHeight: 1.05 }}>Who I work with.</h2>
-        </div>
+        <p style={{ ...LBL, marginBottom: "1.75rem", ...fade(vis) }}>Collaborate</p>
 
-        {/* Horizontal row: item · item · item · item ···· Partner */}
+        {/* One row: title · item · item · item · item ···· Partner */}
         <div style={{
           display: "flex", alignItems: "center", flexWrap: "wrap",
           gap: "0.5rem", rowGap: "1.5rem",
           ...fade(vis, 0.08),
         }} className="wwd-row">
+          <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(1.5rem,2.4vw,2rem)", color: "var(--c-ink)", lineHeight: 1.05, marginRight: "1rem", whiteSpace: "nowrap" }}>Who I work with.</h2>
           {ENGAGE_GROUPS.map((g, i) => {
             const isSelected = selected === g.key;
             return (
               <div key={g.key} style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                {i > 0 && <span style={{ width: "1px", height: "10px", background: "var(--c-border)", display: "block" }} />}
+                <span style={{ width: "1px", height: "10px", background: "var(--c-border)", display: "block" }} />
                 <button
                   onClick={() => setSelected(g.key)}
                   style={{
