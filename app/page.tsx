@@ -74,7 +74,7 @@ function Hero() {
           color: "#F0EEE9", lineHeight: 1.02, letterSpacing: "-0.01em",
           marginBottom: "1rem",
         }}>
-          Decra Kerubo.
+          Technology Lawyer &amp; Product Counsel.
         </h1>
         <p style={{
           fontFamily: "var(--font-sans)", fontWeight: 400,
@@ -115,27 +115,17 @@ function About() {
   const { ref, vis } = useReveal();
   return (
     <section id="about" ref={ref as React.RefObject<HTMLElement>} style={SEC}>
-      <div style={{
-        maxWidth: "var(--max-w)", margin: "0 auto",
-        display: "grid", gridTemplateColumns: "0.9fr 1.1fr",
-        gap: "clamp(3rem,6vw,6rem)", alignItems: "center",
-      }} className="about-grid">
-        <div style={fade(vis)}>
-          <p style={{ ...LBL, marginBottom: "1.25rem" }}>About</p>
-          <h2 style={SERIF("clamp(1.9rem,3vw,2.6rem)")}>Two degrees.<br />One rare intersection.</h2>
-        </div>
-        <div style={fade(vis, 0.12)}>
-          <div style={{ display: "flex", gap: "0.75rem", marginBottom: "1.75rem", flexWrap: "wrap" }}>
-            {["BSc Computer Science (AI)", "Bachelor of Laws (LLB)"].map(t => (
-              <span key={t} style={{ ...LBL, color: "var(--c-accent)", border: "1px solid var(--c-border)", padding: "0.4rem 0.75rem" }}>{t}</span>
-            ))}
-          </div>
-          <p style={{ borderLeft: "2px solid var(--c-accent)", paddingLeft: "1.5rem", ...SERIF("clamp(1.1rem,1.7vw,1.4rem)") }}>
-            A dual degree spanning law and computer science — built to sit at the exact point where technology meets regulation.
-          </p>
-        </div>
+      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
+        <p style={{ ...LBL, marginBottom: "1.5rem", ...fade(vis) }}>About</p>
+        <p style={{
+          ...SERIF("clamp(1.3rem,2.1vw,1.75rem)"),
+          maxWidth: "820px",
+          lineHeight: 1.55,
+          ...fade(vis, 0.1),
+        }}>
+          I am a technology lawyer and product counsel with a dual degree — a BSc in Computer Science (AI) from African Leadership University, and a Bachelor of Laws (LLB) / Juris Doctor from Africa Nazarene University. I also help startups, especially techpreneurs, build safely.
+        </p>
       </div>
-      <style>{`@media(max-width:720px){.about-grid{grid-template-columns:1fr!important;gap:2.5rem!important}}`}</style>
     </section>
   );
 }
@@ -169,8 +159,7 @@ function Services() {
     <section id="services" ref={ref as React.RefObject<HTMLElement>} style={SEC}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
         <div style={{ marginBottom: "4rem", ...fade(vis) }}>
-          <p style={{ ...LBL, marginBottom: "1.25rem" }}>Areas of Practice</p>
-          <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(2rem,3.5vw,3rem)", color: "var(--c-ink)", lineHeight: 1.05 }}>Counsel, structured three ways.</h2>
+          <p style={{ ...LBL }}>Areas of Practice</p>
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "0" }} className="svc-grid">
@@ -686,20 +675,22 @@ function ResearchSection() {
 }
 
 /* ── Section 8: Education & Training ── */
-type Cred = { key: string; src: string; name: string; detail: string };
+type Cred = { key: string; src: string; name: string; detail: string; main?: boolean };
 
 const CREDENTIALS: Cred[] = [
   {
     key: "alu",
     src: "/logos/logo-alu.png",
     name: "African Leadership University",
-    detail: "AI-Enabled Regulation &amp; Digital Safety",
+    detail: "BSc Computer Science (AI)",
+    main: true,
   },
   {
     key: "nazarene",
     src: "/logos/logo-nazarene.png",
     name: "Africa Nazarene University",
-    detail: "Cross-Border Data Transfer Laws",
+    detail: "Bachelor of Laws (LLB) / Juris Doctor",
+    main: true,
   },
   {
     key: "ksl",
@@ -739,17 +730,23 @@ const CREDENTIALS: Cred[] = [
   },
 ];
 
-function CredCard({ c, i, vis }: { c: Cred; i: number; vis: boolean }) {
+function CredCard({ c, i, vis, big }: { c: Cred; i: number; vis: boolean; big?: boolean }) {
+  const [hover, setHover] = useState(false);
+  const logoHeight = big ? "clamp(64px,8vw,88px)" : "clamp(44px,5vw,56px)";
   return (
-    <div style={{
-      opacity: vis ? 1 : 0,
-      transform: vis ? "none" : "translateY(12px)",
-      transition: `opacity 0.6s ease ${0.05 + i * 0.06}s, transform 0.6s ease ${0.05 + i * 0.06}s`,
-    }}>
+    <div
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{
+        opacity: vis ? 1 : 0,
+        transform: vis ? "none" : "translateY(12px)",
+        transition: `opacity 0.6s ease ${0.05 + i * 0.06}s, transform 0.6s ease ${0.05 + i * 0.06}s`,
+      }}>
       <div style={{
-        height: "clamp(52px,6vw,68px)",
+        height: logoHeight,
         display: "flex", alignItems: "center",
         marginBottom: "1rem",
+        position: "relative",
       }}>
         <img
           src={c.src}
@@ -759,12 +756,16 @@ function CredCard({ c, i, vis }: { c: Cred; i: number; vis: boolean }) {
             width: "auto", height: "auto",
             objectFit: "contain",
             borderRadius: "3px",
+            filter: hover
+              ? "grayscale(0) contrast(1) opacity(1)"
+              : "grayscale(1) contrast(0.9) opacity(0.55)",
+            transition: "filter 0.4s cubic-bezier(0.16,1,0.3,1)",
           }}
         />
       </div>
       <p style={{
         fontFamily: "var(--font-serif)", fontWeight: 400,
-        fontSize: "clamp(0.85rem,1.15vw,0.95rem)",
+        fontSize: big ? "clamp(1rem,1.4vw,1.15rem)" : "clamp(0.85rem,1.15vw,0.95rem)",
         color: "var(--c-ink)", lineHeight: 1.3, marginBottom: "0.3rem",
       }}>{c.name}</p>
       <p style={{
@@ -778,54 +779,41 @@ function CredCard({ c, i, vis }: { c: Cred; i: number; vis: boolean }) {
 
 function Accreditations() {
   const { ref, vis } = useReveal();
+  const mainCreds = CREDENTIALS.filter(c => c.main);
+  const restCreds = CREDENTIALS.filter(c => !c.main);
   return (
     <section ref={ref as React.RefObject<HTMLElement>} style={SEC}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
         <p style={{ ...LBL, marginBottom: "2.5rem", ...fade(vis) }}>Education &amp; Training</p>
 
         <div style={{
+          display: "grid", gridTemplateColumns: "repeat(2, 1fr)",
+          gap: "clamp(1.75rem,3vw,2.75rem)",
+          marginBottom: "clamp(2.25rem,4vw,3.25rem)",
+          paddingBottom: "clamp(2.25rem,4vw,3.25rem)",
+          borderBottom: "1px solid var(--c-border)",
+        }} className="cred-grid-main">
+          {mainCreds.map((c, i) => <CredCard key={c.key} c={c} i={i} vis={vis} big />)}
+        </div>
+
+        <div style={{
           display: "grid", gridTemplateColumns: "repeat(4, 1fr)",
           gap: "clamp(1.75rem,3vw,2.75rem)",
         }} className="cred-grid">
-          {CREDENTIALS.map((c, i) => <CredCard key={c.key} c={c} i={i} vis={vis} />)}
+          {restCreds.map((c, i) => <CredCard key={c.key} c={c} i={i} vis={vis} />)}
         </div>
       </div>
       <style>{`
         @media(max-width:820px){.cred-grid{grid-template-columns:repeat(2,1fr)!important}}
+        @media(max-width:560px){.cred-grid-main{grid-template-columns:1fr!important}}
         @media(max-width:480px){.cred-grid{grid-template-columns:1fr!important}}
       `}</style>
     </section>
   );
 }
 
-/* ── Section 9: Editorial break ── */
+/* ── Section 9+10: Editorial break with social icons overlaid ── */
 function EditorialBreak() {
-  const { ref, vis } = useReveal();
-  return (
-    <section ref={ref as React.RefObject<HTMLElement>} style={{
-      height: "clamp(280px, 40vh, 480px)",
-      position: "relative", overflow: "hidden", background: "#0A0A0A",
-    }}>
-      <img src="/decra-texture.jpg" alt="" style={{
-        width: "100%", height: "100%",
-        objectFit: "cover", objectPosition: "center 40%",
-        display: "block",
-        filter: "saturate(0.75)",
-        opacity: vis ? 0.85 : 0,
-        transform: vis ? "scale(1)" : "scale(1.04)",
-        transition: "opacity 1.4s cubic-bezier(0.16,1,0.3,1), transform 1.6s cubic-bezier(0.16,1,0.3,1)",
-      }} />
-      <div style={{
-        position: "absolute", inset: 0,
-        background: "linear-gradient(to bottom, rgba(10,10,10,0.15) 0%, transparent 25%, transparent 75%, rgba(10,10,10,0.25) 100%)",
-        pointerEvents: "none",
-      }} />
-    </section>
-  );
-}
-
-/* ── Section 10: Social ── */
-function Social() {
   const { ref, vis } = useReveal();
 
   const socials = [
@@ -863,31 +851,45 @@ function Social() {
   ];
 
   return (
-    <section ref={ref as React.RefObject<HTMLElement>} style={SEC}>
-      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-        <div style={{
-          display: "flex", alignItems: "center",
-          justifyContent: "center", gap: "2rem", flexWrap: "wrap",
-          opacity: vis ? 1 : 0,
-          transform: vis ? "none" : "translateY(14px)",
-          transition: "opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1)",
-        }}>
-          {socials.map(({ label, url, icon }, i) => (
-            <a key={label} href={url} target="_blank" rel="noopener noreferrer"
-              aria-label={label}
-              style={{
-                color: "var(--c-ink-muted)",
-                textDecoration: "none",
-                lineHeight: 0, display: "block",
-                opacity: vis ? 1 : 0,
-                transition: `opacity 0.5s ease ${0.1 + i * 0.08}s, color 0.2s, transform 0.2s`,
-              } as React.CSSProperties}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"; (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-ink-muted)"; (e.currentTarget as HTMLElement).style.transform = "none"; }}>
-              {icon}
-            </a>
-          ))}
-        </div>
+    <section ref={ref as React.RefObject<HTMLElement>} style={{
+      height: "clamp(280px, 40vh, 480px)",
+      position: "relative", overflow: "hidden", background: "#0A0A0A",
+    }}>
+      <img src="/decra-texture.jpg" alt="" style={{
+        width: "100%", height: "100%",
+        objectFit: "cover", objectPosition: "center 40%",
+        display: "block",
+        filter: "saturate(0.75)",
+        opacity: vis ? 0.85 : 0,
+        transform: vis ? "scale(1)" : "scale(1.04)",
+        transition: "opacity 1.4s cubic-bezier(0.16,1,0.3,1), transform 1.6s cubic-bezier(0.16,1,0.3,1)",
+      }} />
+      <div style={{
+        position: "absolute", inset: 0,
+        background: "linear-gradient(to bottom, rgba(10,10,10,0.15) 0%, transparent 25%, transparent 75%, rgba(10,10,10,0.25) 100%)",
+        pointerEvents: "none",
+      }} />
+      <div style={{
+        position: "absolute", left: 0, right: 0, bottom: "clamp(1.5rem,4vw,2.75rem)",
+        display: "flex", alignItems: "center",
+        justifyContent: "center", gap: "2rem", flexWrap: "wrap",
+      }}>
+        {socials.map(({ label, url, icon }, i) => (
+          <a key={label} href={url} target="_blank" rel="noopener noreferrer"
+            aria-label={label}
+            style={{
+              color: "rgba(240,238,233,0.75)",
+              textDecoration: "none",
+              lineHeight: 0, display: "block",
+              opacity: vis ? 1 : 0,
+              transform: vis ? "none" : "translateY(14px)",
+              transition: `opacity 0.6s ease ${0.15 + i * 0.08}s, transform 0.6s ease ${0.15 + i * 0.08}s, color 0.2s`,
+            } as React.CSSProperties}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#F0EEE9"; (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "rgba(240,238,233,0.75)"; (e.currentTarget as HTMLElement).style.transform = "none"; }}>
+            {icon}
+          </a>
+        ))}
       </div>
     </section>
   );
@@ -908,7 +910,6 @@ export default function Home() {
       <ResearchSection />
       <Accreditations />
       <EditorialBreak />
-      <Social />
     </>
   );
 }
