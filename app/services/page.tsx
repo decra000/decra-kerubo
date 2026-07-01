@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, ExternalLink, Scale, Users, CheckCircle2 } from "lucide-react";
+import { ArrowRight, Scale, Users, CheckCircle2 } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Services",
@@ -81,17 +81,6 @@ export default function ServicesPage() {
             <p className="t-body" style={{ marginBottom: "1.5rem" }}>
               Most legal problems for founders and tech organizations fall into one of two categories — exposure at the company level, or vulnerability at the founder level. The advisory is structured accordingly.
             </p>
-            {/* Entrora referral banner */}
-            <a href="https://entrorasystems.com" target="_blank" rel="noopener noreferrer"
-              className="entrora-banner"
-              style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "1rem", background: "var(--c-forest)", borderRadius: "10px", padding: "0.9rem 1.1rem", textDecoration: "none" }}
-            >
-              <div>
-                <p style={{ fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--c-gold)", marginBottom: "0.25rem" }}>Need AI Engineering?</p>
-                <p style={{ fontSize: "0.78rem", color: "rgba(248,246,241,0.75)", lineHeight: 1.4 }}>That's handled through <strong style={{ color: "rgba(248,246,241,0.95)" }}>Entrora Systems</strong> — Decra's tech development practice.</p>
-              </div>
-              <ExternalLink size={16} style={{ color: "var(--c-gold)", flexShrink: 0 }} />
-            </a>
           </div>
         </div>
       </section>
@@ -196,8 +185,6 @@ export default function ServicesPage() {
       </section>
 
       <style>{`
-        .entrora-banner { transition: opacity 0.2s; }
-        .entrora-banner:hover { opacity: 0.85; }
         @media(max-width:768px){
           .inner{grid-template-columns:1fr !important; gap:2.5rem !important;}
           .inner > div > div{grid-template-columns:1fr !important; position:static !important;}

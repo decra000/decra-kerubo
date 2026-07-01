@@ -8,6 +8,7 @@ const links = [
   { href: "/#about",       label: "About" },
   { href: "/#services",   label: "Services" },
   { href: "/#collaborate", label: "Collaborate" },
+  { href: "/#the-1000",    label: "Spotify" },
 ];
 
 const lk: React.CSSProperties = {

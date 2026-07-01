@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import { ArrowRight, X } from "lucide-react";
 
 /* ── helpers ── */
@@ -96,7 +95,7 @@ function Hero() {
         `,
       }} />
       <div style={{
-        position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
+        position: "absolute", top: "6vh", left: 0, right: 0, bottom: 0,
         display: "flex", alignItems: "center",
         padding: "0 var(--space-x)",
         maxWidth: "calc(var(--max-w) + (var(--space-x) * 2))", margin: "0 auto",
@@ -121,36 +120,6 @@ function Hero() {
           >
             Retain as Technical Product Counsel
           </button>
-        </div>
-      </div>
-      <div style={{
-        position: "absolute", bottom: 0, left: 0, right: 0,
-        padding: "3.5rem var(--space-x) 5rem",
-        maxWidth: "calc(var(--max-w) + (var(--space-x) * 2))", margin: "0 auto",
-        opacity: vis ? 1 : 0,
-        transform: vis ? "none" : "translateY(22px)",
-        transition: "opacity 1s cubic-bezier(0.16,1,0.3,1) 0.45s, transform 1s cubic-bezier(0.16,1,0.3,1) 0.45s",
-      }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "1.75rem" }}>
-          <a href="#services" style={{
-            fontFamily: "var(--font-manjari)", fontWeight: 700,
-            fontSize: "0.52rem", letterSpacing: "0.24em", textTransform: "uppercase",
-            color: "rgba(240,238,233,0.42)", textDecoration: "none", transition: "color 0.25s",
-          }}
-            onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#F0EEE9"}
-            onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "rgba(240,238,233,0.42)"}>
-            Services
-          </a>
-          <span style={{ width: "1px", height: "10px", background: "rgba(240,238,233,0.16)", display: "block" }} />
-          <Link href="/#collaborate" style={{
-            fontFamily: "var(--font-manjari)", fontWeight: 700,
-            fontSize: "0.52rem", letterSpacing: "0.24em", textTransform: "uppercase",
-            color: "rgba(196,160,106,0.8)", textDecoration: "none", transition: "color 0.25s",
-          }}
-            onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#C4A06A"}
-            onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "rgba(196,160,106,0.8)"}>
-            Collaborate
-          </Link>
         </div>
       </div>
     </section>
@@ -548,7 +517,7 @@ const SpotifyLogo = () => (
 function The1000() {
   const { ref, vis } = useReveal();
   return (
-    <section ref={ref as React.RefObject<HTMLElement>} style={{
+    <section id="the-1000" ref={ref as React.RefObject<HTMLElement>} style={{
       borderTop: "none",
       minHeight: "clamp(420px, 60vh, 680px)",
       background: "#0F3320",
@@ -590,34 +559,41 @@ function The1000() {
             fontSize: "0.68rem", letterSpacing: "0.24em", textTransform: "uppercase",
             color: "rgba(255,255,255,0.7)",
           }}>Technology law in Africa &nbsp;&middot;&nbsp; on Spotify</p>
-
-          <button
-            onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: SPOTIFY_GROUP }))}
-            style={{ ...lineBtn({ light: true }), marginTop: "1rem" }}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "#C4A06A"; (e.currentTarget as HTMLElement).style.color = "#C4A06A"; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.3)"; (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"; }}
-          >
-            Express Interest
-          </button>
         </div>
       </div>
 
-      {/* Coming soon — a quiet, handwritten signature near the base of the section */}
+      {/* Coming soon — large, no background, sitting low in the section */}
       <div style={{
-        position: "absolute", left: 0, right: 0, bottom: "clamp(1.5rem,4vw,2.75rem)",
+        position: "absolute", left: 0, right: 0, bottom: "clamp(0.75rem,2.5vw,1.5rem)",
         display: "flex", justifyContent: "center",
         zIndex: 3, pointerEvents: "none",
       }}>
         <span style={{
           fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400,
-          fontSize: "1.05rem", letterSpacing: "0.01em",
-          color: "#0A0A0A",
-          background: "rgba(240,238,233,0.82)",
-          padding: "0.4rem 1.1rem",
-          borderRadius: "2px",
+          fontSize: "clamp(1.6rem,3.2vw,2.4rem)", letterSpacing: "0.01em",
+          color: "rgba(255,255,255,0.92)",
           transform: "rotate(-1.5deg)",
         }}>Coming soon</span>
       </div>
+
+      {/* Express Interest — handwritten, tucked to the side at the base of the section */}
+      <button
+        onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: SPOTIFY_GROUP }))}
+        style={{
+          position: "absolute", right: "clamp(1.5rem,5vw,4rem)", bottom: "clamp(1.75rem,4.5vw,3rem)",
+          zIndex: 3,
+          background: "none", border: "none", cursor: "pointer", padding: 0,
+          fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400,
+          fontSize: "clamp(1.1rem,1.8vw,1.4rem)", letterSpacing: "0.01em",
+          color: "rgba(255,255,255,0.85)",
+          textDecoration: "underline", textDecorationStyle: "wavy", textUnderlineOffset: "5px",
+          transform: "rotate(-2deg)", transition: "color 0.25s",
+        }}
+        onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#C4A06A"}
+        onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"}
+      >
+        Express Interest
+      </button>
     </section>
   );
 }
