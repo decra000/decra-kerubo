@@ -39,6 +39,18 @@ const SEC: React.CSSProperties = {
   padding: "var(--space-section) var(--space-x)",
 };
 
+/* Shared "line button" style — outline only, no fill, used for every CTA on the page */
+const lineBtn = (opts?: { light?: boolean }): React.CSSProperties => ({
+  display: "inline-flex", alignItems: "center", gap: "0.6rem",
+  fontFamily: "var(--font-manjari)", fontWeight: 700,
+  fontSize: "0.65rem", letterSpacing: "0.2em", textTransform: "uppercase",
+  color: opts?.light ? "rgba(255,255,255,0.85)" : "var(--c-ink)",
+  background: "transparent",
+  border: `1px solid ${opts?.light ? "rgba(255,255,255,0.3)" : "var(--c-border)"}`,
+  padding: "0.9rem 1.75rem", cursor: "pointer", textDecoration: "none",
+  transition: "border-color 0.25s ease, color 0.25s ease",
+});
+
 /* ── Section 1: Hero ── */
 function Hero() {
   const [vis, setVis] = useState(false);
@@ -102,17 +114,17 @@ function About() {
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
         <p style={{ ...LBL, marginBottom: "1.5rem", ...fade(vis) }}>About</p>
         <h2 style={{
-          ...SERIF("clamp(2rem,3.8vw,3.25rem)"),
+          ...SERIF(),
           letterSpacing: "-0.01em",
-          marginBottom: "2rem",
+          marginBottom: "1.75rem",
           ...fade(vis, 0.05),
         }}>
           Technology Lawyer &amp; Product Counsel.
         </h2>
         <p style={{
-          ...SERIF("clamp(1.3rem,2.1vw,1.75rem)"),
+          ...SERIF("clamp(1.1rem,1.5vw,1.3rem)"),
           maxWidth: "820px",
-          lineHeight: 1.55,
+          lineHeight: 1.6,
           ...fade(vis, 0.14),
         }}>
           I am a technology lawyer and product counsel with a dual degree — a BSc in Computer Science (AI) and a Bachelor of Laws (LLB) / Juris Doctor. I also help startups, especially techpreneurs, build safely.
@@ -176,6 +188,17 @@ function Services() {
             </div>
           ))}
         </div>
+
+        <div style={{ marginTop: "3rem", ...fade(vis, 0.24) }}>
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: PRODUCT_COUNSEL_GROUP }))}
+            style={lineBtn()}
+            onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"}
+            onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--c-border)"}
+          >
+            Retain as Technical Product Counsel <ArrowRight size={12} strokeWidth={1.5} />
+          </button>
+        </div>
       </div>
       <style>{`@media(max-width:900px){.svc-grid{grid-template-columns:1fr!important}.svc-grid>div{border-left:none!important;border-top:1px solid var(--c-border)!important}}`}</style>
     </section>
@@ -191,6 +214,14 @@ const ENGAGE_GROUPS = [
   { key: "techpreneurs", label: "Techpreneurs", opening: "Hi, I'm a founder or builder looking for help with incorporation, equity, fundraising, or startup advisory." },
   { key: "tech-law-events", label: "Tech Law Events", opening: "Hi, I'm organizing or partnering on a technology law event and would like to discuss having Decra speak or participate." },
 ];
+
+const PRODUCT_COUNSEL_GROUP = {
+  key: "product-counsel",
+  label: "Technical Product Counsel",
+  opening: "Hi, I'd like to retain Decra as embedded Technical Product Counsel for my product and engineering team.",
+};
+
+const OPEN_PARTNER_MODAL_EVENT = "decra:open-partner-modal";
 
 const ENGAGE_SYSTEM = `You are Decra Kerubo's AI intake advisor on decrakerubo.com.
 Decra is a Nairobi-based lawyer and computer scientist specialising in technology law and startup legal advisory in Kenya and East Africa.
@@ -246,6 +277,16 @@ function WorkWithDecra() {
     }
   };
 
+  useEffect(() => {
+    const onExternalOpen = (e: Event) => {
+      const detail = (e as CustomEvent<{ key: string; label: string; opening: string }>).detail;
+      setModalOpen(true);
+      if (detail) startGroup(detail.key, detail.opening);
+    };
+    window.addEventListener(OPEN_PARTNER_MODAL_EVENT, onExternalOpen as EventListener);
+    return () => window.removeEventListener(OPEN_PARTNER_MODAL_EVENT, onExternalOpen as EventListener);
+  }, []);
+
   const closeModal = () => { setModalOpen(false); setActive(null); setMsgs([]); setDone(false); setInput(""); };
 
   const send = async () => {
@@ -281,7 +322,7 @@ function WorkWithDecra() {
           ...fade(vis, 0.08),
         }} className="wwd-row">
           <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(1.5rem,2.4vw,2rem)", color: "var(--c-ink)", lineHeight: 1.05, marginRight: "1rem", whiteSpace: "nowrap" }}>Who I work with.</h2>
-          {ENGAGE_GROUPS.map((g, i) => {
+          {ENGAGE_GROUPS.map((g) => {
             const isSelected = selected === g.key;
             return (
               <div key={g.key} style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
@@ -293,7 +334,6 @@ function WorkWithDecra() {
                     background: "none", border: "none", cursor: "pointer", padding: "0.5rem 0.25rem",
                   }}
                 >
-                  <span style={{ fontFamily: "var(--font-sans)", fontWeight: 600, fontSize: "0.62rem", color: "var(--c-ink-muted)" }}>{String(i + 1).padStart(2, "0")}</span>
                   <span style={{
                     fontFamily: "var(--font-serif)", fontWeight: 400,
                     fontSize: "clamp(0.95rem,1.3vw,1.1rem)",
@@ -308,16 +348,9 @@ function WorkWithDecra() {
           <span style={{ flex: 1, minWidth: "1.5rem" }} />
           <button
             onClick={openPartnerModal}
-            style={{
-              display: "inline-flex", alignItems: "center", gap: "0.6rem",
-              fontFamily: "var(--font-manjari)", fontWeight: 700,
-              fontSize: "0.65rem", letterSpacing: "0.2em", textTransform: "uppercase",
-              color: "#0A0A0A", background: "var(--c-accent)",
-              border: "none", padding: "0.9rem 1.75rem", cursor: "pointer",
-              transition: "filter 0.2s",
-            }}
-            onMouseEnter={e => (e.currentTarget as HTMLElement).style.filter = "brightness(1.1)"}
-            onMouseLeave={e => (e.currentTarget as HTMLElement).style.filter = "none"}
+            style={lineBtn()}
+            onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"}
+            onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--c-border)"}
           >
             Partner
             <ArrowRight size={12} strokeWidth={1.5} />
@@ -349,7 +382,7 @@ function WorkWithDecra() {
                 <p style={{ ...LBL, marginBottom: "0.35rem" }}>Partner with Decra</p>
                 {active && (
                   <p style={{ fontFamily: "var(--font-serif)", fontSize: "1rem", color: "var(--c-ink)" }}>
-                    {ENGAGE_GROUPS.find(g => g.key === active)?.label}
+                    {[...ENGAGE_GROUPS, PRODUCT_COUNSEL_GROUP].find(g => g.key === active)?.label}
                   </p>
                 )}
               </div>
@@ -481,36 +514,46 @@ function The1000() {
         opacity: vis ? 1 : 0, transform: vis ? "none" : "translateY(20px)",
         transition: "opacity 1s cubic-bezier(0.16,1,0.3,1), transform 1s cubic-bezier(0.16,1,0.3,1)",
       }}>
-        <a href="https://open.spotify.com" target="_blank" rel="noopener noreferrer" style={{
-          display: "flex", flexDirection: "column", alignItems: "center",
-          gap: "1.5rem", textDecoration: "none", transition: "filter 0.25s", filter: "none",
-        }}
-          onMouseEnter={e => (e.currentTarget as HTMLElement).style.filter = "opacity(0.7)"}
-          onMouseLeave={e => (e.currentTarget as HTMLElement).style.filter = "none"}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1.75rem" }}>
           <SpotifyLogo />
+          <div>
+            <p style={{
+              fontFamily: "var(--font-serif)",
+              fontWeight: 400, fontSize: "clamp(2.5rem,4.6vw,4rem)",
+              color: "#FFFFFF", letterSpacing: "-0.01em", lineHeight: 1,
+              fontStyle: "italic",
+            }}>The 1000</p>
+          </div>
           <p style={{
-            fontFamily: "var(--font-serif)",
-            fontWeight: 400, fontSize: "clamp(2.25rem,4.2vw,3.5rem)",
-            color: "#FFFFFF", letterSpacing: "0", lineHeight: 1.05,
-          }}>The 1000</p>
-          <p style={{
-            fontFamily: "var(--font-sans)", fontWeight: 400,
-            fontSize: "0.9rem", color: "rgba(255,255,255,0.55)", letterSpacing: "0.04em",
-          }}>Technology law in Africa &nbsp;&mdash;&nbsp; on Spotify</p>
-        </a>
+            fontFamily: "var(--font-manjari)", fontWeight: 700,
+            fontSize: "0.68rem", letterSpacing: "0.24em", textTransform: "uppercase",
+            color: "rgba(255,255,255,0.6)",
+          }}>Technology law in Africa &nbsp;&middot;&nbsp; on Spotify</p>
+          <span style={{
+            display: "inline-flex", alignItems: "center", gap: "0.5rem",
+            fontFamily: "var(--font-manjari)", fontWeight: 700,
+            fontSize: "0.6rem", letterSpacing: "0.22em", textTransform: "uppercase",
+            color: "#0F3320", background: "#C4A06A",
+            padding: "0.55rem 1.25rem", marginTop: "0.5rem",
+          }}>
+            <span style={{ width: "5px", height: "5px", borderRadius: "50%", background: "#0F3320", display: "block" }} />
+            Coming Soon
+          </span>
+        </div>
       </div>
     </section>
   );
 }
 
 /* ── Section 6: Start Your Business / Build Tech ── */
-function StartBusiness() {
+function StartBusiness({ compact = false }: { compact?: boolean }) {
   const { ref, vis } = useReveal();
+  const pad = compact ? "2.25rem" : "3.5rem";
   return (
     <section ref={ref as React.RefObject<HTMLElement>} style={{ borderTop: "none" }}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0" }} className="sb-g">
-          <div style={{ padding: "3.5rem", background: "#0D0D0D", ...fade(vis) }}>
+        <div style={{ display: "grid", gridTemplateColumns: compact ? "1fr" : "1fr 1fr", gap: "0" }} className="sb-g">
+          <div style={{ padding: pad, background: "#0D0D0D", ...fade(vis) }}>
             <p style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.6rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(255,255,255,0.5)", marginBottom: "1.25rem" }}>Advisory</p>
             <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(1.65rem,2.6vw,2.1rem)", color: "#FFFFFF", lineHeight: 1.15, letterSpacing: "0", marginBottom: "1.25rem" }}>
               Start your business with me.
@@ -536,20 +579,14 @@ function StartBusiness() {
                 </div>
               ))}
             </div>
-            <Link href="/start" style={{
-              display: "inline-flex", alignItems: "center", gap: "0.5rem",
-              fontFamily: "var(--font-manjari)", fontWeight: 700,
-              fontSize: "0.6rem", letterSpacing: "0.2em", textTransform: "uppercase",
-              color: "#0D0D0D", background: "var(--c-accent)",
-              padding: "0.8rem 1.6rem", textDecoration: "none", transition: "background 0.2s",
-            }}
-              onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = "#D4B87A"}
-              onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = "var(--c-accent)"}>
+            <Link href="/start" style={lineBtn({ light: true })}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"; (e.currentTarget as HTMLElement).style.color = "var(--c-accent)"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.3)"; (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"; }}>
               Start here <ArrowRight size={11} strokeWidth={1.5} />
             </Link>
           </div>
 
-          <div style={{ padding: "3.5rem", background: "#0F3320", ...fade(vis, 0.12) }}>
+          <div style={{ padding: pad, background: "#0F3320", ...fade(vis, 0.12) }}>
             <p style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.6rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(255,255,255,0.55)", marginBottom: "1.25rem" }}>In partnership with Entrora Systems</p>
             <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(1.65rem,2.6vw,2.1rem)", color: "#FFFFFF", lineHeight: 1.15, letterSpacing: "0", marginBottom: "1.25rem" }}>
               Build a compliant tech product.
@@ -607,13 +644,9 @@ function ComplementaryCTA({ onOpen }: { onOpen: () => void }) {
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
           style={{
-            display: "inline-flex", alignItems: "center", gap: "0.6rem",
-            fontFamily: "var(--font-manjari)", fontWeight: 700,
-            fontSize: "0.62rem", letterSpacing: "0.2em", textTransform: "uppercase",
-            color: "var(--c-ink)", background: "transparent",
-            border: `1px solid ${hover ? "var(--c-accent)" : "var(--c-border)"}`,
-            padding: "1rem 2.25rem", cursor: "pointer",
-            transition: "border-color 0.25s ease",
+            ...lineBtn(),
+            borderColor: hover ? "var(--c-accent)" : "var(--c-border)",
+            padding: "1rem 2.25rem",
           }}
         >
           Explore Complementary Services <ArrowRight size={12} strokeWidth={1.5} />
@@ -652,8 +685,8 @@ function StartBusinessModal({ open, onClose }: { open: boolean; onClose: () => v
       <div
         onClick={e => e.stopPropagation()}
         style={{
-          position: "relative", width: "100%", maxWidth: "var(--max-w)",
-          maxHeight: "88vh", overflowY: "auto",
+          position: "relative", width: "100%", maxWidth: "48rem",
+          maxHeight: "min(42rem, 80vh)", overflowY: "auto",
           background: "#0D0D0D",
           boxShadow: "0 30px 80px rgba(0,0,0,0.5)",
         }}
@@ -671,7 +704,7 @@ function StartBusinessModal({ open, onClose }: { open: boolean; onClose: () => v
         >
           <X size={16} strokeWidth={1.5} />
         </button>
-        <StartBusiness />
+        <StartBusiness compact />
       </div>
       <style>{`@keyframes sbm-fade{from{opacity:0}to{opacity:1}}`}</style>
     </div>
@@ -810,16 +843,6 @@ function ResearchSection() {
               }}
             >
               <span style={{ fontFamily: "var(--font-sans)", fontWeight: 600, fontSize: "0.65rem", color: "var(--c-ink-muted)", display: "block", marginBottom: "1rem" }}>{String(i + 1).padStart(2, "0")}</span>
-              {paper.status === "current" && (
-                <span style={{
-                  display: "inline-block",
-                  fontFamily: "var(--font-manjari)", fontWeight: 700,
-                  fontSize: "0.42rem", letterSpacing: "0.16em", textTransform: "uppercase",
-                  color: "var(--c-accent)",
-                  border: "1px solid var(--c-accent)",
-                  padding: "0.12rem 0.35rem", marginBottom: "0.75rem",
-                }}>Current</span>
-              )}
               <h3 style={{
                 fontFamily: "var(--font-serif)", fontWeight: 400,
                 fontSize: "0.85rem", color: "var(--c-ink)", lineHeight: 1.3,
@@ -952,45 +975,34 @@ function CredCard({ c, i, vis, size = "sm" }: { c: Cred; i: number; vis: boolean
 
 function Accreditations() {
   const { ref, vis } = useReveal();
-  const tier1 = CREDENTIALS.filter(c => c.tier === 1);
-  const tier2 = CREDENTIALS.filter(c => c.tier === 2);
-  const tier3 = CREDENTIALS.filter(c => c.tier === 3);
+  // Two rows of four — the two degree-granting institutions lead each row, rest follow by tier.
+  const row1 = [CREDENTIALS[0], CREDENTIALS[2], CREDENTIALS[3], CREDENTIALS[4]]; // ALU, KSL, Oxford, CMU
+  const row2 = [CREDENTIALS[1], CREDENTIALS[5], CREDENTIALS[6], CREDENTIALS[7]]; // Nazarene, Cisco, HKUST, Qualys
   return (
     <section ref={ref as React.RefObject<HTMLElement>} style={SEC}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
         <p style={{ ...LBL, marginBottom: "2.5rem", ...fade(vis) }}>Education &amp; Training</p>
 
         <div style={{
-          display: "grid", gridTemplateColumns: "repeat(2, 1fr)",
+          display: "grid", gridTemplateColumns: "repeat(4, 1fr)",
           gap: "clamp(1.75rem,3vw,2.75rem)",
           marginBottom: "clamp(2.25rem,4vw,3.25rem)",
           paddingBottom: "clamp(2.25rem,4vw,3.25rem)",
           borderBottom: "1px solid var(--c-border)",
-        }} className="cred-grid-main">
-          {tier1.map((c, i) => <CredCard key={c.key} c={c} i={i} vis={vis} size="lg" />)}
+        }} className="cred-grid">
+          {row1.map((c, i) => <CredCard key={c.key} c={c} i={i} vis={vis} size="md" />)}
         </div>
 
         <div style={{
-          display: "grid", gridTemplateColumns: "repeat(3, 1fr)",
-          gap: "clamp(1.75rem,3vw,2.75rem)",
-          marginBottom: "clamp(2.25rem,4vw,3.25rem)",
-          paddingBottom: "clamp(2.25rem,4vw,3.25rem)",
-          borderBottom: "1px solid var(--c-border)",
-        }} className="cred-grid-mid">
-          {tier2.map((c, i) => <CredCard key={c.key} c={c} i={i} vis={vis} size="md" />)}
-        </div>
-
-        <div style={{
-          display: "grid", gridTemplateColumns: "repeat(3, 1fr)",
+          display: "grid", gridTemplateColumns: "repeat(4, 1fr)",
           gap: "clamp(1.75rem,3vw,2.75rem)",
         }} className="cred-grid">
-          {tier3.map((c, i) => <CredCard key={c.key} c={c} i={i} vis={vis} size="sm" />)}
+          {row2.map((c, i) => <CredCard key={c.key} c={c} i={i} vis={vis} size="md" />)}
         </div>
       </div>
       <style>{`
-        @media(max-width:820px){.cred-grid{grid-template-columns:repeat(2,1fr)!important}.cred-grid-mid{grid-template-columns:repeat(2,1fr)!important}}
-        @media(max-width:560px){.cred-grid-main{grid-template-columns:1fr!important}}
-        @media(max-width:480px){.cred-grid{grid-template-columns:1fr!important}.cred-grid-mid{grid-template-columns:1fr!important}}
+        @media(max-width:820px){.cred-grid{grid-template-columns:repeat(2,1fr)!important}}
+        @media(max-width:480px){.cred-grid{grid-template-columns:1fr!important}}
       `}</style>
     </section>
   );
