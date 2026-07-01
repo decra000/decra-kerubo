@@ -406,9 +406,9 @@ function The1000() {
           onMouseLeave={e => (e.currentTarget as HTMLElement).style.filter = "none"}>
           <SpotifyLogo />
           <p style={{
-            fontFamily: "'Circular Std', 'Circular', -apple-system, BlinkMacSystemFont, sans-serif",
-            fontWeight: 700, fontSize: "clamp(2.5rem,5vw,4.5rem)",
-            color: "#FFFFFF", letterSpacing: "-0.02em", lineHeight: 1,
+            fontFamily: "var(--font-serif)",
+            fontWeight: 400, fontSize: "clamp(2.25rem,4.2vw,3.5rem)",
+            color: "#FFFFFF", letterSpacing: "0", lineHeight: 1.05,
           }}>The 1000</p>
           <p style={{
             fontFamily: "var(--font-sans)", fontWeight: 400,
@@ -429,7 +429,7 @@ function StartBusiness() {
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0" }} className="sb-g">
           <div style={{ padding: "3.5rem", background: "#0D0D0D", ...fade(vis) }}>
             <p style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.6rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(255,255,255,0.5)", marginBottom: "1.25rem" }}>Advisory</p>
-            <h2 style={{ fontFamily: "var(--font-sans)", fontWeight: 700, fontSize: "clamp(1.6rem,2.8vw,2.4rem)", color: "#FFFFFF", lineHeight: 1.1, letterSpacing: "-0.01em", marginBottom: "1.25rem" }}>
+            <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(1.65rem,2.6vw,2.1rem)", color: "#FFFFFF", lineHeight: 1.15, letterSpacing: "0", marginBottom: "1.25rem" }}>
               Start your business with me.
             </h2>
             <p style={{ fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.875rem", color: "rgba(255,255,255,0.65)", lineHeight: 1.85, maxWidth: "22rem", marginBottom: "2.5rem" }}>
@@ -468,7 +468,7 @@ function StartBusiness() {
 
           <div style={{ padding: "3.5rem", background: "#0F3320", ...fade(vis, 0.12) }}>
             <p style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.6rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(255,255,255,0.55)", marginBottom: "1.25rem" }}>In partnership with Entrora Systems</p>
-            <h2 style={{ fontFamily: "var(--font-sans)", fontWeight: 700, fontSize: "clamp(1.6rem,2.8vw,2.4rem)", color: "#FFFFFF", lineHeight: 1.1, letterSpacing: "-0.01em", marginBottom: "1.25rem" }}>
+            <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(1.65rem,2.6vw,2.1rem)", color: "#FFFFFF", lineHeight: 1.15, letterSpacing: "0", marginBottom: "1.25rem" }}>
               Build a compliant tech product.
             </h2>
             <p style={{ fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.875rem", color: "rgba(255,255,255,0.65)", lineHeight: 1.85, maxWidth: "22rem", marginBottom: "2.5rem" }}>
@@ -744,7 +744,7 @@ function CredCard({ c, i, vis, big }: { c: Cred; i: number; vis: boolean; big?: 
       }}>
       <div style={{
         height: logoHeight,
-        display: "flex", alignItems: "center",
+        display: "flex", alignItems: "flex-end",
         marginBottom: "1rem",
         position: "relative",
       }}>
@@ -755,10 +755,9 @@ function CredCard({ c, i, vis, big }: { c: Cred; i: number; vis: boolean; big?: 
             maxHeight: "100%", maxWidth: "100%",
             width: "auto", height: "auto",
             objectFit: "contain",
-            borderRadius: "3px",
             filter: hover
-              ? "grayscale(0) contrast(1) opacity(1)"
-              : "grayscale(1) contrast(0.9) opacity(0.55)",
+              ? "saturate(1) opacity(1)"
+              : "saturate(0.35) opacity(0.8)",
             transition: "filter 0.4s cubic-bezier(0.16,1,0.3,1)",
           }}
         />
@@ -870,7 +869,7 @@ function EditorialBreak() {
         pointerEvents: "none",
       }} />
       <div style={{
-        position: "absolute", left: 0, right: 0, bottom: "clamp(1.5rem,4vw,2.75rem)",
+        position: "absolute", inset: 0,
         display: "flex", alignItems: "center",
         justifyContent: "center", gap: "2rem", flexWrap: "wrap",
       }}>
