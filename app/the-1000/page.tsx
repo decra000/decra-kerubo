@@ -79,8 +79,7 @@ export default function The1000Page() {
             <div>
               <h1 className="t-display t-display-xl" style={{ marginBottom: "1.25rem" }}>Tech Harm Index.</h1>
               <p className="t-body" style={{ maxWidth: "30rem" }}>
-                A living index of documented cases where technology caused harm — and where the law failed to protect people.
-                Every profile is a policy argument.
+                A living index of tech harm in Africa. Every profile is a policy argument.
               </p>
             </div>
             <div>
@@ -94,7 +93,7 @@ export default function The1000Page() {
                 </div>
               </div>
               <p style={{ fontSize: "0.775rem", color: "var(--c-ink-muted)", lineHeight: 1.7 }}>
-                Details are anonymized to protect individuals. Cases are selected for the policy gap they expose, not shock value. This index informs Decra's tech policy advisory work.
+                Anonymized. Selected for the policy gap each case exposes, not shock value.
               </p>
             </div>
           </div>
@@ -129,7 +128,7 @@ export default function The1000Page() {
               <div>
                 <p style={{ fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#1DB954", marginBottom: "0.25rem" }}>Now Listening — Spotify Podcast</p>
                 <p style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "1rem", color: "rgba(248,246,241,0.92)", marginBottom: "0.15rem" }}>Nove</p>
-                <p style={{ fontSize: "0.72rem", color: "rgba(248,246,241,0.45)", lineHeight: 1.5 }}>The podcast companion to The 1000 — real stories of tech harm, told with context and policy intent.</p>
+                <p style={{ fontSize: "0.72rem", color: "rgba(248,246,241,0.45)", lineHeight: 1.5 }}>The podcast companion to The 1000 — tech harm, told with context.</p>
               </div>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", color: "#1DB954", flexShrink: 0 }}>
@@ -181,8 +180,7 @@ export default function The1000Page() {
               <p className="t-label" style={{ marginBottom: "0.75rem" }}>Contribute to the Index</p>
               <h3 style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "1.05rem", color: "rgba(248,246,241,0.9)", marginBottom: "0.6rem" }}>Know a case that belongs here?</h3>
               <p style={{ fontSize: "0.775rem", color: "rgba(248,246,241,0.5)", lineHeight: 1.7, maxWidth: "36rem" }}>
-                If you've witnessed or experienced tech harm in Africa — especially where the law failed — share it.
-                All submissions are reviewed, anonymized, and credited only if you request it.
+                Witnessed or experienced tech harm in Africa? Share it — reviewed, anonymized, and credited only if you ask.
               </p>
             </div>
             <a href="mailto:the1000@decrakero.com?subject=Case%20Submission"

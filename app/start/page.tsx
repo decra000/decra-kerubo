@@ -13,7 +13,7 @@ const LBL: React.CSSProperties = {
   color: "var(--c-ink-muted)",
 };
 const SERIF = (sz = "clamp(2rem,3.5vw,3rem)"): React.CSSProperties => ({
-  fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400,
+  fontFamily: "var(--font-serif)", fontWeight: 400,
   fontSize: sz, color: "var(--c-ink)", lineHeight: 1.05,
 });
 
@@ -175,8 +175,7 @@ export default function StartPage() {
                   borderBottom: "1px solid var(--c-border)",
                 }}>
                   <span style={{
-                    fontFamily: "var(--font-serif)", fontStyle: "italic",
-                    fontSize: "0.78rem", color: "var(--c-accent)", flexShrink: 0,
+                    fontFamily: "var(--font-serif)", fontSize: "0.78rem", color: "var(--c-accent)", flexShrink: 0,
                   }}>{n}</span>
                   <span style={{
                     fontFamily: "var(--font-sans)", fontWeight: 400,
@@ -199,7 +198,7 @@ export default function StartPage() {
                 border: "1px solid var(--c-border)",
                 padding: "3rem",
               }}>
-                <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "1rem", color: "var(--c-ink)", marginBottom: "0.5rem" }}>Ready?</p>
+                <p style={{ fontFamily: "var(--font-serif)", fontSize: "1rem", color: "var(--c-ink)", marginBottom: "0.5rem" }}>Ready?</p>
                 <p style={{
                   fontFamily: "var(--font-sans)", fontWeight: 400,
                   fontSize: "0.875rem", color: "var(--c-ink-muted)",
@@ -228,7 +227,7 @@ export default function StartPage() {
                 border: "1px solid var(--c-border)",
                 padding: "3rem",
               }}>
-                <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "1.3rem", color: "var(--c-ink)", marginBottom: "0.75rem" }}>Message received.</p>
+                <p style={{ fontFamily: "var(--font-serif)", fontSize: "1.3rem", color: "var(--c-ink)", marginBottom: "0.75rem" }}>Message received.</p>
                 <p style={{
                   fontFamily: "var(--font-sans)", fontWeight: 400,
                   fontSize: "0.875rem", color: "var(--c-ink-muted)", lineHeight: 1.75,
@@ -248,8 +247,7 @@ export default function StartPage() {
                 }}>
                   <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#4ade80" }} />
                   <p style={{
-                    fontFamily: "var(--font-serif)", fontStyle: "italic",
-                    fontSize: "0.875rem", color: "var(--c-ink)",
+                    fontFamily: "var(--font-serif)", fontSize: "0.875rem", color: "var(--c-ink)",
                   }}>Decra's advisor</p>
                 </div>
 
@@ -266,8 +264,7 @@ export default function StartPage() {
                     }}>
                       {m.role === "assistant" && (
                         <p style={{
-                          fontFamily: "var(--font-serif)", fontStyle: "italic",
-                          fontSize: "0.6rem", color: "var(--c-accent)", marginBottom: "0.3rem",
+                          fontFamily: "var(--font-serif)", fontSize: "0.6rem", color: "var(--c-accent)", marginBottom: "0.3rem",
                         }}>Advisor</p>
                       )}
                       <p style={{
@@ -280,7 +277,7 @@ export default function StartPage() {
                   ))}
                   {loading && (
                     <div style={{ alignSelf: "flex-start" }}>
-                      <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "0.6rem", color: "var(--c-accent)", marginBottom: "0.3rem" }}>Advisor</p>
+                      <p style={{ fontFamily: "var(--font-serif)", fontSize: "0.6rem", color: "var(--c-accent)", marginBottom: "0.3rem" }}>Advisor</p>
                       <div style={{ display: "flex", gap: "4px" }}>
                         {[0,1,2].map(j => <span key={j} style={{ width: "5px", height: "5px", borderRadius: "50%", background: "var(--c-ink-muted)", animation: `bd 1.2s ease ${j*0.2}s infinite` }} />)}
                       </div>

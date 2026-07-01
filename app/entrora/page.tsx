@@ -19,7 +19,7 @@ const fade = (vis: boolean, delay = 0): React.CSSProperties => ({
   transition: `opacity 0.85s cubic-bezier(0.16,1,0.3,1) ${delay}s, transform 0.85s cubic-bezier(0.16,1,0.3,1) ${delay}s`,
 });
 const LBL: React.CSSProperties = { fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.55rem", letterSpacing: "0.24em", textTransform: "uppercase", color: "var(--c-ink-muted)" };
-const SERIF = (sz = "clamp(2rem,3.5vw,3rem)"): React.CSSProperties => ({ fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400, fontSize: sz, color: "var(--c-ink)", lineHeight: 1.05 });
+const SERIF = (sz = "clamp(2rem,3.5vw,3rem)"): React.CSSProperties => ({ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: sz, color: "var(--c-ink)", lineHeight: 1.05 });
 const BODY: React.CSSProperties = { fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.875rem", color: "var(--c-ink-mid)", lineHeight: 1.85 };
 const SEC: React.CSSProperties = { borderTop: "1px solid var(--c-border)", padding: "var(--space-section) var(--space-x)" };
 
@@ -56,16 +56,16 @@ function Services() {
         <p style={{ ...LBL, marginBottom: "4rem", ...fade(vis) }}>Services</p>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "var(--c-border)" }} className="ent-g">
           {[
-            { n: "01", t: "AI Document Systems", b: "Custom pipelines for document classification, extraction, and review at scale. Built for legal, finance, and compliance workflows." },
-            { n: "02", t: "Legal Tech Development", b: "Software built specifically for legal workflows — designed by someone who understands both sides of the table." },
-            { n: "03", t: "Compliant AI Products", b: "End-to-end AI product development with data governance, privacy compliance, and regulatory alignment built in from day one." },
-            { n: "04", t: "AI Adoption Advisory", b: "Scoping, readiness assessment, and implementation for organisations at any stage. No enterprise budget required." },
-            { n: "05", t: "Regulatory Sandbox Navigation", b: "Guidance for tech companies seeking to operate within or alongside regulatory sandbox frameworks in Kenya and East Africa." },
-            { n: "06", t: "AI Governance Frameworks", b: "Policy and governance documents for organisations deploying AI — covering accountability, explainability, and risk management." },
+            { n: "01", t: "AI Document Systems", b: "Classification, extraction, and review pipelines — built for legal and compliance workflows." },
+            { n: "02", t: "Legal Tech Development", b: "Software built for legal workflows, by someone who understands both sides of the table." },
+            { n: "03", t: "Compliant AI Products", b: "AI products with data governance and regulatory alignment built in from day one." },
+            { n: "04", t: "AI Adoption Advisory", b: "Scoping and implementation for organisations at any stage — no enterprise budget required." },
+            { n: "05", t: "Regulatory Sandbox Navigation", b: "Navigating regulatory sandbox frameworks across Kenya and East Africa." },
+            { n: "06", t: "AI Governance Frameworks", b: "Governance documents for AI deployment — accountability, explainability, risk." },
           ].map((s, i) => (
             <div key={s.n} style={{ padding: "2.5rem", background: "var(--c-bg)", opacity: vis ? 1 : 0, transition: `opacity 0.5s ease ${0.06 * i}s` }}>
-              <span style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "0.75rem", color: "var(--c-accent)", display: "block", marginBottom: "1.25rem" }}>{s.n}</span>
-              <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "1.05rem", color: "var(--c-ink)", marginBottom: "0.75rem" }}>{s.t}</p>
+              <span style={{ fontFamily: "var(--font-serif)", fontSize: "0.75rem", color: "var(--c-accent)", display: "block", marginBottom: "1.25rem" }}>{s.n}</span>
+              <p style={{ fontFamily: "var(--font-serif)", fontSize: "1.05rem", color: "var(--c-ink)", marginBottom: "0.75rem" }}>{s.t}</p>
               <p style={{ ...BODY, fontSize: "0.8rem" }}>{s.b}</p>
             </div>
           ))}

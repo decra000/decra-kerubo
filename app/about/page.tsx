@@ -21,7 +21,7 @@ const LBL: React.CSSProperties = {
   color: "var(--c-ink-muted)",
 };
 const SERIF = (sz = "clamp(2rem,3.5vw,3rem)"): React.CSSProperties => ({
-  fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400,
+  fontFamily: "var(--font-serif)", fontWeight: 400,
   fontSize: sz, color: "var(--c-ink)", lineHeight: 1.05, letterSpacing: "-0.01em",
 });
 const BODY: React.CSSProperties = {
@@ -74,7 +74,7 @@ function Cover() {
       }}>
         <p style={{ ...LBL, color: "rgba(240,237,232,0.55)", marginBottom: "0.85rem" }}>About</p>
         <h1 style={{
-          fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400,
+          fontFamily: "var(--font-serif)", fontWeight: 400,
           fontSize: "clamp(3rem, 6vw, 5.5rem)",
           color: "#F0EDE8",
           lineHeight: 1.02, letterSpacing: "-0.02em",
@@ -194,7 +194,7 @@ function PaperViewer({ paper, onClose }: { paper: Paper; onClose: () => void }) 
           padding: "1rem 1.5rem", borderBottom: "1px solid rgba(240,237,232,0.1)", flexShrink: 0,
         }}>
           <div style={{ minWidth: 0 }}>
-            <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "0.95rem", color: "#F0EDE8", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+            <p style={{ fontFamily: "var(--font-serif)", fontSize: "0.95rem", color: "#F0EDE8", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
               {paper.title}
             </p>
             <p style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.55rem", letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(240,237,232,0.45)", marginTop: "0.2rem" }}>
@@ -266,7 +266,7 @@ function Research() {
                 }}>Current</span>
               )}
               <h3 style={{
-                fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400,
+                fontFamily: "var(--font-serif)", fontWeight: 400,
                 fontSize: "0.85rem", color: "var(--c-ink)", lineHeight: 1.3,
                 marginBottom: "0.6rem",
               }}>{paper.title}</h3>
@@ -327,8 +327,7 @@ function Bio() {
                 borderBottom: "1px solid var(--c-border)",
               }}>
                 <span style={{
-                  fontFamily: "var(--font-serif)", fontStyle: "italic",
-                  fontSize: "0.82rem", color: "var(--c-accent)", minWidth: "2.5rem",
+                  fontFamily: "var(--font-serif)", fontSize: "0.82rem", color: "var(--c-accent)", minWidth: "2.5rem",
                 }}>{abbr}</span>
                 <span style={{
                   fontFamily: "var(--font-sans)", fontWeight: 400,
@@ -350,7 +349,7 @@ function Bio() {
             </h2>
 
             <p style={{ ...BODY, marginBottom: "3rem" }}>
-              A rare intersection — technology law consulting for companies and platforms, and startup advisory for the people building them.
+              Technology law for companies. Startup advisory for their founders.
             </p>
 
             {/* Pullquote */}
@@ -360,12 +359,12 @@ function Bio() {
               marginBottom: "3rem",
             }}>
               <p style={{
-                fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400,
+                fontFamily: "var(--font-serif)", fontWeight: 400,
                 fontSize: "clamp(1.05rem, 1.6vw, 1.3rem)",
                 color: "var(--c-ink)",
                 lineHeight: 1.65,
               }}>
-                "Legal clarity is a competitive advantage — not a compliance box."
+                "Legal clarity is a competitive advantage."
               </p>
             </blockquote>
 
@@ -373,10 +372,10 @@ function Bio() {
 
             <div style={{ marginBottom: "3rem" }}>
               {[
-                "Law firms seeking technology law capacity",
-                "Tech companies needing embedded legal advisory",
-                "Investors — portfolio legal support",
-                "Accelerators and incubators",
+                "Law firms",
+                "Tech companies",
+                "Investors",
+                "Accelerators & incubators",
                 "International firms entering East Africa",
               ].map((item, i) => (
                 <div key={i} style={{
@@ -387,8 +386,7 @@ function Bio() {
                   transition: `opacity 0.6s ease ${0.2 + i * 0.07}s`,
                 }}>
                   <span style={{
-                    fontFamily: "var(--font-serif)", fontStyle: "italic",
-                    fontSize: "0.75rem", color: "var(--c-accent)",
+                    fontFamily: "var(--font-serif)", fontSize: "0.75rem", color: "var(--c-accent)",
                     flexShrink: 0, width: "1.5rem",
                     lineHeight: 1.6,
                   }}>{String(i + 1).padStart(2, "0")}</span>
@@ -449,7 +447,7 @@ function Accreditations() {
         }}>
           {ACCREDITATIONS.map((name, i) => (
             <span key={name} style={{
-              fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400,
+              fontFamily: "var(--font-serif)", fontWeight: 400,
               fontSize: "clamp(0.95rem,1.6vw,1.2rem)",
               color: "var(--c-ink-mid)", lineHeight: 1.3,
               opacity: vis ? 1 : 0,

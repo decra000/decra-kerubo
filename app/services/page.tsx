@@ -114,7 +114,7 @@ export default function ServicesPage() {
                     </div>
                     <p style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--c-gold)", marginBottom: "0.4rem" }}>{s.audience}</p>
                     <h2 className="t-display t-display-md" style={{ marginBottom: "0.6rem" }}>{s.label}</h2>
-                    <p style={{ fontSize: "0.775rem", fontStyle: "italic", color: "var(--c-ink-muted)", marginBottom: "1.5rem", lineHeight: 1.6 }}>{s.tagline}</p>
+                    <p style={{ fontSize: "0.775rem", color: "var(--c-ink-muted)", marginBottom: "1.5rem", lineHeight: 1.6 }}>{s.tagline}</p>
 
                     {/* The key distinction */}
                     <div style={{ background: "rgba(14,61,50,0.04)", borderLeft: "2px solid var(--c-forest)", padding: "0.85rem 1rem", borderRadius: "0 8px 8px 0", marginBottom: "1.75rem" }}>

@@ -27,7 +27,7 @@ const LBL: React.CSSProperties = {
   color: "var(--c-ink-muted)",
 };
 const SERIF = (sz = "clamp(2rem,3.5vw,3rem)"): React.CSSProperties => ({
-  fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400,
+  fontFamily: "var(--font-serif)", fontWeight: 400,
   fontSize: sz, color: "var(--c-ink)", lineHeight: 1.05,
 });
 const BODY: React.CSSProperties = {
@@ -69,7 +69,7 @@ function Hero() {
         transition: "opacity 1s cubic-bezier(0.16,1,0.3,1) 0.45s, transform 1s cubic-bezier(0.16,1,0.3,1) 0.45s",
       }}>
         <h1 style={{
-          fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400,
+          fontFamily: "var(--font-serif)", fontWeight: 400,
           fontSize: "clamp(2.5rem,5.5vw,5rem)",
           color: "#F0EEE9", lineHeight: 1.02, letterSpacing: "-0.01em",
           marginBottom: "1.75rem",
@@ -105,22 +105,22 @@ function Hero() {
 /* ── Section 2: Services ── */
 const SERVICES = [
   {
-    id: "consulting",
-    label: "Technology Law Consulting",
-    body: "End-to-end legal advisory for technology companies, products, and digital platforms operating in Kenya and across Africa.",
-    items: ["Technology regulatory compliance", "Data protection & ODPC compliance", "Cybersecurity law", "Digital commerce & platform law", "Tech contracts & licensing", "Policy engagement & representation"],
+    id: "regulatory",
+    label: "Technology & Regulatory Law",
+    body: "The legal architecture technology companies operate inside — Kenyan and pan-African regulation, translated into clear positions.",
+    items: ["Data protection & ODPC compliance", "Cybersecurity law", "Digital commerce & platform regulation", "Licensing & policy engagement"],
   },
   {
-    id: "compliance",
-    label: "Technical Products Compliance Review",
-    body: "Systematic legal review of your technology product against applicable regulations — before regulators find the gaps.",
-    items: ["Pre-launch compliance audit", "Product liability assessment", "Privacy-by-design review", "Terms of service & privacy policy", "API & third-party integration review", "Ongoing compliance monitoring"],
+    id: "product-counsel",
+    label: "Product Counsel",
+    body: "Embedded legal partnership with your product and engineering team — in the room as things get built, not called in after they ship.",
+    items: ["Pre-launch legal review", "Privacy-by-design & data flow review", "Terms of service & policy drafting", "Ongoing embedded advisory"],
   },
   {
-    id: "advisory",
-    label: "Advisory to Techpreneurs",
-    body: "Practical, clear-headed legal guidance for founders and builders who need to make fast decisions with real legal consequences.",
-    items: ["Company incorporation & structure", "Founder & co-founder agreements", "Equity, vesting & cap table", "Tax structuring (eTIMS, VAT, PAYE)", "Fundraising legal readiness", "Investor agreement review"],
+    id: "founder-advisory",
+    label: "Founder & Startup Advisory",
+    body: "Practical legal guidance for founders and builders making fast decisions with real, lasting consequences.",
+    items: ["Company incorporation & structure", "Founder & co-founder agreements", "Equity, vesting & cap table", "Tax structuring (eTIMS, VAT, PAYE)", "Fundraising legal readiness"],
   },
 ];
 
@@ -132,7 +132,7 @@ function Services() {
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
         <div style={{ marginBottom: "4rem", ...fade(vis) }}>
           <p style={{ ...LBL, marginBottom: "1.25rem" }}>Areas of Practice</p>
-          <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(2rem,3.5vw,3rem)", color: "var(--c-ink)", lineHeight: 1.05 }}>Technology Law Consulting.</h2>
+          <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(2rem,3.5vw,3rem)", color: "var(--c-ink)", lineHeight: 1.05 }}>Counsel, structured three ways.</h2>
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "0" }} className="svc-grid">
@@ -323,7 +323,7 @@ function Impact() {
     <section ref={ref as React.RefObject<HTMLElement>} style={{ ...SEC, background: "var(--c-surface)" }}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto", textAlign: "center" }}>
         <div style={fade(vis)}>
-          <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "clamp(5rem,12vw,11rem)", color: "var(--c-ink)", lineHeight: 1 }}>
+          <p style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(5rem,12vw,11rem)", color: "var(--c-ink)", lineHeight: 1 }}>
             {count}+
           </p>
           <p style={{ ...LBL, marginTop: "1rem" }}>Startup founders &amp; tech developers assisted</p>
@@ -406,13 +406,13 @@ function StartBusiness() {
               Start your business with me.
             </h2>
             <p style={{ fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.875rem", color: "rgba(255,255,255,0.65)", lineHeight: 1.85, maxWidth: "22rem", marginBottom: "2.5rem" }}>
-              From incorporation to fundraising readiness — full-spectrum startup advisory.
+              Full-spectrum startup advisory — incorporation through fundraising.
             </p>
             <div style={{ display: "flex", flexDirection: "column", marginBottom: "2.5rem" }}>
               {[
                 ["Incorporation & structure", "Entity type, shareholding, constitutional documents"],
                 ["Equity & founder agreements", "Cap tables, vesting, co-founder terms"],
-                ["Tax & compliance", "eTIMS, KRA, VAT, PAYE — from day one"],
+                ["Tax & compliance", "eTIMS, KRA, VAT, PAYE — day one"],
                 ["Fundraising readiness", "Term sheets, investor agreements, due diligence"],
                 ["Foreign branches & PBOs", "International orgs, foreign companies, PBO registration"],
               ].map(([title, body], i) => (
@@ -445,7 +445,7 @@ function StartBusiness() {
               Build a compliant tech product.
             </h2>
             <p style={{ fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.875rem", color: "rgba(255,255,255,0.65)", lineHeight: 1.85, maxWidth: "22rem", marginBottom: "2.5rem" }}>
-              AI engineering and software development with legal compliance built in from day one — not bolted on after.
+              Legal compliance built into AI engineering from day one — not bolted on after.
             </p>
             <div style={{ display: "flex", flexDirection: "column", marginBottom: "2.5rem" }}>
               {[

@@ -53,7 +53,7 @@ export function ContactBubble() {
       <div ref={panel} className={`cb ${open ? "on" : "off"}`}>
         <div style={{ padding: "1rem 1.2rem", borderBottom: "1px solid var(--c-border)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div>
-            <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "0.85rem", color: "var(--c-ink)" }}>Decra AI</p>
+            <p style={{ fontFamily: "var(--font-serif)", fontSize: "0.85rem", color: "var(--c-ink)" }}>Decra AI</p>
             <div style={{ display: "flex", alignItems: "center", gap: "0.3rem", marginTop: "2px" }}>
               <div style={{ width: "4px", height: "4px", borderRadius: "50%", background: "#4ade80" }} />
               <span style={{ fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "0.58rem", color: "var(--c-ink-muted)" }}>Online</span>
@@ -67,7 +67,7 @@ export function ContactBubble() {
         <div style={{ flex: 1, overflowY: "auto", padding: "1.1rem 1.2rem", display: "flex", flexDirection: "column", gap: "0.85rem" }}>
           {msgs.map((m, i) => (
             <div key={i}>
-              {m.role === "assistant" && <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "0.6rem", color: "var(--c-accent)", marginBottom: "0.2rem" }}>Decra AI</p>}
+              {m.role === "assistant" && <p style={{ fontFamily: "var(--font-serif)", fontSize: "0.6rem", color: "var(--c-accent)", marginBottom: "0.2rem" }}>Decra AI</p>}
               <p style={{ fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "0.82rem", lineHeight: 1.7, color: m.role === "user" ? "var(--c-ink)" : "var(--c-ink-mid)" }}>{m.text}</p>
             </div>
           ))}
