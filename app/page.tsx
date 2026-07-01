@@ -44,20 +44,20 @@ function Hero() {
   const [vis, setVis] = useState(false);
   useEffect(() => { const t = setTimeout(() => setVis(true), 60); return () => clearTimeout(t); }, []);
   return (
-    <section style={{ height: "100svh", position: "relative", overflow: "hidden", background: "#080808" }}>
+    <section style={{ height: "100svh", position: "relative", overflow: "hidden", background: "#0A0A0A" }}>
       <div style={{
         position: "absolute", inset: 0,
         opacity: vis ? 1 : 0,
         transition: "opacity 1.4s cubic-bezier(0.16,1,0.3,1)",
       }}>
-        <img src="/decra-hero.jpg" alt=""
-          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "72% 28%", display: "block" }} />
+        <img src="/decra-cover.jpg" alt=""
+          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 38%", display: "block" }} />
       </div>
       <div style={{
         position: "absolute", inset: 0,
         background: `
-          linear-gradient(to top, rgba(8,8,8,0.92) 0%, rgba(8,8,8,0.2) 35%, transparent 55%),
-          linear-gradient(to right, rgba(8,8,8,0.88) 0%, rgba(8,8,8,0.5) 38%, rgba(8,8,8,0.1) 62%, transparent 75%)
+          linear-gradient(to top, rgba(10,10,10,0.96) 0%, rgba(10,10,10,0.4) 32%, rgba(10,10,10,0.05) 55%, transparent 72%),
+          linear-gradient(to right, rgba(10,10,10,0.75) 0%, rgba(10,10,10,0.3) 40%, transparent 65%)
         `,
       }} />
       <div style={{
@@ -72,10 +72,18 @@ function Hero() {
           fontFamily: "var(--font-serif)", fontWeight: 400,
           fontSize: "clamp(2.5rem,5.5vw,5rem)",
           color: "#F0EEE9", lineHeight: 1.02, letterSpacing: "-0.01em",
-          marginBottom: "1.75rem",
+          marginBottom: "1rem",
         }}>
           Decra Kerubo.
         </h1>
+        <p style={{
+          fontFamily: "var(--font-sans)", fontWeight: 400,
+          fontSize: "clamp(0.8rem, 1.3vw, 0.95rem)",
+          color: "rgba(240,238,233,0.6)",
+          marginBottom: "2rem",
+        }}>
+          Lawyer &nbsp;·&nbsp; Computer Scientist &nbsp;·&nbsp; Nairobi
+        </p>
         <div style={{ display: "flex", alignItems: "center", gap: "1.75rem" }}>
           <a href="#services" style={{
             fontFamily: "var(--font-manjari)", fontWeight: 700,
@@ -87,17 +95,47 @@ function Hero() {
             Services
           </a>
           <span style={{ width: "1px", height: "10px", background: "rgba(240,238,233,0.16)", display: "block" }} />
-          <Link href="/about" style={{
+          <Link href="/#collaborate" style={{
             fontFamily: "var(--font-manjari)", fontWeight: 700,
             fontSize: "0.52rem", letterSpacing: "0.24em", textTransform: "uppercase",
             color: "rgba(196,160,106,0.8)", textDecoration: "none", transition: "color 0.25s",
           }}
             onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#C4A06A"}
             onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "rgba(196,160,106,0.8)"}>
-            About
+            Collaborate
           </Link>
         </div>
       </div>
+    </section>
+  );
+}
+
+/* ── Section 1.5: About (condensed) ── */
+function About() {
+  const { ref, vis } = useReveal();
+  return (
+    <section id="about" ref={ref as React.RefObject<HTMLElement>} style={SEC}>
+      <div style={{
+        maxWidth: "var(--max-w)", margin: "0 auto",
+        display: "grid", gridTemplateColumns: "0.9fr 1.1fr",
+        gap: "clamp(3rem,6vw,6rem)", alignItems: "center",
+      }} className="about-grid">
+        <div style={fade(vis)}>
+          <p style={{ ...LBL, marginBottom: "1.25rem" }}>About</p>
+          <h2 style={SERIF("clamp(1.9rem,3vw,2.6rem)")}>Two degrees.<br />One rare intersection.</h2>
+        </div>
+        <div style={fade(vis, 0.12)}>
+          <div style={{ display: "flex", gap: "0.75rem", marginBottom: "1.75rem", flexWrap: "wrap" }}>
+            {["LLB", "BSc — Computer Science"].map(t => (
+              <span key={t} style={{ ...LBL, color: "var(--c-accent)", border: "1px solid var(--c-border)", padding: "0.4rem 0.75rem" }}>{t}</span>
+            ))}
+          </div>
+          <blockquote style={{ borderLeft: "2px solid var(--c-accent)", paddingLeft: "1.5rem" }}>
+            <p style={SERIF("clamp(1.1rem,1.7vw,1.4rem)")}>"Legal clarity is a competitive advantage."</p>
+          </blockquote>
+        </div>
+      </div>
+      <style>{`@media(max-width:720px){.about-grid{grid-template-columns:1fr!important;gap:2.5rem!important}}`}</style>
     </section>
   );
 }
@@ -486,16 +524,317 @@ function StartBusiness() {
 }
 
 
+/* ── Section 7: Research ── */
+type PaperStatus = "current" | "complete";
+interface Paper {
+  slug: string;
+  title: string;
+  partner: string;
+  dates: string;
+  status: PaperStatus;
+}
+
+const PAPERS: Paper[] = [
+  {
+    slug: "democratization-decarbonization-ai",
+    title: "Democratization and Decarbonization of AI Solutions",
+    partner: "In association with the Visionaries Mercedes-Benz Program",
+    dates: "May 2024 — Present",
+    status: "current",
+  },
+  {
+    slug: "merger-regulation-kenya",
+    title: "Merger Regulation & Competition Law",
+    partner: "In association with the Kenya School of Law",
+    dates: "Sep — Dec 2025",
+    status: "complete",
+  },
+  {
+    slug: "ai-enabled-regulation",
+    title: "AI-Enabled Regulation & Digital Safety",
+    partner: "In association with the African Leadership University",
+    dates: "Aug 2023 — Apr 2024",
+    status: "complete",
+  },
+  {
+    slug: "cross-border-data-transfer",
+    title: "Cross-Border Data Transfer Laws",
+    partner: "In association with Africa Nazarene University",
+    dates: "Jan — Nov 2022",
+    status: "complete",
+  },
+  {
+    slug: "unbiased-hiring-algorithms",
+    title: "Unbiased Hiring Algorithms",
+    partner: "In association with the United Nations Academic Impact",
+    dates: "Aug — Dec 2021",
+    status: "complete",
+  },
+];
+
+function PaperViewer({ paper, onClose }: { paper: Paper; onClose: () => void }) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => { document.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
+  }, [onClose]);
+
+  return (
+    <div
+      role="dialog" aria-modal="true" aria-label={paper.title}
+      onClick={onClose}
+      style={{
+        position: "fixed", inset: 0, zIndex: 1000,
+        background: "rgba(10,10,10,0.82)", backdropFilter: "blur(6px)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        padding: "clamp(1rem,4vw,3.5rem)",
+      }}
+    >
+      <div onClick={e => e.stopPropagation()} style={{
+        width: "100%", maxWidth: "62rem", height: "100%", maxHeight: "92vh",
+        background: "#1A1916", borderRadius: "4px", overflow: "hidden",
+        display: "flex", flexDirection: "column",
+        boxShadow: "0 30px 80px rgba(0,0,0,0.5)",
+      }}>
+        <div style={{
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+          padding: "1rem 1.5rem", borderBottom: "1px solid rgba(240,237,232,0.1)", flexShrink: 0,
+        }}>
+          <div style={{ minWidth: 0 }}>
+            <p style={{ fontFamily: "var(--font-serif)", fontSize: "0.95rem", color: "#F0EDE8", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+              {paper.title}
+            </p>
+            <p style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.55rem", letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(240,237,232,0.45)", marginTop: "0.2rem" }}>
+              View only &nbsp;·&nbsp; {paper.dates}
+            </p>
+          </div>
+          <button onClick={onClose} aria-label="Close" style={{
+            background: "none", border: "none", cursor: "pointer",
+            color: "rgba(240,237,232,0.55)",
+            fontFamily: "var(--font-manjari)", fontWeight: 700,
+            fontSize: "0.6rem", letterSpacing: "0.16em", textTransform: "uppercase",
+            padding: "0.5rem 0.75rem", flexShrink: 0, transition: "color 0.2s",
+          }}
+            onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#F0EDE8"}
+            onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "rgba(240,237,232,0.55)"}>
+            Close ✕
+          </button>
+        </div>
+        <div style={{ flex: 1, background: "#0A0A0A" }}>
+          <iframe src={`/api/research/${paper.slug}#toolbar=0&navpanes=0`} title={paper.title}
+            style={{ width: "100%", height: "100%", border: "none" }} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ResearchSection() {
+  const { ref, vis } = useReveal();
+  const [active, setActive] = useState<Paper | null>(null);
+
+  return (
+    <section id="research" ref={ref as React.RefObject<HTMLElement>} style={SEC}>
+      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
+        <p style={{ ...LBL, marginBottom: "3rem", ...fade(vis) }}>Research</p>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "0" }} className="rsc-grid">
+          {PAPERS.map((paper, i) => (
+            <button
+              key={paper.slug}
+              onClick={() => setActive(paper)}
+              style={{
+                display: "block", width: "100%", textAlign: "left",
+                background: "none", border: "none", cursor: "pointer",
+                padding: "1.75rem 1.25rem",
+                borderTop: "1px solid var(--c-border)",
+                borderLeft: i > 0 ? "1px solid var(--c-border)" : "none",
+                opacity: vis ? 1 : 0,
+                transition: `opacity 0.6s ease ${0.06 * i}s`,
+              }}
+            >
+              <span style={{ fontFamily: "var(--font-sans)", fontWeight: 600, fontSize: "0.65rem", color: "var(--c-ink-muted)", display: "block", marginBottom: "1rem" }}>{String(i + 1).padStart(2, "0")}</span>
+              {paper.status === "current" && (
+                <span style={{
+                  display: "inline-block",
+                  fontFamily: "var(--font-manjari)", fontWeight: 700,
+                  fontSize: "0.42rem", letterSpacing: "0.16em", textTransform: "uppercase",
+                  color: "var(--c-accent)",
+                  border: "1px solid var(--c-accent)",
+                  padding: "0.12rem 0.35rem", marginBottom: "0.75rem",
+                }}>Current</span>
+              )}
+              <h3 style={{
+                fontFamily: "var(--font-serif)", fontWeight: 400,
+                fontSize: "0.85rem", color: "var(--c-ink)", lineHeight: 1.3,
+                marginBottom: "0.6rem",
+              }}>{paper.title}</h3>
+              <p style={{
+                fontFamily: "var(--font-sans)", fontWeight: 400,
+                fontSize: "0.66rem", color: "var(--c-ink-muted)", lineHeight: 1.5,
+              }}>{paper.partner}</p>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {active && <PaperViewer paper={active} onClose={() => setActive(null)} />}
+      <style>{`@media(max-width:900px){.rsc-grid{grid-template-columns:repeat(2,1fr)!important}.rsc-grid>button:nth-child(odd){border-left:none!important}.rsc-grid>button:nth-child(n+3){border-top:1px solid var(--c-border)!important}}@media(max-width:560px){.rsc-grid{grid-template-columns:1fr!important}.rsc-grid>button{border-left:none!important;border-top:1px solid var(--c-border)!important}}`}</style>
+    </section>
+  );
+}
+
+/* ── Section 8: Accreditations ── */
+const ACCREDITATIONS = [
+  "World Bank",
+  "African Leadership University",
+  "Africa Nazarene University",
+  "Bevisioneers — Mercedes-Benz Fund",
+  "United Nations Academic Impact",
+  "UNESCO",
+  "Saïd Business School, Oxford",
+];
+
+function Accreditations() {
+  const { ref, vis } = useReveal();
+  return (
+    <section ref={ref as React.RefObject<HTMLElement>} style={SEC}>
+      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
+        <p style={{ ...LBL, marginBottom: "2rem", ...fade(vis) }}>Accreditations &amp; Training</p>
+        <div style={{
+          display: "flex", flexWrap: "wrap",
+          alignItems: "baseline", rowGap: "1.1rem", columnGap: "clamp(2rem,4vw,3.5rem)",
+        }}>
+          {ACCREDITATIONS.map((name, i) => (
+            <span key={name} style={{
+              fontFamily: "var(--font-serif)", fontWeight: 400,
+              fontSize: "clamp(0.95rem,1.6vw,1.2rem)",
+              color: "var(--c-ink-mid)", lineHeight: 1.3,
+              opacity: vis ? 1 : 0,
+              transform: vis ? "none" : "translateY(10px)",
+              transition: `opacity 0.6s ease ${0.05 + i * 0.06}s, transform 0.6s ease ${0.05 + i * 0.06}s`,
+            }}>
+              {name}
+            </span>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── Section 9: Editorial break ── */
+function EditorialBreak() {
+  const { ref, vis } = useReveal();
+  return (
+    <section ref={ref as React.RefObject<HTMLElement>} style={{
+      height: "clamp(280px, 40vh, 480px)",
+      position: "relative", overflow: "hidden", background: "#0A0A0A",
+    }}>
+      <img src="/decra-texture.jpg" alt="" style={{
+        width: "100%", height: "100%",
+        objectFit: "cover", objectPosition: "center 40%",
+        display: "block",
+        filter: "saturate(0.75)",
+        opacity: vis ? 0.85 : 0,
+        transform: vis ? "scale(1)" : "scale(1.04)",
+        transition: "opacity 1.4s cubic-bezier(0.16,1,0.3,1), transform 1.6s cubic-bezier(0.16,1,0.3,1)",
+      }} />
+      <div style={{
+        position: "absolute", inset: 0,
+        background: "linear-gradient(to bottom, rgba(10,10,10,0.15) 0%, transparent 25%, transparent 75%, rgba(10,10,10,0.25) 100%)",
+        pointerEvents: "none",
+      }} />
+    </section>
+  );
+}
+
+/* ── Section 10: Social ── */
+function Social() {
+  const { ref, vis } = useReveal();
+
+  const socials = [
+    {
+      label: "Instagram",
+      url: "https://instagram.com/decrakerubo",
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+        </svg>
+      ),
+    },
+    {
+      label: "LinkedIn",
+      url: "https://linkedin.com/in/decrakerubo",
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+          <rect x="2" y="9" width="4" height="12"/>
+          <circle cx="4" cy="4" r="2"/>
+        </svg>
+      ),
+    },
+    {
+      label: "Spotify",
+      url: "https://open.spotify.com",
+      icon: (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+        </svg>
+      ),
+    },
+  ];
+
+  return (
+    <section ref={ref as React.RefObject<HTMLElement>} style={SEC}>
+      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
+        <div style={{
+          display: "flex", alignItems: "center",
+          justifyContent: "center", gap: "2rem", flexWrap: "wrap",
+          opacity: vis ? 1 : 0,
+          transform: vis ? "none" : "translateY(14px)",
+          transition: "opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1)",
+        }}>
+          {socials.map(({ label, url, icon }, i) => (
+            <a key={label} href={url} target="_blank" rel="noopener noreferrer"
+              aria-label={label}
+              style={{
+                color: "var(--c-ink-muted)",
+                textDecoration: "none",
+                lineHeight: 0, display: "block",
+                opacity: vis ? 1 : 0,
+                transition: `opacity 0.5s ease ${0.1 + i * 0.08}s, color 0.2s, transform 0.2s`,
+              } as React.CSSProperties}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"; (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-ink-muted)"; (e.currentTarget as HTMLElement).style.transform = "none"; }}>
+              {icon}
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+
 /* ── Page ── */
 export default function Home() {
   return (
     <>
       <Hero />
+      <About />
       <Services />
       <The1000 />
       <WorkWithDecra />
       <Impact />
       <StartBusiness />
+      <ResearchSection />
+      <Accreditations />
+      <EditorialBreak />
+      <Social />
     </>
   );
 }
