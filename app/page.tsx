@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, X } from "lucide-react";
 
 /* ── helpers ── */
 function useReveal() {
@@ -512,6 +512,89 @@ function StartBusiness() {
   );
 }
 
+/* ── CTA: opens Start Your Business / Entrora section in a modal ── */
+function ComplementaryCTA({ onOpen }: { onOpen: () => void }) {
+  const { ref, vis } = useReveal();
+  const [hover, setHover] = useState(false);
+  return (
+    <section ref={ref as React.RefObject<HTMLElement>} style={{ ...SEC, textAlign: "center" }}>
+      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto", ...fade(vis) }}>
+        <button
+          onClick={onOpen}
+          onMouseEnter={() => setHover(true)}
+          onMouseLeave={() => setHover(false)}
+          style={{
+            display: "inline-flex", alignItems: "center", gap: "0.6rem",
+            fontFamily: "var(--font-manjari)", fontWeight: 700,
+            fontSize: "0.62rem", letterSpacing: "0.2em", textTransform: "uppercase",
+            color: "var(--c-ink)", background: "transparent",
+            border: `1px solid ${hover ? "var(--c-accent)" : "var(--c-border)"}`,
+            padding: "1rem 2.25rem", cursor: "pointer",
+            transition: "border-color 0.25s ease",
+          }}
+        >
+          Explore Complementary Services <ArrowRight size={12} strokeWidth={1.5} />
+        </button>
+      </div>
+    </section>
+  );
+}
+
+function StartBusinessModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [open, onClose]);
+
+  if (!open) return null;
+
+  return (
+    <div
+      onClick={onClose}
+      style={{
+        position: "fixed", inset: 0, zIndex: 200,
+        background: "rgba(0,0,0,0.72)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        padding: "clamp(1rem,3vw,3rem)",
+        animation: "sbm-fade 0.25s ease",
+      }}
+    >
+      <div
+        onClick={e => e.stopPropagation()}
+        style={{
+          position: "relative", width: "100%", maxWidth: "var(--max-w)",
+          maxHeight: "88vh", overflowY: "auto",
+          background: "#0D0D0D",
+          boxShadow: "0 30px 80px rgba(0,0,0,0.5)",
+        }}
+      >
+        <button
+          onClick={onClose}
+          aria-label="Close"
+          style={{
+            position: "absolute", top: "1rem", right: "1rem",
+            width: "2.25rem", height: "2.25rem",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)",
+            color: "#fff", cursor: "pointer", zIndex: 5,
+          }}
+        >
+          <X size={16} strokeWidth={1.5} />
+        </button>
+        <StartBusiness />
+      </div>
+      <style>{`@keyframes sbm-fade{from{opacity:0}to{opacity:1}}`}</style>
+    </div>
+  );
+}
+
 
 /* ── Section 7: Research ── */
 type PaperStatus = "current" | "complete";
@@ -675,7 +758,7 @@ function ResearchSection() {
 }
 
 /* ── Section 8: Education & Training ── */
-type Cred = { key: string; src: string; name: string; detail: string; main?: boolean };
+type Cred = { key: string; src: string; name: string; detail: string; tier: 1 | 2 | 3 };
 
 const CREDENTIALS: Cred[] = [
   {
@@ -683,56 +766,63 @@ const CREDENTIALS: Cred[] = [
     src: "/logos/logo-alu.png",
     name: "African Leadership University",
     detail: "BSc Computer Science (AI)",
-    main: true,
+    tier: 1,
   },
   {
     key: "nazarene",
     src: "/logos/logo-nazarene.png",
     name: "Africa Nazarene University",
     detail: "Bachelor of Laws (LLB) / Juris Doctor",
-    main: true,
+    tier: 1,
   },
   {
     key: "ksl",
     src: "/logos/logo-ksl.png",
     name: "Kenya School of Law",
     detail: "Attorney Licensing Program",
+    tier: 2,
   },
   {
     key: "oxford",
     src: "/logos/logo-oxford.png",
     name: "Saïd Business School, University of Oxford",
     detail: "AI, Justice, and the Rule of Law",
+    tier: 2,
   },
   {
     key: "cmu",
     src: "/logos/logo-cmu.png",
     name: "Carnegie Mellon University",
     detail: "Advanced Tech, IoT &amp; Robotics",
+    tier: 2,
   },
   {
     key: "cisco",
     src: "/logos/logo-cisco.png",
     name: "Cisco",
     detail: "Ethical Hacker",
+    tier: 3,
   },
   {
     key: "hkust",
     src: "/logos/logo-hkust.png",
     name: "The Hong Kong University of Science and Technology",
     detail: "Information Systems Auditing, Controls &amp; Assurance",
+    tier: 3,
   },
   {
     key: "qualys",
     src: "/logos/logo-qualys.png",
     name: "Qualys",
     detail: "Vulnerability Management Foundations",
+    tier: 3,
   },
 ];
 
-function CredCard({ c, i, vis, big }: { c: Cred; i: number; vis: boolean; big?: boolean }) {
+function CredCard({ c, i, vis, size = "sm" }: { c: Cred; i: number; vis: boolean; size?: "lg" | "md" | "sm" }) {
   const [hover, setHover] = useState(false);
-  const logoHeight = big ? "clamp(64px,8vw,88px)" : "clamp(44px,5vw,56px)";
+  const logoHeight = size === "lg" ? "clamp(64px,8vw,88px)" : size === "md" ? "clamp(54px,6.5vw,72px)" : "clamp(44px,5vw,56px)";
+  const nameSize = size === "lg" ? "clamp(1rem,1.4vw,1.15rem)" : size === "md" ? "clamp(0.92rem,1.25vw,1.05rem)" : "clamp(0.85rem,1.15vw,0.95rem)";
   return (
     <div
       onMouseEnter={() => setHover(true)}
@@ -744,7 +834,7 @@ function CredCard({ c, i, vis, big }: { c: Cred; i: number; vis: boolean; big?: 
       }}>
       <div style={{
         height: logoHeight,
-        display: "flex", alignItems: "flex-end",
+        display: "flex", alignItems: "center",
         marginBottom: "1rem",
         position: "relative",
       }}>
@@ -755,16 +845,17 @@ function CredCard({ c, i, vis, big }: { c: Cred; i: number; vis: boolean; big?: 
             maxHeight: "100%", maxWidth: "100%",
             width: "auto", height: "auto",
             objectFit: "contain",
+            borderRadius: "3px",
             filter: hover
               ? "saturate(1) opacity(1)"
-              : "saturate(0.35) opacity(0.8)",
+              : "saturate(0.7) contrast(0.96) opacity(0.9)",
             transition: "filter 0.4s cubic-bezier(0.16,1,0.3,1)",
           }}
         />
       </div>
       <p style={{
         fontFamily: "var(--font-serif)", fontWeight: 400,
-        fontSize: big ? "clamp(1rem,1.4vw,1.15rem)" : "clamp(0.85rem,1.15vw,0.95rem)",
+        fontSize: nameSize,
         color: "var(--c-ink)", lineHeight: 1.3, marginBottom: "0.3rem",
       }}>{c.name}</p>
       <p style={{
@@ -778,8 +869,9 @@ function CredCard({ c, i, vis, big }: { c: Cred; i: number; vis: boolean; big?: 
 
 function Accreditations() {
   const { ref, vis } = useReveal();
-  const mainCreds = CREDENTIALS.filter(c => c.main);
-  const restCreds = CREDENTIALS.filter(c => !c.main);
+  const tier1 = CREDENTIALS.filter(c => c.tier === 1);
+  const tier2 = CREDENTIALS.filter(c => c.tier === 2);
+  const tier3 = CREDENTIALS.filter(c => c.tier === 3);
   return (
     <section ref={ref as React.RefObject<HTMLElement>} style={SEC}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
@@ -792,20 +884,30 @@ function Accreditations() {
           paddingBottom: "clamp(2.25rem,4vw,3.25rem)",
           borderBottom: "1px solid var(--c-border)",
         }} className="cred-grid-main">
-          {mainCreds.map((c, i) => <CredCard key={c.key} c={c} i={i} vis={vis} big />)}
+          {tier1.map((c, i) => <CredCard key={c.key} c={c} i={i} vis={vis} size="lg" />)}
         </div>
 
         <div style={{
-          display: "grid", gridTemplateColumns: "repeat(4, 1fr)",
+          display: "grid", gridTemplateColumns: "repeat(3, 1fr)",
+          gap: "clamp(1.75rem,3vw,2.75rem)",
+          marginBottom: "clamp(2.25rem,4vw,3.25rem)",
+          paddingBottom: "clamp(2.25rem,4vw,3.25rem)",
+          borderBottom: "1px solid var(--c-border)",
+        }} className="cred-grid-mid">
+          {tier2.map((c, i) => <CredCard key={c.key} c={c} i={i} vis={vis} size="md" />)}
+        </div>
+
+        <div style={{
+          display: "grid", gridTemplateColumns: "repeat(3, 1fr)",
           gap: "clamp(1.75rem,3vw,2.75rem)",
         }} className="cred-grid">
-          {restCreds.map((c, i) => <CredCard key={c.key} c={c} i={i} vis={vis} />)}
+          {tier3.map((c, i) => <CredCard key={c.key} c={c} i={i} vis={vis} size="sm" />)}
         </div>
       </div>
       <style>{`
-        @media(max-width:820px){.cred-grid{grid-template-columns:repeat(2,1fr)!important}}
+        @media(max-width:820px){.cred-grid{grid-template-columns:repeat(2,1fr)!important}.cred-grid-mid{grid-template-columns:repeat(2,1fr)!important}}
         @media(max-width:560px){.cred-grid-main{grid-template-columns:1fr!important}}
-        @media(max-width:480px){.cred-grid{grid-template-columns:1fr!important}}
+        @media(max-width:480px){.cred-grid{grid-template-columns:1fr!important}.cred-grid-mid{grid-template-columns:1fr!important}}
       `}</style>
     </section>
   );
@@ -897,18 +999,20 @@ function EditorialBreak() {
 
 /* ── Page ── */
 export default function Home() {
+  const [servicesModalOpen, setServicesModalOpen] = useState(false);
   return (
     <>
       <Hero />
       <Services />
-      <The1000 />
+      <ComplementaryCTA onOpen={() => setServicesModalOpen(true)} />
       <About />
+      <ResearchSection />
       <WorkWithDecra />
       <Impact />
-      <StartBusiness />
-      <ResearchSection />
+      <The1000 />
       <Accreditations />
       <EditorialBreak />
+      <StartBusinessModal open={servicesModalOpen} onClose={() => setServicesModalOpen(false)} />
     </>
   );
 }
