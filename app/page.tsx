@@ -126,13 +126,13 @@ function About() {
         </div>
         <div style={fade(vis, 0.12)}>
           <div style={{ display: "flex", gap: "0.75rem", marginBottom: "1.75rem", flexWrap: "wrap" }}>
-            {["LLB", "BSc — Computer Science"].map(t => (
+            {["BSc Computer Science (AI)", "Bachelor of Laws (LLB)"].map(t => (
               <span key={t} style={{ ...LBL, color: "var(--c-accent)", border: "1px solid var(--c-border)", padding: "0.4rem 0.75rem" }}>{t}</span>
             ))}
           </div>
-          <blockquote style={{ borderLeft: "2px solid var(--c-accent)", paddingLeft: "1.5rem" }}>
-            <p style={SERIF("clamp(1.1rem,1.7vw,1.4rem)")}>"Legal clarity is a competitive advantage."</p>
-          </blockquote>
+          <p style={{ borderLeft: "2px solid var(--c-accent)", paddingLeft: "1.5rem", ...SERIF("clamp(1.1rem,1.7vw,1.4rem)") }}>
+            A dual degree spanning law and computer science — built to sit at the exact point where technology meets regulation.
+          </p>
         </div>
       </div>
       <style>{`@media(max-width:720px){.about-grid{grid-template-columns:1fr!important;gap:2.5rem!important}}`}</style>
@@ -686,35 +686,38 @@ function ResearchSection() {
 }
 
 /* ── Section 8: Education & Training ── */
-type Cred = { key: string; src: string; name: string; detail: string; priority?: boolean };
+type Cred = { key: string; src: string; name: string; detail: string };
 
 const CREDENTIALS: Cred[] = [
-  {
-    key: "oxford",
-    src: "/logos/logo-oxford.png",
-    name: "Saïd Business School, University of Oxford",
-    detail: "AI, Justice, and the Rule of Law",
-    priority: true,
-  },
-  {
-    key: "cmu",
-    src: "/logos/logo-cmu.png",
-    name: "Carnegie Mellon University",
-    detail: "Advanced Tech, IoT &amp; Robotics",
-    priority: true,
-  },
   {
     key: "alu",
     src: "/logos/logo-alu.png",
     name: "African Leadership University",
     detail: "AI-Enabled Regulation &amp; Digital Safety",
-    priority: true,
   },
   {
     key: "nazarene",
     src: "/logos/logo-nazarene.png",
     name: "Africa Nazarene University",
     detail: "Cross-Border Data Transfer Laws",
+  },
+  {
+    key: "ksl",
+    src: "/logos/logo-ksl.png",
+    name: "Kenya School of Law",
+    detail: "Attorney Licensing Program",
+  },
+  {
+    key: "oxford",
+    src: "/logos/logo-oxford.png",
+    name: "Saïd Business School, University of Oxford",
+    detail: "AI, Justice, and the Rule of Law",
+  },
+  {
+    key: "cmu",
+    src: "/logos/logo-cmu.png",
+    name: "Carnegie Mellon University",
+    detail: "Advanced Tech, IoT &amp; Robotics",
   },
   {
     key: "cisco",
@@ -736,8 +739,7 @@ const CREDENTIALS: Cred[] = [
   },
 ];
 
-function CredCard({ c, i, vis, size }: { c: Cred; i: number; vis: boolean; size: "lg" | "sm" }) {
-  const h = size === "lg" ? "clamp(64px,7vw,84px)" : "clamp(44px,5vw,58px)";
+function CredCard({ c, i, vis }: { c: Cred; i: number; vis: boolean }) {
   return (
     <div style={{
       opacity: vis ? 1 : 0,
@@ -745,9 +747,9 @@ function CredCard({ c, i, vis, size }: { c: Cred; i: number; vis: boolean; size:
       transition: `opacity 0.6s ease ${0.05 + i * 0.06}s, transform 0.6s ease ${0.05 + i * 0.06}s`,
     }}>
       <div style={{
-        height: h,
+        height: "clamp(52px,6vw,68px)",
         display: "flex", alignItems: "center",
-        marginBottom: size === "lg" ? "1.1rem" : "0.85rem",
+        marginBottom: "1rem",
       }}>
         <img
           src={c.src}
@@ -757,22 +759,17 @@ function CredCard({ c, i, vis, size }: { c: Cred; i: number; vis: boolean; size:
             width: "auto", height: "auto",
             objectFit: "contain",
             borderRadius: "3px",
-            filter: "grayscale(1) contrast(1.02)",
-            opacity: 0.82,
-            transition: "filter 0.35s ease, opacity 0.35s ease",
           }}
-          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.filter = "grayscale(0)"; (e.currentTarget as HTMLElement).style.opacity = "1"; }}
-          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.filter = "grayscale(1) contrast(1.02)"; (e.currentTarget as HTMLElement).style.opacity = "0.82"; }}
         />
       </div>
       <p style={{
         fontFamily: "var(--font-serif)", fontWeight: 400,
-        fontSize: size === "lg" ? "clamp(0.92rem,1.3vw,1.05rem)" : "clamp(0.82rem,1.1vw,0.92rem)",
+        fontSize: "clamp(0.85rem,1.15vw,0.95rem)",
         color: "var(--c-ink)", lineHeight: 1.3, marginBottom: "0.3rem",
       }}>{c.name}</p>
       <p style={{
         fontFamily: "var(--font-sans)", fontWeight: 400,
-        fontSize: size === "lg" ? "0.76rem" : "0.7rem",
+        fontSize: "0.72rem",
         color: "var(--c-ink-muted)", lineHeight: 1.5,
       }} dangerouslySetInnerHTML={{ __html: c.detail }} />
     </div>
@@ -781,31 +778,21 @@ function CredCard({ c, i, vis, size }: { c: Cred; i: number; vis: boolean; size:
 
 function Accreditations() {
   const { ref, vis } = useReveal();
-  const primary = CREDENTIALS.filter(c => c.priority);
-  const secondary = CREDENTIALS.filter(c => !c.priority);
   return (
     <section ref={ref as React.RefObject<HTMLElement>} style={SEC}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
         <p style={{ ...LBL, marginBottom: "2.5rem", ...fade(vis) }}>Education &amp; Training</p>
 
         <div style={{
-          display: "grid", gridTemplateColumns: "repeat(3, 1fr)",
-          gap: "clamp(2rem,4vw,3.5rem)", marginBottom: "clamp(2.5rem,4vw,3.5rem)",
-        }} className="cred-grid-lg">
-          {primary.map((c, i) => <CredCard key={c.key} c={c} i={i} vis={vis} size="lg" />)}
-        </div>
-
-        <div style={{
           display: "grid", gridTemplateColumns: "repeat(4, 1fr)",
-          gap: "clamp(1.75rem,3vw,2.5rem)",
-          borderTop: "1px solid var(--c-border)", paddingTop: "clamp(2rem,3.5vw,2.75rem)",
-        }} className="cred-grid-sm">
-          {secondary.map((c, i) => <CredCard key={c.key} c={c} i={primary.length + i} vis={vis} size="sm" />)}
+          gap: "clamp(1.75rem,3vw,2.75rem)",
+        }} className="cred-grid">
+          {CREDENTIALS.map((c, i) => <CredCard key={c.key} c={c} i={i} vis={vis} />)}
         </div>
       </div>
       <style>{`
-        @media(max-width:820px){.cred-grid-lg{grid-template-columns:repeat(2,1fr)!important}.cred-grid-sm{grid-template-columns:repeat(2,1fr)!important}}
-        @media(max-width:480px){.cred-grid-lg{grid-template-columns:1fr!important}.cred-grid-sm{grid-template-columns:1fr!important}}
+        @media(max-width:820px){.cred-grid{grid-template-columns:repeat(2,1fr)!important}}
+        @media(max-width:480px){.cred-grid{grid-template-columns:1fr!important}}
       `}</style>
     </section>
   );
