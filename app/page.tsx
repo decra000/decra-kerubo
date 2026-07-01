@@ -127,7 +127,7 @@ function About() {
           lineHeight: 1.6,
           ...fade(vis, 0.14),
         }}>
-          I am a technology lawyer and product counsel with a dual degree — a BSc in Computer Science (AI) and a Bachelor of Laws (LLB) / Juris Doctor. I also help startups, especially techpreneurs, build safely.
+          I am a technology lawyer and product counsel with a dual degree in Computer Science (AI) and Law. I help founders, startups, and technology companies navigate regulation while building products that scale safely.
         </p>
       </div>
     </section>
@@ -546,171 +546,73 @@ function The1000() {
 }
 
 /* ── Section 6: Start Your Business / Build Tech ── */
-function StartBusiness({ compact = false }: { compact?: boolean }) {
+/* ── CTA: lightweight inline teaser for Start Your Business / Entrora, linking to their full pages ── */
+function ComplementaryCTA() {
   const { ref, vis } = useReveal();
-  const pad = compact ? "2.25rem" : "3.5rem";
-  return (
-    <section ref={ref as React.RefObject<HTMLElement>} style={{ borderTop: "none" }}>
-      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-        <div style={{ display: "grid", gridTemplateColumns: compact ? "1fr" : "1fr 1fr", gap: "0" }} className="sb-g">
-          <div style={{ padding: pad, background: "#0D0D0D", ...fade(vis) }}>
-            <p style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.6rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(255,255,255,0.5)", marginBottom: "1.25rem" }}>Advisory</p>
-            <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(1.65rem,2.6vw,2.1rem)", color: "#FFFFFF", lineHeight: 1.15, letterSpacing: "0", marginBottom: "1.25rem" }}>
-              Start your business with me.
-            </h2>
-            <p style={{ fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.875rem", color: "rgba(255,255,255,0.65)", lineHeight: 1.85, maxWidth: "22rem", marginBottom: "2.5rem" }}>
-              Full-spectrum startup advisory — incorporation through fundraising.
-            </p>
-            <div style={{ display: "flex", flexDirection: "column", marginBottom: "2.5rem" }}>
-              {[
-                ["Incorporation & structure", "Entity type, shareholding, constitutional documents"],
-                ["Equity & founder agreements", "Cap tables, vesting, co-founder terms"],
-                ["Tax & compliance", "eTIMS, KRA, VAT, PAYE — day one"],
-                ["Fundraising readiness", "Term sheets, investor agreements, due diligence"],
-                ["Foreign branches & PBOs", "International orgs, foreign companies, PBO registration"],
-              ].map(([title, body], i) => (
-                <div key={title} style={{
-                  padding: "0.9rem 0", borderBottom: "1px solid rgba(255,255,255,0.1)",
-                  opacity: vis ? 1 : 0,
-                  transition: `opacity 0.55s ease ${0.1 + i * 0.07}s`,
-                }}>
-                  <p style={{ fontFamily: "var(--font-sans)", fontWeight: 600, fontSize: "0.85rem", color: "rgba(255,255,255,0.88)", marginBottom: "0.2rem" }}>{title}</p>
-                  <p style={{ fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.78rem", color: "rgba(255,255,255,0.45)", lineHeight: 1.6 }}>{body}</p>
-                </div>
-              ))}
-            </div>
-            <Link href="/start" style={lineBtn({ light: true })}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"; (e.currentTarget as HTMLElement).style.color = "var(--c-accent)"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.3)"; (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"; }}>
-              Start here <ArrowRight size={11} strokeWidth={1.5} />
-            </Link>
-          </div>
+  const [open, setOpen] = useState(false);
 
-          <div style={{ padding: pad, background: "#0F3320", ...fade(vis, 0.12) }}>
-            <p style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.6rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(255,255,255,0.55)", marginBottom: "1.25rem" }}>In partnership with Entrora Systems</p>
-            <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(1.65rem,2.6vw,2.1rem)", color: "#FFFFFF", lineHeight: 1.15, letterSpacing: "0", marginBottom: "1.25rem" }}>
-              Build a compliant tech product.
-            </h2>
-            <p style={{ fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.875rem", color: "rgba(255,255,255,0.65)", lineHeight: 1.85, maxWidth: "22rem", marginBottom: "2.5rem" }}>
-              Legal compliance built into AI engineering from day one — not bolted on after.
-            </p>
-            <div style={{ display: "flex", flexDirection: "column", marginBottom: "2.5rem" }}>
-              {[
-                ["AI Document Systems", "Classification, extraction, and review at scale"],
-                ["Legal Tech Development", "Software built for legal workflows"],
-                ["Compliant AI Products", "Data governance and privacy from day one"],
-                ["AI Adoption Advisory", "Scoping and implementation for any budget"],
-                ["Regulatory sandbox", "Navigation for AI products in East Africa"],
-              ].map(([title, body], i) => (
-                <div key={title} style={{
-                  padding: "0.9rem 0", borderBottom: "1px solid rgba(255,255,255,0.1)",
-                  opacity: vis ? 1 : 0,
-                  transition: `opacity 0.55s ease ${0.15 + i * 0.07}s`,
-                }}>
-                  <p style={{ fontFamily: "var(--font-sans)", fontWeight: 600, fontSize: "0.85rem", color: "rgba(255,255,255,0.88)", marginBottom: "0.2rem" }}>{title}</p>
-                  <p style={{ fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.78rem", color: "rgba(255,255,255,0.45)", lineHeight: 1.6 }}>{body}</p>
-                </div>
-              ))}
-            </div>
-            <Link href="/entrora" style={{
-              display: "inline-flex", alignItems: "center", gap: "0.5rem",
-              fontFamily: "var(--font-manjari)", fontWeight: 700,
-              fontSize: "0.6rem", letterSpacing: "0.2em", textTransform: "uppercase",
-              color: "rgba(255,255,255,0.75)", textDecoration: "none",
-              borderBottom: "1px solid rgba(255,255,255,0.3)", paddingBottom: "2px",
-              transition: "color 0.2s, border-color 0.2s",
-            }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#FFFFFF"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.8)"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.75)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.3)"; }}>
-              Learn about Entrora <ArrowRight size={11} strokeWidth={1.5} />
-            </Link>
-          </div>
-        </div>
-      </div>
-      <style>{`@media(max-width:700px){.sb-g{grid-template-columns:1fr!important;}.sb-g>div{padding:2.5rem 0!important}}`}</style>
-    </section>
-  );
-}
+  const cards = [
+    {
+      href: "/start", bg: "#0D0D0D",
+      eyebrow: "Advisory",
+      title: "Start your business with me.",
+      body: "Full-spectrum startup advisory — incorporation through fundraising.",
+      cta: "Start here",
+    },
+    {
+      href: "/entrora", bg: "#0F3320",
+      eyebrow: "In partnership with Entrora Systems",
+      title: "Build a compliant tech product.",
+      body: "Legal compliance built into AI engineering from day one — not bolted on after.",
+      cta: "Learn about Entrora",
+    },
+  ];
 
-/* ── CTA: opens Start Your Business / Entrora section in a modal ── */
-function ComplementaryCTA({ onOpen }: { onOpen: () => void }) {
-  const { ref, vis } = useReveal();
-  const [hover, setHover] = useState(false);
   return (
     <section ref={ref as React.RefObject<HTMLElement>} style={{ ...SEC, textAlign: "center" }}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto", ...fade(vis) }}>
         <button
-          onClick={onOpen}
-          onMouseEnter={() => setHover(true)}
-          onMouseLeave={() => setHover(false)}
-          style={{
-            ...lineBtn(),
-            borderColor: hover ? "var(--c-accent)" : "var(--c-border)",
-            padding: "1rem 2.25rem",
-          }}
+          onClick={() => setOpen(o => !o)}
+          style={{ ...lineBtn(), padding: "1rem 2.25rem" }}
+          onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"}
+          onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--c-border)"}
         >
-          Explore Complementary Services <ArrowRight size={12} strokeWidth={1.5} />
+          Explore Complementary Services <ArrowRight size={12} strokeWidth={1.5} style={{ transform: open ? "rotate(90deg)" : "none", transition: "transform 0.25s ease" }} />
         </button>
+
+        <div style={{
+          maxHeight: open ? "40rem" : "0px",
+          opacity: open ? 1 : 0,
+          overflow: "hidden",
+          transition: "max-height 0.5s cubic-bezier(0.16,1,0.3,1), opacity 0.4s ease",
+          marginTop: open ? "2.5rem" : "0px",
+        }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "var(--c-border)" }} className="comp-teaser">
+            {cards.map(c => (
+              <Link key={c.href} href={c.href} style={{
+                display: "block", textAlign: "left", textDecoration: "none",
+                padding: "2.5rem", background: c.bg,
+              }}>
+                <p style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.58rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.5)", marginBottom: "1rem" }}>{c.eyebrow}</p>
+                <h3 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(1.3rem,2vw,1.6rem)", color: "#FFFFFF", lineHeight: 1.2, marginBottom: "0.9rem" }}>{c.title}</h3>
+                <p style={{ fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.82rem", color: "rgba(255,255,255,0.65)", lineHeight: 1.7, marginBottom: "1.5rem" }}>{c.body}</p>
+                <span style={{
+                  display: "inline-flex", alignItems: "center", gap: "0.5rem",
+                  fontFamily: "var(--font-manjari)", fontWeight: 700,
+                  fontSize: "0.58rem", letterSpacing: "0.2em", textTransform: "uppercase",
+                  color: "rgba(255,255,255,0.85)",
+                }}>
+                  {c.cta} <ArrowRight size={11} strokeWidth={1.5} />
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
       </div>
+      <style>{`@media(max-width:700px){.comp-teaser{grid-template-columns:1fr!important}}`}</style>
     </section>
   );
 }
-
-function StartBusinessModal({ open, onClose }: { open: boolean; onClose: () => void }) {
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
-    document.addEventListener("keydown", onKey);
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = prevOverflow;
-    };
-  }, [open, onClose]);
-
-  if (!open) return null;
-
-  return (
-    <div
-      onClick={onClose}
-      style={{
-        position: "fixed", inset: 0, zIndex: 200,
-        background: "rgba(0,0,0,0.72)",
-        display: "flex", alignItems: "center", justifyContent: "center",
-        padding: "clamp(1rem,3vw,3rem)",
-        animation: "sbm-fade 0.25s ease",
-      }}
-    >
-      <div
-        onClick={e => e.stopPropagation()}
-        style={{
-          position: "relative", width: "100%", maxWidth: "48rem",
-          maxHeight: "min(42rem, 80vh)", overflowY: "auto",
-          background: "#0D0D0D",
-          boxShadow: "0 30px 80px rgba(0,0,0,0.5)",
-        }}
-      >
-        <button
-          onClick={onClose}
-          aria-label="Close"
-          style={{
-            position: "absolute", top: "1rem", right: "1rem",
-            width: "2.25rem", height: "2.25rem",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)",
-            color: "#fff", cursor: "pointer", zIndex: 5,
-          }}
-        >
-          <X size={16} strokeWidth={1.5} />
-        </button>
-        <StartBusiness compact />
-      </div>
-      <style>{`@keyframes sbm-fade{from{opacity:0}to{opacity:1}}`}</style>
-    </div>
-  );
-}
-
 
 /* ── Section 7: Research ── */
 type PaperStatus = "current" | "complete";
@@ -976,8 +878,8 @@ function CredCard({ c, i, vis, size = "sm" }: { c: Cred; i: number; vis: boolean
 function Accreditations() {
   const { ref, vis } = useReveal();
   // Two rows of four — the two degree-granting institutions lead each row, rest follow by tier.
-  const row1 = [CREDENTIALS[0], CREDENTIALS[2], CREDENTIALS[3], CREDENTIALS[4]]; // ALU, KSL, Oxford, CMU
-  const row2 = [CREDENTIALS[1], CREDENTIALS[5], CREDENTIALS[6], CREDENTIALS[7]]; // Nazarene, Cisco, HKUST, Qualys
+  const row1 = [CREDENTIALS[0], CREDENTIALS[1], CREDENTIALS[3], CREDENTIALS[2]]; // ALU, Nazarene, Oxford, KSL
+  const row2 = [CREDENTIALS[4], CREDENTIALS[5], CREDENTIALS[6], CREDENTIALS[7]]; // CMU, Cisco, HKUST, Qualys
   return (
     <section ref={ref as React.RefObject<HTMLElement>} style={SEC}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
@@ -1094,20 +996,18 @@ function EditorialBreak() {
 
 /* ── Page ── */
 export default function Home() {
-  const [servicesModalOpen, setServicesModalOpen] = useState(false);
   return (
     <>
       <Hero />
       <About />
       <Services />
-      <ComplementaryCTA onOpen={() => setServicesModalOpen(true)} />
+      <ComplementaryCTA />
       <ResearchSection />
+      <Accreditations />
       <WorkWithDecra />
       <Impact />
       <The1000 />
-      <Accreditations />
       <EditorialBreak />
-      <StartBusinessModal open={servicesModalOpen} onClose={() => setServicesModalOpen(false)} />
     </>
   );
 }
