@@ -68,22 +68,6 @@ function Hero() {
         transform: vis ? "none" : "translateY(22px)",
         transition: "opacity 1s cubic-bezier(0.16,1,0.3,1) 0.45s, transform 1s cubic-bezier(0.16,1,0.3,1) 0.45s",
       }}>
-        <h1 style={{
-          fontFamily: "var(--font-serif)", fontWeight: 400,
-          fontSize: "clamp(2.5rem,5.5vw,5rem)",
-          color: "#F0EEE9", lineHeight: 1.02, letterSpacing: "-0.01em",
-          marginBottom: "1rem",
-        }}>
-          Technology Lawyer &amp; Product Counsel.
-        </h1>
-        <p style={{
-          fontFamily: "var(--font-sans)", fontWeight: 400,
-          fontSize: "clamp(0.8rem, 1.3vw, 0.95rem)",
-          color: "rgba(240,238,233,0.6)",
-          marginBottom: "2rem",
-        }}>
-          Lawyer &nbsp;·&nbsp; Computer Scientist &nbsp;·&nbsp; Nairobi
-        </p>
         <div style={{ display: "flex", alignItems: "center", gap: "1.75rem" }}>
           <a href="#services" style={{
             fontFamily: "var(--font-manjari)", fontWeight: 700,
@@ -117,11 +101,28 @@ function About() {
     <section id="about" ref={ref as React.RefObject<HTMLElement>} style={SEC}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
         <p style={{ ...LBL, marginBottom: "1.5rem", ...fade(vis) }}>About</p>
+        <h2 style={{
+          ...SERIF("clamp(2rem,3.8vw,3.25rem)"),
+          letterSpacing: "-0.01em",
+          marginBottom: "0.85rem",
+          ...fade(vis, 0.05),
+        }}>
+          Technology Lawyer &amp; Product Counsel.
+        </h2>
+        <p style={{
+          fontFamily: "var(--font-manjari)", fontWeight: 700,
+          fontSize: "0.62rem", letterSpacing: "0.22em", textTransform: "uppercase",
+          color: "var(--c-accent)",
+          marginBottom: "2.25rem",
+          ...fade(vis, 0.08),
+        }}>
+          Lawyer &nbsp;·&nbsp; Computer Scientist &nbsp;·&nbsp; Nairobi
+        </p>
         <p style={{
           ...SERIF("clamp(1.3rem,2.1vw,1.75rem)"),
           maxWidth: "820px",
           lineHeight: 1.55,
-          ...fade(vis, 0.1),
+          ...fade(vis, 0.14),
         }}>
           I am a technology lawyer and product counsel with a dual degree — a BSc in Computer Science (AI) from African Leadership University, and a Bachelor of Laws (LLB) / Juris Doctor from Africa Nazarene University. I also help startups, especially techpreneurs, build safely.
         </p>
@@ -213,6 +214,8 @@ Style: 2 sentences per reply. Warm and direct. Never mention Anthropic, Claude, 
 
 function WorkWithDecra() {
   const { ref, vis } = useReveal();
+  const [selected, setSelected] = useState<string | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
   const [active, setActive] = useState<string | null>(null);
   const [msgs, setMsgs] = useState<{ role: "user" | "assistant"; text: string }[]>([]);
   const [input, setInput] = useState("");
@@ -222,6 +225,15 @@ function WorkWithDecra() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [msgs, loading]);
+
+  useEffect(() => {
+    if (!modalOpen) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") closeModal(); };
+    document.addEventListener("keydown", onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => { document.removeEventListener("keydown", onKey); document.body.style.overflow = prevOverflow; };
+  }, [modalOpen]);
 
   const startGroup = async (groupKey: string, opening: string) => {
     setActive(groupKey); setMsgs([]); setDone(false); setInput(""); setLoading(true);
@@ -234,6 +246,16 @@ function WorkWithDecra() {
     setLoading(false);
     setTimeout(() => inputRef.current?.focus(), 150);
   };
+
+  const openPartnerModal = () => {
+    setModalOpen(true);
+    if (selected) {
+      const g = ENGAGE_GROUPS.find(g => g.key === selected);
+      if (g) startGroup(g.key, g.opening);
+    }
+  };
+
+  const closeModal = () => { setModalOpen(false); setActive(null); setMsgs([]); setDone(false); setInput(""); };
 
   const send = async () => {
     if (!input.trim() || loading || done) return;
@@ -259,78 +281,150 @@ function WorkWithDecra() {
   return (
     <section id="collaborate" ref={ref as React.RefObject<HTMLElement>} style={SEC}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-        <div style={{ marginBottom: "4rem", ...fade(vis) }}>
+        <div style={{ marginBottom: "3rem", ...fade(vis) }}>
           <p style={{ ...LBL, marginBottom: "1.25rem" }}>Collaborate</p>
           <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(2rem,3.5vw,3rem)", color: "var(--c-ink)", lineHeight: 1.05 }}>Who I work with.</h2>
         </div>
 
-        {/* One row, Services-style numbered cards */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "0" }} className="wwd-grid">
+        {/* Horizontal row: item · item · item · item ···· Partner */}
+        <div style={{
+          display: "flex", alignItems: "center", flexWrap: "wrap",
+          gap: "0.5rem", rowGap: "1.5rem",
+          ...fade(vis, 0.08),
+        }} className="wwd-row">
           {ENGAGE_GROUPS.map((g, i) => {
-            const isActive = active === g.key;
+            const isSelected = selected === g.key;
             return (
-              <button
-                key={g.key}
-                onClick={() => startGroup(g.key, g.opening)}
-                style={{
-                  display: "block", width: "100%", textAlign: "left",
-                  background: "none", border: "none", cursor: "pointer",
-                  padding: "2.25rem 2rem",
-                  borderTop: "1px solid var(--c-border)",
-                  borderLeft: i > 0 ? "1px solid var(--c-border)" : "none",
-                  ...fade(vis, 0.06 * i),
-                }}
-              >
-                <span style={{ fontFamily: "var(--font-sans)", fontWeight: 600, fontSize: "0.7rem", color: "var(--c-ink-muted)", display: "block", marginBottom: "1.25rem" }}>{String(i + 1).padStart(2, "0")}</span>
-                <h3 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(1.05rem,1.6vw,1.3rem)", color: "var(--c-ink)", lineHeight: 1.25, marginBottom: "1rem" }}>{g.label}</h3>
-                <span style={{
-                  display: "inline-flex", alignItems: "center", gap: "0.4rem",
-                  fontFamily: "var(--font-manjari)", fontWeight: 700,
-                  fontSize: "0.6rem", letterSpacing: "0.16em", textTransform: "uppercase",
-                  color: isActive ? "var(--c-accent)" : "var(--c-ink-muted)", transition: "color 0.2s",
-                }}>
-                  Partner with me
-                  <ArrowRight size={11} strokeWidth={1.5} style={{ transform: isActive ? "rotate(90deg)" : "none", transition: "transform 0.3s" }} />
-                </span>
-              </button>
-            );
-          })}
-        </div>
-
-        {active && (
-          <div style={{ border: "1px solid var(--c-border)", borderTop: "none", minHeight: "20rem", display: "flex", flexDirection: "column" }}>
-            <div style={{ flex: 1, overflowY: "auto", padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1rem", maxHeight: "28rem" }}>
-              {msgs.map((m, i) => (
-                <div key={i} style={{ display: "flex", justifyContent: m.role === "user" ? "flex-end" : "flex-start" }}>
-                  <div style={{ maxWidth: "80%", padding: "0.7rem 1rem", background: m.role === "user" ? "var(--c-accent)" : "var(--c-surface)", color: m.role === "user" ? "#0A0A0A" : "var(--c-ink)", fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.84rem", lineHeight: 1.7 }}>{m.text}</div>
-                </div>
-              ))}
-              {loading && (
-                <div style={{ display: "flex", justifyContent: "flex-start" }}>
-                  <div style={{ padding: "0.7rem 1rem", background: "var(--c-surface)", display: "flex", gap: "4px", alignItems: "center" }}>
-                    {[0,1,2].map(i => <span key={i} style={{ width: "4px", height: "4px", borderRadius: "50%", background: "var(--c-ink-muted)", animation: `dot-pulse 1.2s ease-in-out ${i*0.2}s infinite` }} />)}
-                  </div>
-                </div>
-              )}
-              <div ref={bottomRef} />
-            </div>
-            {!done ? (
-              <div style={{ borderTop: "1px solid var(--c-border)", display: "flex", alignItems: "center", padding: "0.75rem 1rem", gap: "0.75rem" }}>
-                <input ref={inputRef} value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); }}} placeholder="Type your reply…" style={{ flex: 1, background: "none", border: "none", outline: "none", fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.875rem", color: "var(--c-ink)" }} />
-                <button onClick={send} disabled={!input.trim() || loading} style={{ background: "none", border: "none", cursor: "pointer", padding: "0.25rem", opacity: input.trim() ? 1 : 0.3, transition: "opacity 0.2s", color: "var(--c-ink)", display: "flex", alignItems: "center" }}>
-                  <ArrowRight size={15} strokeWidth={1.5} />
+              <div key={g.key} style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                {i > 0 && <span style={{ width: "1px", height: "10px", background: "var(--c-border)", display: "block" }} />}
+                <button
+                  onClick={() => setSelected(g.key)}
+                  style={{
+                    display: "inline-flex", alignItems: "baseline", gap: "0.5rem",
+                    background: "none", border: "none", cursor: "pointer", padding: "0.5rem 0.25rem",
+                  }}
+                >
+                  <span style={{ fontFamily: "var(--font-sans)", fontWeight: 600, fontSize: "0.62rem", color: "var(--c-ink-muted)" }}>{String(i + 1).padStart(2, "0")}</span>
+                  <span style={{
+                    fontFamily: "var(--font-serif)", fontWeight: 400,
+                    fontSize: "clamp(0.95rem,1.3vw,1.1rem)",
+                    color: isSelected ? "var(--c-accent)" : "var(--c-ink)",
+                    borderBottom: isSelected ? "1px solid var(--c-accent)" : "1px solid transparent",
+                    lineHeight: 1.3, transition: "color 0.2s, border-color 0.2s",
+                  }}>{g.label}</span>
                 </button>
               </div>
-            ) : (
-              <div style={{ borderTop: "1px solid var(--c-border)", padding: "1rem 1.5rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <p style={{ ...LBL, color: "var(--c-accent)", fontSize: "0.52rem" }}>Message sent to Decra</p>
-                <button onClick={() => { setActive(null); setMsgs([]); setDone(false); }} style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.52rem", letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--c-ink-muted)", transition: "color 0.2s" }} onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"} onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink-muted)"}>Start over</button>
+            );
+          })}
+          <span style={{ flex: 1, minWidth: "1.5rem" }} />
+          <button
+            onClick={openPartnerModal}
+            style={{
+              display: "inline-flex", alignItems: "center", gap: "0.6rem",
+              fontFamily: "var(--font-manjari)", fontWeight: 700,
+              fontSize: "0.65rem", letterSpacing: "0.2em", textTransform: "uppercase",
+              color: "#0A0A0A", background: "var(--c-accent)",
+              border: "none", padding: "0.9rem 1.75rem", cursor: "pointer",
+              transition: "filter 0.2s",
+            }}
+            onMouseEnter={e => (e.currentTarget as HTMLElement).style.filter = "brightness(1.1)"}
+            onMouseLeave={e => (e.currentTarget as HTMLElement).style.filter = "none"}
+          >
+            Partner
+            <ArrowRight size={12} strokeWidth={1.5} />
+          </button>
+        </div>
+      </div>
+
+      {modalOpen && (
+        <div
+          onClick={closeModal}
+          style={{
+            position: "fixed", inset: 0, zIndex: 100,
+            background: "rgba(10,10,10,0.6)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            padding: "1.5rem",
+          }}
+        >
+          <div
+            onClick={e => e.stopPropagation()}
+            style={{
+              width: "100%", maxWidth: "36rem",
+              background: "var(--c-bg)", border: "1px solid var(--c-border)",
+              display: "flex", flexDirection: "column",
+              maxHeight: "min(38rem, 88vh)",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1.25rem 1.5rem", borderBottom: "1px solid var(--c-border)" }}>
+              <div>
+                <p style={{ ...LBL, marginBottom: "0.35rem" }}>Partner with Decra</p>
+                {active && (
+                  <p style={{ fontFamily: "var(--font-serif)", fontSize: "1rem", color: "var(--c-ink)" }}>
+                    {ENGAGE_GROUPS.find(g => g.key === active)?.label}
+                  </p>
+                )}
               </div>
+              <button onClick={closeModal} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--c-ink-muted)", display: "flex", padding: "0.25rem" }}>
+                <X size={18} strokeWidth={1.5} />
+              </button>
+            </div>
+
+            {!active ? (
+              <div style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                <p style={{ ...BODY, fontSize: "0.82rem", marginBottom: "0.5rem" }}>Tell me a bit about who you are, so I can point you the right way:</p>
+                {ENGAGE_GROUPS.map(g => (
+                  <button
+                    key={g.key}
+                    onClick={() => startGroup(g.key, g.opening)}
+                    style={{
+                      display: "flex", alignItems: "center", justifyContent: "space-between",
+                      textAlign: "left", background: "none", border: "1px solid var(--c-border)",
+                      padding: "0.9rem 1.1rem", cursor: "pointer", transition: "border-color 0.2s",
+                    }}
+                    onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"}
+                    onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--c-border)"}
+                  >
+                    <span style={{ fontFamily: "var(--font-serif)", fontSize: "0.95rem", color: "var(--c-ink)" }}>{g.label}</span>
+                    <ArrowRight size={13} strokeWidth={1.5} color="var(--c-ink-muted)" />
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <>
+                <div style={{ flex: 1, overflowY: "auto", padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
+                  {msgs.map((m, i) => (
+                    <div key={i} style={{ display: "flex", justifyContent: m.role === "user" ? "flex-end" : "flex-start" }}>
+                      <div style={{ maxWidth: "80%", padding: "0.7rem 1rem", background: m.role === "user" ? "var(--c-accent)" : "var(--c-surface)", color: m.role === "user" ? "#0A0A0A" : "var(--c-ink)", fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.84rem", lineHeight: 1.7 }}>{m.text}</div>
+                    </div>
+                  ))}
+                  {loading && (
+                    <div style={{ display: "flex", justifyContent: "flex-start" }}>
+                      <div style={{ padding: "0.7rem 1rem", background: "var(--c-surface)", display: "flex", gap: "4px", alignItems: "center" }}>
+                        {[0,1,2].map(i => <span key={i} style={{ width: "4px", height: "4px", borderRadius: "50%", background: "var(--c-ink-muted)", animation: `dot-pulse 1.2s ease-in-out ${i*0.2}s infinite` }} />)}
+                      </div>
+                    </div>
+                  )}
+                  <div ref={bottomRef} />
+                </div>
+                {!done ? (
+                  <div style={{ borderTop: "1px solid var(--c-border)", display: "flex", alignItems: "center", padding: "0.75rem 1rem", gap: "0.75rem" }}>
+                    <input ref={inputRef} value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); }}} placeholder="Type your reply…" style={{ flex: 1, background: "none", border: "none", outline: "none", fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.875rem", color: "var(--c-ink)" }} />
+                    <button onClick={send} disabled={!input.trim() || loading} style={{ background: "none", border: "none", cursor: "pointer", padding: "0.25rem", opacity: input.trim() ? 1 : 0.3, transition: "opacity 0.2s", color: "var(--c-ink)", display: "flex", alignItems: "center" }}>
+                      <ArrowRight size={15} strokeWidth={1.5} />
+                    </button>
+                  </div>
+                ) : (
+                  <div style={{ borderTop: "1px solid var(--c-border)", padding: "1rem 1.5rem", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                    <p style={{ ...LBL, color: "var(--c-accent)", fontSize: "0.52rem" }}>Message sent to Decra</p>
+                    <button onClick={closeModal} style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.52rem", letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--c-ink-muted)", transition: "color 0.2s" }} onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"} onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink-muted)"}>Close</button>
+                  </div>
+                )}
+              </>
             )}
           </div>
-        )}
-      </div>
-      <style>{`@media(max-width:900px){.wwd-grid{grid-template-columns:repeat(2,1fr)!important}.wwd-grid>button:nth-child(odd){border-left:none!important}.wwd-grid>button:nth-child(n+3){border-top:1px solid var(--c-border)!important}}@media(max-width:560px){.wwd-grid{grid-template-columns:1fr!important}.wwd-grid>button{border-left:none!important;border-top:1px solid var(--c-border)!important}}@keyframes dot-pulse{0%,100%{opacity:0.3;transform:translateY(0)}50%{opacity:1;transform:translateY(-3px)}}`}</style>
+        </div>
+      )}
+      <style>{`@media(max-width:640px){.wwd-row{gap:0.35rem}}@keyframes dot-pulse{0%,100%{opacity:0.3;transform:translateY(0)}50%{opacity:1;transform:translateY(-3px)}}`}</style>
     </section>
   );
 }
@@ -377,9 +471,9 @@ function The1000() {
       position: "relative", overflow: "hidden",
       display: "flex", alignItems: "center",
     }}>
-      <img src="/decra-spotify-bg.jpg" alt="" style={{
+      <img src="/decra-spotify-portrait.png" alt="" style={{
         position: "absolute", inset: 0, width: "100%", height: "100%",
-        objectFit: "cover", objectPosition: "62% 28%",
+        objectFit: "cover", objectPosition: "50% 20%",
         opacity: 1, zIndex: 0, pointerEvents: "none", display: "block",
       }} />
       <div style={{
@@ -1003,9 +1097,9 @@ export default function Home() {
   return (
     <>
       <Hero />
+      <About />
       <Services />
       <ComplementaryCTA onOpen={() => setServicesModalOpen(true)} />
-      <About />
       <ResearchSection />
       <WorkWithDecra />
       <Impact />
