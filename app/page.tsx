@@ -46,6 +46,11 @@ const PRODUCT_COUNSEL_GROUP = {
   label: "Technical Product Counsel",
   opening: "Hi, I'd like to retain Decra as embedded Technical Product Counsel for my product and engineering team.",
 };
+const SPOTIFY_GROUP = {
+  key: "the-1000",
+  label: "The 1000 — Podcast",
+  opening: "Hi, I'd like to be notified when The 1000 launches on Spotify.",
+};
 
 /* Shared "line button" style — outline only, no fill, used for every CTA on the page */
 const lineBtn = (opts?: { light?: boolean }): React.CSSProperties => ({
@@ -181,8 +186,8 @@ const SERVICES = [
     id: "founder-advisory",
     label: "Founder & Startup Advisory",
     body: "Practical legal guidance for founders and builders making fast decisions with real, lasting consequences.",
-    items: ["Company incorporation & structure", "Founder & co-founder agreements", "Equity, vesting & cap table", "Tax structuring (eTIMS, VAT, PAYE)", "Fundraising legal readiness"],
-    opening: "Hi, I'm a founder looking for legal advisory — incorporation, equity, tax structuring, or fundraising readiness.",
+    items: ["Company incorporation & structure", "Founder & co-founder agreements", "Equity, vesting & cap table", "Tax structuring (eTIMS, VAT, PAYE)", "Fundraising legal readiness", "Foreign branches & PBO registration"],
+    opening: "Hi, I'm a founder looking for legal advisory — incorporation, equity, tax structuring, fundraising readiness, or setting up a foreign branch or PBO.",
   },
 ];
 
@@ -190,8 +195,9 @@ function Services() {
   const { ref, vis } = useReveal();
 
   return (
-    <section id="services" ref={ref as React.RefObject<HTMLElement>} style={SEC}>
+    <section id="services" ref={ref as React.RefObject<HTMLElement>} style={{ ...SEC, borderTop: "none" }}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
+        <p style={{ ...LBL, marginBottom: "1.5rem", ...fade(vis) }}>Services</p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "0" }} className="svc-grid">
           {SERVICES.map((s, i) => (
             <div key={s.id} style={{
@@ -238,16 +244,15 @@ function Services() {
 type ChatMsg = { role: "user" | "assistant"; text: string };
 
 const ENGAGE_GROUPS = [
+  { key: "startup-founders", label: "Startup Founders", opening: "Hi, I'm a founder or builder looking for help with incorporation, equity, fundraising, or startup advisory." },
+  { key: "technology-companies", label: "Technology Companies", opening: "Hi, I work at a tech company and need support with regulatory compliance, data protection, or product legal review." },
   { key: "law-firms", label: "Law Firms", opening: "Hi, I represent a law firm interested in working with Decra on technology law advisory or compliance." },
-  { key: "tech-firms", label: "Tech Firms", opening: "Hi, I work at a tech company and need support with regulatory compliance, data protection, or product legal review." },
-  { key: "techpreneurs", label: "Techpreneurs", opening: "Hi, I'm a founder or builder looking for help with incorporation, equity, fundraising, or startup advisory." },
-  { key: "investors-incubators", label: "Investors & Incubators", opening: "Hi, I'm with an investment fund or incubator and would like to discuss legal support for our portfolio companies or partnership opportunities." },
-  { key: "tech-law-events", label: "Tech Law Events", opening: "Hi, I'm organizing or partnering on a technology law event and would like to discuss having Decra speak or participate." },
+  { key: "innovation-ecosystems", label: "Innovation Ecosystems", opening: "Hi, I'm with an investor, incubator, accelerator, or ecosystem body and would like to discuss legal support or partnership opportunities." },
 ];
 
 const ENGAGE_SYSTEM = `You are Decra Kerubo's AI intake advisor on decrakerubo.com.
 Decra is a Nairobi-based lawyer and computer scientist specialising in technology law and startup legal advisory in Kenya and East Africa.
-She works with: law firms needing tech law support or compliance; tech companies needing ODPC/data protection, product legal review, tech contracts; founders needing incorporation, equity, co-founder agreements, eTIMS/KRA tax, fundraising, foreign branches, PBO registration; and tech law event organizers seeking speakers, panelists, or partnership.
+She works with: startup founders needing incorporation, equity, co-founder agreements, eTIMS/KRA tax, fundraising, foreign branches, PBO registration; technology companies needing ODPC/data protection, product legal review, tech contracts; law firms needing tech law support or compliance; and innovation ecosystem players — investors, incubators, accelerators, and event organizers — seeking legal support, partnership, or speaking engagements.
 Your job: warm natural conversation, ONE question at a time. Gather over 4-6 exchanges: what they need, their context/stage, name, email.
 If they mention NGO, nonprofit, or international branch, ask: PBO (local Kenyan entity) or foreign company branch?
 Once done say exactly: "Perfect — I have everything Decra needs. She'll be in touch within 48 hours." Then on a new line:
@@ -549,110 +554,27 @@ function The1000() {
             fontSize: "0.68rem", letterSpacing: "0.24em", textTransform: "uppercase",
             color: "rgba(255,255,255,0.6)",
           }}>Technology law in Africa &nbsp;&middot;&nbsp; on Spotify</p>
-          <span style={{
-            display: "inline-flex", alignItems: "center", gap: "0.5rem",
-            fontFamily: "var(--font-manjari)", fontWeight: 700,
-            fontSize: "0.6rem", letterSpacing: "0.22em", textTransform: "uppercase",
-            color: "#0F3320", background: "#C4A06A",
-            padding: "0.55rem 1.25rem", marginTop: "0.5rem",
-          }}>
-            <span style={{ width: "5px", height: "5px", borderRadius: "50%", background: "#0F3320", display: "block" }} />
-            Coming Soon
-          </span>
-        </div>
-      </div>
-    </section>
-  );
-}
 
-/* ── Section 6: Start Your Business / Build Tech ── */
-/* ── CTA: lightweight inline teaser for Start Your Business / Entrora, linking to their full pages ── */
-function ComplementaryCTA() {
-  const { ref, vis } = useReveal();
-  const [open, setOpen] = useState(false);
-
-  const cards = [
-    {
-      href: "/start", bg: "#0D0D0D",
-      eyebrow: "Advisory",
-      title: "Start your business with me.",
-      body: "Full-spectrum startup advisory — incorporation through fundraising.",
-      cta: "Start here",
-      items: [
-        ["Incorporation & structure", "Entity type, shareholding, constitutional documents"],
-        ["Equity & founder agreements", "Cap tables, vesting, co-founder terms"],
-        ["Tax & compliance", "eTIMS, KRA, VAT, PAYE — day one"],
-        ["Fundraising readiness", "Term sheets, investor agreements, due diligence"],
-        ["Foreign branches & PBOs", "International orgs, foreign companies, PBO registration"],
-      ],
-    },
-    {
-      href: "/entrora", bg: "#0F3320",
-      eyebrow: "In partnership with Entrora Systems",
-      title: "Build a compliant tech product.",
-      body: "Legal compliance built into AI engineering from day one — not bolted on after.",
-      cta: "Learn about Entrora",
-      items: [
-        ["AI Document Systems", "Classification, extraction, and review at scale"],
-        ["Legal Tech Development", "Software built for legal workflows"],
-        ["Compliant AI Products", "Data governance and privacy from day one"],
-        ["AI Adoption Advisory", "Scoping and implementation for any budget"],
-        ["Regulatory sandbox", "Navigation for AI products in East Africa"],
-      ],
-    },
-  ];
-
-  return (
-    <section ref={ref as React.RefObject<HTMLElement>} style={{ ...SEC, textAlign: "center" }}>
-      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto", ...fade(vis) }}>
-        <button
-          onClick={() => setOpen(o => !o)}
-          style={{ ...lineBtn(), padding: "1rem 2.25rem" }}
-          onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"}
-          onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--c-border)"}
-        >
-          Explore Complementary Services <ArrowRight size={12} strokeWidth={1.5} style={{ transform: open ? "rotate(90deg)" : "none", transition: "transform 0.25s ease" }} />
-        </button>
-
-        <div style={{
-          maxHeight: open ? "90rem" : "0px",
-          opacity: open ? 1 : 0,
-          overflow: "hidden",
-          transition: "max-height 0.6s cubic-bezier(0.16,1,0.3,1), opacity 0.45s ease",
-          marginTop: open ? "2.5rem" : "0px",
-        }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "var(--c-border)" }} className="comp-teaser">
-            {cards.map(c => (
-              <div key={c.href} style={{ textAlign: "left", padding: "3rem", background: c.bg }}>
-                <p style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.58rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(255,255,255,0.5)", marginBottom: "1.25rem" }}>{c.eyebrow}</p>
-                <h3 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(1.4rem,2.2vw,1.85rem)", color: "#FFFFFF", lineHeight: 1.2, marginBottom: "1rem" }}>{c.title}</h3>
-                <p style={{ fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.84rem", color: "rgba(255,255,255,0.65)", lineHeight: 1.75, marginBottom: "2rem" }}>{c.body}</p>
-                <div style={{ display: "flex", flexDirection: "column", marginBottom: "2.25rem" }}>
-                  {c.items.map(([title, body]) => (
-                    <div key={title} style={{ padding: "0.85rem 0", borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
-                      <p style={{ fontFamily: "var(--font-sans)", fontWeight: 600, fontSize: "0.84rem", color: "rgba(255,255,255,0.88)", marginBottom: "0.2rem" }}>{title}</p>
-                      <p style={{ fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.76rem", color: "rgba(255,255,255,0.45)", lineHeight: 1.6 }}>{body}</p>
-                    </div>
-                  ))}
-                </div>
-                <Link href={c.href} style={{
-                  display: "inline-flex", alignItems: "center", gap: "0.5rem",
-                  fontFamily: "var(--font-manjari)", fontWeight: 700,
-                  fontSize: "0.58rem", letterSpacing: "0.2em", textTransform: "uppercase",
-                  color: "rgba(255,255,255,0.85)", textDecoration: "none",
-                  borderBottom: "1px solid rgba(255,255,255,0.3)", paddingBottom: "2px",
-                  transition: "color 0.2s, border-color 0.2s",
-                }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#FFFFFF"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.8)"; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.3)"; }}>
-                  {c.cta} <ArrowRight size={11} strokeWidth={1.5} />
-                </Link>
-              </div>
-            ))}
+          <div style={{ display: "flex", alignItems: "center", gap: "0.85rem", marginTop: "0.75rem" }}>
+            <span style={{ width: "2.25rem", height: "1px", background: "rgba(196,160,106,0.5)", display: "block" }} />
+            <span style={{
+              fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400,
+              fontSize: "0.95rem", letterSpacing: "0.03em",
+              color: "#C4A06A",
+            }}>Coming soon</span>
+            <span style={{ width: "2.25rem", height: "1px", background: "rgba(196,160,106,0.5)", display: "block" }} />
           </div>
+
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: SPOTIFY_GROUP }))}
+            style={{ ...lineBtn({ light: true }), marginTop: "1.5rem" }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "#C4A06A"; (e.currentTarget as HTMLElement).style.color = "#C4A06A"; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.3)"; (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"; }}
+          >
+            Express Interest
+          </button>
         </div>
       </div>
-      <style>{`@media(max-width:700px){.comp-teaser{grid-template-columns:1fr!important}}`}</style>
     </section>
   );
 }
@@ -706,12 +628,23 @@ const PAPERS: Paper[] = [
 ];
 
 function PaperViewer({ paper, onClose }: { paper: Paper; onClose: () => void }) {
+  const [status, setStatus] = useState<"checking" | "ready" | "missing">("checking");
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
     document.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
     return () => { document.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
   }, [onClose]);
+
+  useEffect(() => {
+    let cancelled = false;
+    setStatus("checking");
+    fetch(`/api/research/${paper.slug}`, { method: "HEAD" })
+      .then(res => { if (!cancelled) setStatus(res.ok ? "ready" : "missing"); })
+      .catch(() => { if (!cancelled) setStatus("missing"); });
+    return () => { cancelled = true; };
+  }, [paper.slug]);
 
   return (
     <div
@@ -755,8 +688,24 @@ function PaperViewer({ paper, onClose }: { paper: Paper; onClose: () => void }) 
           </button>
         </div>
         <div style={{ flex: 1, background: "#0A0A0A" }}>
-          <iframe src={`/api/research/${paper.slug}#toolbar=0&navpanes=0`} title={paper.title}
-            style={{ width: "100%", height: "100%", border: "none" }} />
+          {status === "ready" && (
+            <iframe src={`/api/research/${paper.slug}#toolbar=0&navpanes=0`} title={paper.title}
+              style={{ width: "100%", height: "100%", border: "none" }} />
+          )}
+          {status === "missing" && (
+            <div style={{
+              width: "100%", height: "100%",
+              display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+              textAlign: "center", padding: "2rem",
+            }}>
+              <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "1.15rem", color: "#F0EDE8", marginBottom: "0.75rem" }}>
+                Check back soon.
+              </p>
+              <p style={{ fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.8rem", color: "rgba(240,237,232,0.5)", lineHeight: 1.7, maxWidth: "26rem" }}>
+                This paper is being prepared for publication and isn&apos;t available to view just yet.
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -766,37 +715,54 @@ function PaperViewer({ paper, onClose }: { paper: Paper; onClose: () => void }) 
 function ResearchSection() {
   const { ref, vis } = useReveal();
   const [active, setActive] = useState<Paper | null>(null);
+  const [open, setOpen] = useState(false);
 
   return (
-    <section id="research" ref={ref as React.RefObject<HTMLElement>} style={SEC}>
-      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "0" }} className="rsc-grid">
-          {PAPERS.map((paper, i) => (
-            <button
-              key={paper.slug}
-              onClick={() => setActive(paper)}
-              style={{
-                display: "block", width: "100%", textAlign: "left",
-                background: "none", border: "none", cursor: "pointer",
-                padding: "1.75rem 1.25rem",
-                borderTop: "1px solid var(--c-border)",
-                borderLeft: i > 0 ? "1px solid var(--c-border)" : "none",
-                opacity: vis ? 1 : 0,
-                transition: `opacity 0.6s ease ${0.06 * i}s`,
-              }}
-            >
-              <span style={{ fontFamily: "var(--font-sans)", fontWeight: 600, fontSize: "0.65rem", color: "var(--c-ink-muted)", display: "block", marginBottom: "1rem" }}>{String(i + 1).padStart(2, "0")}</span>
-              <h3 style={{
-                fontFamily: "var(--font-serif)", fontWeight: 400,
-                fontSize: "0.85rem", color: "var(--c-ink)", lineHeight: 1.3,
-                marginBottom: "0.6rem",
-              }}>{paper.title}</h3>
-              <p style={{
-                fontFamily: "var(--font-sans)", fontWeight: 400,
-                fontSize: "0.66rem", color: "var(--c-ink-muted)", lineHeight: 1.5,
-              }}>{paper.partner}</p>
-            </button>
-          ))}
+    <section id="research" ref={ref as React.RefObject<HTMLElement>} style={{ ...SEC, textAlign: "center" }}>
+      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto", ...fade(vis) }}>
+        <button
+          onClick={() => setOpen(o => !o)}
+          style={{ ...lineBtn(), padding: "1rem 2.25rem" }}
+          onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"}
+          onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--c-border)"}
+        >
+          Explore Research <ArrowRight size={12} strokeWidth={1.5} style={{ transform: open ? "rotate(90deg)" : "none", transition: "transform 0.25s ease" }} />
+        </button>
+
+        <div style={{
+          maxHeight: open ? "90rem" : "0px",
+          opacity: open ? 1 : 0,
+          overflow: "hidden",
+          transition: "max-height 0.6s cubic-bezier(0.16,1,0.3,1), opacity 0.45s ease",
+          marginTop: open ? "2.5rem" : "0px",
+        }}>
+          <p style={{ ...LBL, textAlign: "left", marginBottom: "1.5rem" }}>Research</p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "0" }} className="rsc-grid">
+            {PAPERS.map((paper, i) => (
+              <button
+                key={paper.slug}
+                onClick={() => setActive(paper)}
+                style={{
+                  display: "block", width: "100%", textAlign: "left",
+                  background: "none", border: "none", cursor: "pointer",
+                  padding: "1.75rem 1.25rem",
+                  borderTop: "1px solid var(--c-border)",
+                  borderLeft: i > 0 ? "1px solid var(--c-border)" : "none",
+                }}
+              >
+                <span style={{ fontFamily: "var(--font-sans)", fontWeight: 600, fontSize: "0.65rem", color: "var(--c-ink-muted)", display: "block", marginBottom: "1rem" }}>{String(i + 1).padStart(2, "0")}</span>
+                <h3 style={{
+                  fontFamily: "var(--font-serif)", fontWeight: 400,
+                  fontSize: "0.85rem", color: "var(--c-ink)", lineHeight: 1.3,
+                  marginBottom: "0.6rem",
+                }}>{paper.title}</h3>
+                <p style={{
+                  fontFamily: "var(--font-sans)", fontWeight: 400,
+                  fontSize: "0.66rem", color: "var(--c-ink-muted)", lineHeight: 1.5,
+                }}>{paper.partner}</p>
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -924,6 +890,7 @@ function Accreditations() {
   return (
     <section ref={ref as React.RefObject<HTMLElement>} style={SEC}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
+        <p style={{ ...LBL, marginBottom: "2rem", ...fade(vis) }}>Credentials &amp; Training</p>
         <div style={{
           display: "grid", gridTemplateColumns: "repeat(4, 1fr)",
           gap: "clamp(1.75rem,3vw,2.75rem)",
@@ -967,7 +934,7 @@ function EditorialBreak() {
     },
     {
       label: "LinkedIn",
-      url: "https://linkedin.com/in/decrakerubo",
+      url: "https://www.linkedin.com/in/decra/",
       icon: (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
           <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
@@ -1040,7 +1007,6 @@ export default function Home() {
       <Hero />
       <About />
       <Services />
-      <ComplementaryCTA />
       <ResearchSection />
       <Accreditations />
       <The1000 />
