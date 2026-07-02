@@ -1,11 +1,18 @@
 "use client";
 import { useEffect, useState } from "react";
-import { ArrowRight, ArrowLeft, Clock, CheckCircle2, ShieldCheck } from "lucide-react";
+import { ArrowRight, ArrowLeft, Clock, CheckCircle2, ShieldCheck, Smartphone } from "lucide-react";
 import { CONSULTATION_TYPES } from "@/lib/types";
 
 type Step = 1 | 2 | 3;
 
 const TIME_SLOTS = ["09:00 AM", "10:00 AM", "11:00 AM", "02:00 PM", "03:00 PM", "04:00 PM"];
+
+// If Paystack isn't configured (no NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY), paid
+// bookings fall back to this manual M-Pesa flow — no account signup needed
+// to get the site working, but it requires Decra to confirm payments by hand
+// in /admin. Update the Till/Paybill details below to the real ones.
+const MPESA_PAYBILL = "XXXXXX";
+const MPESA_ACCOUNT = "Your name as the account number";
 
 declare global {
   interface Window {
@@ -23,35 +30,39 @@ export default function BookPage() {
   const [loading, setLoading] = useState(false);
   const [paying, setPaying] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
+  const [bookingStatus, setBookingStatus] = useState<"confirmed" | "pending_payment">("confirmed");
   const [meetLink, setMeetLink] = useState("");
   const [paidRef, setPaidRef] = useState("");
   const [payError, setPayError] = useState("");
+  const [manualRef, setManualRef] = useState("");
   const [form, setForm] = useState({ name: "", email: "", organization: "", website: "", industry: "", team_size: "", primary_challenge: "", desired_outcome: "" });
 
   const selectedConsultation = CONSULTATION_TYPES.find(t => t.id === selectedType);
   const isPaid = (selectedConsultation?.price ?? 0) > 0;
+  const paystackConfigured = !!process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY;
 
   // Paystack Inline is a free client-side script — no SDK install needed.
   useEffect(() => {
-    if (document.getElementById("paystack-inline-js")) return;
+    if (!paystackConfigured || document.getElementById("paystack-inline-js")) return;
     const s = document.createElement("script");
     s.id = "paystack-inline-js";
     s.src = "https://js.paystack.co/v1/inline.js";
     s.async = true;
     document.body.appendChild(s);
-  }, []);
+  }, [paystackConfigured]);
 
-  const handleBooking = async (reference?: string) => {
+  const handleBooking = async (reference?: string, method?: "paystack" | "manual") => {
     setLoading(true);
     try {
       const res = await fetch("/api/book", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({
         ...form, consultation_type: selectedType, scheduled_at: `${selectedDate}T${selectedTime}`,
-        amount: selectedConsultation?.price ?? 0, payment_reference: reference || null,
+        amount: selectedConsultation?.price ?? 0, payment_reference: reference || null, payment_method: method || null,
       }) });
       const data = await res.json();
       if (data.error) { setPayError(data.error); return; }
       if (data.meet_link) setMeetLink(data.meet_link);
       if (reference) setPaidRef(reference);
+      if (data.status) setBookingStatus(data.status);
       setConfirmed(true);
     } catch { setPayError("Booking failed. Please try again or email hello@decrakerubo.com."); }
     finally { setLoading(false); setPaying(false); }
@@ -61,10 +72,16 @@ export default function BookPage() {
     setPayError("");
     if (!isPaid) { handleBooking(); return; }
 
+    // No Paystack account connected yet — use the manual M-Pesa fallback.
+    if (!paystackConfigured) {
+      if (!manualRef.trim()) { setPayError("Enter the M-Pesa confirmation code from your payment SMS."); return; }
+      handleBooking(manualRef.trim(), "manual");
+      return;
+    }
+
     if (!window.PaystackPop) { setPayError("Payment is still loading — please try again in a moment."); return; }
     setPaying(true);
-    const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY;
-    if (!publicKey) { setPayError("Payments aren't configured yet — email hello@decrakerubo.com to book this consultation."); setPaying(false); return; }
+    const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY!;
 
     const handler = window.PaystackPop.setup({
       key: publicKey,
@@ -73,7 +90,7 @@ export default function BookPage() {
       currency: "KES",
       channels: ["mobile_money", "card"],
       metadata: { consultation_type: selectedType, name: form.name },
-      callback: (response: { reference: string }) => { handleBooking(response.reference); },
+      callback: (response: { reference: string }) => { handleBooking(response.reference, "paystack"); },
       onClose: () => { setPaying(false); },
     });
     handler.openIframe();
@@ -82,21 +99,26 @@ export default function BookPage() {
   const labelStyle = { display: "block", fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "var(--c-ink-muted)", marginBottom: "0.5rem" };
 
   if (confirmed) {
+    const pending = bookingStatus === "pending_payment";
     return (
       <div style={{ background: "var(--c-bg)", minHeight: "100svh", paddingTop: "6rem", display: "flex", alignItems: "center", justifyContent: "center", padding: "6rem var(--space-page-x)" }}>
         <div style={{ maxWidth: "32rem", width: "100%", textAlign: "center" }}>
           <div style={{ width: "3.5rem", height: "3.5rem", borderRadius: "50%", background: "rgba(14,61,50,0.07)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 2rem" }}>
             <CheckCircle2 size={24} style={{ color: "var(--c-forest)" }} />
           </div>
-          <h1 className="t-display t-display-lg" style={{ marginBottom: "0.75rem" }}>Booking confirmed.</h1>
-          <p className="t-body" style={{ marginBottom: "2rem" }}>A confirmation email has been sent to <strong>{form.email}</strong>.</p>
+          <h1 className="t-display t-display-lg" style={{ marginBottom: "0.75rem" }}>{pending ? "Booking received." : "Booking confirmed."}</h1>
+          <p className="t-body" style={{ marginBottom: "2rem" }}>
+            {pending
+              ? <>Your slot is held while we confirm your M-Pesa payment. A confirmation email is on its way to <strong>{form.email}</strong>.</>
+              : <>A confirmation email has been sent to <strong>{form.email}</strong>.</>}
+          </p>
           {meetLink && (
             <a href={meetLink} target="_blank" rel="noopener noreferrer" className="btn-outline" style={{ marginBottom: "2rem", display: "inline-flex" }}>
               Join Google Meet <ArrowRight size={13} />
             </a>
           )}
           <div className="card" style={{ textAlign: "left" }}>
-            {[["Type", selectedConsultation?.label], ["Date", selectedDate], ["Time", `${selectedTime} EAT`], ...(isPaid ? [["Amount paid", formatKES(selectedConsultation?.price ?? 0)], ["Reference", paidRef]] : [])].map(([k, v]) => (
+            {[["Type", selectedConsultation?.label], ["Date", selectedDate], ["Time", `${selectedTime} EAT`], ...(isPaid ? [[pending ? "Amount due" : "Amount paid", formatKES(selectedConsultation?.price ?? 0)], ["Reference", paidRef || "—"]] : [])].map(([k, v]) => (
               <div key={k as string} style={{ display: "flex", justifyContent: "space-between", gap: "1rem", fontSize: "0.8rem", padding: "0.65rem 0", borderBottom: "1px solid var(--c-border)" }}>
                 <span style={{ color: "var(--c-ink-muted)", flexShrink: 0 }}>{k as string}</span>
                 <span style={{ color: "var(--c-forest)", fontWeight: 700, textAlign: "right", wordBreak: "break-all" }}>{v as string}</span>
@@ -213,6 +235,21 @@ export default function BookPage() {
                 ))}
               </div>
             )}
+            {isPaid && !paystackConfigured && (
+              <div className="card" style={{ marginBottom: "2rem" }}>
+                <p className="t-label" style={{ marginBottom: "0.75rem", display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                  <Smartphone size={12} /> Pay via M-Pesa
+                </p>
+                <p style={{ fontSize: "0.78rem", color: "var(--c-ink-mid)", lineHeight: 1.7, marginBottom: "1rem" }}>
+                  Go to M-Pesa &rarr; Lipa na M-Pesa &rarr; Paybill. Use business number <strong>{MPESA_PAYBILL}</strong>, account <strong>{MPESA_ACCOUNT}</strong>, amount <strong>{formatKES(selectedConsultation?.price ?? 0)}</strong>. Then enter the confirmation code from the SMS below.
+                </p>
+                <label style={labelStyle}>M-Pesa Confirmation Code</label>
+                <input value={manualRef} onChange={e => setManualRef(e.target.value)} placeholder="e.g. QGH7XYZ123" className="field" />
+                <p style={{ fontSize: "0.68rem", color: "var(--c-ink-muted)", marginTop: "0.75rem" }}>
+                  Your slot is held as soon as you submit — Decra confirms the payment by hand, usually within a few hours.
+                </p>
+              </div>
+            )}
             {payError && (
               <p style={{ fontSize: "0.75rem", color: "#B4453A", marginBottom: "1.25rem" }}>{payError}</p>
             )}
@@ -222,13 +259,16 @@ export default function BookPage() {
                 {loading || paying
                   ? (paying ? "Redirecting to payment..." : "Confirming...")
                   : isPaid
-                    ? <>Pay {formatKES(selectedConsultation?.price ?? 0)} &amp; Confirm <ShieldCheck size={13} /></>
+                    ? (paystackConfigured
+                        ? <>Pay {formatKES(selectedConsultation?.price ?? 0)} &amp; Confirm <ShieldCheck size={13} /></>
+                        : <>I've Paid — Submit Booking <ArrowRight size={13} /></>)
                     : <>Confirm Booking <ArrowRight size={13} /></>}
               </button>
             </div>
             {isPaid && (
               <p style={{ fontSize: "0.68rem", color: "var(--c-ink-muted)", marginTop: "1rem", display: "flex", alignItems: "center", gap: "0.4rem" }}>
-                <ShieldCheck size={12} /> Secure payment via Paystack — cards &amp; M-Pesa accepted.
+                <ShieldCheck size={12} />
+                {paystackConfigured ? "Secure payment via Paystack — cards & M-Pesa accepted." : "Manual M-Pesa — payment is confirmed by hand, not automatically."}
               </p>
             )}
           </div>

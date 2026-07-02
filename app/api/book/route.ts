@@ -34,20 +34,29 @@ export async function POST(req: NextRequest) {
     const {
       name, email, organization, website, industry, team_size,
       primary_challenge, desired_outcome, consultation_type, scheduled_at,
-      amount, payment_reference,
+      amount, payment_reference, payment_method,
     } = body;
 
-    // Paid consultations must carry a verified Paystack reference before we
-    // ever write a "confirmed" booking to the database.
+    let status = "confirmed";
+
     if (amount > 0) {
-      if (!payment_reference) {
-        return NextResponse.json({ error: "Payment reference missing." }, { status: 400 });
-      }
-      try {
-        await verifyPaystackPayment(payment_reference, amount);
-      } catch (verifyErr) {
-        console.error("Payment verification failed:", verifyErr);
-        return NextResponse.json({ error: "We couldn't verify your payment. If you were charged, email hello@decrakerubo.com with your reference number." }, { status: 402 });
+      if (payment_method === "manual") {
+        // No processor configured — the person paid (or will pay) directly
+        // via M-Pesa/bank and self-reported a reference. Booking goes in as
+        // "pending_payment" until confirmed by hand in the admin dashboard.
+        status = "pending_payment";
+      } else {
+        // Paystack path — must carry a verified reference before this booking
+        // is ever written to the database as "confirmed".
+        if (!payment_reference) {
+          return NextResponse.json({ error: "Payment reference missing." }, { status: 400 });
+        }
+        try {
+          await verifyPaystackPayment(payment_reference, amount);
+        } catch (verifyErr) {
+          console.error("Payment verification failed:", verifyErr);
+          return NextResponse.json({ error: "We couldn't verify your payment. If you were charged, email hello@decrakerubo.com with your reference number." }, { status: 402 });
+        }
       }
     }
 
@@ -59,8 +68,10 @@ export async function POST(req: NextRequest) {
       .insert({
         name, email, organization, website, industry, team_size,
         primary_challenge, desired_outcome, consultation_type,
-        scheduled_at, status: "confirmed",
-        amount_paid: amount || 0, payment_reference: payment_reference || null,
+        scheduled_at, status,
+        amount_paid: status === "pending_payment" ? 0 : (amount || 0),
+        payment_reference: payment_reference || null,
+        payment_method: amount > 0 ? (payment_method === "manual" ? "manual" : "paystack") : null,
       })
       .select()
       .single();
@@ -74,6 +85,7 @@ export async function POST(req: NextRequest) {
 
     // Send confirmation email via Resend
     try {
+      const pendingPayment = status === "pending_payment";
       await fetch("https://api.resend.com/emails", {
         method: "POST",
         headers: {
@@ -83,14 +95,18 @@ export async function POST(req: NextRequest) {
         body: JSON.stringify({
           from: `Decra Kerubo <${process.env.EMAIL_FROM}>`,
           to: [email],
-          subject: `Consultation confirmed — ${consultation_type}`,
+          subject: pendingPayment
+            ? `Booking received — awaiting payment confirmation (${consultation_type})`
+            : `Consultation confirmed — ${consultation_type}`,
           html: `
             <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; padding: 40px; color: #222;">
-              <h1 style="color: #0F4D3F; font-size: 28px;">Your consultation is confirmed.</h1>
+              <h1 style="color: #0F4D3F; font-size: 28px;">${pendingPayment ? "Booking received — payment pending." : "Your consultation is confirmed."}</h1>
               <p>Hi ${name},</p>
-              <p>Your <strong>${consultation_type}</strong> consultation has been confirmed.</p>
+              <p>Your <strong>${consultation_type}</strong> consultation is booked for:</p>
               <p><strong>Date:</strong> ${scheduled_at}</p>
-              ${amount > 0 ? `<p><strong>Amount paid:</strong> KES ${Number(amount).toLocaleString("en-KE")} (ref: ${payment_reference})</p>` : ""}
+              ${pendingPayment
+                ? `<p>We've noted your M-Pesa/bank reference (<strong>${payment_reference || "none provided"}</strong>) and will confirm the slot as soon as the payment is verified — usually within a few hours.</p>`
+                : (amount > 0 ? `<p><strong>Amount paid:</strong> KES ${Number(amount).toLocaleString("en-KE")} (ref: ${payment_reference})</p>` : "")}
               <p>I'll send a Google Meet link shortly. In the meantime, feel free to reply to this email with any questions.</p>
               <p style="margin-top: 40px;">— Decra Kerubo</p>
             </div>
@@ -101,7 +117,7 @@ export async function POST(req: NextRequest) {
       console.error("Email send failed:", emailErr);
     }
 
-    return NextResponse.json({ success: true, booking, meet_link: null });
+    return NextResponse.json({ success: true, booking, meet_link: null, status });
   } catch (err) {
     console.error("Booking error:", err);
     return NextResponse.json({ error: "Booking failed" }, { status: 500 });

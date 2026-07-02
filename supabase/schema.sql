@@ -4,11 +4,13 @@
 -- ============================================
 
 -- Bookings table
--- Bookings table
 -- If this table already exists in your Supabase project (schema was applied
 -- before payments were added), run this once to add the new columns:
 --   alter table bookings add column if not exists amount_paid numeric default 0;
 --   alter table bookings add column if not exists payment_reference text;
+--   alter table bookings add column if not exists payment_method text;
+--   alter table bookings drop constraint if exists bookings_status_check;
+--   alter table bookings add constraint bookings_status_check check (status in ('pending','pending_payment','confirmed','cancelled'));
 create table if not exists bookings (
   id uuid default gen_random_uuid() primary key,
   name text not null,
@@ -25,7 +27,8 @@ create table if not exists bookings (
   meet_link text,
   amount_paid numeric default 0,
   payment_reference text,
-  status text default 'confirmed' check (status in ('pending', 'confirmed', 'cancelled')),
+  payment_method text, -- 'paystack' | 'manual' | null (free booking)
+  status text default 'confirmed' check (status in ('pending', 'pending_payment', 'confirmed', 'cancelled')),
   created_at timestamptz default now()
 );
 

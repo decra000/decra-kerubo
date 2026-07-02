@@ -75,7 +75,7 @@ export default function AdminPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-[#8EA89B]/15">
-                  {tab === "bookings" && ["Name", "Email", "Type", "Date", "Status"].map((h) => (
+                  {tab === "bookings" && ["Name", "Email", "Type", "Date", "Status", "Payment"].map((h) => (
                     <th key={h} className="text-left text-xs uppercase tracking-widest text-[#8EA89B] px-6 py-4">{h}</th>
                   ))}
                   {tab === "leads" && ["Name", "Email", "Organization", "Source", "Date"].map((h) => (
@@ -94,7 +94,30 @@ export default function AdminPage() {
                     <td className="px-6 py-4 text-[#666]">{b.consultation_type}</td>
                     <td className="px-6 py-4 text-[#666]">{new Date(b.scheduled_at).toLocaleDateString()}</td>
                     <td className="px-6 py-4">
-                      <span className="text-xs px-2 py-1 bg-[#0F4D3F]/10 text-[#0F4D3F] rounded-full">{b.status}</span>
+                      <span className={`text-xs px-2 py-1 rounded-full ${b.status === "pending_payment" ? "bg-[#C8A95B]/15 text-[#8A6D2B]" : "bg-[#0F4D3F]/10 text-[#0F4D3F]"}`}>{b.status}</span>
+                    </td>
+                    <td className="px-6 py-4 text-[#666]">
+                      {b.payment_method === "manual" && b.status === "pending_payment" ? (
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs">{b.payment_reference ? `ref: ${b.payment_reference}` : "no ref given"}</span>
+                          <button
+                            onClick={async () => {
+                              const res = await fetch("/api/admin/mark-paid", {
+                                method: "POST", headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ id: b.id }),
+                              });
+                              if (res.ok) setBookings(prev => prev.map(x => x.id === b.id ? { ...x, status: "confirmed" } : x));
+                            }}
+                            className="text-xs px-2 py-1 rounded-full bg-[#0F4D3F] text-white hover:opacity-85 transition-opacity"
+                          >
+                            Mark Paid
+                          </button>
+                        </div>
+                      ) : b.amount_paid > 0 ? (
+                        <span className="text-xs">KES {Number(b.amount_paid).toLocaleString("en-KE")}</span>
+                      ) : (
+                        <span className="text-xs text-[#8EA89B]">Free</span>
+                      )}
                     </td>
                   </tr>
                 ))}
