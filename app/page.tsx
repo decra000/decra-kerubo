@@ -34,7 +34,6 @@ const BODY: React.CSSProperties = {
   fontSize: "0.875rem", color: "var(--c-ink-muted)", lineHeight: 1.85,
 };
 const SEC: React.CSSProperties = {
-  borderTop: "1px solid var(--c-border)",
   padding: "var(--space-section) var(--space-x)",
 };
 
@@ -518,7 +517,6 @@ function The1000() {
   const { ref, vis } = useReveal();
   return (
     <section id="spotify" ref={ref as React.RefObject<HTMLElement>} style={{
-      borderTop: "1px solid var(--c-border)",
       minHeight: "clamp(440px,64vh,700px)",
       position: "relative", overflow: "hidden",
       display: "flex", alignItems: "flex-end",
@@ -583,7 +581,7 @@ function The1000() {
 
       {/* Coming soon — sits over the open photo, no card/background of its own */}
       <p style={{
-        position: "absolute", left: "50%", transform: "translateX(-50%)", bottom: "clamp(2.5rem,5vw,4rem)",
+        position: "absolute", left: "50%", transform: "translateX(-50%)", bottom: "clamp(1.25rem,2.75vw,2rem)",
         zIndex: 1, margin: 0, textAlign: "center",
         fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 300,
         fontSize: "clamp(1.35rem,2.6vw,1.9rem)", letterSpacing: "0.14em",
