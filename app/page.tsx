@@ -532,14 +532,22 @@ function The1000() {
         background: `linear-gradient(to top, rgba(10,10,10,0.92) 0%, rgba(10,10,10,0.55) 28%, rgba(10,10,10,0.08) 55%, transparent 72%)`,
       }} />
 
+      {/* Fade to transparent at the bottom edge, blending into the section below */}
+      <div style={{
+        position: "absolute", left: 0, right: 0, bottom: 0, height: "22%",
+        background: "linear-gradient(to bottom, transparent 0%, var(--c-bg) 100%)",
+        pointerEvents: "none",
+      }} />
+
       <div style={{
         position: "relative", zIndex: 1, width: "100%",
         maxWidth: "var(--max-w)", margin: "0 auto",
         padding: "clamp(2.5rem,5vw,4.5rem) var(--space-x) clamp(3rem,6vw,5rem)",
+        display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center",
         ...fade(vis),
       }}>
-        <div style={{ maxWidth: "26rem" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "1.25rem" }}>
+        <div style={{ maxWidth: "26rem", display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.6rem", marginBottom: "1.25rem" }}>
             <SpotifyLogo />
             <p style={{
               fontFamily: "var(--font-manjari)", fontWeight: 700,
@@ -559,7 +567,7 @@ function The1000() {
             fontSize: "0.84rem", color: "rgba(255,255,255,0.68)", lineHeight: 1.8,
             marginBottom: "2.25rem",
           }}>
-            A new conversation on technology law across Africa — the regulation shaping how founders, companies, and institutions build. Launching on Spotify.
+            Technology Law in Africa
           </p>
 
           <button
@@ -575,14 +583,13 @@ function The1000() {
 
       {/* Coming soon — sits over the open photo, no card/background of its own */}
       <p style={{
-        position: "absolute", right: "var(--space-x)", bottom: "clamp(2.5rem,5vw,4rem)",
-        zIndex: 1, margin: 0,
-        fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400,
-        fontSize: "clamp(1.35rem,2.6vw,1.9rem)", letterSpacing: "0.01em",
-        color: "#0A0A0A",
-        textShadow: "0 0 22px rgba(255,255,255,0.6), 0 0 8px rgba(255,255,255,0.5)",
+        position: "absolute", left: "50%", transform: "translateX(-50%)", bottom: "clamp(2.5rem,5vw,4rem)",
+        zIndex: 1, margin: 0, textAlign: "center",
+        fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 300,
+        fontSize: "clamp(1.35rem,2.6vw,1.9rem)", letterSpacing: "0.14em",
+        color: "rgba(255,255,255,0.75)",
       }}>Coming soon</p>
-      <style>{`@media(max-width:640px){#spotify p[style*="position: absolute"]{position:static!important;margin-top:1.5rem!important;text-shadow:none!important;color:rgba(255,255,255,0.55)!important;}}`}</style>
+      <style>{`@media(max-width:640px){#spotify p[style*="position: absolute"]{position:static!important;transform:none!important;margin-top:1.5rem!important;color:rgba(255,255,255,0.55)!important;}}`}</style>
     </section>
   );
 }
