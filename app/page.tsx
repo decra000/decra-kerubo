@@ -54,6 +54,11 @@ const PACK_GROUP = {
   label: "Full Startup Advisory Pack",
   opening: "Hi, tell me about the Full Startup Advisory Pack — what's included and how it works.",
 };
+const POST_LAUNCH_REVIEW_GROUP = {
+  key: "post-launch-review",
+  label: "Post-Launch Review",
+  opening: "Hi, tell me about the Post-Launch Review — I already have a product live and want it looked at.",
+};
 const EVENTS_GROUP = {
   key: "events-conferences",
   label: "Events & Conferences",
@@ -212,6 +217,24 @@ function Services() {
                   See the full Startup Advisory Pack →
                 </button>
               )}
+              {s.id === "product-counsel" && (
+                <button
+                  onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: POST_LAUNCH_REVIEW_GROUP }))}
+                  style={{
+                    display: "block", background: "none", border: "none",
+                    padding: 0, marginBottom: "1.5rem", cursor: "pointer",
+                    textAlign: "left",
+                    fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400,
+                    fontSize: "0.82rem", color: "var(--c-accent)",
+                    textDecoration: "underline", textUnderlineOffset: "3px",
+                    textDecorationColor: "var(--c-border)",
+                  }}
+                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.textDecorationColor = "var(--c-accent)"}
+                  onMouseLeave={e => (e.currentTarget as HTMLElement).style.textDecorationColor = "var(--c-border)"}
+                >
+                  Already built? See Post-Launch Review →
+                </button>
+              )}
               <button
                 onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: { key: s.id, label: s.label, opening: s.opening } }))}
                 style={{
@@ -255,6 +278,8 @@ Decra is a Nairobi-based lawyer and computer scientist specialising in technolog
 She works with: startup founders needing incorporation, equity, co-founder agreements, eTIMS/KRA tax, fundraising, foreign branches, PBO registration; technology companies needing ODPC/data protection, product legal review, tech contracts; law firms needing tech law support or compliance; innovation ecosystem players — investors, incubators, and accelerators — seeking legal support or partnership; and event/conference organizers seeking Decra as a speaker, panelist, or partner.
 
 The Full Startup Advisory Pack is a bundled engagement covering: company incorporation & structure, founder & co-founder agreements, equity/vesting/cap table setup, tax structuring (eTIMS, VAT, PAYE), fundraising legal readiness, and foreign branch/PBO registration — the complete legal foundation from formation through fundraising. If someone asks about "the pack" or the Full Startup Advisory Pack, briefly explain what's included in 2-3 sentences FIRST, before moving into intake questions.
+
+Post-Launch Review is for products already live, not still being built — a one-time legal review covering compliance exposure, liability, privacy-by-design, terms of service, third-party/API integrations, and regulatory gaps, versus Product Counsel which is ongoing embedded support during the build itself. If someone asks about Post-Launch Review, briefly explain this distinction in 2-3 sentences FIRST, before moving into intake questions.
 
 The 1000 is Decra's upcoming podcast on technology law in Africa, launching soon on Spotify — not yet live. If someone expresses interest in The 1000, first find out how they'd like to be involved (e.g. featured guest, topic suggestion, sponsor/partner, or just notified when it launches), then continue normal intake gathering name and email.
 
@@ -412,7 +437,7 @@ function WorkWithDecra() {
                 <p style={{ ...LBL, marginBottom: "0.35rem" }}>Partner with Decra</p>
                 {active && (
                   <p style={{ fontFamily: "var(--font-serif)", fontSize: "1rem", color: "var(--c-ink)" }}>
-                    {[...PARTNER_GROUPS, PRODUCT_COUNSEL_GROUP, SPOTIFY_GROUP, PACK_GROUP].find(g => g.key === active)?.label}
+                    {[...PARTNER_GROUPS, PRODUCT_COUNSEL_GROUP, SPOTIFY_GROUP, PACK_GROUP, POST_LAUNCH_REVIEW_GROUP].find(g => g.key === active)?.label}
                   </p>
                 )}
               </div>

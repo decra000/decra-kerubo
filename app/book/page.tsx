@@ -152,32 +152,6 @@ export default function BookPage() {
         {/* Step 1 */}
         {step === 1 && (
           <div>
-            <h2 style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "1.05rem", color: "var(--c-forest)", marginBottom: "1.5rem" }}>What kind of consultation do you need?</h2>
-            <div className="consult-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem", marginBottom: "2rem" }}>
-              {CONSULTATION_TYPES.map((type) => (
-                <button key={type.id} onClick={() => setSelectedType(type.id)}
-                  style={{ textAlign: "left", padding: "1.25rem", borderRadius: "12px", border: `1.5px solid ${selectedType === type.id ? "var(--c-forest)" : "var(--c-border)"}`, background: selectedType === type.id ? "rgba(14,61,50,0.04)" : "transparent", cursor: "pointer", transition: "border-color 0.2s" }}
-                >
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", marginBottom: "0.4rem" }}>
-                    <Clock size={11} style={{ color: "var(--c-gold)" }} />
-                    <span style={{ fontSize: "0.65rem", color: "var(--c-gold)" }}>{type.duration} min</span>
-                    <span style={{ fontSize: "0.65rem", color: "var(--c-ink-muted)" }}>·</span>
-                    <span style={{ fontSize: "0.65rem", color: "var(--c-ink-muted)", fontWeight: 700 }}>{type.price > 0 ? formatKES(type.price) : "Free"}</span>
-                  </div>
-                  <p style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.825rem", color: "var(--c-forest)", marginBottom: "0.3rem" }}>{type.label}</p>
-                  <p style={{ fontSize: "0.7rem", color: "var(--c-ink-muted)", lineHeight: 1.5 }}>{type.description}</p>
-                </button>
-              ))}
-            </div>
-            <button disabled={!selectedType} onClick={() => setStep(2)} className="btn-primary" style={{ border: "none", opacity: !selectedType ? 0.4 : 1 }}>
-              Continue <ArrowRight size={13} />
-            </button>
-          </div>
-        )}
-
-        {/* Step 2 */}
-        {step === 2 && (
-          <div>
             <h2 style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "1.05rem", color: "var(--c-forest)", marginBottom: "0.35rem" }}>Tell me about yourself.</h2>
             <p style={{ fontSize: "0.75rem", color: "var(--c-ink-muted)", marginBottom: "2rem" }}>This helps me prepare for our conversation.</p>
             <div style={{ display: "flex", flexDirection: "column", gap: "1.1rem", marginBottom: "2rem" }}>
@@ -194,9 +168,35 @@ export default function BookPage() {
                 </div>
               ))}
             </div>
+            <button disabled={!form.name || !form.email || !form.primary_challenge || !form.desired_outcome} onClick={() => setStep(2)} className="btn-primary" style={{ border: "none", opacity: (!form.name || !form.email || !form.primary_challenge || !form.desired_outcome) ? 0.4 : 1 }}>
+              Continue <ArrowRight size={13} />
+            </button>
+          </div>
+        )}
+
+        {/* Step 2 */}
+        {step === 2 && (
+          <div>
+            <h2 style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "1.05rem", color: "var(--c-forest)", marginBottom: "1.5rem" }}>Which call do you need?</h2>
+            <div className="consult-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem", marginBottom: "2rem" }}>
+              {CONSULTATION_TYPES.map((type) => (
+                <button key={type.id} onClick={() => setSelectedType(type.id)}
+                  style={{ textAlign: "left", padding: "1.25rem", borderRadius: "12px", border: `1.5px solid ${selectedType === type.id ? "var(--c-forest)" : "var(--c-border)"}`, background: selectedType === type.id ? "rgba(14,61,50,0.04)" : "transparent", cursor: "pointer", transition: "border-color 0.2s" }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", marginBottom: "0.4rem" }}>
+                    <Clock size={11} style={{ color: "var(--c-gold)" }} />
+                    <span style={{ fontSize: "0.65rem", color: "var(--c-gold)" }}>{type.duration} min</span>
+                    <span style={{ fontSize: "0.65rem", color: "var(--c-ink-muted)" }}>·</span>
+                    <span style={{ fontSize: "0.65rem", color: "var(--c-ink-muted)", fontWeight: 700 }}>{type.price > 0 ? formatKES(type.price) : "Free"}</span>
+                  </div>
+                  <p style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.825rem", color: "var(--c-forest)", marginBottom: "0.3rem" }}>{type.label}</p>
+                  <p style={{ fontSize: "0.7rem", color: "var(--c-ink-muted)", lineHeight: 1.5 }}>{type.description}</p>
+                </button>
+              ))}
+            </div>
             <div style={{ display: "flex", gap: "0.75rem" }}>
               <button onClick={() => setStep(1)} className="btn-outline" style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}><ArrowLeft size={13} /> Back</button>
-              <button disabled={!form.name || !form.email || !form.primary_challenge || !form.desired_outcome} onClick={() => setStep(3)} className="btn-primary" style={{ border: "none", opacity: (!form.name || !form.email || !form.primary_challenge || !form.desired_outcome) ? 0.4 : 1 }}>
+              <button disabled={!selectedType} onClick={() => setStep(3)} className="btn-primary" style={{ border: "none", opacity: !selectedType ? 0.4 : 1 }}>
                 Continue <ArrowRight size={13} />
               </button>
             </div>
