@@ -37,6 +37,7 @@ export interface ConsultationType {
   label: string;
   duration: number;
   description: string;
+  price: number; // KES. 0 = free.
 }
 
 export const CONSULTATION_TYPES: ConsultationType[] = [
@@ -45,35 +46,41 @@ export const CONSULTATION_TYPES: ConsultationType[] = [
     label: "Discovery Call",
     duration: 15,
     description: "A quick call to understand your needs and explore how I can help.",
+    price: 0,
   },
   {
     id: "strategy",
     label: "Strategy Session",
     duration: 30,
     description: "A focused session to map out a strategic direction for your challenge.",
+    price: 5000,
   },
   {
     id: "advisory",
     label: "Advisory Consultation",
     duration: 60,
     description: "An in-depth consultation for complex challenges requiring detailed guidance.",
+    price: 12000,
   },
   {
     id: "ai-strategy",
     label: "AI Strategy Consultation",
     duration: 60,
     description: "Deep dive into AI readiness, adoption strategy, and implementation planning.",
+    price: 15000,
   },
   {
     id: "tech-law",
     label: "Technology Law Consultation",
     duration: 60,
     description: "Legal advisory on technology, IP, data privacy, and startup law.",
+    price: 10000,
   },
   {
     id: "entrepreneurial-legal",
     label: "Entrepreneurial Legal Consultation",
     duration: 60,
     description: "Legal guidance for founders on incorporation, IP, tax structuring, and governance.",
+    price: 10000,
   },
 ];

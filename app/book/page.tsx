@@ -1,11 +1,19 @@
 "use client";
-import { useState } from "react";
-import { ArrowRight, ArrowLeft, Clock, CheckCircle2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ArrowRight, ArrowLeft, Clock, CheckCircle2, ShieldCheck } from "lucide-react";
 import { CONSULTATION_TYPES } from "@/lib/types";
 
 type Step = 1 | 2 | 3;
 
 const TIME_SLOTS = ["09:00 AM", "10:00 AM", "11:00 AM", "02:00 PM", "03:00 PM", "04:00 PM"];
+
+declare global {
+  interface Window {
+    PaystackPop?: { setup: (opts: Record<string, unknown>) => { openIframe: () => void } };
+  }
+}
+
+const formatKES = (n: number) => `KES ${n.toLocaleString("en-KE")}`;
 
 export default function BookPage() {
   const [step, setStep] = useState<Step>(1);
@@ -13,21 +21,62 @@ export default function BookPage() {
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [loading, setLoading] = useState(false);
+  const [paying, setPaying] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
   const [meetLink, setMeetLink] = useState("");
+  const [paidRef, setPaidRef] = useState("");
+  const [payError, setPayError] = useState("");
   const [form, setForm] = useState({ name: "", email: "", organization: "", website: "", industry: "", team_size: "", primary_challenge: "", desired_outcome: "" });
 
   const selectedConsultation = CONSULTATION_TYPES.find(t => t.id === selectedType);
+  const isPaid = (selectedConsultation?.price ?? 0) > 0;
 
-  const handleBooking = async () => {
+  // Paystack Inline is a free client-side script — no SDK install needed.
+  useEffect(() => {
+    if (document.getElementById("paystack-inline-js")) return;
+    const s = document.createElement("script");
+    s.id = "paystack-inline-js";
+    s.src = "https://js.paystack.co/v1/inline.js";
+    s.async = true;
+    document.body.appendChild(s);
+  }, []);
+
+  const handleBooking = async (reference?: string) => {
     setLoading(true);
     try {
-      const res = await fetch("/api/book", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...form, consultation_type: selectedType, scheduled_at: `${selectedDate}T${selectedTime}` }) });
+      const res = await fetch("/api/book", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({
+        ...form, consultation_type: selectedType, scheduled_at: `${selectedDate}T${selectedTime}`,
+        amount: selectedConsultation?.price ?? 0, payment_reference: reference || null,
+      }) });
       const data = await res.json();
+      if (data.error) { setPayError(data.error); return; }
       if (data.meet_link) setMeetLink(data.meet_link);
+      if (reference) setPaidRef(reference);
       setConfirmed(true);
-    } catch { alert("Booking failed. Please try again or email hello@decrakero.com"); }
-    finally { setLoading(false); }
+    } catch { setPayError("Booking failed. Please try again or email hello@decrakerubo.com."); }
+    finally { setLoading(false); setPaying(false); }
+  };
+
+  const handleConfirm = () => {
+    setPayError("");
+    if (!isPaid) { handleBooking(); return; }
+
+    if (!window.PaystackPop) { setPayError("Payment is still loading — please try again in a moment."); return; }
+    setPaying(true);
+    const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY;
+    if (!publicKey) { setPayError("Payments aren't configured yet — email hello@decrakerubo.com to book this consultation."); setPaying(false); return; }
+
+    const handler = window.PaystackPop.setup({
+      key: publicKey,
+      email: form.email,
+      amount: Math.round((selectedConsultation?.price ?? 0) * 100), // Paystack expects the lowest currency unit
+      currency: "KES",
+      channels: ["mobile_money", "card"],
+      metadata: { consultation_type: selectedType, name: form.name },
+      callback: (response: { reference: string }) => { handleBooking(response.reference); },
+      onClose: () => { setPaying(false); },
+    });
+    handler.openIframe();
   };
 
   const labelStyle = { display: "block", fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "var(--c-ink-muted)", marginBottom: "0.5rem" };
@@ -47,10 +96,10 @@ export default function BookPage() {
             </a>
           )}
           <div className="card" style={{ textAlign: "left" }}>
-            {[["Type", selectedConsultation?.label], ["Date", selectedDate], ["Time", `${selectedTime} EAT`]].map(([k, v]) => (
-              <div key={k as string} style={{ display: "flex", justifyContent: "space-between", fontSize: "0.8rem", padding: "0.65rem 0", borderBottom: "1px solid var(--c-border)" }}>
-                <span style={{ color: "var(--c-ink-muted)" }}>{k as string}</span>
-                <span style={{ color: "var(--c-forest)", fontWeight: 700 }}>{v as string}</span>
+            {[["Type", selectedConsultation?.label], ["Date", selectedDate], ["Time", `${selectedTime} EAT`], ...(isPaid ? [["Amount paid", formatKES(selectedConsultation?.price ?? 0)], ["Reference", paidRef]] : [])].map(([k, v]) => (
+              <div key={k as string} style={{ display: "flex", justifyContent: "space-between", gap: "1rem", fontSize: "0.8rem", padding: "0.65rem 0", borderBottom: "1px solid var(--c-border)" }}>
+                <span style={{ color: "var(--c-ink-muted)", flexShrink: 0 }}>{k as string}</span>
+                <span style={{ color: "var(--c-forest)", fontWeight: 700, textAlign: "right", wordBreak: "break-all" }}>{v as string}</span>
               </div>
             ))}
           </div>
@@ -82,7 +131,7 @@ export default function BookPage() {
         {step === 1 && (
           <div>
             <h2 style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "1.05rem", color: "var(--c-forest)", marginBottom: "1.5rem" }}>What kind of consultation do you need?</h2>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem", marginBottom: "2rem" }}>
+            <div className="consult-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem", marginBottom: "2rem" }}>
               {CONSULTATION_TYPES.map((type) => (
                 <button key={type.id} onClick={() => setSelectedType(type.id)}
                   style={{ textAlign: "left", padding: "1.25rem", borderRadius: "12px", border: `1.5px solid ${selectedType === type.id ? "var(--c-forest)" : "var(--c-border)"}`, background: selectedType === type.id ? "rgba(14,61,50,0.04)" : "transparent", cursor: "pointer", transition: "border-color 0.2s" }}
@@ -90,6 +139,8 @@ export default function BookPage() {
                   <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", marginBottom: "0.4rem" }}>
                     <Clock size={11} style={{ color: "var(--c-gold)" }} />
                     <span style={{ fontSize: "0.65rem", color: "var(--c-gold)" }}>{type.duration} min</span>
+                    <span style={{ fontSize: "0.65rem", color: "var(--c-ink-muted)" }}>·</span>
+                    <span style={{ fontSize: "0.65rem", color: "var(--c-ink-muted)", fontWeight: 700 }}>{type.price > 0 ? formatKES(type.price) : "Free"}</span>
                   </div>
                   <p style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.825rem", color: "var(--c-forest)", marginBottom: "0.3rem" }}>{type.label}</p>
                   <p style={{ fontSize: "0.7rem", color: "var(--c-ink-muted)", lineHeight: 1.5 }}>{type.description}</p>
@@ -142,7 +193,7 @@ export default function BookPage() {
             {selectedDate && (
               <div style={{ marginBottom: "1.75rem" }}>
                 <label style={labelStyle}>Select Time</label>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "0.6rem" }}>
+                <div className="time-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "0.6rem" }}>
                   {TIME_SLOTS.map(slot => (
                     <button key={slot} onClick={() => setSelectedTime(slot)}
                       style={{ padding: "0.65rem", borderRadius: "8px", border: `1px solid ${selectedTime === slot ? "var(--c-forest)" : "var(--c-border)"}`, background: selectedTime === slot ? "var(--c-forest)" : "transparent", color: selectedTime === slot ? "white" : "var(--c-ink-mid)", fontSize: "0.775rem", cursor: "pointer", fontFamily: "var(--font-manjari)", transition: "all 0.2s" }}
@@ -154,7 +205,7 @@ export default function BookPage() {
             {selectedDate && selectedTime && (
               <div style={{ background: "var(--c-forest)", borderRadius: "12px", padding: "1.5rem", marginBottom: "2rem" }}>
                 <p className="t-label" style={{ marginBottom: "1rem" }}>Booking Summary</p>
-                {[["Type", selectedConsultation?.label], ["Duration", `${selectedConsultation?.duration} minutes`], ["Date", selectedDate], ["Time", `${selectedTime} EAT`]].map(([k, v]) => (
+                {[["Type", selectedConsultation?.label], ["Duration", `${selectedConsultation?.duration} minutes`], ["Date", selectedDate], ["Time", `${selectedTime} EAT`], ["Amount", isPaid ? formatKES(selectedConsultation?.price ?? 0) : "Free"]].map(([k, v]) => (
                   <div key={k as string} style={{ display: "flex", justifyContent: "space-between", fontSize: "0.775rem", color: "rgba(248,246,241,0.7)", padding: "0.4rem 0" }}>
                     <span style={{ color: "rgba(248,246,241,0.4)" }}>{k as string}</span>
                     <span>{v as string}</span>
@@ -162,12 +213,24 @@ export default function BookPage() {
                 ))}
               </div>
             )}
+            {payError && (
+              <p style={{ fontSize: "0.75rem", color: "#B4453A", marginBottom: "1.25rem" }}>{payError}</p>
+            )}
             <div style={{ display: "flex", gap: "0.75rem" }}>
               <button onClick={() => setStep(2)} className="btn-outline" style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}><ArrowLeft size={13} /> Back</button>
-              <button disabled={!selectedDate || !selectedTime || loading} onClick={handleBooking} className="btn-primary" style={{ border: "none", opacity: (!selectedDate || !selectedTime || loading) ? 0.4 : 1 }}>
-                {loading ? "Confirming..." : <>Confirm Booking <ArrowRight size={13} /></>}
+              <button disabled={!selectedDate || !selectedTime || loading || paying} onClick={handleConfirm} className="btn-primary" style={{ border: "none", opacity: (!selectedDate || !selectedTime || loading || paying) ? 0.4 : 1 }}>
+                {loading || paying
+                  ? (paying ? "Redirecting to payment..." : "Confirming...")
+                  : isPaid
+                    ? <>Pay {formatKES(selectedConsultation?.price ?? 0)} &amp; Confirm <ShieldCheck size={13} /></>
+                    : <>Confirm Booking <ArrowRight size={13} /></>}
               </button>
             </div>
+            {isPaid && (
+              <p style={{ fontSize: "0.68rem", color: "var(--c-ink-muted)", marginTop: "1rem", display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                <ShieldCheck size={12} /> Secure payment via Paystack — cards &amp; M-Pesa accepted.
+              </p>
+            )}
           </div>
         )}
       </div>

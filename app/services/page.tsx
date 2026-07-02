@@ -69,7 +69,7 @@ export default function ServicesPage() {
 
       {/* ── Header ── */}
       <section className="section page-x" style={{ borderBottom: "1px solid var(--c-border)" }}>
-        <div className="inner" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "5rem", alignItems: "end" }}>
+        <div className="inner header-grid" style={{ alignItems: "end" }}>
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "1.5rem" }}>
               <span style={{ display: "inline-block", width: "1.5rem", height: "1px", background: "var(--c-gold)" }} />
@@ -92,9 +92,9 @@ export default function ServicesPage() {
             const Icon = s.icon;
             return (
               <div key={s.id} id={s.id} style={{ scrollMarginTop: "6rem", paddingTop: "4rem", paddingBottom: "4rem", borderBottom: "1px solid var(--c-border)" }}>
-                <div style={{ display: "grid", gridTemplateColumns: "2fr 3fr", gap: "4rem" }}>
+                <div className="track-grid" style={{ display: "grid", gridTemplateColumns: "2fr 3fr", gap: "4rem" }}>
                   {/* Left: sticky summary */}
-                  <div style={{ position: "sticky", top: "6rem", alignSelf: "start" }}>
+                  <div className="track-summary" style={{ position: "sticky", top: "6rem", alignSelf: "start" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "1.25rem" }}>
                       <div style={{ width: "2.25rem", height: "2.25rem", borderRadius: "8px", background: "rgba(14,61,50,0.06)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                         <Icon size={16} style={{ color: "var(--c-forest)" }} />
@@ -137,7 +137,7 @@ export default function ServicesPage() {
                         ))}
                       </ol>
                     </div>
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.1rem" }}>
+                    <div className="two-col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.1rem" }}>
                       <div className="card">
                         <p className="t-label" style={{ marginBottom: "1rem" }}>Deliverables</p>
                         <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
@@ -185,9 +185,13 @@ export default function ServicesPage() {
       </section>
 
       <style>{`
+        @media(max-width:900px){
+          .header-grid{grid-template-columns:1fr !important; gap:2.5rem !important;}
+        }
         @media(max-width:768px){
-          .inner{grid-template-columns:1fr !important; gap:2.5rem !important;}
-          .inner > div > div{grid-template-columns:1fr !important; position:static !important;}
+          .track-grid{grid-template-columns:1fr !important; gap:2rem !important;}
+          .track-summary{position:static !important; top:auto !important;}
+          .two-col{grid-template-columns:1fr !important;}
         }
       `}</style>
     </div>

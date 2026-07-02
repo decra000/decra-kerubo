@@ -2,13 +2,54 @@ export const dynamic = "force-dynamic";
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 
+// Verifies a Paystack transaction reference server-side — never trust the
+// amount/status reported by the client alone. Free (no monthly fee),
+// pay-as-you-go; see https://paystack.com/ke/pricing.
+async function verifyPaystackPayment(reference: string, expectedAmountKES: number) {
+  const secretKey = process.env.PAYSTACK_SECRET_KEY;
+  if (!secretKey) throw new Error("Paystack is not configured (missing PAYSTACK_SECRET_KEY).");
+
+  const res = await fetch(`https://api.paystack.co/transaction/verify/${encodeURIComponent(reference)}`, {
+    headers: { Authorization: `Bearer ${secretKey}` },
+  });
+  const data = await res.json();
+  const tx = data?.data;
+
+  if (!res.ok || !tx || tx.status !== "success") {
+    throw new Error("Payment could not be verified.");
+  }
+  // Paystack amounts are in the lowest currency unit (cents).
+  if (Math.round(tx.amount) !== Math.round(expectedAmountKES * 100)) {
+    throw new Error("Payment amount does not match the selected consultation.");
+  }
+  if ((tx.currency || "").toUpperCase() !== "KES") {
+    throw new Error("Payment currency mismatch.");
+  }
+  return tx;
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const {
       name, email, organization, website, industry, team_size,
       primary_challenge, desired_outcome, consultation_type, scheduled_at,
+      amount, payment_reference,
     } = body;
+
+    // Paid consultations must carry a verified Paystack reference before we
+    // ever write a "confirmed" booking to the database.
+    if (amount > 0) {
+      if (!payment_reference) {
+        return NextResponse.json({ error: "Payment reference missing." }, { status: 400 });
+      }
+      try {
+        await verifyPaystackPayment(payment_reference, amount);
+      } catch (verifyErr) {
+        console.error("Payment verification failed:", verifyErr);
+        return NextResponse.json({ error: "We couldn't verify your payment. If you were charged, email hello@decrakerubo.com with your reference number." }, { status: 402 });
+      }
+    }
 
     const db = supabaseAdmin();
 
@@ -19,6 +60,7 @@ export async function POST(req: NextRequest) {
         name, email, organization, website, industry, team_size,
         primary_challenge, desired_outcome, consultation_type,
         scheduled_at, status: "confirmed",
+        amount_paid: amount || 0, payment_reference: payment_reference || null,
       })
       .select()
       .single();
@@ -48,6 +90,7 @@ export async function POST(req: NextRequest) {
               <p>Hi ${name},</p>
               <p>Your <strong>${consultation_type}</strong> consultation has been confirmed.</p>
               <p><strong>Date:</strong> ${scheduled_at}</p>
+              ${amount > 0 ? `<p><strong>Amount paid:</strong> KES ${Number(amount).toLocaleString("en-KE")} (ref: ${payment_reference})</p>` : ""}
               <p>I'll send a Google Meet link shortly. In the meantime, feel free to reply to this email with any questions.</p>
               <p style="margin-top: 40px;">— Decra Kerubo</p>
             </div>

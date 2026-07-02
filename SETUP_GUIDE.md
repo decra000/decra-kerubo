@@ -54,6 +54,31 @@ That creates: bookings, leads, subscribers, and messages tables.
 
 ---
 
+## STEP 3b — SET UP PAYSTACK (PAYMENTS ON /book)
+
+Free to integrate — no monthly fee or setup cost, only a per-transaction fee
+when a payment succeeds (2.9% cards, 1.5% M-Pesa in Kenya). Supports cards
+and M-Pesa natively.
+
+1. Go to https://paystack.com and sign up with your Kenyan business details
+2. In the dashboard, go to **Settings → API Keys & Webhooks**
+3. Copy the **Public Key** → this is `NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY`
+4. Copy the **Secret Key** → this is `PAYSTACK_SECRET_KEY` (never expose this in client code)
+5. Under **Settings → Preferences**, tick **Mobile Money** so M-Pesa shows up at checkout
+6. Start in **Test Mode** (keys prefixed `pk_test_` / `sk_test_`) until you've confirmed a full booking end-to-end, then switch to your live keys
+7. If your `bookings` table already existed before this update, run this once in the Supabase SQL editor:
+   ```sql
+   alter table bookings add column if not exists amount_paid numeric default 0;
+   alter table bookings add column if not exists payment_reference text;
+   ```
+
+Consultation prices live in `lib/types.ts` (`CONSULTATION_TYPES`) — edit the
+`price` field on each type (in KES) to match what you actually want to
+charge. Set `price: 0` for anything that should stay free (e.g. the
+Discovery Call).
+
+---
+
 ## STEP 4 — FILL IN YOUR .env.local
 
 Open `.env.local` in the project root and fill in every value:
@@ -65,6 +90,9 @@ SUPABASE_SERVICE_ROLE_KEY=eyJ...
 
 RESEND_API_KEY=re_...
 EMAIL_FROM=onboarding@resend.dev
+
+NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY=pk_test_...
+PAYSTACK_SECRET_KEY=sk_test_...
 
 NEXTAUTH_SECRET=any-long-random-string-here
 NEXTAUTH_URL=http://localhost:3000

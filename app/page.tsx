@@ -95,9 +95,9 @@ function Hero() {
         `,
       }} />
       <div style={{
-        position: "absolute", top: "6vh", left: 0, right: 0, bottom: 0,
+        position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
         display: "flex", alignItems: "center",
-        padding: "0 var(--space-x)",
+        padding: "clamp(2rem,6vh,4.5rem) var(--space-x) 0",
         maxWidth: "calc(var(--max-w) + (var(--space-x) * 2))", margin: "0 auto",
         pointerEvents: "none",
         opacity: vis ? 1 : 0,
@@ -517,83 +517,65 @@ const SpotifyLogo = () => (
 function The1000() {
   const { ref, vis } = useReveal();
   return (
-    <section id="the-1000" ref={ref as React.RefObject<HTMLElement>} style={{
-      borderTop: "none",
-      minHeight: "clamp(420px, 60vh, 680px)",
-      background: "#0F3320",
-      position: "relative", overflow: "hidden",
-      display: "flex", alignItems: "center",
-    }}>
-      <img src="/decra-spotify-portrait.png" alt="" style={{
-        position: "absolute", inset: 0, width: "100%", height: "100%",
-        objectFit: "cover", objectPosition: "50% 30%",
-        opacity: 1, zIndex: 0, pointerEvents: "none", display: "block",
-      }} />
-      {/* Light scrim — just enough for text contrast, photo stays visible */}
-      <div style={{
-        position: "absolute", inset: 0, zIndex: 1,
-        background: `radial-gradient(ellipse 70% 80% at 50% 38%, rgba(15,51,32,0.18) 0%, rgba(15,51,32,0.4) 60%, rgba(15,51,32,0.6) 100%)`,
-      }} />
-      <div style={{
-        position: "absolute", inset: 0, zIndex: 2,
-        background: `linear-gradient(to bottom, rgba(15,51,32,0.55) 0%, transparent 20%, transparent 78%, rgba(15,51,32,0.7) 100%)`,
-      }} />
-      <div style={{
-        maxWidth: "var(--max-w)", margin: "0 auto", width: "100%",
-        padding: "clamp(5rem,9vw,9rem) var(--space-x)",
-        position: "relative", zIndex: 3,
-        display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center",
-        opacity: vis ? 1 : 0, transform: vis ? "none" : "translateY(20px)",
-        transition: "opacity 1s cubic-bezier(0.16,1,0.3,1), transform 1s cubic-bezier(0.16,1,0.3,1)",
-      }}>
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1.75rem" }}>
-          <SpotifyLogo />
+    <section id="spotify" ref={ref as React.RefObject<HTMLElement>} style={{ borderTop: "1px solid var(--c-border)" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", minHeight: "clamp(360px,52vh,560px)" }} className="spotify-grid">
+        <div style={{
+          background: "#0D0D0D",
+          padding: "clamp(2.5rem,5vw,4.5rem) clamp(1.75rem,4vw,3.5rem)",
+          display: "flex", flexDirection: "column", justifyContent: "center",
+          ...fade(vis),
+        }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "1.5rem" }}>
+            <SpotifyLogo />
+            <p style={{
+              fontFamily: "var(--font-manjari)", fontWeight: 700,
+              fontSize: "0.55rem", letterSpacing: "0.24em", textTransform: "uppercase",
+              color: "rgba(255,255,255,0.45)",
+            }}>Podcast</p>
+          </div>
+
+          <h2 style={{
+            fontFamily: "var(--font-serif)", fontWeight: 400, fontStyle: "italic",
+            fontSize: "clamp(2rem,3.6vw,3rem)", color: "#FFFFFF",
+            letterSpacing: "-0.01em", lineHeight: 1, marginBottom: "1rem",
+          }}>The 1000</h2>
+
           <p style={{
-            fontFamily: "var(--font-serif)",
-            fontWeight: 400, fontSize: "clamp(2.5rem,4.6vw,4rem)",
-            color: "#FFFFFF", letterSpacing: "-0.01em", lineHeight: 1,
-            fontStyle: "italic",
-          }}>The 1000</p>
+            fontFamily: "var(--font-sans)", fontWeight: 400,
+            fontSize: "0.84rem", color: "rgba(255,255,255,0.6)", lineHeight: 1.8,
+            maxWidth: "24rem", marginBottom: "2.25rem",
+          }}>
+            A new conversation on technology law across Africa — the regulation shaping how founders, companies, and institutions build. Launching on Spotify.
+          </p>
+
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: SPOTIFY_GROUP }))}
+            style={lineBtn({ light: true })}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "#C4A06A"; (e.currentTarget as HTMLElement).style.color = "#C4A06A"; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.3)"; (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"; }}
+          >
+            Express Interest
+          </button>
+
           <p style={{
             fontFamily: "var(--font-manjari)", fontWeight: 700,
-            fontSize: "0.68rem", letterSpacing: "0.24em", textTransform: "uppercase",
-            color: "rgba(255,255,255,0.7)",
-          }}>Technology law in Africa &nbsp;&middot;&nbsp; on Spotify</p>
+            fontSize: "0.52rem", letterSpacing: "0.22em", textTransform: "uppercase",
+            color: "rgba(255,255,255,0.32)", marginTop: "2.25rem",
+          }}>Coming soon</p>
+        </div>
+
+        <div style={{ position: "relative", overflow: "hidden", minHeight: "18rem" }} className="spotify-img">
+          <img src="/decra-spotify-portrait.png" alt="" style={{
+            position: "absolute", inset: 0, width: "100%", height: "100%",
+            objectFit: "cover", objectPosition: "50% 25%", display: "block",
+          }} />
+          <div style={{
+            position: "absolute", inset: 0,
+            background: "linear-gradient(105deg, rgba(13,13,13,0.35) 0%, transparent 22%)",
+          }} />
         </div>
       </div>
-
-      {/* Coming soon — large, no background, sitting low in the section */}
-      <div style={{
-        position: "absolute", left: 0, right: 0, bottom: "clamp(0.75rem,2.5vw,1.5rem)",
-        display: "flex", justifyContent: "center",
-        zIndex: 3, pointerEvents: "none",
-      }}>
-        <span style={{
-          fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400,
-          fontSize: "clamp(1.6rem,3.2vw,2.4rem)", letterSpacing: "0.01em",
-          color: "rgba(255,255,255,0.92)",
-          transform: "rotate(-1.5deg)",
-        }}>Coming soon</span>
-      </div>
-
-      {/* Express Interest — handwritten, tucked to the side at the base of the section */}
-      <button
-        onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: SPOTIFY_GROUP }))}
-        style={{
-          position: "absolute", right: "clamp(1.5rem,5vw,4rem)", bottom: "clamp(1.75rem,4.5vw,3rem)",
-          zIndex: 3,
-          background: "none", border: "none", cursor: "pointer", padding: 0,
-          fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400,
-          fontSize: "clamp(1.1rem,1.8vw,1.4rem)", letterSpacing: "0.01em",
-          color: "rgba(255,255,255,0.85)",
-          textDecoration: "underline", textDecorationStyle: "wavy", textUnderlineOffset: "5px",
-          transform: "rotate(-2deg)", transition: "color 0.25s",
-        }}
-        onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "#C4A06A"}
-        onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"}
-      >
-        Express Interest
-      </button>
+      <style>{`@media(max-width:820px){.spotify-grid{grid-template-columns:1fr!important}.spotify-img{min-height:16rem!important;order:-1}}`}</style>
     </section>
   );
 }

@@ -7,8 +7,8 @@ import { useTheme } from "./ThemeProvider";
 const links = [
   { href: "/#about",       label: "About" },
   { href: "/#services",   label: "Services" },
+  { href: "/#spotify",    label: "Spotify" },
   { href: "/#collaborate", label: "Collaborate" },
-  { href: "/#the-1000",    label: "Spotify" },
 ];
 
 const lk: React.CSSProperties = {
@@ -63,6 +63,14 @@ export function Navbar() {
                 {l.label}
               </Link>
             ))}
+            <Link href="/book" style={{
+              ...lk, color: "var(--c-bg)", background: "var(--c-ink)",
+              padding: "0.55rem 1rem", borderRadius: "2px",
+            }}
+              onMouseEnter={e => (e.currentTarget as HTMLElement).style.opacity = "0.82"}
+              onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = "1"}>
+              Book Appointment
+            </Link>
             <button onClick={toggle} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--c-ink-muted)", lineHeight: 0, transition: "color 0.2s" }}
               onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"}
               onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink-mid)"}>
@@ -89,6 +97,12 @@ export function Navbar() {
                 {l.label}
               </Link>
             ))}
+            <Link href="/book" onClick={() => setMob(false)} style={{
+              ...lk, fontSize: "0.75rem", color: "var(--c-bg)", background: "var(--c-ink)",
+              padding: "0.7rem 1rem", borderRadius: "2px", textAlign: "center",
+            }}>
+              Book Appointment
+            </Link>
           </div>
         )}
       </header>

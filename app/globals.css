@@ -22,6 +22,7 @@
   --c-border-strong: rgba(13,13,13,0.16);
 
   --space-x:       clamp(1.5rem, 5.5vw, 7rem);
+  --space-page-x:  clamp(1.5rem, 6vw, 6rem);
   --space-section: clamp(5rem, 9vw, 10rem);
   --max-w:         70rem;
 }
@@ -73,4 +74,79 @@ img { display: block; }
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: none; }
+}
+
+/* ── Shared layout utilities (used by /services, /book, /the-1000) ── */
+.section  { padding-top: var(--space-section); padding-bottom: var(--space-section); }
+.page-x   { padding-left: var(--space-page-x); padding-right: var(--space-page-x); }
+.inner    { max-width: var(--max-w); margin: 0 auto; }
+
+/* ── Shared typography ── */
+.t-label {
+  display: block;
+  font-family: var(--font-manjari); font-weight: 700;
+  font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--c-ink-muted);
+}
+.t-body {
+  font-family: var(--font-sans); font-weight: 400;
+  font-size: 0.9rem; color: var(--c-ink-muted); line-height: 1.8;
+}
+.t-body-sm {
+  font-family: var(--font-sans); font-weight: 400;
+  font-size: 0.8rem; color: var(--c-ink-muted); line-height: 1.7;
+}
+.t-display {
+  font-family: var(--font-serif); font-weight: 400;
+  color: var(--c-ink); line-height: 1.08; letter-spacing: -0.01em;
+}
+.t-display-xl { font-size: clamp(2.1rem, 5vw, 4rem); }
+.t-display-lg { font-size: clamp(1.75rem, 3.6vw, 2.75rem); }
+.t-display-md { font-size: clamp(1.4rem, 2.6vw, 2rem); }
+
+/* ── Shared components ── */
+.card {
+  border: 1px solid var(--c-border);
+  border-radius: 10px;
+  padding: clamp(1.1rem, 2.4vw, 1.5rem);
+}
+.btn-primary, .btn-outline {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  font-family: var(--font-manjari); font-weight: 700;
+  font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+  padding: 0.9rem 1.75rem; border-radius: 2px;
+  text-decoration: none; cursor: pointer;
+  transition: opacity 0.2s, border-color 0.2s, color 0.2s;
+}
+.btn-primary { color: var(--c-bg); background: var(--c-ink); }
+.btn-primary:hover { opacity: 0.82; }
+.btn-outline { color: var(--c-ink); background: transparent; border: 1px solid var(--c-border-strong); }
+.btn-outline:hover { border-color: var(--c-accent); color: var(--c-accent); }
+
+.field {
+  width: 100%;
+  font-family: var(--font-sans); font-size: 0.85rem; color: var(--c-ink);
+  background: var(--c-surface); border: 1px solid var(--c-border);
+  border-radius: 8px; padding: 0.75rem 0.9rem;
+  transition: border-color 0.2s;
+}
+.field:focus { outline: none; border-color: var(--c-accent); }
+
+/* ── Shared grids ── */
+.header-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+.cases-grid  { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+
+/* ── Mobile — applies site-wide ── */
+@media (max-width: 900px) {
+  .header-grid { grid-template-columns: 1fr; gap: 2rem; align-items: start !important; }
+  .cases-grid  { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  :root { --space-section: clamp(3.5rem, 14vw, 6rem); }
+  .cases-grid  { grid-template-columns: 1fr; }
+  .btn-primary, .btn-outline { width: 100%; padding: 0.85rem 1.25rem; }
+}
+@media (max-width: 480px) {
+  .consult-grid { grid-template-columns: 1fr !important; }
+  .time-grid    { grid-template-columns: repeat(2, 1fr) !important; }
 }
