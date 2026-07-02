@@ -542,7 +542,7 @@ function The1000() {
   const { ref, vis } = useReveal();
   return (
     <section id="spotify" ref={ref as React.RefObject<HTMLElement>} style={{
-      minHeight: "clamp(440px,64vh,700px)",
+      minHeight: "clamp(560px,82vh,880px)",
       position: "relative", overflow: "hidden",
       display: "flex", alignItems: "flex-end",
     }}>
@@ -565,7 +565,7 @@ function The1000() {
       <div style={{
         position: "relative", zIndex: 1, width: "100%",
         maxWidth: "var(--max-w)", margin: "0 auto",
-        padding: "clamp(2.5rem,5vw,4.5rem) var(--space-x) clamp(3rem,6vw,5rem)",
+        padding: "clamp(2.5rem,5vw,4.5rem) var(--space-x) clamp(4.5rem,8vw,7rem)",
         display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center",
         ...fade(vis),
       }}>
