@@ -95,11 +95,12 @@ export default function StartPage() {
     try {
       const data = JSON.parse(match[1].trim());
       // Send to email API
-      await fetch("/api/intake", {
+      const ir = await fetch("/api/intake", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
+      if (!ir.ok) console.error("Intake submission failed:", ir.status);
       setSubmitted(true);
       setTimeout(() => setStage("done"), 400);
     } catch (e) {

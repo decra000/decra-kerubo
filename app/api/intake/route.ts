@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { sendMail } from "@/lib/mail";
 
 const ENGAGEMENT_LABELS: Record<string, string> = {
   speak: "Speaking engagement",
@@ -29,25 +30,14 @@ Summary:
 ${summary || "No summary generated"}
   `.trim();
 
-  const RESEND_KEY = process.env.RESEND_API_KEY;
   const TO_EMAIL = process.env.CONTACT_EMAIL || "hello@decrakerubo.com";
 
-  if (RESEND_KEY) {
-    await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${RESEND_KEY}`,
-      },
-      body: JSON.stringify({
-        from: "advisor@decrakerubo.com",
-        to: [TO_EMAIL],
-        reply_to: email || TO_EMAIL,
-        subject: `New ${label}: ${name || "Anonymous"}${stage ? ` — ${stage}` : ""}`,
-        text: body,
-      }),
-    });
-  }
+  await sendMail({
+    to: TO_EMAIL,
+    replyTo: email || TO_EMAIL,
+    subject: `New ${label}: ${name || "Anonymous"}${stage ? ` — ${stage}` : ""}`,
+    text: body,
+  });
 
   // Always return success to client — don't block on email
   return NextResponse.json({ ok: true });

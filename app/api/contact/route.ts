@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { sendMail } from "@/lib/mail";
 
 export async function POST(req: NextRequest) {
   try {
@@ -17,25 +18,14 @@ Message:
 ${message || "No message"}
     `.trim();
 
-    const RESEND_KEY = process.env.RESEND_API_KEY;
     const TO_EMAIL = process.env.CONTACT_EMAIL || "hello@decrakerubo.com";
 
-    if (RESEND_KEY) {
-      await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${RESEND_KEY}`,
-        },
-        body: JSON.stringify({
-          from: "contact@decrakerubo.com",
-          to: [TO_EMAIL],
-          reply_to: email || TO_EMAIL,
-          subject: `${subject || "New message"} — from ${name || "Anonymous"}`,
-          text: body,
-        }),
-      });
-    }
+    await sendMail({
+      to: TO_EMAIL,
+      replyTo: email || TO_EMAIL,
+      subject: `${subject || "New message"} — from ${name || "Anonymous"}`,
+      text: body,
+    });
 
     return NextResponse.json({ ok: true });
   } catch (error) {

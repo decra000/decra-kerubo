@@ -358,7 +358,7 @@ function WorkWithDecra() {
       let reply: string = data.reply || "";
       if (reply.includes("<intake_complete>")) {
         const m = reply.match(/<intake_complete>([\s\S]*?)<\/intake_complete>/);
-        if (m) { try { const p = JSON.parse(m[1].trim()); await fetch("/api/intake", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...p, engagement: active }) }); } catch {} }
+        if (m) { try { const p = JSON.parse(m[1].trim()); const ir = await fetch("/api/intake", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...p, engagement: active }) }); if (!ir.ok) console.error("Intake submission failed:", ir.status); } catch (err) { console.error("Intake submission error:", err); } }
         reply = reply.replace(/<intake_complete>[\s\S]*?<\/intake_complete>/, "").trim();
         setDone(true);
       }

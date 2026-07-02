@@ -43,14 +43,14 @@ That creates: bookings, leads, subscribers, and messages tables.
 
 ---
 
-## STEP 3 — SET UP RESEND (EMAIL)
+## STEP 3 — SET UP GMAIL (EMAIL)
 
-1. Go to https://resend.com and sign up (free tier is fine to start)
-2. Go to **API Keys** → **Create API Key**
-3. Name it: `decra-kerubo-platform`
-4. Copy the key — this is your `RESEND_API_KEY`
-5. Go to **Domains** and add your domain (e.g. decrakero.com) — follow their DNS setup instructions
-6. Until domain is verified, use `onboarding@resend.dev` as your `EMAIL_FROM`
+1. Go to your Google Account → **Security** → turn on **2-Step Verification** (required)
+2. Go to https://myaccount.google.com/apppasswords
+3. Name it: `Decra Site` → **Create**
+4. Copy the 16-character password — this is your `GMAIL_APP_PASSWORD`
+5. Your `GMAIL_USER` is the Gmail address itself (e.g. `decrakerry@gmail.com`)
+6. `CONTACT_EMAIL` is where client inquiries land — usually the same address
 
 ---
 
@@ -88,8 +88,9 @@ NEXT_PUBLIC_SUPABASE_URL=https://xxxxxxxxxxxx.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
 SUPABASE_SERVICE_ROLE_KEY=eyJ...
 
-RESEND_API_KEY=re_...
-EMAIL_FROM=onboarding@resend.dev
+GMAIL_USER=decrakerry@gmail.com
+GMAIL_APP_PASSWORD=xxxx xxxx xxxx xxxx
+CONTACT_EMAIL=decrakerry@gmail.com
 
 NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY=pk_test_...
 PAYSTACK_SECRET_KEY=sk_test_...
@@ -167,8 +168,9 @@ git push -u origin main
    - NEXT_PUBLIC_SUPABASE_URL
    - NEXT_PUBLIC_SUPABASE_ANON_KEY
    - SUPABASE_SERVICE_ROLE_KEY
-   - RESEND_API_KEY
-   - EMAIL_FROM
+   - GMAIL_USER
+   - GMAIL_APP_PASSWORD
+   - CONTACT_EMAIL
    - NEXTAUTH_SECRET
    - NEXTAUTH_URL → change this to your Vercel URL (e.g. https://decra-kerubo.vercel.app)
    - NEXT_PUBLIC_SITE_URL → same as NEXTAUTH_URL
@@ -218,11 +220,10 @@ Replace `YOUR_PASSWORD_HERE` with a strong password of your choice.
 
 ## STEP 9 — CUSTOM EMAIL DOMAIN
 
-Once your domain is connected to Vercel:
-1. Go back to Resend → Domains
-2. Verify your domain
-3. Update EMAIL_FROM in Vercel env vars to: `hello@decrakero.com`
-4. Redeploy
+Gmail's App Password works immediately — no domain verification needed. If
+you'd rather send from your own domain later (e.g. `hello@decrakero.com`
+via Google Workspace) instead of a personal Gmail address, that's a separate
+Workspace setup, not something this App Password covers.
 
 ---
 
