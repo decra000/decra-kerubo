@@ -119,7 +119,7 @@ function Hero() {
           <button
             onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: PRODUCT_COUNSEL_GROUP }))}
             style={lineBtn({ light: true })}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "#C4A06A"; (e.currentTarget as HTMLElement).style.color = "#C4A06A"; }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "#5FA98F"; (e.currentTarget as HTMLElement).style.color = "#5FA98F"; }}
             onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.3)"; (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"; }}
           >
             Retain as Technical Product Counsel
@@ -506,31 +506,6 @@ function WorkWithDecra() {
   );
 }
 
-/* ── Section 4: Impact counter ── */
-function Impact() {
-  const { ref, vis } = useReveal();
-  const [count, setCount] = useState(0);
-  useEffect(() => {
-    if (!vis) return;
-    let n = 0;
-    const t = setInterval(() => { n += 2; setCount(Math.min(n, 80)); if (n >= 80) clearInterval(t); }, 25);
-    return () => clearInterval(t);
-  }, [vis]);
-
-  return (
-    <section ref={ref as React.RefObject<HTMLElement>} style={{ ...SEC, background: "var(--c-surface)" }}>
-      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto", textAlign: "center" }}>
-        <div style={fade(vis)}>
-          <p style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(5rem,12vw,11rem)", color: "var(--c-ink)", lineHeight: 1 }}>
-            {count}+
-          </p>
-          <p style={{ ...LBL, marginTop: "1rem" }}>Startup founders &amp; tech developers assisted</p>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 /* ── Section 5: The 1000 ── */
 const SpotifyLogo = () => (
   <svg width="28" height="28" viewBox="0 0 24 24" fill="#1DB954">
@@ -596,7 +571,7 @@ function The1000() {
           <button
             onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: SPOTIFY_GROUP }))}
             style={lineBtn({ light: true })}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "#C4A06A"; (e.currentTarget as HTMLElement).style.color = "#C4A06A"; }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "#5FA98F"; (e.currentTarget as HTMLElement).style.color = "#5FA98F"; }}
             onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.3)"; (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"; }}
           >
             Express Interest
@@ -954,90 +929,6 @@ function Accreditations() {
   );
 }
 
-/* ── Section 9+10: Editorial break with social icons overlaid ── */
-function EditorialBreak() {
-  const { ref, vis } = useReveal();
-
-  const socials = [
-    {
-      label: "Instagram",
-      url: "https://instagram.com/decrakerubo",
-      icon: (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-        </svg>
-      ),
-    },
-    {
-      label: "LinkedIn",
-      url: "https://www.linkedin.com/in/decra/",
-      icon: (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
-          <rect x="2" y="9" width="4" height="12"/>
-          <circle cx="4" cy="4" r="2"/>
-        </svg>
-      ),
-    },
-    {
-      label: "Spotify",
-      url: "https://open.spotify.com",
-      icon: (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
-        </svg>
-      ),
-    },
-  ];
-
-  return (
-    <section ref={ref as React.RefObject<HTMLElement>} style={{
-      height: "clamp(280px, 40vh, 480px)",
-      position: "relative", overflow: "hidden", background: "#0A0A0A",
-    }}>
-      <img src="/decra-texture.jpg" alt="" style={{
-        width: "100%", height: "100%",
-        objectFit: "cover", objectPosition: "center 40%",
-        display: "block",
-        filter: "saturate(0.75)",
-        opacity: vis ? 0.85 : 0,
-        transform: vis ? "scale(1)" : "scale(1.04)",
-        transition: "opacity 1.4s cubic-bezier(0.16,1,0.3,1), transform 1.6s cubic-bezier(0.16,1,0.3,1)",
-      }} />
-      <div style={{
-        position: "absolute", inset: 0,
-        background: "linear-gradient(to bottom, rgba(10,10,10,0.15) 0%, transparent 25%, transparent 75%, rgba(10,10,10,0.25) 100%)",
-        pointerEvents: "none",
-      }} />
-      <div style={{
-        position: "absolute", inset: 0,
-        display: "flex", alignItems: "center",
-        justifyContent: "center", gap: "2rem", flexWrap: "wrap",
-      }}>
-        {socials.map(({ label, url, icon }, i) => (
-          <a key={label} href={url} target="_blank" rel="noopener noreferrer"
-            aria-label={label}
-            style={{
-              color: "rgba(240,238,233,0.75)",
-              textDecoration: "none",
-              lineHeight: 0, display: "block",
-              opacity: vis ? 1 : 0,
-              transform: vis ? "none" : "translateY(14px)",
-              transition: `opacity 0.6s ease ${0.15 + i * 0.08}s, transform 0.6s ease ${0.15 + i * 0.08}s, color 0.2s`,
-            } as React.CSSProperties}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#F0EEE9"; (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "rgba(240,238,233,0.75)"; (e.currentTarget as HTMLElement).style.transform = "none"; }}>
-            {icon}
-          </a>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-
 /* ── Page ── */
 export default function Home() {
   return (
@@ -1049,8 +940,6 @@ export default function Home() {
       <Accreditations />
       <The1000 />
       <WorkWithDecra />
-      <Impact />
-      <EditorialBreak />
     </>
   );
 }

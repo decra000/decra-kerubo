@@ -32,12 +32,32 @@ ${summary || "No summary generated"}
 
   const TO_EMAIL = process.env.CONTACT_EMAIL || "hello@decrakerubo.com";
 
+  // Internal notification — to Decra
   await sendMail({
     to: TO_EMAIL,
     replyTo: email || TO_EMAIL,
     subject: `New ${label}: ${name || "Anonymous"}${stage ? ` — ${stage}` : ""}`,
     text: body,
   });
+
+  // Immediate auto-reply — to the client, before Decra personally responds
+  if (email) {
+    await sendMail({
+      to: email,
+      subject: `Got it, ${name || "there"} — thank you for reaching out`,
+      html: `
+        <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; padding: 40px; color: #222;">
+          <h1 style="color: #0F4D3F; font-size: 26px;">Thank you for reaching out.</h1>
+          <p>Hi ${name || "there"},</p>
+          <p>This confirms your ${label.toLowerCase()} inquiry has been received.</p>
+          ${summary ? `<p style="background: #F5F4F1; padding: 16px 20px; border-radius: 8px; font-size: 14px; line-height: 1.6;"><strong>What you shared:</strong><br/>${summary}</p>` : ""}
+          <p>Decra reviews every inquiry personally and will be in touch within <strong>48 hours</strong>.</p>
+          <p>If anything changes in the meantime, just reply directly to this email.</p>
+          <p style="margin-top: 40px;">— Decra Kerubo</p>
+        </div>
+      `,
+    });
+  }
 
   // Always return success to client — don't block on email
   return NextResponse.json({ ok: true });

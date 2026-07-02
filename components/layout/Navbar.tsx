@@ -25,9 +25,6 @@ export function Navbar() {
   useEffect(() => {
     const fn = () => {
       setScrolled(window.scrollY > 50);
-      const rp = document.getElementById("rp");
-      const h = document.documentElement.scrollHeight - window.innerHeight;
-      if (rp && h > 0) rp.style.width = `${(window.scrollY / h) * 100}%`;
     };
     window.addEventListener("scroll", fn, { passive: true });
     return () => window.removeEventListener("scroll", fn);
@@ -52,7 +49,7 @@ export function Navbar() {
       }}>
         <div style={{ maxWidth: "var(--max-w)", margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <Link href="/" style={{ textDecoration: "none" }}>
-            <span style={{ fontFamily: "var(--font-serif)", fontSize: "1.1rem", color: "var(--c-ink)" }}>Decra</span>
+            <span style={{ fontFamily: "var(--font-serif)", fontSize: "1.1rem", color: "var(--c-ink)" }}>Decra Kerubo</span>
           </Link>
 
           <nav className="nav-links">
