@@ -4,7 +4,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ContactBubble } from "@/components/layout/ContactBubble";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
-import { SmoothScroll } from "@/components/layout/SmoothScroll";
+import { ScrollProgress } from "@/components/layout/ScrollProgress";
 
 export const metadata: Metadata = {
   title: { default: "Decra Kerubo", template: "%s — Decra" },
@@ -25,13 +25,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <ThemeProvider>
-          <SmoothScroll>
-            <div id="rp" style={{ width: "0%" }} />
-            <Navbar />
-            <main>{children}</main>
-            <Footer />
-            <ContactBubble />
-          </SmoothScroll>
+          <ScrollProgress />
+          <Navbar />
+          <main>{children}</main>
+          <Footer />
+          <ContactBubble />
         </ThemeProvider>
       </body>
     </html>

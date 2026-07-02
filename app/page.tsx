@@ -82,23 +82,23 @@ function Hero() {
   const [vis, setVis] = useState(false);
   useEffect(() => { const t = setTimeout(() => setVis(true), 60); return () => clearTimeout(t); }, []);
   return (
-    <section style={{ height: "100svh", position: "relative", overflow: "hidden", background: "#0A0A0A" }}>
+    <section id="hero" style={{ height: "100svh", position: "relative", overflow: "hidden", background: "#0A0A0A" }}>
       <div style={{
         position: "absolute", inset: 0,
         opacity: vis ? 1 : 0,
         transition: "opacity 1.4s cubic-bezier(0.16,1,0.3,1)",
       }}>
-        <img src="/decra-cover.jpg" alt=""
+        <img src="/decra-cover.jpg" alt="" id="hero-img"
           style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 38%", display: "block" }} />
       </div>
-      <div style={{
+      <div id="hero-scrim" style={{
         position: "absolute", inset: 0,
         background: `
           linear-gradient(to top, rgba(10,10,10,0.96) 0%, rgba(10,10,10,0.4) 32%, rgba(10,10,10,0.05) 55%, transparent 72%),
           linear-gradient(to right, rgba(10,10,10,0.75) 0%, rgba(10,10,10,0.3) 40%, transparent 65%)
         `,
       }} />
-      <div style={{
+      <div id="hero-content" style={{
         position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
         display: "flex", alignItems: "center",
         padding: "clamp(2rem,6vh,4.5rem) var(--space-x) 0",
@@ -126,6 +126,22 @@ function Hero() {
           </button>
         </div>
       </div>
+      <style>{`
+        @media (max-width: 640px) {
+          #hero-img { object-position: center 22%; }
+          #hero-scrim {
+            background:
+              linear-gradient(to top, rgba(10,10,10,0.97) 0%, rgba(10,10,10,0.75) 22%, rgba(10,10,10,0.3) 45%, rgba(10,10,10,0.08) 62%, transparent 78%) !important;
+          }
+          #hero-content {
+            align-items: flex-end !important;
+            padding: 0 var(--space-x) calc(3rem + env(safe-area-inset-bottom)) !important;
+          }
+          #hero-content > div { max-width: 100% !important; }
+          #hero-content h1 { font-size: clamp(1.65rem, 7vw, 2.1rem) !important; margin-bottom: 1.5rem !important; }
+          #hero-content button { width: 100%; justify-content: center; }
+        }
+      `}</style>
     </section>
   );
 }
@@ -530,12 +546,6 @@ function The1000() {
         background: `linear-gradient(to top, rgba(10,10,10,0.92) 0%, rgba(10,10,10,0.55) 28%, rgba(10,10,10,0.08) 55%, transparent 72%)`,
       }} />
 
-      {/* Fade to transparent at the bottom edge, blending into the section below */}
-      <div style={{
-        position: "absolute", left: 0, right: 0, bottom: 0, height: "22%",
-        background: "linear-gradient(to bottom, transparent 0%, var(--c-bg) 100%)",
-        pointerEvents: "none",
-      }} />
 
       <div style={{
         position: "relative", zIndex: 1, width: "100%",
