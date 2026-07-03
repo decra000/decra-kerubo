@@ -82,14 +82,17 @@ function Hero() {
   const [vis, setVis] = useState(false);
   useEffect(() => { const t = setTimeout(() => setVis(true), 60); return () => clearTimeout(t); }, []);
   return (
-    <section id="hero" style={{ height: "100svh", position: "relative", overflow: "hidden", background: "#0A0A0A" }}>
+    <section id="hero" className="hero-sec" style={{ position: "relative", overflow: "hidden", background: "#0A0A0A" }}>
       <div style={{
         position: "absolute", inset: 0,
         opacity: vis ? 1 : 0,
         transition: "opacity 1.4s cubic-bezier(0.16,1,0.3,1)",
       }}>
-        <img src="/decra-cover.jpg" alt="" id="hero-img"
-          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 38%", display: "block" }} />
+        <picture style={{ display: "block", width: "100%", height: "100%" }}>
+          <source media="(max-width: 640px)" srcSet="/decra-about.jpg" />
+          <img src="/decra-cover.jpg" alt="" id="hero-img"
+            style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 38%", display: "block" }} />
+        </picture>
       </div>
       <div id="hero-scrim" style={{
         position: "absolute", inset: 0,
@@ -127,8 +130,10 @@ function Hero() {
         </div>
       </div>
       <style>{`
+        .hero-sec { height: 100vh; }
+        @supports (height: 100svh) { .hero-sec { height: 100svh; } }
         @media (max-width: 640px) {
-          #hero-img { object-position: center 22%; }
+          #hero-img { object-position: center 18%; }
           #hero-scrim {
             background:
               linear-gradient(to top, rgba(10,10,10,0.97) 0%, rgba(10,10,10,0.75) 22%, rgba(10,10,10,0.3) 45%, rgba(10,10,10,0.08) 62%, transparent 78%) !important;

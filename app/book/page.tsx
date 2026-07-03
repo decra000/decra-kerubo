@@ -274,6 +274,7 @@ export default function BookPage() {
           </div>
         )}
       </div>
+      <style>{`@media(max-width:480px){.consult-grid{grid-template-columns:1fr!important}}`}</style>
     </div>
   );
 }

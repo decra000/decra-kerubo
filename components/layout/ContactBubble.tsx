@@ -38,7 +38,8 @@ export function ContactBubble() {
   return (
     <>
       <style>{`
-        .cb{position:fixed;bottom:5rem;right:1.5rem;width:310px;background:var(--c-bg);border:1px solid var(--c-border-strong);z-index:9000;display:flex;flex-direction:column;max-height:400px;transform-origin:bottom right;transition:transform 0.25s cubic-bezier(0.34,1.3,0.64,1),opacity 0.2s}
+        .cb{position:fixed;bottom:5rem;right:1.5rem;width:310px;max-width:calc(100vw - 2rem);background:var(--c-bg);border:1px solid var(--c-border-strong);z-index:9000;display:flex;flex-direction:column;max-height:400px;transform-origin:bottom right;transition:transform 0.25s cubic-bezier(0.34,1.3,0.64,1),opacity 0.2s}
+        @media(max-width:400px){.cb{right:1rem;left:1rem;width:auto;max-width:none}}
         .cb.off{transform:scale(0.9) translateY(8px);opacity:0;pointer-events:none}
         .cb.on{transform:scale(1);opacity:1}
         .fab{position:fixed;bottom:1.5rem;right:1.5rem;width:2.5rem;height:2.5rem;border-radius:50%;background:var(--c-ink);color:var(--c-bg);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:9001;transition:transform 0.2s,background 0.2s}
