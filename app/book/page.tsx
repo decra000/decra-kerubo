@@ -5,7 +5,15 @@ import { CONSULTATION_TYPES } from "@/lib/types";
 
 type Step = 1 | 2 | 3;
 
-const TIME_SLOTS = ["09:00 AM", "10:00 AM", "11:00 AM", "02:00 PM", "03:00 PM", "04:00 PM"];
+const TIME_SLOTS: { label: string; value: string }[] = [
+  { label: "09:00 AM", value: "09:00" },
+  { label: "10:00 AM", value: "10:00" },
+  { label: "11:00 AM", value: "11:00" },
+  { label: "02:00 PM", value: "14:00" },
+  { label: "03:00 PM", value: "15:00" },
+  { label: "04:00 PM", value: "16:00" },
+];
+const timeLabel = (value: string) => TIME_SLOTS.find(s => s.value === value)?.label || value;
 
 // If Paystack isn't configured (no NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY), paid
 // bookings fall back to this manual M-Pesa flow — no account signup needed
@@ -55,7 +63,7 @@ export default function BookPage() {
     setLoading(true);
     try {
       const res = await fetch("/api/book", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({
-        ...form, consultation_type: selectedType, scheduled_at: `${selectedDate}T${selectedTime}`,
+        ...form, consultation_type: selectedType, scheduled_at: `${selectedDate}T${selectedTime}:00+03:00`,
         amount: selectedConsultation?.price ?? 0, payment_reference: reference || null, payment_method: method || null,
       }) });
       const data = await res.json();
@@ -118,7 +126,7 @@ export default function BookPage() {
             </a>
           )}
           <div className="card" style={{ textAlign: "left" }}>
-            {[["Type", selectedConsultation?.label], ["Date", selectedDate], ["Time", `${selectedTime} EAT`], ...(isPaid ? [[pending ? "Amount due" : "Amount paid", formatKES(selectedConsultation?.price ?? 0)], ["Reference", paidRef || "—"]] : [])].map(([k, v]) => (
+            {[["Type", selectedConsultation?.label], ["Date", selectedDate], ["Time", `${timeLabel(selectedTime)} EAT`], ...(isPaid ? [[pending ? "Amount due" : "Amount paid", formatKES(selectedConsultation?.price ?? 0)], ["Reference", paidRef || "—"]] : [])].map(([k, v]) => (
               <div key={k as string} style={{ display: "flex", justifyContent: "space-between", gap: "1rem", fontSize: "0.8rem", padding: "0.65rem 0", borderBottom: "1px solid var(--c-border)" }}>
                 <span style={{ color: "var(--c-ink-muted)", flexShrink: 0 }}>{k as string}</span>
                 <span style={{ color: "var(--c-forest)", fontWeight: 700, textAlign: "right", wordBreak: "break-all" }}>{v as string}</span>
@@ -217,9 +225,9 @@ export default function BookPage() {
                 <label style={labelStyle}>Select Time</label>
                 <div className="time-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "0.6rem" }}>
                   {TIME_SLOTS.map(slot => (
-                    <button key={slot} onClick={() => setSelectedTime(slot)}
-                      style={{ padding: "0.65rem", borderRadius: "8px", border: `1px solid ${selectedTime === slot ? "var(--c-forest)" : "var(--c-border)"}`, background: selectedTime === slot ? "var(--c-forest)" : "transparent", color: selectedTime === slot ? "white" : "var(--c-ink-mid)", fontSize: "0.775rem", cursor: "pointer", fontFamily: "var(--font-manjari)", transition: "all 0.2s" }}
-                    >{slot}</button>
+                    <button key={slot.value} onClick={() => setSelectedTime(slot.value)}
+                      style={{ padding: "0.65rem", borderRadius: "8px", border: `1px solid ${selectedTime === slot.value ? "var(--c-forest)" : "var(--c-border)"}`, background: selectedTime === slot.value ? "var(--c-forest)" : "transparent", color: selectedTime === slot.value ? "white" : "var(--c-ink-mid)", fontSize: "0.775rem", cursor: "pointer", fontFamily: "var(--font-manjari)", transition: "all 0.2s" }}
+                    >{slot.label}</button>
                   ))}
                 </div>
               </div>
@@ -227,7 +235,7 @@ export default function BookPage() {
             {selectedDate && selectedTime && (
               <div style={{ background: "var(--c-forest)", borderRadius: "12px", padding: "1.5rem", marginBottom: "2rem" }}>
                 <p className="t-label" style={{ marginBottom: "1rem" }}>Booking Summary</p>
-                {[["Type", selectedConsultation?.label], ["Duration", `${selectedConsultation?.duration} minutes`], ["Date", selectedDate], ["Time", `${selectedTime} EAT`], ["Amount", isPaid ? formatKES(selectedConsultation?.price ?? 0) : "Free"]].map(([k, v]) => (
+                {[["Type", selectedConsultation?.label], ["Duration", `${selectedConsultation?.duration} minutes`], ["Date", selectedDate], ["Time", `${timeLabel(selectedTime)} EAT`], ["Amount", isPaid ? formatKES(selectedConsultation?.price ?? 0) : "Free"]].map(([k, v]) => (
                   <div key={k as string} style={{ display: "flex", justifyContent: "space-between", fontSize: "0.775rem", color: "rgba(248,246,241,0.7)", padding: "0.4rem 0" }}>
                     <span style={{ color: "rgba(248,246,241,0.4)" }}>{k as string}</span>
                     <span>{v as string}</span>

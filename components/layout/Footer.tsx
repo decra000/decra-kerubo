@@ -4,7 +4,7 @@ import Link from "next/link";
 const SOCIALS = [
   {
     label: "Instagram",
-    url: "https://instagram.com/decrakerubo",
+    url: "https://instagram.com/little._d._",
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>

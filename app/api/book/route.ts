@@ -31,12 +31,24 @@ async function verifyPaystackPayment(reference: string, expectedAmountKES: numbe
 
 export async function POST(req: NextRequest) {
   try {
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      console.error("Booking error: Supabase is not configured (missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY).");
+      return NextResponse.json({ error: "Booking is temporarily unavailable (server not configured). Please email hello@decrakerubo.com to book directly." }, { status: 500 });
+    }
+
     const body = await req.json();
     const {
       name, email, organization, website, industry, team_size,
       primary_challenge, desired_outcome, consultation_type, scheduled_at,
       amount, payment_reference, payment_method,
     } = body;
+
+    if (!name || !email || !consultation_type || !scheduled_at) {
+      return NextResponse.json({ error: "Missing required booking details." }, { status: 400 });
+    }
+    if (isNaN(new Date(scheduled_at).getTime())) {
+      return NextResponse.json({ error: "Invalid date/time selected." }, { status: 400 });
+    }
 
     let status = "confirmed";
 
@@ -77,14 +89,18 @@ export async function POST(req: NextRequest) {
       .select()
       .single();
 
-    if (error) throw error;
+    if (error) {
+      console.error("Supabase insert error (bookings):", error);
+      return NextResponse.json({ error: `Booking failed: ${error.message}` }, { status: 500 });
+    }
 
-    // Store as lead
-    await db.from("leads").insert({
+    // Store as lead — best-effort, shouldn't fail the booking if this errors
+    const { error: leadError } = await db.from("leads").insert({
       name, email, organization, source: "booking",
     });
+    if (leadError) console.error("Supabase insert error (leads):", leadError);
 
-    // Send confirmation email via Gmail
+    // Send confirmation email via Gmail — best-effort, sendMail never throws
     const pendingPayment = status === "pending_payment";
     await sendMail({
       to: email,
@@ -109,6 +125,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true, booking, meet_link: null, status });
   } catch (err) {
     console.error("Booking error:", err);
-    return NextResponse.json({ error: "Booking failed" }, { status: 500 });
+    const message = err instanceof Error ? err.message : "Booking failed";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

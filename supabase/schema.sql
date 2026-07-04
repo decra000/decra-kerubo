@@ -60,6 +60,21 @@ create table if not exists messages (
   created_at timestamptz default now()
 );
 
+-- Broadcast log (audit trail for the private /broadcast email tool)
+create table if not exists broadcasts (
+  id uuid default gen_random_uuid() primary key,
+  company text,
+  email text not null,
+  subject text,
+  status text default 'sent' check (status in ('sent', 'failed')),
+  created_at timestamptz default now()
+);
+alter table broadcasts enable row level security;
+create policy "Service role full access broadcasts"
+  on broadcasts for all
+  using (true)
+  with check (true);
+
 -- Enable Row Level Security
 alter table bookings enable row level security;
 alter table leads enable row level security;

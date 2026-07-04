@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { MessageCircle, X, Send } from "lucide-react";
+import { MessageCircle, X, Send, Mic, Volume2, VolumeX } from "lucide-react";
+import { useSpeech } from "@/hooks/useSpeech";
 
 type Msg = { role: "user" | "assistant"; text: string };
 
@@ -9,9 +10,11 @@ export function ContactBubble() {
   const [msgs, setMsgs] = useState<Msg[]>([{ role: "assistant", text: "What are you working on?" }]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [voiceOn, setVoiceOn] = useState(false);
   const bottom = useRef<HTMLDivElement>(null);
   const panel = useRef<HTMLDivElement>(null);
   const inp = useRef<HTMLInputElement>(null);
+  const { listen, stopListening, listening, supported, speak, stopSpeaking, speaking, synthSupported } = useSpeech();
 
   useEffect(() => {
     const fn = (e: MouseEvent) => { if (open && panel.current && !panel.current.contains(e.target as Node)) setOpen(false); };
@@ -20,19 +23,29 @@ export function ContactBubble() {
   }, [open]);
   useEffect(() => { bottom.current?.scrollIntoView({ behavior: "smooth" }); }, [msgs]);
   useEffect(() => { if (open) setTimeout(() => inp.current?.focus(), 200); }, [open]);
+  useEffect(() => { if (!open) stopSpeaking(); }, [open, stopSpeaking]);
 
-  const send = async () => {
-    const text = input.trim();
+  const send = async (overrideText?: string) => {
+    const text = (overrideText ?? input).trim();
     if (!text || loading) return;
     setMsgs(prev => [...prev, { role: "user", text }]);
     setInput(""); setLoading(true);
     try {
       const res = await fetch("/api/chat", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: text, history: msgs }) });
       const d = await res.json();
-      setMsgs(prev => [...prev, { role: "assistant", text: d.reply || "Email hello@decrakerubo.com" }]);
+      const reply = d.reply || "Email hello@decrakerubo.com";
+      setMsgs(prev => [...prev, { role: "assistant", text: reply }]);
+      if (voiceOn) speak(reply);
     } catch {
-      setMsgs(prev => [...prev, { role: "assistant", text: "Email hello@decrakerubo.com directly." }]);
+      const reply = "Email hello@decrakerubo.com directly.";
+      setMsgs(prev => [...prev, { role: "assistant", text: reply }]);
+      if (voiceOn) speak(reply);
     } finally { setLoading(false); }
+  };
+
+  const handleMic = () => {
+    if (listening) { stopListening(); return; }
+    listen((text) => { setInput(text); send(text); });
   };
 
   return (
@@ -60,9 +73,19 @@ export function ContactBubble() {
               <span style={{ fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "0.58rem", color: "var(--c-ink-muted)" }}>Online</span>
             </div>
           </div>
-          <button onClick={() => setOpen(false)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--c-ink-muted)", lineHeight: 0 }}>
-            <X size={12} strokeWidth={1.5} />
-          </button>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            {synthSupported && (
+              <button onClick={() => { if (voiceOn) stopSpeaking(); setVoiceOn(v => !v); }}
+                aria-label={voiceOn ? "Turn off spoken replies" : "Turn on spoken replies"}
+                title={voiceOn ? "Spoken replies on" : "Spoken replies off"}
+                style={{ background: "none", border: "none", cursor: "pointer", color: voiceOn ? "var(--c-accent)" : "var(--c-ink-muted)", lineHeight: 0, transition: "color 0.2s", animation: speaking ? "bd3 1s ease infinite" : "none" }}>
+                {voiceOn ? <Volume2 size={13} strokeWidth={1.5} /> : <VolumeX size={13} strokeWidth={1.5} />}
+              </button>
+            )}
+            <button onClick={() => setOpen(false)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--c-ink-muted)", lineHeight: 0 }}>
+              <X size={12} strokeWidth={1.5} />
+            </button>
+          </div>
         </div>
 
         <div style={{ flex: 1, overflowY: "auto", padding: "1.1rem 1.2rem", display: "flex", flexDirection: "column", gap: "0.85rem" }}>
@@ -79,9 +102,15 @@ export function ContactBubble() {
         <div style={{ display: "flex", borderTop: "1px solid var(--c-border)", alignItems: "center" }}>
           <input ref={inp} value={input} onChange={e => setInput(e.target.value)}
             onKeyDown={e => e.key === "Enter" && send()}
-            placeholder="Ask anything..."
+            placeholder={listening ? "Listening…" : "Ask anything..."}
             style={{ flex: 1, background: "none", border: "none", padding: "0.8rem 1.1rem", fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "0.82rem", color: "var(--c-ink)", outline: "none" }} />
-          <button onClick={send} disabled={!input.trim() || loading} style={{ background: "none", border: "none", cursor: input.trim() ? "pointer" : "default", color: input.trim() ? "var(--c-accent)" : "var(--c-ink-muted)", padding: "0 1rem", transition: "color 0.2s", lineHeight: 0 }}>
+          {supported && (
+            <button onClick={handleMic} aria-label={listening ? "Stop listening" : "Speak your message"}
+              style={{ background: "none", border: "none", cursor: "pointer", color: listening ? "#e05252" : "var(--c-ink-muted)", padding: "0 0.5rem", lineHeight: 0, animation: listening ? "bd3 1s ease infinite" : "none" }}>
+              <Mic size={13} strokeWidth={1.5} />
+            </button>
+          )}
+          <button onClick={() => send()} disabled={!input.trim() || loading} style={{ background: "none", border: "none", cursor: input.trim() ? "pointer" : "default", color: input.trim() ? "var(--c-accent)" : "var(--c-ink-muted)", padding: "0 1rem", transition: "color 0.2s", lineHeight: 0 }}>
             <Send size={12} strokeWidth={1.5} />
           </button>
         </div>

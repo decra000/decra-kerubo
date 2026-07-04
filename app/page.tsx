@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, X } from "lucide-react";
+import { ArrowRight, X, Mic, Volume2, VolumeX } from "lucide-react";
+import { useSpeech } from "@/hooks/useSpeech";
 
 /* ── helpers ── */
 function useReveal() {
@@ -132,6 +133,9 @@ function Hero() {
       <style>{`
         .hero-sec { height: 100vh; }
         @supports (height: 100svh) { .hero-sec { height: 100svh; } }
+        @media (min-width: 641px) {
+          #hero-content { align-items: flex-end !important; padding-bottom: 12vh !important; }
+        }
         @media (max-width: 640px) {
           #hero-img { object-position: center 18%; }
           #hero-scrim {
@@ -142,9 +146,9 @@ function Hero() {
             align-items: flex-end !important;
             padding: 0 var(--space-x) calc(3rem + env(safe-area-inset-bottom)) !important;
           }
-          #hero-content > div { max-width: 100% !important; }
+          #hero-content > div { max-width: 100% !important; text-align: center; }
           #hero-content h1 { font-size: clamp(1.65rem, 7vw, 2.1rem) !important; margin-bottom: 1.5rem !important; }
-          #hero-content button { width: 100%; justify-content: center; }
+          #hero-content button { width: auto; max-width: 82%; white-space: normal; line-height: 1.5; }
         }
       `}</style>
     </section>
@@ -321,8 +325,10 @@ function WorkWithDecra() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
+  const [voiceOn, setVoiceOn] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { listen, stopListening, listening, supported, speak, stopSpeaking, speaking, synthSupported } = useSpeech();
 
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [msgs, loading]);
 
@@ -341,7 +347,9 @@ function WorkWithDecra() {
       const res = await fetch("/api/chat", { method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: opening, history: [], system: ENGAGE_SYSTEM }) });
       const data = await res.json();
-      setMsgs([{ role: "assistant", text: data.reply || "Something went wrong. Email hello@decrakerubo.com." }]);
+      const reply = data.reply || "Something went wrong. Email hello@decrakerubo.com.";
+      setMsgs([{ role: "assistant", text: reply }]);
+      if (voiceOn) speak(reply);
     } catch { setMsgs([{ role: "assistant", text: "Something went wrong. Email hello@decrakerubo.com." }]); }
     setLoading(false);
     setTimeout(() => inputRef.current?.focus(), 150);
@@ -365,11 +373,12 @@ function WorkWithDecra() {
     return () => window.removeEventListener(OPEN_PARTNER_MODAL_EVENT, onExternalOpen as EventListener);
   }, []);
 
-  const closeModal = () => { setModalOpen(false); setActive(null); setMsgs([]); setDone(false); setInput(""); };
+  const closeModal = () => { setModalOpen(false); setActive(null); setMsgs([]); setDone(false); setInput(""); stopSpeaking(); };
 
-  const send = async () => {
-    if (!input.trim() || loading || done) return;
-    const userText = input.trim(); setInput("");
+  const send = async (overrideText?: string) => {
+    const text = (overrideText ?? input).trim();
+    if (!text || loading || done) return;
+    const userText = text; setInput("");
     const next = [...msgs, { role: "user" as const, text: userText }];
     setMsgs(next); setLoading(true);
     try {
@@ -384,8 +393,14 @@ function WorkWithDecra() {
         setDone(true);
       }
       setMsgs([...next, { role: "assistant", text: reply }]);
+      if (voiceOn) speak(reply);
     } catch { setMsgs([...next, { role: "assistant", text: "Something went wrong. Email hello@decrakerubo.com." }]); }
     setLoading(false);
+  };
+
+  const handleMic = () => {
+    if (listening) { stopListening(); return; }
+    listen((text) => { setInput(text); send(text); });
   };
 
   return (
@@ -466,6 +481,15 @@ function WorkWithDecra() {
                 <X size={18} strokeWidth={1.5} />
               </button>
             </div>
+            {active && synthSupported && (
+              <div style={{ display: "flex", justifyContent: "flex-end", padding: "0.6rem 1.5rem 0" }}>
+                <button onClick={() => { if (voiceOn) stopSpeaking(); setVoiceOn(v => !v); }}
+                  style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem", background: "none", border: "none", cursor: "pointer", color: voiceOn ? "var(--c-accent)" : "var(--c-ink-muted)", fontSize: "0.65rem", fontFamily: "var(--font-manjari)", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", opacity: speaking ? 0.6 : 1, transition: "opacity 0.3s" }}>
+                  {voiceOn ? <Volume2 size={12} strokeWidth={1.5} /> : <VolumeX size={12} strokeWidth={1.5} />}
+                  {voiceOn ? "Voice on" : "Voice off"}
+                </button>
+              </div>
+            )}
 
             {!active ? (
               <div style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: "0.75rem" }}>
@@ -506,8 +530,13 @@ function WorkWithDecra() {
                 </div>
                 {!done ? (
                   <div style={{ borderTop: "1px solid var(--c-border)", display: "flex", alignItems: "center", padding: "0.75rem 1rem", gap: "0.75rem" }}>
-                    <input ref={inputRef} value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); }}} placeholder="Type your reply…" style={{ flex: 1, background: "none", border: "none", outline: "none", fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.875rem", color: "var(--c-ink)" }} />
-                    <button onClick={send} disabled={!input.trim() || loading} style={{ background: "none", border: "none", cursor: "pointer", padding: "0.25rem", opacity: input.trim() ? 1 : 0.3, transition: "opacity 0.2s", color: "var(--c-ink)", display: "flex", alignItems: "center" }}>
+                    <input ref={inputRef} value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); }}} placeholder={listening ? "Listening…" : "Type your reply…"} style={{ flex: 1, background: "none", border: "none", outline: "none", fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.875rem", color: "var(--c-ink)" }} />
+                    {supported && (
+                      <button onClick={handleMic} aria-label={listening ? "Stop listening" : "Speak your message"} style={{ background: "none", border: "none", cursor: "pointer", padding: "0.25rem", color: listening ? "#e05252" : "var(--c-ink-muted)", display: "flex", alignItems: "center", animation: listening ? "dot-pulse 1s ease-in-out infinite" : "none" }}>
+                        <Mic size={15} strokeWidth={1.5} />
+                      </button>
+                    )}
+                    <button onClick={() => send()} disabled={!input.trim() || loading} style={{ background: "none", border: "none", cursor: "pointer", padding: "0.25rem", opacity: input.trim() ? 1 : 0.3, transition: "opacity 0.2s", color: "var(--c-ink)", display: "flex", alignItems: "center" }}>
                       <ArrowRight size={15} strokeWidth={1.5} />
                     </button>
                   </div>
@@ -944,89 +973,6 @@ function Accreditations() {
   );
 }
 
-/* ── Section: Editorial break with social icons overlaid ── */
-function EditorialBreak() {
-  const { ref, vis } = useReveal();
-
-  const socials = [
-    {
-      label: "Instagram",
-      url: "https://instagram.com/decrakerubo",
-      icon: (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-        </svg>
-      ),
-    },
-    {
-      label: "LinkedIn",
-      url: "https://www.linkedin.com/in/decra/",
-      icon: (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
-          <rect x="2" y="9" width="4" height="12"/>
-          <circle cx="4" cy="4" r="2"/>
-        </svg>
-      ),
-    },
-    {
-      label: "Spotify",
-      url: "https://open.spotify.com",
-      icon: (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
-        </svg>
-      ),
-    },
-  ];
-
-  return (
-    <section ref={ref as React.RefObject<HTMLElement>} style={{
-      height: "clamp(280px, 40vh, 480px)",
-      position: "relative", overflow: "hidden", background: "#0A0A0A",
-    }}>
-      <img src="/decra-texture.jpg" alt="" style={{
-        width: "100%", height: "100%",
-        objectFit: "cover", objectPosition: "center 40%",
-        display: "block",
-        filter: "saturate(0.75)",
-        opacity: vis ? 0.85 : 0,
-        transform: vis ? "scale(1)" : "scale(1.04)",
-        transition: "opacity 1.4s cubic-bezier(0.16,1,0.3,1), transform 1.6s cubic-bezier(0.16,1,0.3,1)",
-      }} />
-      <div style={{
-        position: "absolute", inset: 0,
-        background: "linear-gradient(to bottom, rgba(10,10,10,0.15) 0%, transparent 25%, transparent 75%, rgba(10,10,10,0.25) 100%)",
-        pointerEvents: "none",
-      }} />
-      <div style={{
-        position: "absolute", inset: 0,
-        display: "flex", alignItems: "center",
-        justifyContent: "center", gap: "2rem", flexWrap: "wrap",
-      }}>
-        {socials.map(({ label, url, icon }, i) => (
-          <a key={label} href={url} target="_blank" rel="noopener noreferrer"
-            aria-label={label}
-            style={{
-              color: "rgba(240,238,233,0.75)",
-              textDecoration: "none",
-              lineHeight: 0, display: "block",
-              opacity: vis ? 1 : 0,
-              transform: vis ? "none" : "translateY(14px)",
-              transition: `opacity 0.6s ease ${0.15 + i * 0.08}s, transform 0.6s ease ${0.15 + i * 0.08}s, color 0.2s`,
-            } as React.CSSProperties}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "#5FA98F"; (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)"; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "rgba(240,238,233,0.75)"; (e.currentTarget as HTMLElement).style.transform = "none"; }}>
-            {icon}
-          </a>
-        ))}
-      </div>
-    </section>
-  );
-}
-
 /* ── Page ── */
 export default function Home() {
   return (
@@ -1038,7 +984,6 @@ export default function Home() {
       <Accreditations />
       <The1000 />
       <WorkWithDecra />
-      <EditorialBreak />
     </>
   );
 }
