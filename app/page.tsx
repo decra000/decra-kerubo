@@ -89,11 +89,8 @@ function Hero() {
         opacity: vis ? 1 : 0,
         transition: "opacity 1.4s cubic-bezier(0.16,1,0.3,1)",
       }}>
-        <picture style={{ display: "block", width: "100%", height: "100%" }}>
-          <source media="(max-width: 640px)" srcSet="/decra-about.jpg" />
-          <img src="/decra-cover.jpg" alt="" id="hero-img"
-            style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 38%", display: "block" }} />
-        </picture>
+        <img src="/decra-hero-new.jpg" alt="" id="hero-img"
+          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 22%", display: "block" }} />
       </div>
       <div id="hero-scrim" style={{
         position: "absolute", inset: 0,
@@ -137,7 +134,7 @@ function Hero() {
           #hero-content { align-items: flex-end !important; padding-bottom: 12vh !important; }
         }
         @media (max-width: 640px) {
-          #hero-img { object-position: center 18%; }
+          #hero-img { object-position: center 12%; }
           #hero-scrim {
             background:
               linear-gradient(to top, rgba(10,10,10,0.97) 0%, rgba(10,10,10,0.75) 22%, rgba(10,10,10,0.3) 45%, rgba(10,10,10,0.08) 62%, transparent 78%) !important;
