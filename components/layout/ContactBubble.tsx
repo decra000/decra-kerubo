@@ -55,12 +55,13 @@ export function ContactBubble() {
         @media(max-width:400px){.cb{right:1rem;left:1rem;width:auto;max-width:none}}
         .cb.off{transform:scale(0.9) translateY(8px);opacity:0;pointer-events:none}
         .cb.on{transform:scale(1);opacity:1}
-        .fab{position:fixed;bottom:1.5rem;right:1.5rem;width:2.5rem;height:2.5rem;border-radius:50%;background:var(--c-ink);color:var(--c-bg);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:9001;transition:transform 0.2s,background 0.2s}
+        .fab{position:fixed;bottom:1.5rem;right:1.5rem;width:2.5rem;height:2.5rem;border-radius:50%;background:var(--c-ink);color:var(--c-bg);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:9001;transition:transform 0.4s cubic-bezier(0.34,1.3,0.64,1),opacity 0.3s ease,background 0.2s}
         .fab:hover{background:var(--c-accent);transform:scale(1.06)}
+        .fab.open{transform:translateY(-3.4rem) scale(0.4);opacity:0;pointer-events:none}
         @keyframes bd3{0%,100%{opacity:0.3}50%{opacity:1}}
       `}</style>
 
-      <button className="fab" onClick={() => setOpen(v => !v)} aria-label="Chat with Decra AI">
+      <button className={`fab ${open ? "open" : ""}`} onClick={() => setOpen(v => !v)} aria-label="Chat with Decra AI">
         {open ? <X size={14} strokeWidth={1.5} /> : <MessageCircle size={14} strokeWidth={1.5} />}
       </button>
 
