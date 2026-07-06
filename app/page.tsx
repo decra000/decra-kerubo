@@ -83,45 +83,29 @@ function Hero() {
   const [vis, setVis] = useState(false);
   useEffect(() => { const t = setTimeout(() => setVis(true), 60); return () => clearTimeout(t); }, []);
   return (
-    <section id="hero" className="hero-sec" style={{ position: "relative", overflow: "hidden", background: "#0A0A0A" }}>
-      <div style={{
-        position: "absolute", inset: 0,
-        opacity: vis ? 1 : 0,
-        transition: "opacity 1.4s cubic-bezier(0.16,1,0.3,1)",
-      }}>
-        <img src="/decra-hero-new.jpg" alt="" id="hero-img"
-          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 22%", display: "block" }} />
-      </div>
-      <div id="hero-scrim" style={{
-        position: "absolute", inset: 0,
-        background: `
-          linear-gradient(to top, rgba(10,10,10,0.96) 0%, rgba(10,10,10,0.4) 32%, rgba(10,10,10,0.05) 55%, transparent 72%),
-          linear-gradient(to right, rgba(10,10,10,0.75) 0%, rgba(10,10,10,0.3) 40%, transparent 65%)
-        `,
-      }} />
+    <section id="hero" className="hero-sec" style={{ position: "relative", overflow: "hidden", background: "var(--c-bg)", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <div id="hero-content" style={{
-        position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
-        display: "flex", alignItems: "center",
-        padding: "clamp(2rem,6vh,4.5rem) var(--space-x) 0",
+        width: "100%",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        padding: "0 var(--space-x)",
         maxWidth: "calc(var(--max-w) + (var(--space-x) * 2))", margin: "0 auto",
-        pointerEvents: "none",
         opacity: vis ? 1 : 0,
         transform: vis ? "none" : "translateY(14px)",
         transition: "opacity 1.1s cubic-bezier(0.16,1,0.3,1) 0.3s, transform 1.1s cubic-bezier(0.16,1,0.3,1) 0.3s",
       }}>
-        <div style={{ maxWidth: "22rem", pointerEvents: "auto" }}>
+        <div style={{ maxWidth: "26rem", textAlign: "center" }}>
           <h1 style={{
             fontFamily: "var(--font-serif)", fontWeight: 400,
-            fontSize: "clamp(1.75rem,3vw,2.5rem)", color: "#F0EEE9",
+            fontSize: "clamp(1.75rem,4vw,2.75rem)", color: "var(--c-ink)",
             lineHeight: 1.15, letterSpacing: "-0.01em", marginBottom: "1.75rem",
           }}>
             Technology Lawyer &amp; Product Counsel.
           </h1>
           <button
             onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: PRODUCT_COUNSEL_GROUP }))}
-            style={lineBtn({ light: true })}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "#5FA98F"; (e.currentTarget as HTMLElement).style.color = "#5FA98F"; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.3)"; (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"; }}
+            style={lineBtn()}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"; (e.currentTarget as HTMLElement).style.color = "var(--c-accent)"; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "var(--c-border)"; (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"; }}
           >
             Retain as Technical Product Counsel
           </button>
@@ -130,20 +114,7 @@ function Hero() {
       <style>{`
         .hero-sec { height: 100vh; }
         @supports (height: 100svh) { .hero-sec { height: 100svh; } }
-        @media (min-width: 641px) {
-          #hero-content { align-items: flex-end !important; padding-bottom: 12vh !important; }
-        }
         @media (max-width: 640px) {
-          #hero-img { object-position: center 12%; }
-          #hero-scrim {
-            background:
-              linear-gradient(to top, rgba(10,10,10,0.97) 0%, rgba(10,10,10,0.75) 22%, rgba(10,10,10,0.3) 45%, rgba(10,10,10,0.08) 62%, transparent 78%) !important;
-          }
-          #hero-content {
-            align-items: flex-end !important;
-            padding: 0 var(--space-x) calc(3rem + env(safe-area-inset-bottom)) !important;
-          }
-          #hero-content > div { max-width: 100% !important; text-align: center; }
           #hero-content h1 { font-size: clamp(1.65rem, 7vw, 2.1rem) !important; margin-bottom: 1.5rem !important; }
           #hero-content button { width: auto; max-width: 82%; white-space: normal; line-height: 1.5; }
         }
