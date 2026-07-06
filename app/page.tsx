@@ -83,7 +83,21 @@ function Hero() {
   const [vis, setVis] = useState(false);
   useEffect(() => { const t = setTimeout(() => setVis(true), 60); return () => clearTimeout(t); }, []);
   return (
-    <section id="hero" className="hero-sec" style={{ position: "relative", overflow: "hidden", background: "var(--c-bg)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <section id="hero" className="hero-sec" style={{ position: "relative", overflow: "hidden", background: "#0A0A0A", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      {/* Corner glows in brand teal + cream, echoing the reference mood boards but on-palette */}
+      <div aria-hidden style={{
+        position: "absolute", top: "-18%", left: "-14%", width: "min(60vw,620px)", height: "min(60vw,620px)",
+        borderRadius: "50%", pointerEvents: "none",
+        background: "radial-gradient(circle, #5FA98F 0%, transparent 70%)",
+        opacity: 0.5, filter: "blur(40px)",
+      }} />
+      <div aria-hidden style={{
+        position: "absolute", bottom: "-22%", right: "-16%", width: "min(65vw,680px)", height: "min(65vw,680px)",
+        borderRadius: "50%", pointerEvents: "none",
+        background: "radial-gradient(circle, #F0EEE9 0%, transparent 68%)",
+        opacity: 0.16, filter: "blur(50px)",
+      }} />
+
       <div id="hero-content" style={{
         position: "relative", width: "100%",
         display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
@@ -94,40 +108,27 @@ function Hero() {
         transition: "opacity 1.1s cubic-bezier(0.16,1,0.3,1) 0.3s, transform 1.1s cubic-bezier(0.16,1,0.3,1) 0.3s",
       }}>
         <div style={{ maxWidth: "26rem", textAlign: "center" }}>
-          <p style={{ ...LBL, marginBottom: "1.25rem" }}>Nairobi · Technology Law</p>
           <h1 style={{
             fontFamily: "var(--font-serif)", fontWeight: 400,
-            fontSize: "clamp(1.75rem,4vw,2.75rem)", color: "var(--c-ink)",
+            fontSize: "clamp(1.75rem,4vw,2.75rem)", color: "#F0EEE9",
             lineHeight: 1.15, letterSpacing: "-0.01em", marginBottom: "1.75rem",
           }}>
             Technology Lawyer &amp; Product Counsel.
           </h1>
           <button
             onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: PRODUCT_COUNSEL_GROUP }))}
-            style={lineBtn()}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"; (e.currentTarget as HTMLElement).style.color = "var(--c-accent)"; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "var(--c-border)"; (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"; }}
+            style={lineBtn({ light: true })}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "#5FA98F"; (e.currentTarget as HTMLElement).style.color = "#5FA98F"; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.3)"; (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"; }}
           >
             Retain as Technical Product Counsel
           </button>
         </div>
       </div>
 
-      <div aria-hidden style={{
-        position: "absolute", bottom: "2.5rem", left: "50%", transform: "translateX(-50%)",
-        display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem",
-        opacity: vis ? 0.5 : 0, transition: "opacity 1s ease 0.8s",
-      }}>
-        <div className="hero-scroll-line" style={{ width: "1px", height: "28px", background: "var(--c-border-strong)", position: "relative", overflow: "hidden" }}>
-          <span className="hero-scroll-dot" style={{ position: "absolute", left: 0, top: 0, width: "1px", height: "8px", background: "var(--c-accent)" }} />
-        </div>
-      </div>
-
       <style>{`
         .hero-sec { height: 100vh; }
         @supports (height: 100svh) { .hero-sec { height: 100svh; } }
-        .hero-scroll-dot { animation: hero-scroll 1.8s ease-in-out infinite; }
-        @keyframes hero-scroll { 0% { top: -8px; opacity: 0; } 30% { opacity: 1; } 100% { top: 28px; opacity: 0; } }
         @media (max-width: 640px) {
           #hero-content h1 { font-size: clamp(1.65rem, 7vw, 2.1rem) !important; margin-bottom: 1.5rem !important; }
           #hero-content button { width: auto; max-width: 82%; white-space: normal; line-height: 1.5; }
