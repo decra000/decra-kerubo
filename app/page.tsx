@@ -84,23 +84,6 @@ function Hero() {
   useEffect(() => { const t = setTimeout(() => setVis(true), 60); return () => clearTimeout(t); }, []);
   return (
     <section id="hero" className="hero-sec" style={{ position: "relative", overflow: "hidden", background: "var(--c-bg)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      {/* Soft accent glow, purely decorative */}
-      <div aria-hidden style={{
-        position: "absolute", top: "50%", left: "50%", width: "min(60vw,700px)", height: "min(60vw,700px)",
-        transform: "translate(-50%,-50%)", borderRadius: "50%", pointerEvents: "none",
-        background: "radial-gradient(circle, var(--c-accent) 0%, transparent 68%)",
-        opacity: 0.1, filter: "blur(10px)",
-      }} />
-      {/* Oversized monogram watermark for texture, no photo needed */}
-      <div aria-hidden style={{
-        position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-54%)",
-        fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(16rem,46vw,30rem)",
-        color: "var(--c-ink)", opacity: 0.045, lineHeight: 1, pointerEvents: "none", whiteSpace: "nowrap",
-        userSelect: "none",
-      }}>
-        DK
-      </div>
-
       <div id="hero-content" style={{
         position: "relative", width: "100%",
         display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
@@ -111,11 +94,7 @@ function Hero() {
         transition: "opacity 1.1s cubic-bezier(0.16,1,0.3,1) 0.3s, transform 1.1s cubic-bezier(0.16,1,0.3,1) 0.3s",
       }}>
         <div style={{ maxWidth: "26rem", textAlign: "center" }}>
-          <p style={{ ...LBL, marginBottom: "1.1rem", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.6rem" }}>
-            <span style={{ width: "1.1rem", height: "1px", background: "var(--c-border-strong)" }} />
-            Nairobi · Technology Law
-            <span style={{ width: "1.1rem", height: "1px", background: "var(--c-border-strong)" }} />
-          </p>
+          <p style={{ ...LBL, marginBottom: "1.25rem" }}>Nairobi · Technology Law</p>
           <h1 style={{
             fontFamily: "var(--font-serif)", fontWeight: 400,
             fontSize: "clamp(1.75rem,4vw,2.75rem)", color: "var(--c-ink)",
@@ -131,20 +110,14 @@ function Hero() {
           >
             Retain as Technical Product Counsel
           </button>
-          <p style={{ marginTop: "2.25rem", fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.6rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--c-ink-muted)", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.65rem", flexWrap: "wrap" }}>
-            <span>LLB</span><span style={{ opacity: 0.4 }}>·</span>
-            <span>BSc Computer Science (AI)</span><span style={{ opacity: 0.4 }}>·</span>
-            <span>Kenya</span>
-          </p>
         </div>
       </div>
 
       <div aria-hidden style={{
         position: "absolute", bottom: "2.5rem", left: "50%", transform: "translateX(-50%)",
         display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem",
-        opacity: vis ? 0.55 : 0, transition: "opacity 1s ease 0.8s",
+        opacity: vis ? 0.5 : 0, transition: "opacity 1s ease 0.8s",
       }}>
-        <span style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.55rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--c-ink-muted)" }}>Scroll</span>
         <div className="hero-scroll-line" style={{ width: "1px", height: "28px", background: "var(--c-border-strong)", position: "relative", overflow: "hidden" }}>
           <span className="hero-scroll-dot" style={{ position: "absolute", left: 0, top: 0, width: "1px", height: "8px", background: "var(--c-accent)" }} />
         </div>
