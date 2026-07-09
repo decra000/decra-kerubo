@@ -86,7 +86,10 @@ const personJsonLd = {
     "Startup Advisory",
     "Artificial Intelligence",
   ],
-  sameAs: [] as string[],
+  sameAs: [
+    "https://www.instagram.com/_little._d._/",
+    "https://www.linkedin.com/in/decra/",
+  ] as string[],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

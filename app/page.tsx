@@ -656,6 +656,8 @@ interface Paper {
   partner: string;
   dates: string;
   status: PaperStatus;
+  abstract: string;
+  externalUrl?: string;
 }
 
 const PAPERS: Paper[] = [
@@ -665,13 +667,8 @@ const PAPERS: Paper[] = [
     partner: "In association with the Bevisioneers Mercedes-Benz Program",
     dates: "May 2024 — Present",
     status: "current",
-  },
-  {
-    slug: "merger-regulation-kenya",
-    title: "Merger Regulation & Competition Law",
-    partner: "In association with the Kenya School of Law",
-    dates: "Sep — Dec 2025",
-    status: "complete",
+    abstract:
+      "An ongoing study into how AI infrastructure can be made more accessible to underserved innovators across Africa without compromising on environmental sustainability — examining low-carbon compute models, equitable access frameworks, and the regulatory conditions needed to support both.",
   },
   {
     slug: "ai-enabled-regulation",
@@ -679,6 +676,9 @@ const PAPERS: Paper[] = [
     partner: "In association with the African Leadership University",
     dates: "Aug 2023 — Apr 2024",
     status: "complete",
+    abstract:
+      "An examination of how artificial intelligence can be deployed within regulatory bodies themselves — from automated compliance monitoring to digital safety enforcement — and the legal safeguards required to keep AI-assisted regulation accountable and rights-respecting.",
+    externalUrl: "https://alu.librarika.com/search?author_id=7008456",
   },
   {
     slug: "cross-border-data-transfer",
@@ -686,6 +686,8 @@ const PAPERS: Paper[] = [
     partner: "In association with Africa Nazarene University",
     dates: "Jan — Nov 2022",
     status: "complete",
+    abstract:
+      "A comparative review of cross-border data transfer regimes across African jurisdictions, assessing how differing data protection standards affect regional trade, cloud infrastructure decisions, and multinational compliance strategy.",
   },
   {
     slug: "unbiased-hiring-algorithms",
@@ -693,11 +695,15 @@ const PAPERS: Paper[] = [
     partner: "In association with the United Nations Academic Impact",
     dates: "Aug — Dec 2021",
     status: "complete",
+    abstract:
+      "A study of algorithmic bias in automated hiring systems, tracing how historical data can encode discrimination into recruitment tools, and proposing legal and technical safeguards to keep hiring algorithms fair, transparent, and auditable.",
+    externalUrl: "https://www.millenniumfellows.org/fellow/2021/alu/decra-kerubo-mokorah",
   },
 ];
 
 function PaperViewer({ paper, onClose }: { paper: Paper; onClose: () => void }) {
   const [status, setStatus] = useState<"checking" | "ready" | "missing">("checking");
+  const isExternal = !!paper.externalUrl;
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
@@ -707,13 +713,14 @@ function PaperViewer({ paper, onClose }: { paper: Paper; onClose: () => void }) 
   }, [onClose]);
 
   useEffect(() => {
+    if (isExternal) return;
     let cancelled = false;
     setStatus("checking");
     fetch(`/api/research/${paper.slug}`, { method: "HEAD" })
       .then(res => { if (!cancelled) setStatus(res.ok ? "ready" : "missing"); })
       .catch(() => { if (!cancelled) setStatus("missing"); });
     return () => { cancelled = true; };
-  }, [paper.slug]);
+  }, [paper.slug, isExternal]);
 
   return (
     <div
@@ -756,12 +763,51 @@ function PaperViewer({ paper, onClose }: { paper: Paper; onClose: () => void }) 
             Close ✕
           </button>
         </div>
-        <div style={{ flex: 1, background: "#0A0A0A" }}>
-          {status === "ready" && (
+
+        {/* Abstract — always shown so the reader knows what the paper covers before viewing */}
+        <div style={{ padding: "1.5rem 1.5rem 0", flexShrink: 0 }}>
+          <p style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.55rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(240,237,232,0.4)", marginBottom: "0.6rem" }}>
+            Abstract
+          </p>
+          <p style={{ fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.82rem", color: "rgba(240,237,232,0.72)", lineHeight: 1.75, maxWidth: "44rem" }}>
+            {paper.abstract}
+          </p>
+        </div>
+
+        <div style={{ flex: 1, background: "#0A0A0A", marginTop: "1.5rem" }}>
+          {isExternal && (
+            <div style={{
+              width: "100%", height: "100%",
+              display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+              textAlign: "center", padding: "2rem",
+            }}>
+              <p style={{ fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.8rem", color: "rgba(240,237,232,0.5)", lineHeight: 1.7, maxWidth: "26rem", marginBottom: "1.75rem" }}>
+                This paper is published externally. Continue to view the full record.
+              </p>
+              <a
+                href={paper.externalUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "inline-flex", alignItems: "center", gap: "0.5rem",
+                  fontFamily: "var(--font-manjari)", fontWeight: 700,
+                  fontSize: "0.62rem", letterSpacing: "0.18em", textTransform: "uppercase",
+                  color: "#F0EDE8", textDecoration: "none",
+                  border: "1px solid rgba(240,237,232,0.25)", borderRadius: "999px",
+                  padding: "0.85rem 1.75rem", transition: "border-color 0.2s, color 0.2s",
+                }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "#5FA98F"; (e.currentTarget as HTMLElement).style.color = "#5FA98F"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(240,237,232,0.25)"; (e.currentTarget as HTMLElement).style.color = "#F0EDE8"; }}
+              >
+                View Full Record <ArrowRight size={12} strokeWidth={1.5} />
+              </a>
+            </div>
+          )}
+          {!isExternal && status === "ready" && (
             <iframe src={`/api/research/${paper.slug}#toolbar=0&navpanes=0`} title={paper.title}
               style={{ width: "100%", height: "100%", border: "none" }} />
           )}
-          {status === "missing" && (
+          {!isExternal && status === "missing" && (
             <div style={{
               width: "100%", height: "100%",
               display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
@@ -791,11 +837,20 @@ function ResearchSection() {
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto", ...fade(vis) }}>
         <button
           onClick={() => setOpen(o => !o)}
-          style={{ ...lineBtn(), padding: "1rem 2.25rem" }}
-          onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"}
-          onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--c-border)"}
+          className="research-toggle-btn"
+          style={{
+            display: "flex", alignItems: "center", justifyContent: "center", gap: "0.6rem",
+            width: "100%", padding: "1.15rem 2.25rem",
+            background: "var(--c-research-btn-bg)", color: "var(--c-research-btn-text)",
+            border: "none", borderRadius: "3px", cursor: "pointer",
+            fontFamily: "var(--font-manjari)", fontWeight: 700,
+            fontSize: "0.68rem", letterSpacing: "0.2em", textTransform: "uppercase",
+            transition: "opacity 0.2s",
+          }}
+          onMouseEnter={e => (e.currentTarget as HTMLElement).style.opacity = "0.85"}
+          onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = "1"}
         >
-          Explore Research <ArrowRight size={12} strokeWidth={1.5} style={{ transform: open ? "rotate(90deg)" : "none", transition: "transform 0.25s ease" }} />
+          Technology Law Research <ArrowRight size={12} strokeWidth={1.5} style={{ transform: open ? "rotate(90deg)" : "none", transition: "transform 0.25s ease" }} />
         </button>
 
         <div style={{
@@ -806,7 +861,7 @@ function ResearchSection() {
           marginTop: open ? "2.5rem" : "0px",
         }}>
           <p style={{ ...LBL, textAlign: "left", marginBottom: "1.5rem" }}>Research</p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: "0" }} className="rsc-grid">
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "0" }} className="rsc-grid">
             {PAPERS.map((paper, i) => (
               <button
                 key={paper.slug}
