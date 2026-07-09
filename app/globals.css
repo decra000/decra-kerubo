@@ -23,7 +23,7 @@
   --c-border:        rgba(13,13,13,0.08);
   --c-border-strong: rgba(13,13,13,0.16);
 
-  --c-research-btn-bg:   #8FA98F;
+  --c-research-btn-bg:   #5FA98F;
   --c-research-btn-text: #0D0D0D;
 
   --space-x:       clamp(1.5rem, 5.5vw, 7rem);
@@ -43,9 +43,6 @@
   --c-forest:        #2E6E5C;
   --c-border:        rgba(240,237,232,0.07);
   --c-border-strong: rgba(240,237,232,0.14);
-
-  --c-research-btn-bg:   #171613;
-  --c-research-btn-text: #F0EDE8;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }

@@ -67,7 +67,7 @@ export function ContactBubble() {
       `}</style>
 
       <a
-        href="https://wa.me/decrakerubo"
+        href="https://wa.me/qr/A2UFLHLZDAPJM1"
         target="_blank"
         rel="noopener noreferrer"
         className={`wa-fab ${open ? "hide" : ""}`}
