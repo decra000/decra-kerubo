@@ -107,14 +107,14 @@ function Hero() {
 
       <div id="hero-content" style={{
         position: "relative", zIndex: 2, width: "100%",
-        display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+        display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "center",
         padding: "0 var(--space-x)",
         maxWidth: "calc(var(--max-w) + (var(--space-x) * 2))", margin: "0 auto",
         opacity: vis ? 1 : 0,
         transform: vis ? "none" : "translateY(14px)",
         transition: "opacity 1.1s cubic-bezier(0.16,1,0.3,1) 0.3s, transform 1.1s cubic-bezier(0.16,1,0.3,1) 0.3s",
       }}>
-        <div style={{ maxWidth: "26rem", textAlign: "center" }}>
+        <div style={{ maxWidth: "26rem", textAlign: "left" }} className="hero-copy">
           <h1 style={{
             fontFamily: "var(--font-serif)", fontWeight: 400,
             fontSize: "clamp(1.75rem,4vw,2.75rem)", color: "#F0EEE9",
@@ -137,14 +137,22 @@ function Hero() {
         .hero-sec { height: 100vh; }
         @supports (height: 100svh) { .hero-sec { height: 100svh; } }
 
-        /* Wide studio shot for larger screens */
-        .hero-bg { background-image: url('/decra-hero-wide.jpg'); background-position: center 20%; }
-        .hero-overlay { background: linear-gradient(180deg, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0.72) 100%); }
+        /* Wide studio shot for larger screens — subject sits right-of-centre, copy hugs the left edge */
+        .hero-bg { background-image: url('/decra-hero-wide.jpg'); background-position: 68% 22%; }
+        /* No darkening over the face — the wash only picks up a little below it, on the right/lower two-thirds */
+        .hero-overlay {
+          background:
+            linear-gradient(180deg, rgba(10,10,10,0) 0%, rgba(10,10,10,0) 42%, rgba(10,10,10,0.5) 62%, rgba(10,10,10,0.75) 100%),
+            linear-gradient(90deg, rgba(10,10,10,0.7) 0%, rgba(10,10,10,0.25) 38%, rgba(10,10,10,0) 55%);
+        }
 
-        /* Portrait selfie for smaller screens, with a deeper overlay for legibility */
+        /* Portrait selfie for smaller screens */
         @media (max-width: 640px) {
-          .hero-bg { background-image: url('/decra-hero-mobile.jpg'); background-position: center 22%; }
-          .hero-overlay { background: linear-gradient(180deg, rgba(10,10,10,0.72) 0%, rgba(10,10,10,0.85) 100%); }
+          #hero-content { align-items: center !important; justify-content: flex-end !important; padding-bottom: 3.5rem; }
+          .hero-copy { text-align: center !important; }
+          .hero-bg { background-image: url('/decra-hero-mobile.jpg'); background-position: center 18%; }
+          /* Overlay stays clear over the face, then goes a lot darker starting just past halfway down */
+          .hero-overlay { background: linear-gradient(180deg, rgba(10,10,10,0) 0%, rgba(10,10,10,0) 52%, rgba(10,10,10,0.92) 64%, rgba(10,10,10,0.97) 100%); }
           #hero-content h1 { font-size: clamp(1.65rem, 7vw, 2.1rem) !important; margin-bottom: 1.5rem !important; }
           #hero-content button { width: auto; max-width: 82%; white-space: normal; line-height: 1.5; }
         }
