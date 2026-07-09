@@ -109,7 +109,7 @@ function Hero() {
         position: "relative", zIndex: 2, width: "100%",
         display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "center",
         padding: "0 var(--space-x)",
-        paddingTop: "10vh",
+        paddingTop: "16vh",
         maxWidth: "calc(var(--max-w) + (var(--space-x) * 2))", margin: "0 auto",
         opacity: vis ? 1 : 0,
         transform: vis ? "none" : "translateY(14px)",
@@ -149,7 +149,7 @@ function Hero() {
 
         /* Portrait selfie for smaller screens */
         @media (max-width: 640px) {
-          #hero-content { align-items: center !important; justify-content: flex-end !important; padding-top: 0 !important; padding-bottom: 2rem; }
+          #hero-content { align-items: center !important; justify-content: flex-end !important; padding-top: 0 !important; padding-bottom: 0.5rem; }
           .hero-copy { text-align: center !important; }
           .hero-bg { background-image: url('/decra-hero-mobile.jpg'); background-position: center 18%; }
           /* Overlay stays clear over the face, then goes a lot darker starting just past halfway down */
@@ -578,9 +578,14 @@ function The1000() {
       position: "relative", overflow: "hidden",
       display: "flex", alignItems: "flex-end",
     }}>
-      <img src="/decra-spotify-portrait.png" alt="" style={{
+      <img src="/decra-spotify-portrait.png" alt="" className="spotify-img" style={{
         position: "absolute", inset: 0, width: "100%", height: "100%",
         objectFit: "cover", objectPosition: "50% 22%", display: "block",
+      }} />
+      {/* Uniform dark wash over the whole photo, plus a stronger gradient pooling at the bottom behind the copy */}
+      <div style={{
+        position: "absolute", inset: 0,
+        background: "rgba(10,10,10,0.4)",
       }} />
       <div style={{
         position: "absolute", inset: 0,
@@ -588,7 +593,7 @@ function The1000() {
       }} />
 
 
-      <div style={{
+      <div className="spotify-content" style={{
         position: "relative", zIndex: 1, width: "100%",
         maxWidth: "var(--max-w)", margin: "0 auto",
         padding: "clamp(2.5rem,5vw,4.5rem) var(--space-x) clamp(4.5rem,8vw,7rem)",
@@ -604,12 +609,6 @@ function The1000() {
               color: "rgba(255,255,255,0.5)",
             }}>Podcast</p>
           </div>
-
-          <h2 style={{
-            fontFamily: "var(--font-serif)", fontWeight: 400, fontStyle: "italic",
-            fontSize: "clamp(2.1rem,3.8vw,3.25rem)", color: "#FFFFFF",
-            letterSpacing: "-0.01em", lineHeight: 1, marginBottom: "1rem",
-          }}>The 1000</h2>
 
           <p style={{
             fontFamily: "var(--font-sans)", fontWeight: 400,
@@ -638,7 +637,13 @@ function The1000() {
         fontSize: "clamp(1.35rem,2.6vw,1.9rem)", letterSpacing: "0.14em",
         color: "rgba(255,255,255,0.75)",
       }}>Coming soon</p>
-      <style>{`@media(max-width:640px){#spotify p[style*="position: absolute"]{position:static!important;transform:none!important;margin-top:1.5rem!important;color:rgba(255,255,255,0.55)!important;}}`}</style>
+      <style>{`
+        @media(max-width:640px){
+          #spotify p[style*="position: absolute"]{position:static!important;transform:none!important;margin-top:1.5rem!important;color:rgba(255,255,255,0.55)!important;}
+          .spotify-img{ object-position: 50% 14% !important; }
+          #spotify .spotify-content{ padding-left: 1.5rem !important; padding-right: 1.5rem !important; padding-bottom: clamp(3rem,10vw,4rem) !important; }
+        }
+      `}</style>
     </section>
   );
 }
@@ -657,7 +662,7 @@ const PAPERS: Paper[] = [
   {
     slug: "democratization-decarbonization-ai",
     title: "Democratization and Decarbonization of AI Solutions",
-    partner: "In association with the Visionaries Mercedes-Benz Program",
+    partner: "In association with the Bevisioneers Mercedes-Benz Program",
     dates: "May 2024 — Present",
     status: "current",
   },
@@ -851,7 +856,7 @@ const CREDENTIALS: Cred[] = [
     key: "nazarene",
     src: "/logos/logo-nazarene.png",
     name: "Africa Nazarene University",
-    detail: "Bachelor of Laws (LLB) / Juris Doctor",
+    detail: "Bachelor of Laws (LLB)",
     tier: 1,
   },
   {
