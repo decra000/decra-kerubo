@@ -84,22 +84,29 @@ function Hero() {
   useEffect(() => { const t = setTimeout(() => setVis(true), 60); return () => clearTimeout(t); }, []);
   return (
     <section id="hero" className="hero-sec" style={{ position: "relative", overflow: "hidden", background: "#0A0A0A", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      {/* Background photo — wide studio shot on larger screens, portrait selfie on small screens */}
+      <div aria-hidden className="hero-bg" style={{
+        position: "absolute", inset: 0, backgroundSize: "cover", backgroundRepeat: "no-repeat", zIndex: 0,
+      }} />
+      {/* Dark overlay so text stays legible — deeper on mobile where the portrait shot needs more contrast */}
+      <div aria-hidden className="hero-overlay" style={{ position: "absolute", inset: 0, zIndex: 1 }} />
+
       {/* Corner glows in brand teal + cream, echoing the reference mood boards but on-palette */}
       <div aria-hidden style={{
         position: "absolute", top: "-18%", left: "-14%", width: "min(60vw,620px)", height: "min(60vw,620px)",
-        borderRadius: "50%", pointerEvents: "none",
+        borderRadius: "50%", pointerEvents: "none", zIndex: 1,
         background: "radial-gradient(circle, #5FA98F 0%, transparent 70%)",
-        opacity: 0.5, filter: "blur(40px)",
+        opacity: 0.35, filter: "blur(40px)",
       }} />
       <div aria-hidden style={{
         position: "absolute", bottom: "-22%", right: "-16%", width: "min(65vw,680px)", height: "min(65vw,680px)",
-        borderRadius: "50%", pointerEvents: "none",
+        borderRadius: "50%", pointerEvents: "none", zIndex: 1,
         background: "radial-gradient(circle, #F0EEE9 0%, transparent 68%)",
-        opacity: 0.16, filter: "blur(50px)",
+        opacity: 0.12, filter: "blur(50px)",
       }} />
 
       <div id="hero-content" style={{
-        position: "relative", width: "100%",
+        position: "relative", zIndex: 2, width: "100%",
         display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
         padding: "0 var(--space-x)",
         maxWidth: "calc(var(--max-w) + (var(--space-x) * 2))", margin: "0 auto",
@@ -129,7 +136,15 @@ function Hero() {
       <style>{`
         .hero-sec { height: 100vh; }
         @supports (height: 100svh) { .hero-sec { height: 100svh; } }
+
+        /* Wide studio shot for larger screens */
+        .hero-bg { background-image: url('/decra-hero-wide.jpg'); background-position: center 20%; }
+        .hero-overlay { background: linear-gradient(180deg, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0.72) 100%); }
+
+        /* Portrait selfie for smaller screens, with a deeper overlay for legibility */
         @media (max-width: 640px) {
+          .hero-bg { background-image: url('/decra-hero-mobile.jpg'); background-position: center 22%; }
+          .hero-overlay { background: linear-gradient(180deg, rgba(10,10,10,0.72) 0%, rgba(10,10,10,0.85) 100%); }
           #hero-content h1 { font-size: clamp(1.65rem, 7vw, 2.1rem) !important; margin-bottom: 1.5rem !important; }
           #hero-content button { width: auto; max-width: 82%; white-space: normal; line-height: 1.5; }
         }
