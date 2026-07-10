@@ -121,7 +121,7 @@ function Hero() {
             fontSize: "clamp(1.75rem,4vw,2.75rem)", color: "#F0EEE9",
             lineHeight: 1.15, letterSpacing: "-0.01em", marginBottom: "1.75rem",
           }}>
-            Technology Lawyer &amp; Product Counsel.
+            Technology Lawyer &amp; Technical Product Counsel.
           </h1>
           <button
             onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: PRODUCT_COUNSEL_GROUP }))}
