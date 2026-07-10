@@ -2,10 +2,11 @@
 export const dynamic = "force-dynamic";
 import { useMemo, useState } from "react";
 import Papa from "papaparse";
-import { Upload, Send, Lock, CheckCircle2, XCircle, Loader2, Trash2 } from "lucide-react";
+import { Upload, Send, Lock, CheckCircle2, XCircle, MinusCircle, Loader2, Trash2, History, RefreshCw } from "lucide-react";
 
 type Recipient = { company: string; email: string; contact?: string };
-type SendResult = { email: string; company: string; ok: boolean; error?: string };
+type SendResult = { email: string; company: string; ok: boolean; skipped?: boolean; error?: string };
+type HistoryRow = { email: string; company: string | null; subject: string | null; status: "sent" | "failed" | "skipped"; created_at: string };
 
 const DEFAULT_SUBJECT = "Product counsel for {{company}}";
 const DEFAULT_BODY = `Hi {{contact}},
@@ -49,6 +50,14 @@ export default function BroadcastPage() {
   const [sending, setSending] = useState(false);
   const [results, setResults] = useState<SendResult[]>([]);
   const [progress, setProgress] = useState(0);
+  const [skipContacted, setSkipContacted] = useState(true);
+
+  const [showHistory, setShowHistory] = useState(false);
+  const [historyRows, setHistoryRows] = useState<HistoryRow[]>([]);
+  const [historySummary, setHistorySummary] = useState<{ totalSent: number; totalFailed: number; totalSkipped: number; uniqueRecipientsContacted: number } | null>(null);
+  const [historyLoading, setHistoryLoading] = useState(false);
+  const [historyError, setHistoryError] = useState("");
+  const [historySearch, setHistorySearch] = useState("");
 
   const preview = recipients[0];
 
@@ -128,7 +137,7 @@ export default function BroadcastPage() {
         const res = await fetch("/api/broadcast/send", {
           method: "POST",
           headers: { "Content-Type": "application/json", "x-broadcast-password": password },
-          body: JSON.stringify({ subject, bodyHtml, recipients: batch }),
+          body: JSON.stringify({ subject, bodyHtml, recipients: batch, forceResend: !skipContacted }),
         });
         const data = await res.json();
         if (res.ok) {
@@ -146,6 +155,34 @@ export default function BroadcastPage() {
     }
     setSending(false);
   }
+
+  async function loadHistory() {
+    setHistoryLoading(true);
+    setHistoryError("");
+    try {
+      const res = await fetch("/api/broadcast/history", { headers: { "x-broadcast-password": password } });
+      const data = await res.json();
+      if (!res.ok) { setHistoryError(data.error || "Couldn't load history."); return; }
+      setHistoryRows(data.rows || []);
+      setHistorySummary(data.summary || null);
+    } catch {
+      setHistoryError("Network error loading history.");
+    } finally {
+      setHistoryLoading(false);
+    }
+  }
+
+  function toggleHistory() {
+    const next = !showHistory;
+    setShowHistory(next);
+    if (next && historyRows.length === 0) loadHistory();
+  }
+
+  const filteredHistory = useMemo(() => {
+    const q = historySearch.trim().toLowerCase();
+    if (!q) return historyRows;
+    return historyRows.filter(r => r.email.toLowerCase().includes(q) || (r.company || "").toLowerCase().includes(q));
+  }, [historyRows, historySearch]);
 
   if (!unlocked) {
     return (
@@ -172,18 +209,98 @@ export default function BroadcastPage() {
   }
 
   const sentCount = results.filter(r => r.ok).length;
-  const failedCount = results.filter(r => !r.ok).length;
+  const skippedCount = results.filter(r => r.skipped).length;
+  const failedCount = results.filter(r => !r.ok && !r.skipped).length;
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--c-bg)", padding: "7rem var(--space-page-x) 5rem" }}>
       <div style={{ maxWidth: "46rem", margin: "0 auto" }}>
-        <p style={{ ...labelStyle, marginBottom: "0.5rem" }}>Private — do not share this URL</p>
+        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "1rem", marginBottom: "0.5rem" }}>
+          <p style={labelStyle}>Private — do not share this URL</p>
+          <button
+            onClick={toggleHistory}
+            style={{
+              display: "flex", alignItems: "center", gap: "0.4rem", flexShrink: 0,
+              background: "none", border: "1px solid var(--c-border-strong)", borderRadius: "999px",
+              padding: "0.4rem 0.85rem", fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.08em",
+              textTransform: "uppercase", color: "var(--c-ink-muted)", cursor: "pointer",
+            }}
+          >
+            <History size={12} /> {showHistory ? "Hide" : "View"} history
+          </button>
+        </div>
         <h1 style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(1.6rem,3vw,2.1rem)", color: "var(--c-ink)", marginBottom: "0.5rem" }}>
           Product Counsel — Outreach Broadcast
         </h1>
         <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.85rem", color: "var(--c-ink-muted)", marginBottom: "2.5rem", lineHeight: 1.6 }}>
           Upload a CSV of companies you&apos;re considering, write one email, and send a personalized copy to each — {"{{company}}"}, {"{{contact}}"} and {"{{email}}"} get swapped in automatically. Sent in small batches to stay within Gmail&apos;s sending limits.
         </p>
+
+        {/* History dashboard — everyone this tool has ever emailed, so you can see at a glance who's already been contacted */}
+        {showHistory && (
+          <div className="card" style={{ marginBottom: "1.5rem" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
+              <p style={labelStyle}>Send history</p>
+              <button onClick={loadHistory} disabled={historyLoading} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--c-ink-muted)", display: "flex", alignItems: "center", gap: "0.3rem", fontSize: "0.7rem" }}>
+                <RefreshCw size={12} className={historyLoading ? "spin" : ""} /> Refresh
+              </button>
+            </div>
+
+            {historyError && <p style={{ color: "#B3524A", fontSize: "0.8rem", marginBottom: "1rem" }}>{historyError}</p>}
+
+            {historySummary && (
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "1.5rem", marginBottom: "1.25rem", fontSize: "0.78rem" }}>
+                <span style={{ color: "var(--c-ink)" }}><strong>{historySummary.uniqueRecipientsContacted}</strong> unique people contacted</span>
+                <span style={{ color: "#2F5D50" }}>{historySummary.totalSent} sent</span>
+                {historySummary.totalSkipped > 0 && <span style={{ color: "var(--c-ink-muted)" }}>{historySummary.totalSkipped} skipped (dupes avoided)</span>}
+                {historySummary.totalFailed > 0 && <span style={{ color: "#B3524A" }}>{historySummary.totalFailed} failed</span>}
+              </div>
+            )}
+
+            <input
+              className="field"
+              placeholder="Search by email or company…"
+              value={historySearch}
+              onChange={e => setHistorySearch(e.target.value)}
+              style={{ marginBottom: "1rem" }}
+            />
+
+            {historyLoading && historyRows.length === 0 ? (
+              <p style={{ fontSize: "0.8rem", color: "var(--c-ink-muted)", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <Loader2 size={13} className="spin" /> Loading…
+              </p>
+            ) : filteredHistory.length === 0 ? (
+              <p style={{ fontSize: "0.8rem", color: "var(--c-ink-muted)" }}>No sends recorded yet.</p>
+            ) : (
+              <div style={{ maxHeight: "320px", overflowY: "auto", border: "1px solid var(--c-border)", borderRadius: "8px" }}>
+                <table style={{ width: "100%", fontSize: "0.76rem", borderCollapse: "collapse" }}>
+                  <thead>
+                    <tr style={{ background: "var(--c-surface)" }}>
+                      {["Date", "Company", "Email", "Status"].map(h => (
+                        <th key={h} style={{ position: "sticky", top: 0, background: "var(--c-surface)", textAlign: "left", padding: "0.5rem 0.75rem", color: "var(--c-ink-muted)", fontWeight: 700, textTransform: "uppercase", fontSize: "0.6rem", letterSpacing: "0.08em" }}>{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredHistory.map((r, i) => (
+                      <tr key={i} style={{ borderTop: "1px solid var(--c-border)" }}>
+                        <td style={{ padding: "0.5rem 0.75rem", color: "var(--c-ink-muted)", whiteSpace: "nowrap" }}>{new Date(r.created_at).toLocaleDateString()}</td>
+                        <td style={{ padding: "0.5rem 0.75rem", color: "var(--c-ink)" }}>{r.company || "—"}</td>
+                        <td style={{ padding: "0.5rem 0.75rem", color: "var(--c-ink)" }}>{r.email}</td>
+                        <td style={{ padding: "0.5rem 0.75rem" }}>
+                          <span style={{
+                            color: r.status === "sent" ? "#2F5D50" : r.status === "failed" ? "#B3524A" : "var(--c-ink-muted)",
+                            fontSize: "0.68rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em",
+                          }}>{r.status}</span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Step 1 — Upload */}
         <div className="card" style={{ marginBottom: "1.5rem" }}>
@@ -256,6 +373,12 @@ export default function BroadcastPage() {
           <p style={{ fontSize: "0.78rem", color: "var(--c-ink-muted)", marginBottom: "1rem", lineHeight: 1.6 }}>
             Sends in batches of 5, with a short pause in between. For large lists, consider spreading sends across a few days — Gmail may flag an account that sends too many near-identical emails at once.
           </p>
+
+          <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "0.78rem", color: "var(--c-ink)", marginBottom: "1.25rem", cursor: "pointer" }}>
+            <input type="checkbox" checked={skipContacted} onChange={e => setSkipContacted(e.target.checked)} />
+            Skip anyone already contacted in a previous send
+          </label>
+
           <button className="btn-primary" style={{ border: "none", width: "100%" }}
             onClick={handleSend} disabled={sending || recipients.length === 0}>
             {sending
@@ -267,12 +390,16 @@ export default function BroadcastPage() {
             <div style={{ marginTop: "1.25rem" }}>
               <p style={{ fontSize: "0.8rem", color: "var(--c-ink)", marginBottom: "0.75rem" }}>
                 <span style={{ color: "#2F5D50" }}>{sentCount} sent</span>
+                {skippedCount > 0 && <span style={{ color: "var(--c-ink-muted)" }}> · {skippedCount} skipped (already contacted)</span>}
                 {failedCount > 0 && <span style={{ color: "#B3524A" }}> · {failedCount} failed</span>}
               </p>
               <div style={{ maxHeight: "180px", overflowY: "auto" }}>
                 {results.map((r, i) => (
-                  <div key={i} style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "0.78rem", padding: "0.35rem 0", color: r.ok ? "var(--c-ink)" : "#B3524A" }}>
-                    {r.ok ? <CheckCircle2 size={13} /> : <XCircle size={13} />}
+                  <div key={i} style={{
+                    display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "0.78rem", padding: "0.35rem 0",
+                    color: r.ok ? "var(--c-ink)" : r.skipped ? "var(--c-ink-muted)" : "#B3524A",
+                  }}>
+                    {r.ok ? <CheckCircle2 size={13} /> : r.skipped ? <MinusCircle size={13} /> : <XCircle size={13} />}
                     {r.company || r.email} {!r.ok && `— ${r.error}`}
                   </div>
                 ))}

@@ -27,8 +27,8 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { subject, bodyHtml, recipients } = body as {
-      subject: string; bodyHtml: string; recipients: Recipient[];
+    const { subject, bodyHtml, recipients, forceResend } = body as {
+      subject: string; bodyHtml: string; recipients: Recipient[]; forceResend?: boolean;
     };
 
     if (!subject || !bodyHtml || !Array.isArray(recipients) || recipients.length === 0) {
@@ -41,7 +41,23 @@ export async function POST(req: NextRequest) {
     }
 
     const db = supabaseAdmin();
-    const results: { email: string; company: string; ok: boolean; error?: string }[] = [];
+    const results: { email: string; company: string; ok: boolean; skipped?: boolean; error?: string }[] = [];
+
+    // Look up which of this batch's addresses have already received a
+    // successful send in the past, so we don't contact the same inbox twice
+    // across separate broadcasts (unless the sender explicitly overrides it).
+    let alreadySent = new Set<string>();
+    if (!forceResend) {
+      const batchEmails = recipients.map(r => (r.email || "").trim().toLowerCase()).filter(Boolean);
+      if (batchEmails.length > 0) {
+        const { data: priorRows } = await db
+          .from("broadcasts")
+          .select("email")
+          .eq("status", "sent")
+          .in("email", batchEmails);
+        alreadySent = new Set((priorRows || []).map((row: { email: string }) => row.email.toLowerCase()));
+      }
+    }
 
     for (const r of recipients) {
       const to = (r.email || "").trim();
@@ -49,6 +65,17 @@ export async function POST(req: NextRequest) {
         results.push({ email: "", company: r.company, ok: false, error: "No email address" });
         continue;
       }
+
+      if (alreadySent.has(to.toLowerCase())) {
+        results.push({ email: to, company: r.company, ok: false, skipped: true, error: "Already contacted previously — skipped to avoid duplicate outreach." });
+        try {
+          await db.from("broadcasts").insert({ company: r.company || null, email: to, subject: personalize(subject, r), status: "skipped" });
+        } catch (logErr) {
+          console.error("Broadcast log insert failed:", logErr);
+        }
+        continue;
+      }
+
       const personalizedSubject = personalize(subject, r);
       const personalizedHtml = personalize(bodyHtml, r);
 

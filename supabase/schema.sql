@@ -66,14 +66,20 @@ create table if not exists broadcasts (
   company text,
   email text not null,
   subject text,
-  status text default 'sent' check (status in ('sent', 'failed')),
+  status text default 'sent' check (status in ('sent', 'failed', 'skipped')),
   created_at timestamptz default now()
 );
+create index if not exists broadcasts_email_idx on broadcasts (email);
+create index if not exists broadcasts_status_idx on broadcasts (status);
 alter table broadcasts enable row level security;
 create policy "Service role full access broadcasts"
   on broadcasts for all
   using (true)
   with check (true);
+
+-- Migration for existing tables created before 'skipped' was added:
+-- alter table broadcasts drop constraint if exists broadcasts_status_check;
+-- alter table broadcasts add constraint broadcasts_status_check check (status in ('sent','failed','skipped'));
 
 -- Enable Row Level Security
 alter table bookings enable row level security;
