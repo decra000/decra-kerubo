@@ -109,7 +109,7 @@ function Hero() {
         position: "relative", zIndex: 2, width: "100%",
         display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "center",
         padding: "0 var(--space-x)",
-        paddingTop: "16vh",
+        paddingTop: "21vh",
         maxWidth: "calc(var(--max-w) + (var(--space-x) * 2))", margin: "0 auto",
         opacity: vis ? 1 : 0,
         transform: vis ? "none" : "translateY(14px)",
@@ -149,7 +149,7 @@ function Hero() {
 
         /* Portrait selfie for smaller screens */
         @media (max-width: 640px) {
-          #hero-content { align-items: center !important; justify-content: flex-end !important; padding-top: 0 !important; padding-bottom: 0.5rem; }
+          #hero-content { align-items: center !important; justify-content: flex-end !important; padding-top: 0 !important; padding-bottom: 0rem; }
           .hero-copy { text-align: center !important; }
           .hero-bg { background-image: url('/decra-hero-mobile.jpg'); background-position: center 18%; }
           /* Overlay stays clear over the face, then goes a lot darker starting just past halfway down */
