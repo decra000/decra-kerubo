@@ -964,6 +964,7 @@ function CredCard({ c, i, vis, size = "sm" }: { c: Cred; i: number; vis: boolean
   const nameSize = size === "lg" ? "clamp(1rem,1.4vw,1.15rem)" : size === "md" ? "clamp(0.92rem,1.25vw,1.05rem)" : "clamp(0.85rem,1.15vw,0.95rem)";
   return (
     <div
+      className="cred-card"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       style={{
@@ -971,7 +972,7 @@ function CredCard({ c, i, vis, size = "sm" }: { c: Cred; i: number; vis: boolean
         transform: vis ? "none" : "translateY(12px)",
         transition: `opacity 0.6s ease ${0.05 + i * 0.06}s, transform 0.6s ease ${0.05 + i * 0.06}s`,
       }}>
-      <div style={{
+      <div className="cred-logo-box" style={{
         height: logoHeight,
         display: "flex", alignItems: "center",
         marginBottom: "1rem",
@@ -980,6 +981,7 @@ function CredCard({ c, i, vis, size = "sm" }: { c: Cred; i: number; vis: boolean
         <img
           src={c.src}
           alt={c.name}
+          className="cred-logo-img"
           style={{
             maxHeight: "100%", maxWidth: "100%",
             width: "auto", height: "auto",
@@ -992,16 +994,18 @@ function CredCard({ c, i, vis, size = "sm" }: { c: Cred; i: number; vis: boolean
           }}
         />
       </div>
-      <p style={{
-        fontFamily: "var(--font-serif)", fontWeight: 400,
-        fontSize: nameSize,
-        color: "var(--c-ink)", lineHeight: 1.3, marginBottom: "0.3rem",
-      }}>{c.name}</p>
-      <p style={{
-        fontFamily: "var(--font-sans)", fontWeight: 400,
-        fontSize: "0.72rem",
-        color: "var(--c-ink-muted)", lineHeight: 1.5,
-      }} dangerouslySetInnerHTML={{ __html: c.detail }} />
+      <div className="cred-text">
+        <p style={{
+          fontFamily: "var(--font-serif)", fontWeight: 400,
+          fontSize: nameSize,
+          color: "var(--c-ink)", lineHeight: 1.3, marginBottom: "0.3rem",
+        }}>{c.name}</p>
+        <p style={{
+          fontFamily: "var(--font-sans)", fontWeight: 400,
+          fontSize: "0.72rem",
+          color: "var(--c-ink-muted)", lineHeight: 1.5,
+        }} dangerouslySetInnerHTML={{ __html: c.detail }} />
+      </div>
     </div>
   );
 }
@@ -1034,7 +1038,13 @@ function Accreditations() {
       </div>
       <style>{`
         @media(max-width:820px){.cred-grid{grid-template-columns:repeat(2,1fr)!important}}
-        @media(max-width:480px){.cred-grid{grid-template-columns:1fr!important}}
+        @media(max-width:560px){
+          .cred-grid{grid-template-columns:1fr!important; gap:1.5rem!important}
+          .cred-card{display:flex!important; align-items:center; gap:1rem}
+          .cred-card .cred-logo-box{flex-shrink:0; width:60px!important; height:60px!important; margin-bottom:0!important; background:var(--c-surface); border-radius:6px; justify-content:center; padding:0.4rem}
+          .cred-card .cred-logo-img{max-height:100%!important; max-width:100%!important}
+          .cred-card .cred-text{flex:1; min-width:0}
+        }
       `}</style>
     </section>
   );

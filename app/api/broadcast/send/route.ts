@@ -50,11 +50,20 @@ export async function POST(req: NextRequest) {
     if (!forceResend) {
       const batchEmails = recipients.map(r => (r.email || "").trim().toLowerCase()).filter(Boolean);
       if (batchEmails.length > 0) {
-        const { data: priorRows } = await db
+        const { data: priorRows, error: lookupError } = await db
           .from("broadcasts")
           .select("email")
           .eq("status", "sent")
           .in("email", batchEmails);
+
+        if (lookupError) {
+          // Fail closed: if we can't verify who's already been contacted, don't send —
+          // sending blind here is exactly how duplicate outreach happens.
+          console.error("Broadcast dedupe lookup failed:", lookupError);
+          return NextResponse.json({
+            error: `Couldn't verify send history before sending, so nothing was sent (to avoid duplicate outreach). Database error: ${lookupError.message}`,
+          }, { status: 500 });
+        }
         alreadySent = new Set((priorRows || []).map((row: { email: string }) => row.email.toLowerCase()));
       }
     }
