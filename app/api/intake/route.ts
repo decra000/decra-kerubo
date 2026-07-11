@@ -5,6 +5,7 @@ const ENGAGEMENT_LABELS: Record<string, string> = {
   speak: "Speaking engagement",
   compliance: "Compliance review",
   startup: "Start a business",
+  "tech-development": "Tech Development Services",
 };
 
 export async function POST(req: NextRequest) {

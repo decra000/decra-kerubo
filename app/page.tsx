@@ -83,6 +83,11 @@ const EVENTS_GROUP = {
   label: "Events & Conferences",
   opening: "Hi, I'm organizing or partnering on an event or conference and would like to discuss having Decra speak, participate, or partner.",
 };
+const TECH_DEV_GROUP = {
+  key: "tech-development",
+  label: "Tech Development Services",
+  opening: "Hi, I'd like to secure Decra's tech development services and go through a build discovery for my website or product.",
+};
 
 /* Shared "line button" style — outline only, no fill, used for every CTA on the page */
 const lineBtn = (opts?: { light?: boolean }): React.CSSProperties => ({
@@ -344,12 +349,27 @@ Post-Launch Review is for products already live, not still being built — a one
 
 The 1000 is Decra's upcoming podcast on technology law in Africa, launching soon on Spotify — not yet live. If someone expresses interest in The 1000, first find out how they'd like to be involved (e.g. featured guest, topic suggestion, sponsor/partner, or just notified when it launches), then continue normal intake gathering name and email.
 
+Tech Development Services is Decra building the actual product — websites, web apps, and MVPs — not legal work. If someone opens this conversation (mentions wanting a site/app/product built, or the opening message says "tech development services" or "build discovery"), run a structured discovery interview like an experienced technical lead scoping a build, ONE question at a time, in this order:
+1. The name of their business/entity, and what it does (its purpose/what problem it solves).
+2. Font preference — ask if they already have brand fonts. If they don't know or don't have any, suggest 2-3 well-paired, free Google Fonts combinations that suit their industry and tone (e.g. a serif + sans pairing for something editorial/premium, or a clean geometric sans pair for something modern/technical), and ask which direction they like.
+3. Color preference — ask if they have brand colors. If not, suggest 2-3 curated, accessible palettes (give actual hex codes, 3-4 colors each) that would suit their brand personality, and ask which resonates.
+4. Whether they already have a logo, or need one designed as part of the build.
+5. Roughly how many pages or screens they need, if they know (e.g. landing page only, 5-8 page site, or a full app with multiple flows) — it's fine if they don't know yet.
+6. The key functionalities/features required — e.g. contact forms, bookings/scheduling, payments, user accounts/login, a blog or CMS, e-commerce, a dashboard, integrations with other tools. Ask open-ended, then probe for specifics.
+7. Any reference sites/apps they like the feel of, or existing brand guidelines to follow, if any (optional, don't dwell on it).
+8. Finally, name and email.
+Keep it conversational and warm, never more than one question per message, and briefly acknowledge their previous answer before asking the next thing — like a real discovery call, not a form. Once complete, say exactly: "Perfect — I have everything Decra needs. She'll be in touch within 48 hours." Then on a new line output the intake_complete block, but for this flow specifically include these additional keys beyond name/email/summary: entityName, purpose, fontPreference, colorPreference, hasLogo, pageCount, functionalities (and referenceSites if mentioned). Example:
+<intake_complete>
+{"name":"...","email":"...","summary":"2-3 sentence briefing for Decra","entityName":"...","purpose":"...","fontPreference":"...","colorPreference":"...","hasLogo":"...","pageCount":"...","functionalities":"..."}
+</intake_complete>
+
 Your job: warm natural conversation, ONE question at a time. Gather over 4-6 exchanges: what they need, their context/stage, name, email.
 If they mention NGO, nonprofit, or international branch, ask: PBO (local Kenyan entity) or foreign company branch?
 Once done say exactly: "Perfect — I have everything Decra needs. She'll be in touch within 48 hours." Then on a new line:
 <intake_complete>
 {"name":"...","email":"...","summary":"2-3 sentence briefing for Decra"}
 </intake_complete>
+(The Tech Development Services flow above overrides this with its own longer question sequence and extra JSON keys — use that version when the conversation is about a build/website/app.)
 Style: 2 sentences per reply. Warm and direct. Never mention Anthropic, Claude, GitHub, or any AI company.`;
 
 function WorkWithDecra() {
@@ -509,7 +529,7 @@ function WorkWithDecra() {
                 <p style={{ ...LBL, marginBottom: "0.35rem" }}>Partner with Decra</p>
                 {active && (
                   <p style={{ fontFamily: "var(--font-serif)", fontSize: "1rem", color: "var(--c-ink)" }}>
-                    {[...PARTNER_GROUPS, PRODUCT_COUNSEL_GROUP, SPOTIFY_GROUP, PACK_GROUP, POST_LAUNCH_REVIEW_GROUP].find(g => g.key === active)?.label}
+                    {[...PARTNER_GROUPS, PRODUCT_COUNSEL_GROUP, SPOTIFY_GROUP, PACK_GROUP, POST_LAUNCH_REVIEW_GROUP, TECH_DEV_GROUP].find(g => g.key === active)?.label}
                   </p>
                 )}
               </div>
@@ -1081,6 +1101,47 @@ function Accreditations() {
   );
 }
 
+/* ── Section: Tech Development ── */
+function TechDevSection() {
+  const { ref, vis } = useReveal();
+  return (
+    <section id="tech-development" ref={ref as React.RefObject<HTMLElement>} style={{ ...SEC, borderTop: "1px solid var(--c-border)" }}>
+      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto", ...reveal(vis, { dir: "up", distance: 18 }) }}>
+        <div style={{ maxWidth: "40rem", marginBottom: "2.5rem" }}>
+          <p style={{ ...LBL, marginBottom: "1.25rem" }}>Tech Development</p>
+          <h2 style={{
+            fontFamily: "var(--font-serif)", fontWeight: 400,
+            fontSize: "clamp(1.5rem,2.6vw,2.1rem)", color: "var(--c-ink)",
+            lineHeight: 1.25, marginBottom: "1.1rem",
+          }}>
+            Need the product actually built, not just reviewed?
+          </h2>
+          <p style={{ ...BODY, fontSize: "0.88rem" }}>
+            Decra also builds — websites and product MVPs, from brand fundamentals through a shipped build. A short discovery conversation captures what you need — fonts, colors, pages, functionality — before any of it gets written.
+          </p>
+        </div>
+
+        <button
+          onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: TECH_DEV_GROUP }))}
+          style={{
+            display: "flex", alignItems: "center", justifyContent: "center", gap: "0.6rem",
+            width: "100%", padding: "1.15rem 2.25rem",
+            background: "var(--c-accent)", color: "var(--c-bg)",
+            border: "none", borderRadius: "3px", cursor: "pointer",
+            fontFamily: "var(--font-manjari)", fontWeight: 700,
+            fontSize: "0.68rem", letterSpacing: "0.2em", textTransform: "uppercase",
+            transition: "opacity 0.2s",
+          }}
+          onMouseEnter={e => (e.currentTarget as HTMLElement).style.opacity = "0.85"}
+          onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = "1"}
+        >
+          Secure My Tech Development Services <ArrowRight size={12} strokeWidth={1.5} />
+        </button>
+      </div>
+    </section>
+  );
+}
+
 /* ── Page ── */
 export default function Home() {
   return (
@@ -1089,6 +1150,7 @@ export default function Home() {
       <About />
       <Services />
       <ResearchSection />
+      <TechDevSection />
       <Accreditations />
       <The1000 />
       <WorkWithDecra />
