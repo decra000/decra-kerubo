@@ -1,9 +1,23 @@
 "use client";
-import { useEffect, useState } from "react";
-import { ArrowRight, ArrowLeft, Clock, CheckCircle2, ShieldCheck, Smartphone, Landmark } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
+import { ArrowRight, ArrowLeft, Clock, CheckCircle2, ShieldCheck, Smartphone, Landmark, SkipForward } from "lucide-react";
 import { CONSULTATION_TYPES } from "@/lib/types";
 
 type Step = 1 | 2 | 3;
+type FormState = { name: string; email: string; organization: string; website: string; industry: string; team_size: string; primary_challenge: string; desired_outcome: string };
+
+// Step 1 as a guided conversation — one question at a time instead of an 8-field wall.
+// `textarea` fields submit on Enter (Shift+Enter for a newline); others submit on Enter.
+const INTAKE_QUESTIONS: { key: keyof FormState; bot: string; placeholder: string; required: boolean; type?: "email" | "textarea"; skippable?: boolean }[] = [
+  { key: "name", bot: "Hi — I'm glad you're here. What's your name?", placeholder: "Your full name", required: true },
+  { key: "email", bot: "Nice to meet you. What's the best email to send your confirmation to?", placeholder: "your@email.com", type: "email", required: true },
+  { key: "organization", bot: "Are you reaching out for a company, NGO, or on your own behalf?", placeholder: "Company / NGO / Personal", required: false, skippable: true },
+  { key: "website", bot: "Got a website I should take a look at beforehand?", placeholder: "https://...", required: false, skippable: true },
+  { key: "industry", bot: "What industry or sector are you in?", placeholder: "e.g. Legal Tech, NGO, FinTech", required: false, skippable: true },
+  { key: "team_size", bot: "Roughly how big is the team?", placeholder: "e.g. 1–5, 10–50, 100+", required: false, skippable: true },
+  { key: "primary_challenge", bot: "Let's get into it — what's the main challenge you're facing right now?", placeholder: "Type your answer...", type: "textarea", required: true },
+  { key: "desired_outcome", bot: "And what would a successful outcome look like for you?", placeholder: "Type your answer...", type: "textarea", required: true },
+];
 
 const TIME_SLOTS: { label: string; value: string }[] = [
   { label: "09:00 AM", value: "09:00" },
@@ -18,8 +32,8 @@ const timeLabel = (value: string) => TIME_SLOTS.find(s => s.value === value)?.la
 // If Paystack isn't configured (no NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY), paid
 // bookings fall back to a manual flow — no account signup needed to get the
 // site working, but it requires Decra to confirm payments by hand in /admin.
-const MPESA_PAYBILL = "XXXXXX";
-const MPESA_ACCOUNT = "Your name as the account number";
+const MPESA_PAYBILL = "542542";
+const MPESA_ACCOUNT = "02006312021250";
 const BANK_DETAILS = {
   accountName: "Decra Kerubo Mokorah",
   bankName: "I&M Bank",
@@ -50,7 +64,42 @@ export default function BookPage() {
   const [manualRef, setManualRef] = useState("");
   const [manualChannel, setManualChannel] = useState<"mpesa" | "bank">("mpesa");
   const [preferBankTransfer, setPreferBankTransfer] = useState(false);
-  const [form, setForm] = useState({ name: "", email: "", organization: "", website: "", industry: "", team_size: "", primary_challenge: "", desired_outcome: "" });
+  const [form, setForm] = useState<FormState>({ name: "", email: "", organization: "", website: "", industry: "", team_size: "", primary_challenge: "", desired_outcome: "" });
+
+  // Chat-style intake state
+  const [qIndex, setQIndex] = useState(0);
+  const [botTyping, setBotTyping] = useState(true);
+  const [chatInput, setChatInput] = useState("");
+  const [chatDone, setChatDone] = useState(false);
+  const chatEndRef = useRef<HTMLDivElement>(null);
+  const chatInputRef = useRef<HTMLTextAreaElement>(null);
+
+  const currentQuestion = INTAKE_QUESTIONS[qIndex];
+
+  // Simulate the bot "typing" before each question appears — keeps the pacing
+  // conversational instead of every question dumping in instantly.
+  useEffect(() => {
+    if (chatDone) return;
+    setBotTyping(true);
+    const t = setTimeout(() => { setBotTyping(false); chatInputRef.current?.focus(); }, qIndex === 0 ? 350 : 500 + Math.random() * 350);
+    return () => clearTimeout(t);
+  }, [qIndex, chatDone]);
+
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+  }, [qIndex, botTyping, chatDone]);
+
+  const submitAnswer = (skip?: boolean) => {
+    const value = skip ? "" : chatInput.trim();
+    if (currentQuestion.required && !value) return;
+    setForm(f => ({ ...f, [currentQuestion.key]: value }));
+    setChatInput("");
+    if (qIndex < INTAKE_QUESTIONS.length - 1) {
+      setQIndex(i => i + 1);
+    } else {
+      setChatDone(true);
+    }
+  };
 
   const selectedConsultation = CONSULTATION_TYPES.find(t => t.id === selectedType);
   const isPaid = (selectedConsultation?.price ?? 0) > 0;
@@ -168,28 +217,85 @@ export default function BookPage() {
           ))}
         </div>
 
-        {/* Step 1 */}
+        {/* Step 1 — conversational intake */}
         {step === 1 && (
           <div>
             <h2 style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "1.05rem", color: "var(--c-forest)", marginBottom: "0.35rem" }}>Tell me about yourself.</h2>
-            <p style={{ fontSize: "0.75rem", color: "var(--c-ink-muted)", marginBottom: "2rem" }}>This helps me prepare for our conversation.</p>
-            <div style={{ display: "flex", flexDirection: "column", gap: "1.1rem", marginBottom: "2rem" }}>
-              {[{ key: "name", label: "Full Name *", required: true, placeholder: "Your full name" }, { key: "email", label: "Email *", required: true, placeholder: "your@email.com", type: "email" }, { key: "organization", label: "Organization", placeholder: "Company / NGO / Personal" }, { key: "website", label: "Website", placeholder: "https://..." }, { key: "industry", label: "Industry / Sector", placeholder: "e.g. Legal Tech, NGO, FinTech" }, { key: "team_size", label: "Team Size", placeholder: "e.g. 1–5, 10–50, 100+" }].map(field => (
-                <div key={field.key}>
-                  <label style={labelStyle}>{field.label}</label>
-                  <input required={field.required} type={field.type || "text"} value={form[field.key as keyof typeof form]} onChange={e => setForm({ ...form, [field.key]: e.target.value })} placeholder={field.placeholder} className="field" />
+            <p style={{ fontSize: "0.75rem", color: "var(--c-ink-muted)", marginBottom: "1.5rem" }}>A few quick questions — answer at your own pace.</p>
+
+            <div className="chat-thread" style={{ display: "flex", flexDirection: "column", gap: "0.9rem", maxHeight: "min(52vh, 420px)", overflowY: "auto", marginBottom: "1.5rem", paddingRight: "0.25rem" }}>
+              {INTAKE_QUESTIONS.slice(0, qIndex).map((q, i) => (
+                <div key={q.key} className="chat-bubble-in">
+                  <div className="chat-bubble chat-bubble-bot">{q.bot}</div>
+                  <div className="chat-bubble chat-bubble-user">{form[q.key] ? form[q.key] : <span style={{ opacity: 0.6, fontStyle: "italic" }}>Skipped</span>}</div>
                 </div>
               ))}
-              {[{ key: "primary_challenge", label: "Primary Challenge *", placeholder: "What's the main challenge you're facing?" }, { key: "desired_outcome", label: "Desired Outcome *", placeholder: "What would a successful outcome look like?" }].map(field => (
-                <div key={field.key}>
-                  <label style={labelStyle}>{field.label}</label>
-                  <textarea required rows={3} value={form[field.key as keyof typeof form]} onChange={e => setForm({ ...form, [field.key]: e.target.value })} placeholder={field.placeholder} className="field" style={{ resize: "none" }} />
+
+              {!chatDone && (
+                <div className="chat-bubble-in">
+                  {botTyping ? (
+                    <div className="chat-bubble chat-bubble-bot chat-typing"><span /><span /><span /></div>
+                  ) : (
+                    <div className="chat-bubble chat-bubble-bot">{currentQuestion.bot}</div>
+                  )}
                 </div>
-              ))}
+              )}
+
+              {chatDone && (
+                <div className="chat-bubble-in">
+                  <div className="chat-bubble chat-bubble-bot">Perfect — that's everything I need for now. Ready to pick a call type?</div>
+                </div>
+              )}
+              <div ref={chatEndRef} />
             </div>
-            <button disabled={!form.name || !form.email || !form.primary_challenge || !form.desired_outcome} onClick={() => setStep(2)} className="btn-primary" style={{ border: "none", opacity: (!form.name || !form.email || !form.primary_challenge || !form.desired_outcome) ? 0.4 : 1 }}>
-              Continue <ArrowRight size={13} />
-            </button>
+
+            {!chatDone && !botTyping && (
+              <div className="chat-bubble-in" style={{ marginBottom: "1.5rem" }}>
+                {currentQuestion.type === "textarea" ? (
+                  <textarea
+                    ref={chatInputRef}
+                    rows={2}
+                    value={chatInput}
+                    onChange={e => setChatInput(e.target.value)}
+                    onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); submitAnswer(); } }}
+                    placeholder={currentQuestion.placeholder}
+                    className="field"
+                    style={{ resize: "none" }}
+                  />
+                ) : (
+                  <input
+                    ref={chatInputRef as unknown as React.RefObject<HTMLInputElement>}
+                    type={currentQuestion.type === "email" ? "email" : "text"}
+                    value={chatInput}
+                    onChange={e => setChatInput(e.target.value)}
+                    onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); submitAnswer(); } }}
+                    placeholder={currentQuestion.placeholder}
+                    className="field"
+                  />
+                )}
+                <div style={{ display: "flex", gap: "0.6rem", marginTop: "0.75rem" }}>
+                  <button
+                    disabled={currentQuestion.required && !chatInput.trim()}
+                    onClick={() => submitAnswer()}
+                    className="btn-primary"
+                    style={{ border: "none", opacity: (currentQuestion.required && !chatInput.trim()) ? 0.4 : 1, padding: "0.65rem 1.5rem" }}
+                  >
+                    Send <ArrowRight size={13} />
+                  </button>
+                  {currentQuestion.skippable && (
+                    <button onClick={() => submitAnswer(true)} className="btn-outline" style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", padding: "0.65rem 1.1rem" }}>
+                      Skip <SkipForward size={12} />
+                    </button>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {chatDone && (
+              <button onClick={() => setStep(2)} className="btn-primary" style={{ border: "none" }}>
+                Continue <ArrowRight size={13} />
+              </button>
+            )}
           </div>
         )}
 
@@ -332,7 +438,25 @@ export default function BookPage() {
           </div>
         )}
       </div>
-      <style>{`@media(max-width:480px){.consult-grid{grid-template-columns:1fr!important}}`}</style>
+      <style>{`
+        @media(max-width:480px){.consult-grid{grid-template-columns:1fr!important}}
+
+        .chat-bubble-in { animation: chatIn 0.35s cubic-bezier(0.16,1,0.3,1); display: flex; flex-direction: column; gap: 0.4rem; }
+        @keyframes chatIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+        .chat-bubble { font-size: 0.8rem; line-height: 1.55; padding: 0.7rem 1rem; border-radius: 14px; max-width: 84%; word-break: break-word; white-space: pre-wrap; }
+        .chat-bubble-bot { align-self: flex-start; background: rgba(14,61,50,0.06); color: var(--c-forest); border-bottom-left-radius: 4px; }
+        .chat-bubble-user { align-self: flex-end; background: var(--c-forest); color: white; border-bottom-right-radius: 4px; }
+
+        .chat-typing { display: flex; align-items: center; gap: 0.3rem; padding: 0.85rem 1.1rem; }
+        .chat-typing span { width: 5px; height: 5px; border-radius: 50%; background: var(--c-forest); opacity: 0.5; animation: chatDot 1.1s infinite ease-in-out; }
+        .chat-typing span:nth-child(2) { animation-delay: 0.15s; }
+        .chat-typing span:nth-child(3) { animation-delay: 0.3s; }
+        @keyframes chatDot { 0%, 60%, 100% { transform: translateY(0); opacity: 0.35; } 30% { transform: translateY(-3px); opacity: 0.9; } }
+
+        .chat-thread::-webkit-scrollbar { width: 5px; }
+        .chat-thread::-webkit-scrollbar-thumb { background: var(--c-border); border-radius: 4px; }
+      `}</style>
     </div>
   );
 }
