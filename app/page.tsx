@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, X, Mic, Volume2, VolumeX } from "lucide-react";
+import { ArrowRight, X, Mic, Volume2, VolumeX, RefreshCw } from "lucide-react";
 import { useSpeech } from "@/hooks/useSpeech";
 
 /* ── helpers ── */
@@ -326,7 +326,7 @@ function Services() {
 }
 
 /* ── Section 3+7: Who I work with & How to work with Decra — unified ── */
-type ChatMsg = { role: "user" | "assistant"; text: string; options?: { items: string[]; multi: boolean } };
+type ChatMsg = { role: "user" | "assistant"; text: string; options?: { items: string[]; multi: boolean }; rateLimited?: boolean };
 
 /* Parses a trailing <options>[...]</options> or <multi_options>[...]</multi_options> block out of an
    assistant reply so it can be rendered as clickable chips instead of raw JSON text. */
@@ -412,6 +412,8 @@ function WorkWithDecra() {
   const [done, setDone] = useState(false);
   const [voiceOn, setVoiceOn] = useState(false);
   const [chipSelections, setChipSelections] = useState<Record<number, string[]>>({});
+  const [lastOpening, setLastOpening] = useState<{ key: string; opening: string } | null>(null);
+  const [lastUserText, setLastUserText] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const { listen, stopListening, listening, supported, speak, stopSpeaking, speaking, synthSupported } = useSpeech();
@@ -427,17 +429,48 @@ function WorkWithDecra() {
     return () => { document.removeEventListener("keydown", onKey); document.body.style.overflow = prevOverflow; };
   }, [modalOpen]);
 
+  // Persist the in-progress conversation so a dropped connection, rate limit,
+  // or accidental tab close doesn't erase what someone already typed.
+  const storageKey = (groupKey: string) => `decra-chat:${groupKey}`;
+  const saveConversation = (groupKey: string, messages: ChatMsg[]) => {
+    try { window.localStorage.setItem(storageKey(groupKey), JSON.stringify(messages)); } catch { /* storage unavailable — non-fatal */ }
+  };
+  const loadConversation = (groupKey: string): ChatMsg[] | null => {
+    try {
+      const raw = window.localStorage.getItem(storageKey(groupKey));
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) && parsed.length > 0 ? parsed : null;
+    } catch { return null; }
+  };
+  const clearConversation = (groupKey: string) => {
+    try { window.localStorage.removeItem(storageKey(groupKey)); } catch { /* non-fatal */ }
+  };
+
+  // Keep the cache in sync as the conversation grows.
+  useEffect(() => {
+    if (active && msgs.length > 0) saveConversation(active, msgs);
+  }, [active, msgs]);
+
   const startGroup = async (groupKey: string, opening: string) => {
-    setActive(groupKey); setMsgs([]); setDone(false); setInput(""); setLoading(true); setChipSelections({});
+    setLastOpening({ key: groupKey, opening });
+    setActive(groupKey); setDone(false); setInput(""); setChipSelections({});
+
+    // Resume a saved conversation for this exact engagement instead of
+    // starting over and re-spending a request on the opening message.
+    const cached = loadConversation(groupKey);
+    if (cached) { setMsgs(cached); setLoading(false); setTimeout(() => inputRef.current?.focus(), 150); return; }
+
+    setMsgs([]); setLoading(true);
     try {
       const res = await fetch("/api/chat", { method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: opening, history: [], system: ENGAGE_SYSTEM }) });
       const data = await res.json();
       const rawReply = data.reply || "Something went wrong. Email hello@decrakerubo.com.";
       const { text: reply, options } = extractOptions(rawReply);
-      setMsgs([{ role: "assistant", text: reply, options }]);
-      if (voiceOn) speak(reply);
-    } catch { setMsgs([{ role: "assistant", text: "Something went wrong. Email hello@decrakerubo.com." }]); }
+      setMsgs([{ role: "assistant", text: reply, options, rateLimited: !!data.rateLimited }]);
+      if (voiceOn && !data.rateLimited) speak(reply);
+    } catch { setMsgs([{ role: "assistant", text: "Something went wrong. Your spot in the conversation is saved — try again in a moment.", rateLimited: true }]); }
     setLoading(false);
     setTimeout(() => inputRef.current?.focus(), 150);
   };
@@ -460,17 +493,22 @@ function WorkWithDecra() {
     return () => window.removeEventListener(OPEN_PARTNER_MODAL_EVENT, onExternalOpen as EventListener);
   }, []);
 
+  // Closing the modal keeps the cached conversation (so reopening the same
+  // engagement resumes it) — only a completed intake clears its cache.
   const closeModal = () => { setModalOpen(false); setActive(null); setMsgs([]); setDone(false); setInput(""); setChipSelections({}); stopSpeaking(); };
 
   const send = async (overrideText?: string) => {
     const text = (overrideText ?? input).trim();
     if (!text || loading || done) return;
-    const userText = text; setInput("");
+    const userText = text; setInput(""); setLastUserText(userText);
     const next = [...msgs, { role: "user" as const, text: userText }];
     setMsgs(next); setLoading(true);
     try {
+      // Rate-limit apology messages are UI-only — never feed them back to the
+      // model as if they were something it actually said.
+      const historyForModel = msgs.filter(m => !m.rateLimited);
       const res = await fetch("/api/chat", { method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: userText, history: msgs, system: ENGAGE_SYSTEM }) });
+        body: JSON.stringify({ message: userText, history: historyForModel, system: ENGAGE_SYSTEM }) });
       const data = await res.json();
       let reply: string = data.reply || "";
       if (reply.includes("<intake_complete>")) {
@@ -478,12 +516,18 @@ function WorkWithDecra() {
         if (m) { try { const p = JSON.parse(m[1].trim()); const ir = await fetch("/api/intake", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...p, engagement: active }) }); if (!ir.ok) console.error("Intake submission failed:", ir.status); } catch (err) { console.error("Intake submission error:", err); } }
         reply = reply.replace(/<intake_complete>[\s\S]*?<\/intake_complete>/, "").trim();
         setDone(true);
+        if (active) clearConversation(active);
       }
       const { text: cleanReply, options } = extractOptions(reply);
-      setMsgs([...next, { role: "assistant", text: cleanReply, options }]);
-      if (voiceOn) speak(cleanReply);
-    } catch { setMsgs([...next, { role: "assistant", text: "Something went wrong. Email hello@decrakerubo.com." }]); }
+      setMsgs([...next, { role: "assistant", text: cleanReply, options, rateLimited: !!data.rateLimited }]);
+      if (voiceOn && !data.rateLimited) speak(cleanReply);
+    } catch { setMsgs([...next, { role: "assistant", text: "Something went wrong. Your message is saved — try again in a moment.", rateLimited: true }]); }
     setLoading(false);
+  };
+
+  const retryLast = () => {
+    if (lastUserText) { send(lastUserText); return; }
+    if (lastOpening) { startGroup(lastOpening.key, lastOpening.opening); }
   };
 
   const handleMic = () => {
@@ -656,6 +700,21 @@ function WorkWithDecra() {
                               </button>
                             )}
                           </div>
+                        )}
+                        {m.rateLimited && isLatest && !loading && !done && (
+                          <button
+                            onClick={retryLast}
+                            style={{
+                              display: "inline-flex", alignItems: "center", gap: "0.4rem",
+                              background: "none", color: "var(--c-accent)",
+                              border: "1px solid var(--c-accent)", borderRadius: "999px",
+                              padding: "0.4rem 0.9rem", cursor: "pointer",
+                              fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.62rem",
+                              letterSpacing: "0.08em", textTransform: "uppercase",
+                            }}
+                          >
+                            <RefreshCw size={11} strokeWidth={1.5} /> Try again
+                          </button>
                         )}
                       </div>
                     );

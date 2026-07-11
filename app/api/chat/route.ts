@@ -130,22 +130,54 @@ export async function POST(req: NextRequest) {
     // Up to 3 rounds: model calls a tool, we execute it, feed the result
     // back, and let it either call another tool or give a final reply.
     for (let round = 0; round < 3 && finalReply === null; round++) {
-      const res = await fetch(GITHUB_MODELS_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
-        body: JSON.stringify({
-          model: GITHUB_MODELS_MODEL, messages,
-          ...(usingDefaultAdvisor ? { tools: TOOLS, tool_choice: "auto" } : {}),
-        }),
-      });
+      let res: Response | null = null;
+      let attempt = 0;
+      const maxAttempts = 3;
 
-      if (!res.ok) {
-        const err = await res.text();
-        console.error("GitHub Models API error:", res.status, err);
+      // Retry loop specifically for 429s (GitHub Models' free tier is quota-limited,
+      // not a hard outage) — back off and retry a couple of times before giving up,
+      // so a brief throttle doesn't kill an in-progress conversation.
+      while (attempt < maxAttempts) {
+        res = await fetch(GITHUB_MODELS_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
+          body: JSON.stringify({
+            model: GITHUB_MODELS_MODEL, messages,
+            ...(usingDefaultAdvisor ? { tools: TOOLS, tool_choice: "auto" } : {}),
+          }),
+        });
+
+        if (res.status !== 429) break;
+
+        attempt++;
+        if (attempt >= maxAttempts) break;
+
+        const retryAfterHeader = res.headers.get("retry-after");
+        const retryAfterSec = retryAfterHeader ? parseInt(retryAfterHeader, 10) : NaN;
+        // Respect a short Retry-After if given; otherwise back off 1.5s then 3s.
+        // (GitHub Models sometimes returns retry-after values measured in hours for
+        // daily-quota exhaustion — in that case there's no point waiting, so cap it.)
+        const waitMs = !isNaN(retryAfterSec) && retryAfterSec > 0 && retryAfterSec <= 5
+          ? retryAfterSec * 1000
+          : attempt * 1500;
+        await new Promise(r => setTimeout(r, waitMs));
+      }
+
+      if (!res!.ok) {
+        const errText = await res!.text();
+        console.error("GitHub Models API error:", res!.status, errText);
+        if (res!.status === 429) {
+          // Distinct, honest message — and a flag the client can use to avoid
+          // treating this as a dead end (the person's message isn't lost).
+          return NextResponse.json({
+            reply: "Decra's assistant is getting more traffic than it can handle right this second. Please try sending that again in a moment — nothing you've typed so far has been lost.",
+            rateLimited: true,
+          });
+        }
         return NextResponse.json({ reply: "I'm having trouble connecting right now. Email hello@decrakerubo.com or use the Talk page." });
       }
 
-      const data = await res.json();
+      const data = await res!.json();
       const choice = data.choices?.[0]?.message;
       if (!choice) {
         return NextResponse.json({ reply: "Something went wrong. Email hello@decrakerubo.com or use the Talk page." });
