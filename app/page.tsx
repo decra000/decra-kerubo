@@ -918,7 +918,7 @@ function The1000() {
       <style>{`
         @media(max-width:640px){
           #spotify{ flex-direction: column !important; align-items: center !important; justify-content: flex-end !important; }
-          #spotify p[style*="position: absolute"]{position:static!important;transform:none!important;width:100%!important;margin:0.5rem 0 0!important;padding:1.25rem 1.5rem clamp(2.5rem,8vw,3.5rem)!important;border-top:1px solid rgba(255,255,255,0.14)!important;color:rgba(255,255,255,0.55)!important;box-sizing:border-box!important;}
+          #spotify p[style*="position: absolute"]{position:static!important;transform:none!important;width:100%!important;margin:0.5rem 0 0!important;padding:1.25rem 1.5rem clamp(2.5rem,8vw,3.5rem)!important;color:rgba(255,255,255,0.55)!important;box-sizing:border-box!important;}
           .spotify-img{ object-position: 58% 20% !important; }
           #spotify .spotify-content{ padding-left: 1.5rem !important; padding-right: 1.5rem !important; padding-bottom: 0 !important; padding-top: clamp(2rem,8vw,3rem) !important; }
         }
