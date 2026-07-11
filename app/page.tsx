@@ -326,7 +326,24 @@ function Services() {
 }
 
 /* ── Section 3+7: Who I work with & How to work with Decra — unified ── */
-type ChatMsg = { role: "user" | "assistant"; text: string };
+type ChatMsg = { role: "user" | "assistant"; text: string; options?: { items: string[]; multi: boolean } };
+
+/* Parses a trailing <options>[...]</options> or <multi_options>[...]</multi_options> block out of an
+   assistant reply so it can be rendered as clickable chips instead of raw JSON text. */
+function extractOptions(raw: string): { text: string; options?: { items: string[]; multi: boolean } } {
+  const multiMatch = raw.match(/<multi_options>([\s\S]*?)<\/multi_options>/);
+  const singleMatch = !multiMatch ? raw.match(/<options>([\s\S]*?)<\/options>/) : null;
+  const match = multiMatch || singleMatch;
+  if (!match) return { text: raw };
+  try {
+    const items = JSON.parse(match[1].trim());
+    if (!Array.isArray(items) || items.length === 0) return { text: raw };
+    const text = raw.replace(match[0], "").trim();
+    return { text, options: { items: items.map(String), multi: !!multiMatch } };
+  } catch {
+    return { text: raw.replace(match[0], "").trim() };
+  }
+}
 
 const ENGAGE_GROUPS = [
   { key: "startup-founders", label: "Startup Founders", opening: "Hi, I'm a founder or builder looking for help with incorporation, equity, fundraising, or startup advisory." },
@@ -349,28 +366,40 @@ Post-Launch Review is for products already live, not still being built — a one
 
 The 1000 is Decra's upcoming podcast on technology law in Africa, launching soon on Spotify — not yet live. If someone expresses interest in The 1000, first find out how they'd like to be involved (e.g. featured guest, topic suggestion, sponsor/partner, or just notified when it launches), then continue normal intake gathering name and email.
 
-Tech Development Services is Decra building the actual product — websites, web apps, and MVPs — not legal work. If someone opens this conversation (mentions wanting a site/app/product built, or the opening message says "tech development services" or "build discovery"), run a structured discovery interview like an experienced technical lead scoping a build, ONE question at a time, in this order:
-1. The name of their business/entity, and what it does (its purpose/what problem it solves).
-2. Font preference — ask if they already have brand fonts. If they don't know or don't have any, suggest 2-3 well-paired, free Google Fonts combinations that suit their industry and tone (e.g. a serif + sans pairing for something editorial/premium, or a clean geometric sans pair for something modern/technical), and ask which direction they like.
-3. Color preference — ask if they have brand colors. If not, suggest 2-3 curated, accessible palettes (give actual hex codes, 3-4 colors each) that would suit their brand personality, and ask which resonates.
-4. Whether they already have a logo, or need one designed as part of the build.
-5. Roughly how many pages or screens they need, if they know (e.g. landing page only, 5-8 page site, or a full app with multiple flows) — it's fine if they don't know yet.
-6. The key functionalities/features required — e.g. contact forms, bookings/scheduling, payments, user accounts/login, a blog or CMS, e-commerce, a dashboard, integrations with other tools. Ask open-ended, then probe for specifics.
-7. Any reference sites/apps they like the feel of, or existing brand guidelines to follow, if any (optional, don't dwell on it).
-8. Finally, name and email.
-Keep it conversational and warm, never more than one question per message, and briefly acknowledge their previous answer before asking the next thing — like a real discovery call, not a form. Once complete, say exactly: "Perfect — I have everything Decra needs. She'll be in touch within 48 hours." Then on a new line output the intake_complete block, but for this flow specifically include these additional keys beyond name/email/summary: entityName, purpose, fontPreference, colorPreference, hasLogo, pageCount, functionalities (and referenceSites if mentioned). Example:
+Tech Development Services is Decra building the actual product — websites, web apps, and MVPs — not legal work. If someone opens this conversation (mentions wanting a site/app/product built, or the opening message says "tech development services" or "build discovery"), you switch personas entirely: for this flow ONLY, you are not a legal intake assistant — you are acting as a senior solution strategist, product designer, AND technical architect running a real discovery/scoping call. Speak with the specificity and confidence of someone who has actually shipped products — reference real technology, real font names, real hex codes, real trade-offs. Never sound like a generic customer-service form. Every question should demonstrate you understood the last answer.
+
+CHIP TOOLS — you can present clickable options instead of making the person type freeform answers. Use these often in this flow, always preceded by a short sentence of context:
+- Single-select (person picks one, sent immediately): end your message with <options>["Option A","Option B","Option C"]</options>
+- Multi-select (person can pick several, then hits Continue): end your message with <multi_options>["Option A","Option B","Option C"]</multi_options>
+Only ONE chip block per message, always as the very last thing in the message, valid JSON array of strings. Always include an escape hatch chip like "Other — I'll describe it" or "Not sure — recommend one" where relevant so the person is never stuck.
+
+Run the discovery in this order:
+1. Entity/business name, AND the actual goal — what they're trying to achieve, for whom, and what outcome success looks like. Do not move on until you genuinely understand the goal — ask a real follow-up if the first answer is vague (e.g. "an app for my business" needs a follow-up: what does the business do, who's the end user).
+2. Jurisdiction — which country/countries this will operate in or serve, since compliance requirements (data protection law, cookie/consent rules, payment regulations) differ by jurisdiction. Ask directly.
+3. ONLY once you understand the goal: reason about what functionality actually fits THIS specific goal (don't ask generic questions) and present a tailored <multi_options> chip list of the features most relevant to their type of product (e.g. an e-commerce goal gets chips like product catalog, cart & checkout, M-Pesa/card payments, inventory management, order tracking, reviews — a booking/service goal gets chips like calendar/scheduling, client accounts, automated reminders, staff management). Always include "Other — I'll describe it".
+4. Ask if there are any special or custom interactions/user flows beyond the standard ones for this kind of product — open-ended, no chips needed here.
+5. For any feature area where it's a real fork (commonly: search, customer support/chat, content or recommendation features), briefly explain in plain, non-technical language the difference between a traditional (rule-based, cheaper, predictable) approach and an AI-powered (smarter, handles nuance, has ongoing cost and needs more data) approach, and what that means for their budget and timeline — THEN offer the choice via <options> chips: ["Traditional","AI-powered","Not sure — recommend for me"]. Skip this step entirely if nothing in their scope actually needs it.
+6. Ask about cookie consent banners and bot/spam protection (e.g. CAPTCHA) — briefly note these matter for the jurisdiction they gave in step 2 — via <multi_options>: ["Cookie consent banner","Bot/spam protection (CAPTCHA)","Neither needed right now"].
+7. Ask about analytics via <options>: ["Google Analytics","Privacy-friendly analytics (e.g. Plausible)","No analytics needed","Not sure — recommend"].
+8. Fonts — ask if they have brand fonts already. If not, pull from the free Google Fonts library and offer 3-4 real, well-paired combinations suited to their brand tone via <options>, e.g. ["Playfair Display + Inter","DM Serif Display + Plus Jakarta Sans","Poppins + Roboto","Space Grotesk + Work Sans"], plus "I have my own fonts".
+9. Colors — ask if they have brand colors already. If not, offer 3-4 real curated palettes (as if pulled from a free tool like Coolors or Adobe Color) with actual hex codes written into each chip label, e.g. ["Forest & Cream — #0E3D32 / #F5F4F1 / #C9A24B","Ocean Blue — #123C69 / #4F98CA / #EAF6FF","Warm Terracotta — #B3542A / #F2E4D8 / #2B2B2B"], via <options>, plus "I have brand colors already".
+10. Logo — <options>: ["I have a logo","I need one designed","Not sure yet"].
+11. Roughly how many pages/screens, if known — <options>: ["Just a landing page","3-5 pages","6-10 pages","10+ / full app","Not sure yet"].
+12. Any reference sites/apps whose feel they like (optional, don't dwell).
+13. Tell them this scope is exactly what Decra needs to put together a quick, accurate pricing quote.
+14. Finally, name and email.
+Keep it warm and conversational, one step at a time, briefly acknowledging their previous answer before moving on — like a real discovery call, never a form. Once complete, say exactly: "Perfect — I have everything Decra needs. She'll be in touch within 48 hours with a scoped quote." Then on a new line output the intake_complete block, including these additional keys beyond name/email/summary: entityName, purpose, jurisdiction, functionalities, specialInteractions, aiVsTraditional, cookiesAndBots, analytics, fontPreference, colorPreference, hasLogo, pageCount, referenceSites. Example:
 <intake_complete>
-{"name":"...","email":"...","summary":"2-3 sentence briefing for Decra","entityName":"...","purpose":"...","fontPreference":"...","colorPreference":"...","hasLogo":"...","pageCount":"...","functionalities":"..."}
+{"name":"...","email":"...","summary":"2-3 sentence briefing for Decra","entityName":"...","purpose":"...","jurisdiction":"...","functionalities":"...","specialInteractions":"...","aiVsTraditional":"...","cookiesAndBots":"...","analytics":"...","fontPreference":"...","colorPreference":"...","hasLogo":"...","pageCount":"...","referenceSites":"..."}
 </intake_complete>
 
-Your job: warm natural conversation, ONE question at a time. Gather over 4-6 exchanges: what they need, their context/stage, name, email.
+Your job for every OTHER flow (not Tech Development): warm natural conversation, ONE question at a time. Gather over 4-6 exchanges: what they need, their context/stage, name, email.
 If they mention NGO, nonprofit, or international branch, ask: PBO (local Kenyan entity) or foreign company branch?
 Once done say exactly: "Perfect — I have everything Decra needs. She'll be in touch within 48 hours." Then on a new line:
 <intake_complete>
 {"name":"...","email":"...","summary":"2-3 sentence briefing for Decra"}
 </intake_complete>
-(The Tech Development Services flow above overrides this with its own longer question sequence and extra JSON keys — use that version when the conversation is about a build/website/app.)
-Style: 2 sentences per reply. Warm and direct. Never mention Anthropic, Claude, GitHub, or any AI company.`;
+Style: 2 sentences per reply outside the Tech Development flow. Warm and direct. Never mention Anthropic, Claude, GitHub, or any AI company.`;
 
 function WorkWithDecra() {
   const { ref, vis } = useReveal();
@@ -382,6 +411,7 @@ function WorkWithDecra() {
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
   const [voiceOn, setVoiceOn] = useState(false);
+  const [chipSelections, setChipSelections] = useState<Record<number, string[]>>({});
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const { listen, stopListening, listening, supported, speak, stopSpeaking, speaking, synthSupported } = useSpeech();
@@ -398,13 +428,14 @@ function WorkWithDecra() {
   }, [modalOpen]);
 
   const startGroup = async (groupKey: string, opening: string) => {
-    setActive(groupKey); setMsgs([]); setDone(false); setInput(""); setLoading(true);
+    setActive(groupKey); setMsgs([]); setDone(false); setInput(""); setLoading(true); setChipSelections({});
     try {
       const res = await fetch("/api/chat", { method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: opening, history: [], system: ENGAGE_SYSTEM }) });
       const data = await res.json();
-      const reply = data.reply || "Something went wrong. Email hello@decrakerubo.com.";
-      setMsgs([{ role: "assistant", text: reply }]);
+      const rawReply = data.reply || "Something went wrong. Email hello@decrakerubo.com.";
+      const { text: reply, options } = extractOptions(rawReply);
+      setMsgs([{ role: "assistant", text: reply, options }]);
       if (voiceOn) speak(reply);
     } catch { setMsgs([{ role: "assistant", text: "Something went wrong. Email hello@decrakerubo.com." }]); }
     setLoading(false);
@@ -429,7 +460,7 @@ function WorkWithDecra() {
     return () => window.removeEventListener(OPEN_PARTNER_MODAL_EVENT, onExternalOpen as EventListener);
   }, []);
 
-  const closeModal = () => { setModalOpen(false); setActive(null); setMsgs([]); setDone(false); setInput(""); stopSpeaking(); };
+  const closeModal = () => { setModalOpen(false); setActive(null); setMsgs([]); setDone(false); setInput(""); setChipSelections({}); stopSpeaking(); };
 
   const send = async (overrideText?: string) => {
     const text = (overrideText ?? input).trim();
@@ -448,8 +479,9 @@ function WorkWithDecra() {
         reply = reply.replace(/<intake_complete>[\s\S]*?<\/intake_complete>/, "").trim();
         setDone(true);
       }
-      setMsgs([...next, { role: "assistant", text: reply }]);
-      if (voiceOn) speak(reply);
+      const { text: cleanReply, options } = extractOptions(reply);
+      setMsgs([...next, { role: "assistant", text: cleanReply, options }]);
+      if (voiceOn) speak(cleanReply);
     } catch { setMsgs([...next, { role: "assistant", text: "Something went wrong. Email hello@decrakerubo.com." }]); }
     setLoading(false);
   };
@@ -570,11 +602,64 @@ function WorkWithDecra() {
             ) : (
               <>
                 <div style={{ flex: 1, overflowY: "auto", padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
-                  {msgs.map((m, i) => (
-                    <div key={i} style={{ display: "flex", justifyContent: m.role === "user" ? "flex-end" : "flex-start" }}>
-                      <div style={{ maxWidth: "80%", padding: "0.7rem 1rem", background: m.role === "user" ? "var(--c-accent)" : "var(--c-surface)", color: m.role === "user" ? "#0A0A0A" : "var(--c-ink)", fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.84rem", lineHeight: 1.7 }}>{m.text}</div>
-                    </div>
-                  ))}
+                  {msgs.map((m, i) => {
+                    const isLatest = i === msgs.length - 1;
+                    const picks = chipSelections[i] || [];
+                    return (
+                      <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: m.role === "user" ? "flex-end" : "flex-start", gap: "0.6rem" }}>
+                        <div style={{ display: "flex", justifyContent: m.role === "user" ? "flex-end" : "flex-start", width: "100%" }}>
+                          <div style={{ maxWidth: "80%", padding: "0.7rem 1rem", background: m.role === "user" ? "var(--c-accent)" : "var(--c-surface)", color: m.role === "user" ? "#0A0A0A" : "var(--c-ink)", fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.84rem", lineHeight: 1.7 }}>{m.text}</div>
+                        </div>
+                        {m.options && isLatest && !loading && !done && (
+                          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", maxWidth: "92%" }}>
+                            {m.options.items.map(opt => {
+                              const selected = picks.includes(opt);
+                              return (
+                                <button
+                                  key={opt}
+                                  onClick={() => {
+                                    if (m.options!.multi) {
+                                      setChipSelections(prev => {
+                                        const cur = prev[i] || [];
+                                        const next = cur.includes(opt) ? cur.filter(x => x !== opt) : [...cur, opt];
+                                        return { ...prev, [i]: next };
+                                      });
+                                    } else {
+                                      send(opt);
+                                    }
+                                  }}
+                                  style={{
+                                    background: selected ? "var(--c-accent)" : "var(--c-surface)",
+                                    color: selected ? "#0A0A0A" : "var(--c-ink)",
+                                    border: `1px solid ${selected ? "var(--c-accent)" : "var(--c-border-strong)"}`,
+                                    borderRadius: "999px", padding: "0.45rem 0.9rem", cursor: "pointer",
+                                    fontFamily: "var(--font-sans)", fontSize: "0.76rem", fontWeight: 500,
+                                    transition: "all 0.15s ease",
+                                  }}
+                                >
+                                  {opt}
+                                </button>
+                              );
+                            })}
+                            {m.options.multi && picks.length > 0 && (
+                              <button
+                                onClick={() => send(picks.join(", "))}
+                                style={{
+                                  display: "inline-flex", alignItems: "center", gap: "0.35rem",
+                                  background: "var(--c-ink)", color: "var(--c-bg)",
+                                  border: "none", borderRadius: "999px", padding: "0.45rem 1rem", cursor: "pointer",
+                                  fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.62rem",
+                                  letterSpacing: "0.08em", textTransform: "uppercase",
+                                }}
+                              >
+                                Continue <ArrowRight size={11} strokeWidth={1.5} />
+                              </button>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                   {loading && (
                     <div style={{ display: "flex", justifyContent: "flex-start" }}>
                       <div style={{ padding: "0.7rem 1rem", background: "var(--c-surface)", display: "flex", gap: "4px", alignItems: "center" }}>
@@ -1117,7 +1202,7 @@ function TechDevSection() {
             Need the product actually built, not just reviewed?
           </h2>
           <p style={{ ...BODY, fontSize: "0.88rem" }}>
-            Decra also builds — websites and product MVPs, from brand fundamentals through a shipped build. A short discovery conversation captures what you need — fonts, colors, pages, functionality — before any of it gets written.
+            Decra also builds — websites and product MVPs, from brand fundamentals through a shipped build. A short discovery conversation scopes exactly what you need, for a quick pricing quote.
           </p>
         </div>
 
