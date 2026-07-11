@@ -63,7 +63,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true, booking: result.booking, meet_link: null, status: result.status });
   } catch (err) {
     console.error("Booking error:", err);
-    const message = err instanceof Error ? err.message : "Booking failed";
-    return NextResponse.json({ error: message }, { status: 500 });
+    // Don't leak raw exception text (e.g. "TypeError: fetch failed") to the person booking —
+    // that's a signal to check server logs, not something a client should see verbatim.
+    return NextResponse.json({ error: "We couldn't complete your booking just now — this is usually temporary. Please try again in a minute, or email hello@decrakerubo.com and we'll get you sorted." }, { status: 500 });
   }
 }

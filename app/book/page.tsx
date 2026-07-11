@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { ArrowRight, ArrowLeft, Clock, CheckCircle2, ShieldCheck, Smartphone } from "lucide-react";
+import { ArrowRight, ArrowLeft, Clock, CheckCircle2, ShieldCheck, Smartphone, Landmark } from "lucide-react";
 import { CONSULTATION_TYPES } from "@/lib/types";
 
 type Step = 1 | 2 | 3;
@@ -16,11 +16,16 @@ const TIME_SLOTS: { label: string; value: string }[] = [
 const timeLabel = (value: string) => TIME_SLOTS.find(s => s.value === value)?.label || value;
 
 // If Paystack isn't configured (no NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY), paid
-// bookings fall back to this manual M-Pesa flow — no account signup needed
-// to get the site working, but it requires Decra to confirm payments by hand
-// in /admin. Update the Till/Paybill details below to the real ones.
+// bookings fall back to a manual flow — no account signup needed to get the
+// site working, but it requires Decra to confirm payments by hand in /admin.
 const MPESA_PAYBILL = "XXXXXX";
 const MPESA_ACCOUNT = "Your name as the account number";
+const BANK_DETAILS = {
+  accountName: "Decra Kerubo Mokorah",
+  bankName: "I&M Bank",
+  accountNumber: "02006312021250",
+  swift: "IMBLKENA",
+};
 
 declare global {
   interface Window {
@@ -43,6 +48,8 @@ export default function BookPage() {
   const [paidRef, setPaidRef] = useState("");
   const [payError, setPayError] = useState("");
   const [manualRef, setManualRef] = useState("");
+  const [manualChannel, setManualChannel] = useState<"mpesa" | "bank">("mpesa");
+  const [preferBankTransfer, setPreferBankTransfer] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", organization: "", website: "", industry: "", team_size: "", primary_challenge: "", desired_outcome: "" });
 
   const selectedConsultation = CONSULTATION_TYPES.find(t => t.id === selectedType);
@@ -80,10 +87,14 @@ export default function BookPage() {
     setPayError("");
     if (!isPaid) { handleBooking(); return; }
 
-    // No Paystack account connected yet — use the manual M-Pesa fallback.
-    if (!paystackConfigured) {
-      if (!manualRef.trim()) { setPayError("Enter the M-Pesa confirmation code from your payment SMS."); return; }
-      handleBooking(manualRef.trim(), "manual");
+    // No Paystack account connected, OR the person explicitly prefers bank transfer
+    // (e.g. to avoid Paystack's M-Pesa channel fees) — use the manual fallback.
+    if (!paystackConfigured || preferBankTransfer) {
+      if (!manualRef.trim()) {
+        setPayError(manualChannel === "mpesa" ? "Enter the M-Pesa confirmation code from your payment SMS." : "Enter the bank transfer reference/receipt number.");
+        return;
+      }
+      handleBooking(`[${manualChannel === "mpesa" ? "M-Pesa" : "Bank Transfer"}] ${manualRef.trim()}`, "manual");
       return;
     }
 
@@ -243,16 +254,50 @@ export default function BookPage() {
                 ))}
               </div>
             )}
-            {isPaid && !paystackConfigured && (
+            {isPaid && (!paystackConfigured || preferBankTransfer) && (
               <div className="card" style={{ marginBottom: "2rem" }}>
-                <p className="t-label" style={{ marginBottom: "0.75rem", display: "flex", alignItems: "center", gap: "0.4rem" }}>
-                  <Smartphone size={12} /> Pay via M-Pesa
-                </p>
-                <p style={{ fontSize: "0.78rem", color: "var(--c-ink-mid)", lineHeight: 1.7, marginBottom: "1rem" }}>
-                  Go to M-Pesa &rarr; Lipa na M-Pesa &rarr; Paybill. Use business number <strong>{MPESA_PAYBILL}</strong>, account <strong>{MPESA_ACCOUNT}</strong>, amount <strong>{formatKES(selectedConsultation?.price ?? 0)}</strong>. Then enter the confirmation code from the SMS below.
-                </p>
-                <label style={labelStyle}>M-Pesa Confirmation Code</label>
-                <input value={manualRef} onChange={e => setManualRef(e.target.value)} placeholder="e.g. QGH7XYZ123" className="field" />
+                {paystackConfigured && (
+                  <button onClick={() => setPreferBankTransfer(false)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--c-ink-muted)", fontSize: "0.7rem", display: "flex", alignItems: "center", gap: "0.3rem", marginBottom: "1rem" }}>
+                    <ArrowLeft size={11} /> Back to card / Paystack payment
+                  </button>
+                )}
+                <p className="t-label" style={{ marginBottom: "0.75rem" }}>How would you like to pay?</p>
+                <div style={{ display: "flex", gap: "0.6rem", marginBottom: "1.25rem" }}>
+                  <button onClick={() => { setManualChannel("mpesa"); setManualRef(""); setPayError(""); }}
+                    style={{ flex: 1, padding: "0.6rem", borderRadius: "8px", border: `1.5px solid ${manualChannel === "mpesa" ? "var(--c-forest)" : "var(--c-border)"}`, background: manualChannel === "mpesa" ? "rgba(14,61,50,0.04)" : "transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.4rem", fontFamily: "var(--font-manjari)", fontSize: "0.75rem", fontWeight: 700, color: "var(--c-forest)" }}>
+                    <Smartphone size={12} /> M-Pesa
+                  </button>
+                  <button onClick={() => { setManualChannel("bank"); setManualRef(""); setPayError(""); }}
+                    style={{ flex: 1, padding: "0.6rem", borderRadius: "8px", border: `1.5px solid ${manualChannel === "bank" ? "var(--c-forest)" : "var(--c-border)"}`, background: manualChannel === "bank" ? "rgba(14,61,50,0.04)" : "transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.4rem", fontFamily: "var(--font-manjari)", fontSize: "0.75rem", fontWeight: 700, color: "var(--c-forest)" }}>
+                    <Landmark size={12} /> Bank Transfer
+                  </button>
+                </div>
+
+                {manualChannel === "mpesa" ? (
+                  <>
+                    <p style={{ fontSize: "0.78rem", color: "var(--c-ink-mid)", lineHeight: 1.7, marginBottom: "1rem" }}>
+                      Go to M-Pesa &rarr; Lipa na M-Pesa &rarr; Paybill. Use business number <strong>{MPESA_PAYBILL}</strong>, account <strong>{MPESA_ACCOUNT}</strong>, amount <strong>{formatKES(selectedConsultation?.price ?? 0)}</strong>. Then enter the confirmation code from the SMS below.
+                    </p>
+                    <label style={labelStyle}>M-Pesa Confirmation Code</label>
+                    <input value={manualRef} onChange={e => setManualRef(e.target.value)} placeholder="e.g. QGH7XYZ123" className="field" />
+                  </>
+                ) : (
+                  <>
+                    <p style={{ fontSize: "0.78rem", color: "var(--c-ink-mid)", lineHeight: 1.7, marginBottom: "1rem" }}>
+                      For international or USD transfers, wire to the account below, then enter your transfer reference or receipt number.
+                    </p>
+                    <div style={{ background: "var(--c-forest)", borderRadius: "10px", padding: "1rem 1.25rem", marginBottom: "1rem" }}>
+                      {[["Account Name", BANK_DETAILS.accountName], ["Bank", BANK_DETAILS.bankName], ["Account Number", BANK_DETAILS.accountNumber], ["SWIFT / IBAN", BANK_DETAILS.swift]].map(([k, v]) => (
+                        <div key={k} style={{ display: "flex", justifyContent: "space-between", fontSize: "0.75rem", color: "rgba(248,246,241,0.7)", padding: "0.3rem 0" }}>
+                          <span style={{ color: "rgba(248,246,241,0.4)" }}>{k}</span>
+                          <span style={{ fontWeight: 600 }}>{v}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <label style={labelStyle}>Transfer Reference / Receipt Number</label>
+                    <input value={manualRef} onChange={e => setManualRef(e.target.value)} placeholder="e.g. bank transaction ID" className="field" />
+                  </>
+                )}
                 <p style={{ fontSize: "0.68rem", color: "var(--c-ink-muted)", marginTop: "0.75rem" }}>
                   Your slot is held as soon as you submit — Decra confirms the payment by hand, usually within a few hours.
                 </p>
@@ -261,13 +306,18 @@ export default function BookPage() {
             {payError && (
               <p style={{ fontSize: "0.75rem", color: "#B4453A", marginBottom: "1.25rem" }}>{payError}</p>
             )}
+            {isPaid && paystackConfigured && !preferBankTransfer && (
+              <button onClick={() => { setPreferBankTransfer(true); setManualChannel("bank"); }} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--c-ink-muted)", fontSize: "0.72rem", textDecoration: "underline", marginBottom: "1.25rem", display: "block" }}>
+                Prefer to pay by bank transfer instead? (avoids card/mobile money fees)
+              </button>
+            )}
             <div style={{ display: "flex", gap: "0.75rem" }}>
               <button onClick={() => setStep(2)} className="btn-outline" style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}><ArrowLeft size={13} /> Back</button>
               <button disabled={!selectedDate || !selectedTime || loading || paying} onClick={handleConfirm} className="btn-primary" style={{ border: "none", opacity: (!selectedDate || !selectedTime || loading || paying) ? 0.4 : 1 }}>
                 {loading || paying
                   ? (paying ? "Redirecting to payment..." : "Confirming...")
                   : isPaid
-                    ? (paystackConfigured
+                    ? ((paystackConfigured && !preferBankTransfer)
                         ? <>Pay {formatKES(selectedConsultation?.price ?? 0)} &amp; Confirm <ShieldCheck size={13} /></>
                         : <>I've Paid — Submit Booking <ArrowRight size={13} /></>)
                     : <>Confirm Booking <ArrowRight size={13} /></>}
@@ -276,7 +326,7 @@ export default function BookPage() {
             {isPaid && (
               <p style={{ fontSize: "0.68rem", color: "var(--c-ink-muted)", marginTop: "1rem", display: "flex", alignItems: "center", gap: "0.4rem" }}>
                 <ShieldCheck size={12} />
-                {paystackConfigured ? "Secure payment via Paystack — cards & M-Pesa accepted." : "Manual M-Pesa — payment is confirmed by hand, not automatically."}
+                {(paystackConfigured && !preferBankTransfer) ? "Secure payment via Paystack — cards & M-Pesa accepted." : "Manual confirmation — payment is verified by hand, not automatically."}
               </p>
             )}
           </div>

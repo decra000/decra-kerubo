@@ -187,7 +187,7 @@ function Hero() {
           .hero-copy { text-align: center !important; }
           .hero-bg { background-image: url('/decra-hero-mobile.jpg'); background-position: center 18%; }
           /* Overlay stays clear over the face, then goes a lot darker starting just past halfway down */
-          .hero-overlay { background: linear-gradient(180deg, rgba(10,10,10,0) 0%, rgba(10,10,10,0) 52%, rgba(10,10,10,0.92) 64%, rgba(10,10,10,0.97) 100%); }
+          .hero-overlay { background: linear-gradient(180deg, rgba(10,10,10,0.28) 0%, rgba(10,10,10,0.4) 25%, rgba(10,10,10,0.58) 50%, rgba(10,10,10,0.85) 75%, rgba(10,10,10,0.97) 100%); }
           #hero-content h1 { font-size: clamp(1.65rem, 7vw, 2.1rem) !important; margin-bottom: 1.5rem !important; }
           #hero-content button { width: auto; max-width: 82%; white-space: normal; line-height: 1.5; }
         }
@@ -414,6 +414,10 @@ function WorkWithDecra() {
   const [chipSelections, setChipSelections] = useState<Record<number, string[]>>({});
   const [lastOpening, setLastOpening] = useState<{ key: string; opening: string } | null>(null);
   const [lastUserText, setLastUserText] = useState("");
+  const [fallbackFormOpen, setFallbackFormOpen] = useState(false);
+  const [fallbackForm, setFallbackForm] = useState({ name: "", email: "", message: "" });
+  const [fallbackSending, setFallbackSending] = useState(false);
+  const [fallbackSent, setFallbackSent] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const { listen, stopListening, listening, supported, speak, stopSpeaking, speaking, synthSupported } = useSpeech();
@@ -455,6 +459,7 @@ function WorkWithDecra() {
   const startGroup = async (groupKey: string, opening: string) => {
     setLastOpening({ key: groupKey, opening });
     setActive(groupKey); setDone(false); setInput(""); setChipSelections({});
+    setFallbackFormOpen(false); setFallbackSent(false); setFallbackForm({ name: "", email: "", message: "" });
 
     // Resume a saved conversation for this exact engagement instead of
     // starting over and re-spending a request on the opening message.
@@ -495,7 +500,21 @@ function WorkWithDecra() {
 
   // Closing the modal keeps the cached conversation (so reopening the same
   // engagement resumes it) — only a completed intake clears its cache.
-  const closeModal = () => { setModalOpen(false); setActive(null); setMsgs([]); setDone(false); setInput(""); setChipSelections({}); stopSpeaking(); };
+  const closeModal = () => { setModalOpen(false); setActive(null); setMsgs([]); setDone(false); setInput(""); setChipSelections({}); setFallbackFormOpen(false); setFallbackSent(false); stopSpeaking(); };
+
+  const submitFallbackForm = async () => {
+    if (!fallbackForm.name.trim() || !fallbackForm.email.trim()) return;
+    setFallbackSending(true);
+    try {
+      await fetch("/api/intake", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({
+        name: fallbackForm.name.trim(), email: fallbackForm.email.trim(),
+        summary: fallbackForm.message.trim() || "No message provided — the assistant was unavailable when they reached out.",
+        engagement: active ? `${active} (assistant unavailable — submitted via fallback form)` : "assistant-unavailable",
+      }) });
+      setFallbackSent(true);
+    } catch { /* the button's own error state below handles this */ }
+    setFallbackSending(false);
+  };
 
   const send = async (overrideText?: string) => {
     const text = (overrideText ?? input).trim();
@@ -646,7 +665,16 @@ function WorkWithDecra() {
             ) : (
               <>
                 <div style={{ flex: 1, overflowY: "auto", padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
-                  {msgs.map((m, i) => {
+                  {(() => {
+                    // Counts consecutive failures ending at the latest message — one
+                    // hiccup just gets "Try again"; genuinely repeated failure ("truly
+                    // fails") also surfaces the no-lost-lead fallback options.
+                    let trailingFailures = 0;
+                    for (let j = msgs.length - 1; j >= 0; j--) {
+                      if (msgs[j].role === "assistant" && msgs[j].rateLimited) trailingFailures++;
+                      else break;
+                    }
+                    return msgs.map((m, i) => {
                     const isLatest = i === msgs.length - 1;
                     const picks = chipSelections[i] || [];
                     return (
@@ -716,9 +744,64 @@ function WorkWithDecra() {
                             <RefreshCw size={11} strokeWidth={1.5} /> Try again
                           </button>
                         )}
+                        {m.rateLimited && isLatest && !loading && !done && trailingFailures >= 2 && (
+                          <div style={{ width: "100%", maxWidth: "92%", background: "var(--c-surface)", border: "1px solid var(--c-border-strong)", borderRadius: "10px", padding: "1rem", marginTop: "0.25rem" }}>
+                            <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.76rem", color: "var(--c-ink-muted)", lineHeight: 1.6, marginBottom: "0.85rem" }}>
+                              The assistant isn&apos;t cooperating right now — here are two ways to reach Decra directly instead:
+                            </p>
+                            {!fallbackFormOpen && !fallbackSent && (
+                              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.6rem" }}>
+                                <a href="/book" style={{
+                                  display: "inline-flex", alignItems: "center", gap: "0.4rem",
+                                  background: "var(--c-accent)", color: "var(--c-bg)", textDecoration: "none",
+                                  border: "none", borderRadius: "999px", padding: "0.5rem 1rem",
+                                  fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.68rem",
+                                  letterSpacing: "0.06em",
+                                }}>
+                                  Book an appointment <ArrowRight size={11} strokeWidth={1.5} />
+                                </a>
+                                <button onClick={() => setFallbackFormOpen(true)} style={{
+                                  display: "inline-flex", alignItems: "center", gap: "0.4rem",
+                                  background: "none", color: "var(--c-ink)",
+                                  border: "1px solid var(--c-border-strong)", borderRadius: "999px", padding: "0.5rem 1rem",
+                                  cursor: "pointer", fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.68rem",
+                                  letterSpacing: "0.06em",
+                                }}>
+                                  Leave your details instead
+                                </button>
+                              </div>
+                            )}
+                            {fallbackFormOpen && !fallbackSent && (
+                              <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
+                                <input placeholder="Your name" value={fallbackForm.name} onChange={e => setFallbackForm(f => ({ ...f, name: e.target.value }))} className="field" style={{ fontSize: "0.78rem" }} />
+                                <input placeholder="Your email" type="email" value={fallbackForm.email} onChange={e => setFallbackForm(f => ({ ...f, email: e.target.value }))} className="field" style={{ fontSize: "0.78rem" }} />
+                                <textarea placeholder="What did you need help with? (optional)" rows={2} value={fallbackForm.message} onChange={e => setFallbackForm(f => ({ ...f, message: e.target.value }))} className="field" style={{ fontSize: "0.78rem", resize: "none" }} />
+                                <button
+                                  onClick={submitFallbackForm}
+                                  disabled={!fallbackForm.name.trim() || !fallbackForm.email.trim() || fallbackSending}
+                                  style={{
+                                    display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "0.4rem",
+                                    background: "var(--c-accent)", color: "var(--c-bg)",
+                                    border: "none", borderRadius: "999px", padding: "0.55rem 1rem",
+                                    cursor: "pointer", opacity: (!fallbackForm.name.trim() || !fallbackForm.email.trim() || fallbackSending) ? 0.5 : 1,
+                                    fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.68rem", letterSpacing: "0.06em",
+                                  }}
+                                >
+                                  {fallbackSending ? "Sending..." : "Send to Decra"}
+                                </button>
+                              </div>
+                            )}
+                            {fallbackSent && (
+                              <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.78rem", color: "var(--c-accent)" }}>
+                                Sent — Decra will follow up by email shortly.
+                              </p>
+                            )}
+                          </div>
+                        )}
                       </div>
                     );
-                  })}
+                  });
+                  })()}
                   {loading && (
                     <div style={{ display: "flex", justifyContent: "flex-start" }}>
                       <div style={{ padding: "0.7rem 1rem", background: "var(--c-surface)", display: "flex", gap: "4px", alignItems: "center" }}>
@@ -771,9 +854,9 @@ function The1000() {
       position: "relative", overflow: "hidden",
       display: "flex", alignItems: "flex-end",
     }}>
-      <img src="/decra-spotify-portrait.png" alt="" className="spotify-img" style={{
+      <img src="/decra-spotify-portrait.jpg" alt="" className="spotify-img" style={{
         position: "absolute", inset: 0, width: "100%", height: "100%",
-        objectFit: "cover", objectPosition: "50% 22%", display: "block",
+        objectFit: "cover", objectPosition: "58% 25%", display: "block",
         transform: vis ? "scale(1)" : "scale(1.09)",
         transition: "transform 1.6s cubic-bezier(0.16,1,0.3,1)",
       }} />
@@ -835,7 +918,7 @@ function The1000() {
       <style>{`
         @media(max-width:640px){
           #spotify p[style*="position: absolute"]{position:static!important;transform:none!important;margin-top:1.5rem!important;color:rgba(255,255,255,0.55)!important;}
-          .spotify-img{ object-position: 50% 14% !important; }
+          .spotify-img{ object-position: 58% 20% !important; }
           #spotify .spotify-content{ padding-left: 1.5rem !important; padding-right: 1.5rem !important; padding-bottom: clamp(3rem,10vw,4rem) !important; }
         }
       `}</style>
