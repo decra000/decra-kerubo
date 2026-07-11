@@ -3,8 +3,18 @@ import Link from "next/link";
 import { ArrowRight, Scale, Users, CheckCircle2 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Services",
+  title: "Services — Technology Lawyer & Product Counsel",
   description: "Tech Policy & Startup Law, and Founder Legal advisory from Decra Kerubo.",
+  keywords: [
+    "technology lawyer Kenya services",
+    "product counsel Kenya",
+    "technical product counsel Africa",
+    "startup legal services Kenya",
+    "tech policy advisory Kenya",
+    "founder legal advisory Africa",
+    "data protection compliance Kenya",
+  ],
+  alternates: { canonical: "https://decrakerubo.com/services" },
 };
 
 const tracks = [

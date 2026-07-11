@@ -31,7 +31,7 @@ export function Hero({ intent }: { intent: Intent }) {
         transition: "opacity 1.1s cubic-bezier(0.16,1,0.3,1), transform 1.1s cubic-bezier(0.16,1,0.3,1)",
         marginBottom: "2.75rem",
       }}>
-        <img src="/decra-hero.png" alt="Decra Kerubo"
+        <img src="/decra-hero.png" alt="Decra Kerubo, technology lawyer and product counsel based in Nairobi, Kenya"
           style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top", display: "block" }} />
       </div>
 

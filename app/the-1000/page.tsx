@@ -4,6 +4,14 @@ import { ArrowUpRight } from "lucide-react";
 export const metadata: Metadata = {
   title: "The 1000 — Tech Harm Index",
   description: "Documenting real cases of technology harm to advocate for better policy. A living index by Decra.",
+  keywords: [
+    "tech harm index Africa",
+    "technology policy Kenya",
+    "tech regulatory research Africa",
+    "Decra Kerubo technology lawyer",
+    "product counsel Kenya research",
+  ],
+  alternates: { canonical: "https://decrakerubo.com/the-1000" },
 };
 
 const categories = [
