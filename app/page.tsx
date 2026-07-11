@@ -21,6 +21,24 @@ const fade = (vis: boolean, delay = 0): React.CSSProperties => ({
   transition: `opacity 0.85s cubic-bezier(0.16,1,0.3,1) ${delay}s, transform 0.85s cubic-bezier(0.16,1,0.3,1) ${delay}s`,
 });
 
+/* A more expressive sibling to `fade` — lets different sections feel distinct
+   instead of every element doing the same up-fade. */
+const reveal = (vis: boolean, opts: { delay?: number; dir?: "up" | "down" | "left" | "right" | "scale"; distance?: number } = {}): React.CSSProperties => {
+  const { delay = 0, dir = "up", distance = 26 } = opts;
+  const hidden =
+    dir === "up" ? `translateY(${distance}px)` :
+    dir === "down" ? `translateY(-${distance}px)` :
+    dir === "left" ? `translateX(${distance}px)` :
+    dir === "right" ? `translateX(-${distance}px)` :
+    "scale(0.94)";
+  return {
+    opacity: vis ? 1 : 0,
+    transform: vis ? "none" : hidden,
+    filter: vis ? "blur(0px)" : "blur(3px)",
+    transition: `opacity 0.9s cubic-bezier(0.16,1,0.3,1) ${delay}s, transform 0.9s cubic-bezier(0.16,1,0.3,1) ${delay}s, filter 0.7s ease ${delay}s`,
+  };
+};
+
 const LBL: React.CSSProperties = {
   fontFamily: "var(--font-manjari)", fontWeight: 700,
   fontSize: "0.55rem", letterSpacing: "0.24em", textTransform: "uppercase",
@@ -85,20 +103,20 @@ function Hero() {
   return (
     <section id="hero" className="hero-sec" style={{ position: "relative", overflow: "hidden", background: "#0A0A0A", display: "flex", alignItems: "center", justifyContent: "center" }}>
       {/* Background photo — wide studio shot on larger screens, portrait selfie on small screens */}
-      <div aria-hidden className="hero-bg" style={{
+      <div aria-hidden className="hero-bg hero-kenburns" style={{
         position: "absolute", inset: 0, backgroundSize: "cover", backgroundRepeat: "no-repeat", zIndex: 0,
       }} />
       {/* Dark overlay so text stays legible — deeper on mobile where the portrait shot needs more contrast */}
       <div aria-hidden className="hero-overlay" style={{ position: "absolute", inset: 0, zIndex: 1 }} />
 
-      {/* Corner glows in brand teal + cream, echoing the reference mood boards but on-palette */}
-      <div aria-hidden style={{
+      {/* Corner glows in brand teal + cream, echoing the reference mood boards but on-palette — slow ambient drift so the hero doesn't feel static */}
+      <div aria-hidden className="hero-glow-a" style={{
         position: "absolute", top: "-18%", left: "-14%", width: "min(60vw,620px)", height: "min(60vw,620px)",
         borderRadius: "50%", pointerEvents: "none", zIndex: 1,
         background: "radial-gradient(circle, #5FA98F 0%, transparent 70%)",
         opacity: 0.35, filter: "blur(40px)",
       }} />
-      <div aria-hidden style={{
+      <div aria-hidden className="hero-glow-b" style={{
         position: "absolute", bottom: "-22%", right: "-16%", width: "min(65vw,680px)", height: "min(65vw,680px)",
         borderRadius: "50%", pointerEvents: "none", zIndex: 1,
         background: "radial-gradient(circle, #F0EEE9 0%, transparent 68%)",
@@ -138,6 +156,17 @@ function Hero() {
         .hero-sec { height: 100vh; }
         @supports (height: 100svh) { .hero-sec { height: 100svh; } }
 
+        /* Slow, continuous zoom on the hero photo — keeps the hero feeling alive rather than a static poster */
+        .hero-kenburns { animation: heroKenBurns 22s ease-in-out infinite alternate; }
+        @keyframes heroKenBurns { from { transform: scale(1); } to { transform: scale(1.08); } }
+
+        /* Gentle ambient drift on the corner glows */
+        .hero-glow-a { animation: heroGlowA 16s ease-in-out infinite alternate; }
+        .hero-glow-b { animation: heroGlowB 19s ease-in-out infinite alternate; }
+        @keyframes heroGlowA { from { transform: translate(0,0) scale(1); } to { transform: translate(3%,4%) scale(1.08); } }
+        @keyframes heroGlowB { from { transform: translate(0,0) scale(1); } to { transform: translate(-3%,-4%) scale(1.1); } }
+        @media (prefers-reduced-motion: reduce) { .hero-kenburns, .hero-glow-a, .hero-glow-b { animation: none; } }
+
         /* Wide studio shot for larger screens — subject sits right-of-centre, copy hugs the left edge */
         .hero-bg { background-image: url('/decra-hero-wide.jpg'); background-position: 68% 22%; }
         /* No darkening over the face — the wash only picks up a little below it, on the right/lower two-thirds */
@@ -172,7 +201,7 @@ function About() {
           ...SERIF("clamp(1.2rem,1.7vw,1.45rem)"),
           maxWidth: "820px",
           lineHeight: 1.6,
-          ...fade(vis),
+          ...reveal(vis, { dir: "scale", distance: 10 }),
         }}>
           I am a technology lawyer and product counsel with a dual degree in Computer Science (AI) and Law. I help founders, startups, and technology companies navigate regulation while building products that scale safely.
         </p>
@@ -219,7 +248,7 @@ function Services() {
               padding: "2.25rem 2rem",
               borderTop: "1px solid var(--c-border)",
               borderLeft: i > 0 ? "1px solid var(--c-border)" : "none",
-              ...fade(vis, 0.06 * i),
+              ...reveal(vis, { delay: 0.08 * i, dir: i % 2 === 0 ? "left" : "right", distance: 22 }),
             }}>
               <h3 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(1.05rem,1.6vw,1.3rem)", color: "var(--c-ink)", lineHeight: 1.25, marginBottom: "1rem" }}>{s.label}</h3>
               <p style={{ ...BODY, fontSize: "0.84rem", marginBottom: "1.5rem" }}>{s.body}</p>
@@ -581,6 +610,8 @@ function The1000() {
       <img src="/decra-spotify-portrait.png" alt="" className="spotify-img" style={{
         position: "absolute", inset: 0, width: "100%", height: "100%",
         objectFit: "cover", objectPosition: "50% 22%", display: "block",
+        transform: vis ? "scale(1)" : "scale(1.09)",
+        transition: "transform 1.6s cubic-bezier(0.16,1,0.3,1)",
       }} />
       {/* Uniform dark wash over the whole photo, plus a stronger gradient pooling at the bottom behind the copy */}
       <div style={{
@@ -969,8 +1000,8 @@ function CredCard({ c, i, vis, size = "sm" }: { c: Cred; i: number; vis: boolean
       onMouseLeave={() => setHover(false)}
       style={{
         opacity: vis ? 1 : 0,
-        transform: vis ? "none" : "translateY(12px)",
-        transition: `opacity 0.6s ease ${0.05 + i * 0.06}s, transform 0.6s ease ${0.05 + i * 0.06}s`,
+        transform: vis ? "none" : "translateY(14px) scale(0.96)",
+        transition: `opacity 0.65s cubic-bezier(0.16,1,0.3,1) ${0.05 + i * 0.06}s, transform 0.65s cubic-bezier(0.16,1,0.3,1) ${0.05 + i * 0.06}s`,
       }}>
       <div className="cred-logo-box" style={{
         height: logoHeight,
