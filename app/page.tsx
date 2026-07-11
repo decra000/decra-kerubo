@@ -406,7 +406,7 @@ function WorkWithDecra() {
   const [selected, setSelected] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [active, setActive] = useState<string | null>(null);
-  const [msgs, setMsgs] = useState<{ role: "user" | "assistant"; text: string }[]>([]);
+  const [msgs, setMsgs] = useState<ChatMsg[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
