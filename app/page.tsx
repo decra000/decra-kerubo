@@ -208,7 +208,7 @@ function About() {
           lineHeight: 1.6,
           ...reveal(vis, { dir: "scale", distance: 10 }),
         }}>
-          I am a Technology Lawyer and Technical Product Counsel with dual degrees in Computer Science (AI) and Law (LLB). I help developers, techpreneurs, investors, regulators, and technology procurers develop, evaluate, commercialize, and adopt safe, compliant, and scalable technology products. I also actively conduct research on technology law and policy.
+          I help developers, techpreneurs, investors, regulators, and technology procurers develop, evaluate, commercialize, and adopt safe, compliant, and scalable technology products.
         </p>
       </div>
     </section>
