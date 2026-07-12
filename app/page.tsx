@@ -208,7 +208,7 @@ function About() {
           lineHeight: 1.6,
           ...reveal(vis, { dir: "scale", distance: 10 }),
         }}>
-          I am a technology lawyer and product counsel with a dual degree in Computer Science (AI) and Law. I help founders, startups, and technology companies navigate regulation while building products that scale safely.
+          I am a Technology Lawyer and Technical Product Counsel with dual degrees in Computer Science (AI) and Law (LLB). I help developers, technology entrepreneurs, investors, and technology procurers develop, evaluate, commercialize, and adopt safe, compliant, and scalable technology products. I also actively conduct research on technology law and policy.
         </p>
       </div>
     </section>
@@ -218,32 +218,25 @@ function About() {
 /* ── Section 2: Services ── */
 const SERVICES = [
   {
-    id: "build",
-    label: "Build",
-    body: "Launch your product without avoidable regulatory surprises — embedded inside your product and engineering team, not called in after it ships.",
-    items: ["AI Governance", "Product & Technical Counsel", "Privacy by Design"],
-    opening: "Hi, I'm building a product and want embedded legal, technical, and AI governance support early in the process.",
+    id: "regulatory",
+    label: "Technology & Regulatory Law",
+    body: "The legal architecture technology companies operate inside — Kenyan and pan-African regulation, translated into clear positions.",
+    items: ["Data protection & ODPC compliance", "Data controller & processor licensing", "Cybersecurity law", "Digital commerce & platform regulation", "Licensing & policy engagement"],
+    opening: "Hi, I need help with technology & regulatory law — data protection, data controller/processor licensing, cybersecurity, or digital commerce compliance.",
   },
   {
-    id: "commercialize",
-    label: "Commercialize",
-    body: "Turn what you've built into something you can sell, license, or scale — contracts, IP, and structure that hold up under a customer's, investor's, or acquirer's scrutiny.",
-    items: ["Technology Contracts", "IP Strategy", "Technology Transactions"],
-    opening: "Hi, I'm commercializing a product and need help with contracts, IP, or technology transactions.",
+    id: "product-counsel",
+    label: "Product Counsel",
+    body: "Embedded legal partnership with your product and engineering team — in the room as things get built, not called in after they ship.",
+    items: ["Pre-launch legal review", "Privacy-by-design & data flow review", "Intellectual property protection & licensing", "Terms of service & policy drafting", "Ongoing embedded advisory"],
+    opening: PRODUCT_COUNSEL_GROUP.opening,
   },
   {
-    id: "evaluate",
-    label: "Evaluate",
-    body: "Know exactly what you're taking on before you invest, acquire, or procure — technical and legal due diligence that surfaces real risk.",
-    items: ["Technical Due Diligence", "Investment & Acquisition Review", "Procurement Risk Review"],
-    opening: "Hi, I'm evaluating a technology investment, acquisition, or procurement and need technical and legal due diligence.",
-  },
-  {
-    id: "govern",
-    label: "Govern",
-    body: "Pass the audit, procurement review, or investor diligence call the first time — governance that grows with your technology, not shelfware.",
-    items: ["ISO & NIST Frameworks", "Data Protection Governance", "Regulatory & Policy Strategy"],
-    opening: "Hi, I need help with technology governance — AI governance, data protection, or regulatory and policy strategy.",
+    id: "founder-advisory",
+    label: "Founder & Startup Advisory",
+    body: "Practical legal guidance for founders and builders making fast decisions with real, lasting consequences.",
+    items: ["Company incorporation & structure", "Founder & co-founder agreements", "Equity, vesting & cap table", "Tax structuring (eTIMS, VAT, PAYE)", "Fundraising legal readiness", "Foreign branches & PBO registration"],
+    opening: "Hi, I'm a founder looking for legal advisory — incorporation, equity, tax structuring, fundraising readiness, or setting up a foreign branch or PBO.",
   },
 ];
 
@@ -253,33 +246,44 @@ function Services() {
   return (
     <section id="services" ref={ref as React.RefObject<HTMLElement>} style={{ ...SEC, borderTop: "none" }}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-        <p style={{ ...LBL, marginBottom: "1.25rem", ...fade(vis) }}>How I Can Help</p>
-        <p style={{
-          ...SERIF("clamp(1.1rem,1.5vw,1.3rem)"),
-          maxWidth: "40rem", lineHeight: 1.5, marginBottom: "3rem",
-          ...fade(vis, 0.05),
-        }}>
-          I provide embedded legal, technical, and regulatory counsel across the technology lifecycle. Choose where you are, and I&apos;ll guide you from there.
-        </p>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "0" }} className="svc-grid">
+        <p style={{ ...LBL, marginBottom: "1.5rem", ...fade(vis) }}>Services</p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "0" }} className="svc-grid">
           {SERVICES.map((s, i) => (
             <div key={s.id} style={{
-              padding: "2.25rem 1.75rem",
+              padding: "2.25rem 2rem",
               borderTop: "1px solid var(--c-border)",
               borderLeft: i > 0 ? "1px solid var(--c-border)" : "none",
               ...reveal(vis, { delay: 0.08 * i, dir: i % 2 === 0 ? "left" : "right", distance: 22 }),
             }}>
               <h3 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(1.05rem,1.6vw,1.3rem)", color: "var(--c-ink)", lineHeight: 1.25, marginBottom: "1rem" }}>{s.label}</h3>
-              <p style={{ ...BODY, fontSize: "0.84rem", marginBottom: "1.25rem" }}>{s.body}</p>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", marginBottom: "1.5rem" }}>
+              <p style={{ ...BODY, fontSize: "0.84rem", marginBottom: "1.5rem" }}>{s.body}</p>
+              <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "0.6rem", marginBottom: "1.5rem" }}>
                 {s.items.map(item => (
-                  <span key={item} style={{
-                    fontSize: "0.62rem", padding: "0.22rem 0.6rem", borderRadius: "100px",
-                    border: "1px solid var(--c-border)", color: "var(--c-ink-muted)",
-                  }}>{item}</span>
+                  <li key={item} style={{ display: "flex", gap: "0.85rem", ...BODY, fontSize: "0.82rem" }}>
+                    <span style={{ width: "3px", height: "3px", borderRadius: "50%", background: "var(--c-accent)", marginTop: "0.5rem", flexShrink: 0 }} />
+                    {item}
+                  </li>
                 ))}
-              </div>
-              {s.id === "build" && (
+              </ul>
+              {s.id === "founder-advisory" && (
+                <button
+                  onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: PACK_GROUP }))}
+                  style={{
+                    display: "block", background: "none", border: "none",
+                    padding: 0, marginBottom: "1.5rem", cursor: "pointer",
+                    textAlign: "left",
+                    fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400,
+                    fontSize: "0.82rem", color: "var(--c-accent)",
+                    textDecoration: "underline", textUnderlineOffset: "3px",
+                    textDecorationColor: "var(--c-border)",
+                  }}
+                  onMouseEnter={e => (e.currentTarget as HTMLElement).style.textDecorationColor = "var(--c-accent)"}
+                  onMouseLeave={e => (e.currentTarget as HTMLElement).style.textDecorationColor = "var(--c-border)"}
+                >
+                  See the full Startup Advisory Pack →
+                </button>
+              )}
+              {s.id === "product-counsel" && (
                 <button
                   onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: POST_LAUNCH_REVIEW_GROUP }))}
                   style={{
@@ -287,7 +291,7 @@ function Services() {
                     padding: 0, marginBottom: "1.5rem", cursor: "pointer",
                     textAlign: "left",
                     fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400,
-                    fontSize: "0.8rem", color: "var(--c-accent)",
+                    fontSize: "0.82rem", color: "var(--c-accent)",
                     textDecoration: "underline", textUnderlineOffset: "3px",
                     textDecorationColor: "var(--c-border)",
                   }}
@@ -310,16 +314,13 @@ function Services() {
                 onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-accent)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"; }}
                 onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-ink-muted)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-border)"; }}
               >
-                Explore with AI <ArrowRight size={10} strokeWidth={1.5} />
+                Discuss this <ArrowRight size={10} strokeWidth={1.5} />
               </button>
             </div>
           ))}
         </div>
       </div>
-      <style>{`
-        @media(max-width:1100px){.svc-grid{grid-template-columns:repeat(2,1fr)!important}.svc-grid>div:nth-child(2n+1){border-left:none!important}.svc-grid>div:nth-child(n+3){border-top:1px solid var(--c-border)!important}}
-        @media(max-width:640px){.svc-grid{grid-template-columns:1fr!important}.svc-grid>div{border-left:none!important;border-top:1px solid var(--c-border)!important}}
-      `}</style>
+      <style>{`@media(max-width:900px){.svc-grid{grid-template-columns:1fr!important}.svc-grid>div{border-left:none!important;border-top:1px solid var(--c-border)!important}}`}</style>
     </section>
   );
 }
@@ -358,13 +359,6 @@ const PARTNER_GROUPS = [...ENGAGE_GROUPS, EVENTS_GROUP];
 const ENGAGE_SYSTEM = `You are Decra Kerubo's AI intake advisor on decrakerubo.com.
 Decra is a Nairobi-based lawyer and computer scientist specialising in technology law and startup legal advisory in Kenya and across Africa.
 She works with: startup founders needing incorporation, equity, co-founder agreements, eTIMS/KRA tax, fundraising, foreign branches, PBO registration; technology companies needing ODPC/data protection, product legal review, tech contracts; law firms needing tech law support or compliance; innovation ecosystem players — investors, incubators, and accelerators — seeking legal support or partnership; and event/conference organizers seeking Decra as a speaker, panelist, or partner.
-
-Her services are organized around four capabilities, mapped to where someone is in the technology lifecycle:
-- Build: AI governance, product & technical counsel, privacy by design — embedded support while a product is being designed or built.
-- Commercialize: technology contracts, IP strategy, technology transactions — turning a built product into something that can be sold, licensed, or scaled.
-- Evaluate: technical due diligence, investment/acquisition review, procurement risk review — for investors, acquirers, or procurement teams assessing a technology before committing.
-- Govern: ISO/NIST/OWASP frameworks, data protection governance, regulatory and policy strategy — ongoing governance for technology already in the market.
-If someone arrives via one of these four entry points, treat their opening message as a strong signal of which capability they need, and tailor your first couple of questions accordingly rather than starting from a generic script.
 
 The Full Startup Advisory Pack is a bundled engagement covering: company incorporation & structure, founder & co-founder agreements, equity/vesting/cap table setup, tax structuring (eTIMS, VAT, PAYE), fundraising legal readiness, and foreign branch/PBO registration — the complete legal foundation from formation through fundraising. If someone asks about "the pack" or the Full Startup Advisory Pack, briefly explain what's included in 2-3 sentences FIRST, before moving into intake questions.
 

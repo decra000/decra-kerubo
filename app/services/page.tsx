@@ -1,65 +1,66 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Scale, Users, CheckCircle2 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "How I Can Help — Technology Lawyer & Technical Product Counsel",
-  description: "Embedded legal, technical, and regulatory counsel across the technology lifecycle, from Decra Kerubo.",
-  keywords: [
-    "technology lawyer Kenya services",
-    "product counsel Kenya",
-    "technical product counsel Africa",
-    "startup legal services Kenya",
-    "tech policy advisory Kenya",
-    "founder legal advisory Africa",
-    "data protection compliance Kenya",
-    "AI governance lawyer Kenya",
-    "technical due diligence Africa",
-  ],
-  alternates: { canonical: "https://decrakerubo.com/services" },
+  title: "Services",
+  description: "Tech Policy & Startup Law, and Founder Legal advisory from Decra Kerubo.",
 };
 
-const capabilities = [
+const tracks = [
   {
-    id: "build",
+    id: "tech-law",
+    icon: Scale,
     number: "01",
-    label: "Build",
-    tagline: "Launch your product without avoidable regulatory surprises.",
-    description: "Most legal advisors review a product after it's built. I sit inside the build — advising engineering and product teams in real time on AI governance, data protection, and privacy by design, so regulation shapes product decisions before code ships, not after an incident.",
-    tags: ["AI Governance", "Product & Technical Counsel", "Privacy by Design"],
+    label: "Tech Policy & Startup Law",
+    audience: "For companies and products",
+    tagline: "When your product, data, or technology faces legal exposure.",
+    distinction: "This track is about your company's legal surface — the contracts you sign, the data you collect, the IP you build, and the regulations you must navigate. It's about protecting what you've built from the outside in.",
+    problem: "Technology moves fast. Law moves slow. The gap between them is where most startups get exposed — through poor IP protection, weak contracts, or data privacy violations they didn't know they were committing. By the time it surfaces, it's expensive.",
+    solution: "Legal advisory specifically for technology companies and startups — helping you map and reduce your legal exposure before it finds you. This includes tech policy research where your sector needs it.",
+    process: [
+      "Legal audit of current structure and exposure",
+      "IP strategy and protection planning",
+      "Contract review and drafting",
+      "Data privacy and compliance gap analysis",
+      "Regulatory mapping for your sector",
+      "Ongoing advisory retainer (optional)",
+    ],
+    deliverables: ["Legal Audit Report", "IP Strategy Document", "Contract Templates", "Compliance Checklist", "Regulatory Risk Map"],
+    outcomes: ["Protected intellectual property", "Legally sound contracts", "Data privacy compliance", "Reduced regulatory exposure", "Clearer policy positioning"],
+    offerings: ["Technology Law Advisory", "IP Protection Strategy", "Data Privacy & Compliance", "Regulatory Frameworks", "Tech Contracts", "Policy Research", "Risk Assessment"],
   },
   {
-    id: "commercialize",
+    id: "founder-legal",
+    icon: Users,
     number: "02",
-    label: "Commercialize",
-    tagline: "Turn what you've built into something you can sell, license, or scale.",
-    description: "A product isn't commercial until its ownership, contracts, and structure hold up under scrutiny — from a customer's procurement team, an investor's diligence process, or an acquirer's legal review. I structure the contracts, IP, and transactions that let technology move from built to bought, licensed, or scaled.",
-    tags: ["Technology Contracts", "IP Strategy", "Technology Transactions"],
-  },
-  {
-    id: "evaluate",
-    number: "03",
-    label: "Evaluate",
-    tagline: "Know exactly what you're taking on before you commit.",
-    description: "Investors, acquirers, and procurement teams need to know what they're actually taking on. I run technical due diligence that surfaces real architecture, data, and compliance risk — not just a paperwork review — so the decision is made with full information.",
-    tags: ["Technical Due Diligence", "Investment & Acquisition Review", "Procurement Risk Review"],
-  },
-  {
-    id: "govern",
-    number: "04",
-    label: "Govern",
-    tagline: "Pass the audit, procurement review, or diligence call the first time.",
-    description: "Enterprises and governments increasingly require technology providers to demonstrate governance — against ISO, NIST, and OWASP frameworks, and against regulation that's still being written. I help organizations build governance that satisfies procurement teams, regulators, and boards, and I conduct independent research on technology law and policy to stay ahead of where it's heading.",
-    tags: ["ISO & NIST Frameworks", "Data Protection Governance", "Regulatory & Policy Strategy"],
+    label: "Founder Legal",
+    audience: "For founders and entrepreneurs",
+    tagline: "When the legal decisions are about you — not just your company.",
+    distinction: "This track is about the founder as a person — how you structure your ownership, protect your equity, navigate tax decisions, and set up governance that doesn't come back to haunt you. It's inside-out: your rights, your risks, your future.",
+    problem: "Most founders treat legal structure as paperwork. Wrong company type, informal equity arrangements, no vesting, unclear tax positions — these aren't administrative oversights. They determine how much of what you build you actually keep.",
+    solution: "Helping founders make sound legal decisions at the right time — from the first day of incorporation through to fundraising readiness. The focus is always on what this decision means for you, not just the entity.",
+    process: [
+      "Founder situation assessment",
+      "Structure and incorporation advisory",
+      "Equity split and vesting design",
+      "Co-founder agreement drafting",
+      "Tax structuring guidance",
+      "Governance framework setup",
+      "Fundraising legal readiness check",
+    ],
+    deliverables: ["Incorporation Advisory Report", "Founder Agreement Template", "Equity & Vesting Framework", "Governance Document", "Fundraising Legal Checklist"],
+    outcomes: ["Correctly structured entity", "Protected founder equity", "Clean cap table", "Tax-efficient structure", "Investment-ready legal standing"],
+    offerings: ["Company Incorporation", "Founder Agreements & Equity", "Tax Decision Guidance", "Co-founder Structuring", "Governance Setup", "IP Registration", "Fundraising Readiness"],
   },
 ];
 
 const faqs = [
-  { q: "Who is this for?", a: "Developers, founders, product and engineering teams, investors, governments, procurement teams, and enterprises working with or on technology — anywhere in the lifecycle from first build to regulatory review." },
-  { q: "What's the difference between the four capabilities?", a: "Build covers how legal judgment gets applied inside your product's development. Commercialize covers how technology becomes a contract, a deal, or an asset. Evaluate covers assessing technology before you invest in, acquire, or procure it. Govern covers how it holds up against standards and regulation over time. Most engagements draw from more than one." },
-  { q: "Do you work across Africa and internationally?", a: "Yes. Based in Nairobi, I work with clients across Africa and internationally. Most engagements are remote." },
-  { q: "What does an engagement look like?", a: "It starts with a discovery call, followed by a scoped engagement matched to what you need — a single strategy session, a technical due diligence sprint, or ongoing embedded advisory." },
-  { q: "Do you handle formal legal representation or court filings?", a: "My practice is strategic and advisory — embedded product, technical, and governance counsel, not litigation. For formal representation, filings, or admission-specific work, I coordinate with a vetted network of practising advocates, so you're never without coverage." },
+  { q: "What's the difference between the two tracks?", a: "Tech Policy & Startup Law protects your company and product — IP, contracts, data, regulation. Founder Legal protects you as a person — your equity, structure, tax position, and governance rights. Some clients need both; many start with one." },
+  { q: "Do you work with clients outside Kenya?", a: "Yes. Based in Nairobi, I work across East Africa and internationally. Most sessions are via Google Meet." },
+  { q: "What does a typical engagement look like?", a: "It starts with a discovery call, followed by a scoped engagement based on your specific needs. Some clients engage for a single strategy session; others retain ongoing support." },
+  { q: "Are you a practising advocate?", a: "I hold a Bachelor of Laws and advise at a strategic level. For formal legal representation or filing, I refer to practising advocates within my network." },
+  { q: "I'm not sure which track I need.", a: "Book a discovery call. In 15 minutes we'll identify the right starting point — no pressure, no obligation." },
 ];
 
 export default function ServicesPage() {
@@ -72,54 +73,97 @@ export default function ServicesPage() {
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "1.5rem" }}>
               <span style={{ display: "inline-block", width: "1.5rem", height: "1px", background: "var(--c-gold)" }} />
-              <span className="t-label">How I Can Help</span>
+              <span className="t-label">Advisory Services</span>
             </div>
-            <h1 className="t-display t-display-xl">Embedded counsel for technology that has to work.</h1>
+            <h1 className="t-display t-display-xl">Two tracks. One question: what do you need protected?</h1>
           </div>
           <div>
-            <p className="t-body" style={{ marginBottom: "1rem", fontStyle: "italic" }}>
-              I don&apos;t sell legal documents. I don&apos;t sell compliance. I embed legal, regulatory, and technical judgment into how technology gets built, sold, and governed.
-            </p>
             <p className="t-body" style={{ marginBottom: "1.5rem" }}>
-              I provide embedded legal, technical, and regulatory counsel across the technology lifecycle. Choose where you are, and I&apos;ll guide you from there.
+              Most legal problems for founders and tech organizations fall into one of two categories — exposure at the company level, or vulnerability at the founder level. The advisory is structured accordingly.
             </p>
           </div>
         </div>
       </section>
 
-      {/* ── Capabilities ── */}
+      {/* ── Service Tracks ── */}
       <section className="page-x" style={{ paddingBottom: "var(--space-section)" }}>
         <div className="inner">
-          {capabilities.map((c) => (
-            <div key={c.id} id={c.id} style={{ scrollMarginTop: "6rem", paddingTop: "3rem", paddingBottom: "3rem", borderBottom: "1px solid var(--c-border)" }}>
-              <div className="cap-grid" style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "3rem", alignItems: "start" }}>
-                <div>
-                  <p style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.68rem", color: "var(--c-gold)", marginBottom: "0.6rem" }}>{c.number}</p>
-                  <h2 className="t-display t-display-md" style={{ marginBottom: "0.5rem" }}>{c.label}</h2>
-                  <p style={{ fontSize: "0.8rem", color: "var(--c-ink-muted)", lineHeight: 1.6 }}>{c.tagline}</p>
-                </div>
-                <div>
-                  <p className="t-body" style={{ marginBottom: "1.25rem" }}>{c.description}</p>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", marginBottom: "1.5rem" }}>
-                    {c.tags.map(tag => (
-                      <span key={tag} style={{ fontSize: "0.62rem", padding: "0.22rem 0.6rem", borderRadius: "100px", border: "1px solid rgba(14,61,50,0.16)", color: "var(--c-forest)" }}>{tag}</span>
-                    ))}
-                  </div>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "1.5rem", alignItems: "center" }}>
+          {tracks.map((s, idx) => {
+            const Icon = s.icon;
+            return (
+              <div key={s.id} id={s.id} style={{ scrollMarginTop: "6rem", paddingTop: "4rem", paddingBottom: "4rem", borderBottom: "1px solid var(--c-border)" }}>
+                <div className="track-grid" style={{ display: "grid", gridTemplateColumns: "2fr 3fr", gap: "4rem" }}>
+                  {/* Left: sticky summary */}
+                  <div className="track-summary" style={{ position: "sticky", top: "6rem", alignSelf: "start" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "1.25rem" }}>
+                      <div style={{ width: "2.25rem", height: "2.25rem", borderRadius: "8px", background: "rgba(14,61,50,0.06)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <Icon size={16} style={{ color: "var(--c-forest)" }} />
+                      </div>
+                      <span className="t-label">{s.number}</span>
+                    </div>
+                    <p style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--c-gold)", marginBottom: "0.4rem" }}>{s.audience}</p>
+                    <h2 className="t-display t-display-md" style={{ marginBottom: "0.6rem" }}>{s.label}</h2>
+                    <p style={{ fontSize: "0.775rem", color: "var(--c-ink-muted)", marginBottom: "1.5rem", lineHeight: 1.6 }}>{s.tagline}</p>
+
+                    {/* The key distinction */}
+                    <div style={{ background: "rgba(14,61,50,0.04)", borderLeft: "2px solid var(--c-forest)", padding: "0.85rem 1rem", borderRadius: "0 8px 8px 0", marginBottom: "1.75rem" }}>
+                      <p style={{ fontSize: "0.75rem", color: "var(--c-ink-mid)", lineHeight: 1.65 }}>{s.distinction}</p>
+                    </div>
+
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", marginBottom: "2rem" }}>
+                      {s.offerings.map(o => (
+                        <span key={o} style={{ fontSize: "0.62rem", padding: "0.22rem 0.6rem", borderRadius: "100px", border: "1px solid rgba(14,61,50,0.16)", color: "var(--c-forest)" }}>{o}</span>
+                      ))}
+                    </div>
                     <Link href="/book" className="btn-primary">Book a Consultation <ArrowRight size={13} /></Link>
-                    <Link href={`/#services`} style={{
-                      fontFamily: "var(--font-manjari)", fontWeight: 700,
-                      fontSize: "0.6rem", letterSpacing: "0.16em", textTransform: "uppercase",
-                      color: "var(--c-ink-muted)", textDecoration: "none",
-                      borderBottom: "1px solid var(--c-border)", paddingBottom: "0.2rem",
-                    }}>
-                      Explore with AI instead →
-                    </Link>
+                  </div>
+
+                  {/* Right: detail cards */}
+                  <div style={{ display: "flex", flexDirection: "column", gap: "1.1rem" }}>
+                    {[{ label: "The Problem", text: s.problem }, { label: "The Solution", text: s.solution }].map(block => (
+                      <div key={block.label} className="card">
+                        <p className="t-label" style={{ marginBottom: "0.75rem" }}>{block.label}</p>
+                        <p className="t-body">{block.text}</p>
+                      </div>
+                    ))}
+                    <div className="card">
+                      <p className="t-label" style={{ marginBottom: "1rem" }}>Process</p>
+                      <ol style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "0.65rem" }}>
+                        {s.process.map((step, i) => (
+                          <li key={i} style={{ display: "flex", gap: "1rem", fontSize: "0.8rem", color: "var(--c-ink-mid)" }}>
+                            <span style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, color: "var(--c-gold)", minWidth: "1.25rem", fontSize: "0.68rem", paddingTop: "0.1rem" }}>{String(i + 1).padStart(2, "0")}</span>
+                            {step}
+                          </li>
+                        ))}
+                      </ol>
+                    </div>
+                    <div className="two-col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.1rem" }}>
+                      <div className="card">
+                        <p className="t-label" style={{ marginBottom: "1rem" }}>Deliverables</p>
+                        <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                          {s.deliverables.map(d => (
+                            <li key={d} style={{ display: "flex", alignItems: "flex-start", gap: "0.5rem", fontSize: "0.75rem", color: "var(--c-ink-mid)" }}>
+                              <CheckCircle2 size={11} style={{ color: "var(--c-gold)", marginTop: "0.2rem", flexShrink: 0 }} />{d}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      <div style={{ background: "var(--c-forest)", borderRadius: "12px", padding: "1.6rem" }}>
+                        <p className="t-label" style={{ marginBottom: "1rem" }}>Outcomes</p>
+                        <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                          {s.outcomes.map(o => (
+                            <li key={o} style={{ display: "flex", alignItems: "flex-start", gap: "0.5rem", fontSize: "0.75rem", color: "rgba(248,246,241,0.55)" }}>
+                              <span style={{ width: "4px", height: "4px", borderRadius: "50%", background: "var(--c-gold)", marginTop: "0.45rem", flexShrink: 0 }} />{o}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
@@ -145,7 +189,9 @@ export default function ServicesPage() {
           .header-grid{grid-template-columns:1fr !important; gap:2.5rem !important;}
         }
         @media(max-width:768px){
-          .cap-grid{grid-template-columns:1fr !important; gap:1.5rem !important;}
+          .track-grid{grid-template-columns:1fr !important; gap:2rem !important;}
+          .track-summary{position:static !important; top:auto !important;}
+          .two-col{grid-template-columns:1fr !important;}
         }
       `}</style>
     </div>

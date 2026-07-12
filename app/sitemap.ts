@@ -14,7 +14,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/start",
     "/book",
     "/the-1000",
-    "/partner",
     "/entrora",
   ];
 
