@@ -11,8 +11,8 @@ const SITE_URL = "https://decrakerubo.com";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Decra Kerubo — Technology Lawyer & Product Counsel, Nairobi",
-    template: "%s — Decra Kerubo",
+    default: "Decra Kerubo, Technology Lawyer & Product Counsel, Nairobi",
+    template: "%s, Decra Kerubo",
   },
   description:
     "Decra Kerubo is a technology lawyer and product counsel based in Nairobi, Kenya, with a dual background in Computer Science (AI) and Law. Regulatory compliance, product counsel, and founder advisory for startups and technology companies across Africa.",
@@ -69,7 +69,7 @@ export const metadata: Metadata = {
     type: "profile",
     url: SITE_URL,
     siteName: "Decra Kerubo",
-    title: "Decra Kerubo — Technology Lawyer & Product Counsel, Nairobi",
+    title: "Decra Kerubo, Technology Lawyer & Product Counsel, Nairobi",
     description:
       "Technology lawyer and product counsel with a dual background in Computer Science (AI) and Law. Regulatory compliance, product counsel, and founder advisory in Nairobi, Kenya.",
     locale: "en_KE",
@@ -84,7 +84,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Decra Kerubo — Technology Lawyer & Product Counsel, Nairobi",
+    title: "Decra Kerubo, Technology Lawyer & Product Counsel, Nairobi",
     description:
       "Technology lawyer and product counsel with a dual background in Computer Science (AI) and Law. Based in Nairobi, Kenya.",
     images: ["/decra-hero-wide.jpg"],
@@ -131,7 +131,7 @@ const personJsonLd = {
 const professionalServiceJsonLd = {
   "@context": "https://schema.org",
   "@type": "LegalService",
-  name: "Decra Kerubo — Technology Lawyer & Product Counsel",
+  name: "Decra Kerubo, Technology Lawyer & Product Counsel",
   image: `${SITE_URL}/decra-hero-wide.jpg`,
   url: SITE_URL,
   email: "hello@decrakerubo.com",
@@ -149,7 +149,7 @@ const professionalServiceJsonLd = {
   address: { "@type": "PostalAddress", addressLocality: "Nairobi", addressCountry: "KE" },
   founder: { "@type": "Person", name: "Decra Kerubo" },
   description:
-    "Technology law and product counsel practice serving founders, startups, and technology companies across Kenya and Africa — covering regulatory compliance, data protection, technical product counsel, and founder advisory.",
+    "Technology law and product counsel practice serving founders, startups, and technology companies across Kenya and Africa, covering regulatory compliance, data protection, technical product counsel, and founder advisory.",
   serviceType: [
     "Technology Law",
     "Product Counsel",

@@ -6,16 +6,16 @@ import { CONSULTATION_TYPES } from "@/lib/types";
 type Step = 1 | 2 | 3;
 type FormState = { name: string; email: string; organization: string; website: string; industry: string; team_size: string; primary_challenge: string; desired_outcome: string };
 
-// Step 1 as a guided conversation — one question at a time instead of an 8-field wall.
+// Step 1 as a guided conversation, one question at a time instead of an 8-field wall.
 // `textarea` fields submit on Enter (Shift+Enter for a newline); others submit on Enter.
 const INTAKE_QUESTIONS: { key: keyof FormState; bot: string; placeholder: string; required: boolean; type?: "email" | "textarea"; skippable?: boolean }[] = [
-  { key: "name", bot: "Hi — I'm glad you're here. What's your name?", placeholder: "Your full name", required: true },
+  { key: "name", bot: "Hi, I'm glad you're here. What's your name?", placeholder: "Your full name", required: true },
   { key: "email", bot: "Nice to meet you. What's the best email to send your confirmation to?", placeholder: "your@email.com", type: "email", required: true },
   { key: "organization", bot: "Are you reaching out for a company, NGO, or on your own behalf?", placeholder: "Company / NGO / Personal", required: false, skippable: true },
   { key: "website", bot: "Got a website I should take a look at beforehand?", placeholder: "https://...", required: false, skippable: true },
   { key: "industry", bot: "What industry or sector are you in?", placeholder: "e.g. Legal Tech, NGO, FinTech", required: false, skippable: true },
   { key: "team_size", bot: "Roughly how big is the team?", placeholder: "e.g. 1–5, 10–50, 100+", required: false, skippable: true },
-  { key: "primary_challenge", bot: "Let's get into it — what's the main challenge you're facing right now?", placeholder: "Type your answer...", type: "textarea", required: true },
+  { key: "primary_challenge", bot: "Let's get into it, what's the main challenge you're facing right now?", placeholder: "Type your answer...", type: "textarea", required: true },
   { key: "desired_outcome", bot: "And what would a successful outcome look like for you?", placeholder: "Type your answer...", type: "textarea", required: true },
 ];
 
@@ -30,7 +30,7 @@ const TIME_SLOTS: { label: string; value: string }[] = [
 const timeLabel = (value: string) => TIME_SLOTS.find(s => s.value === value)?.label || value;
 
 // If Paystack isn't configured (no NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY), paid
-// bookings fall back to a manual flow — no account signup needed to get the
+// bookings fall back to a manual flow, no account signup needed to get the
 // site working, but it requires Decra to confirm payments by hand in /admin.
 const MPESA_PAYBILL = "542542";
 const MPESA_ACCOUNT = "02006312021250";
@@ -76,7 +76,7 @@ export default function BookPage() {
 
   const currentQuestion = INTAKE_QUESTIONS[qIndex];
 
-  // Simulate the bot "typing" before each question appears — keeps the pacing
+  // Simulate the bot "typing" before each question appears, keeps the pacing
   // conversational instead of every question dumping in instantly.
   useEffect(() => {
     if (chatDone) return;
@@ -105,7 +105,7 @@ export default function BookPage() {
   const isPaid = (selectedConsultation?.price ?? 0) > 0;
   const paystackConfigured = !!process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY;
 
-  // Paystack Inline is a free client-side script — no SDK install needed.
+  // Paystack Inline is a free client-side script, no SDK install needed.
   useEffect(() => {
     if (!paystackConfigured || document.getElementById("paystack-inline-js")) return;
     const s = document.createElement("script");
@@ -137,7 +137,7 @@ export default function BookPage() {
     if (!isPaid) { handleBooking(); return; }
 
     // No Paystack account connected, OR the person explicitly prefers bank transfer
-    // (e.g. to avoid Paystack's M-Pesa channel fees) — use the manual fallback.
+    // (e.g. to avoid Paystack's M-Pesa channel fees), use the manual fallback.
     if (!paystackConfigured || preferBankTransfer) {
       if (!manualRef.trim()) {
         setPayError(manualChannel === "mpesa" ? "Enter the M-Pesa confirmation code from your payment SMS." : "Enter the bank transfer reference/receipt number.");
@@ -147,7 +147,7 @@ export default function BookPage() {
       return;
     }
 
-    if (!window.PaystackPop) { setPayError("Payment is still loading — please try again in a moment."); return; }
+    if (!window.PaystackPop) { setPayError("Payment is still loading, please try again in a moment."); return; }
     setPaying(true);
     const publicKey = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY!;
 
@@ -186,7 +186,7 @@ export default function BookPage() {
             </a>
           )}
           <div className="card" style={{ textAlign: "left" }}>
-            {[["Type", selectedConsultation?.label], ["Date", selectedDate], ["Time", `${timeLabel(selectedTime)} EAT`], ...(isPaid ? [[pending ? "Amount due" : "Amount paid", formatKES(selectedConsultation?.price ?? 0)], ["Reference", paidRef || "—"]] : [])].map(([k, v]) => (
+            {[["Type", selectedConsultation?.label], ["Date", selectedDate], ["Time", `${timeLabel(selectedTime)} EAT`], ...(isPaid ? [[pending ? "Amount due" : "Amount paid", formatKES(selectedConsultation?.price ?? 0)], ["Reference", paidRef || "N/A"]] : [])].map(([k, v]) => (
               <div key={k as string} style={{ display: "flex", justifyContent: "space-between", gap: "1rem", fontSize: "0.8rem", padding: "0.65rem 0", borderBottom: "1px solid var(--c-border)" }}>
                 <span style={{ color: "var(--c-ink-muted)", flexShrink: 0 }}>{k as string}</span>
                 <span style={{ color: "var(--c-forest)", fontWeight: 700, textAlign: "right", wordBreak: "break-all" }}>{v as string}</span>
@@ -217,11 +217,11 @@ export default function BookPage() {
           ))}
         </div>
 
-        {/* Step 1 — conversational intake */}
+        {/* Step 1, conversational intake */}
         {step === 1 && (
           <div>
             <h2 style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "1.05rem", color: "var(--c-forest)", marginBottom: "0.35rem" }}>Tell me about yourself.</h2>
-            <p style={{ fontSize: "0.75rem", color: "var(--c-ink-muted)", marginBottom: "1.5rem" }}>A few quick questions — answer at your own pace.</p>
+            <p style={{ fontSize: "0.75rem", color: "var(--c-ink-muted)", marginBottom: "1.5rem" }}>A few quick questions, answer at your own pace.</p>
 
             <div className="chat-thread" style={{ display: "flex", flexDirection: "column", gap: "0.9rem", maxHeight: "min(52vh, 420px)", overflowY: "auto", marginBottom: "1.5rem", paddingRight: "0.25rem" }}>
               {INTAKE_QUESTIONS.slice(0, qIndex).map((q, i) => (
@@ -243,7 +243,7 @@ export default function BookPage() {
 
               {chatDone && (
                 <div className="chat-bubble-in">
-                  <div className="chat-bubble chat-bubble-bot">Perfect — that's everything I need for now. Ready to pick a call type?</div>
+                  <div className="chat-bubble chat-bubble-bot">Perfect, that's everything I need for now. Ready to pick a call type?</div>
                 </div>
               )}
               <div ref={chatEndRef} />
@@ -405,7 +405,7 @@ export default function BookPage() {
                   </>
                 )}
                 <p style={{ fontSize: "0.68rem", color: "var(--c-ink-muted)", marginTop: "0.75rem" }}>
-                  Your slot is held as soon as you submit — Decra confirms the payment by hand, usually within a few hours.
+                  Your slot is held as soon as you submit, Decra confirms the payment by hand, usually within a few hours.
                 </p>
               </div>
             )}
@@ -425,14 +425,14 @@ export default function BookPage() {
                   : isPaid
                     ? ((paystackConfigured && !preferBankTransfer)
                         ? <>Pay {formatKES(selectedConsultation?.price ?? 0)} &amp; Confirm <ShieldCheck size={13} /></>
-                        : <>I've Paid — Submit Booking <ArrowRight size={13} /></>)
+                        : <>I've Paid, Submit Booking <ArrowRight size={13} /></>)
                     : <>Confirm Booking <ArrowRight size={13} /></>}
               </button>
             </div>
             {isPaid && (
               <p style={{ fontSize: "0.68rem", color: "var(--c-ink-muted)", marginTop: "1rem", display: "flex", alignItems: "center", gap: "0.4rem" }}>
                 <ShieldCheck size={12} />
-                {(paystackConfigured && !preferBankTransfer) ? "Secure payment via Paystack — cards & M-Pesa accepted." : "Manual confirmation — payment is verified by hand, not automatically."}
+                {(paystackConfigured && !preferBankTransfer) ? "Secure payment via Paystack, cards & M-Pesa accepted." : "Manual confirmation, payment is verified by hand, not automatically."}
               </p>
             )}
           </div>

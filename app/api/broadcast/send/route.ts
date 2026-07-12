@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
     if (!subject || !bodyHtml || !Array.isArray(recipients) || recipients.length === 0) {
       return NextResponse.json({ error: "Missing subject, body, or recipients." }, { status: 400 });
     }
-    // Kept small on purpose — the client sends in batches so a single request
+    // Kept small on purpose, the client sends in batches so a single request
     // never risks hitting the serverless function's execution time limit.
     if (recipients.length > 15) {
       return NextResponse.json({ error: "Send in batches of 15 or fewer per request." }, { status: 400 });
@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
           .in("email", batchEmails);
 
         if (lookupError) {
-          // Fail closed: if we can't verify who's already been contacted, don't send —
+          // Fail closed: if we can't verify who's already been contacted, don't send,
           // sending blind here is exactly how duplicate outreach happens.
           console.error("Broadcast dedupe lookup failed:", lookupError);
           return NextResponse.json({
@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
       }
 
       if (alreadySent.has(to.toLowerCase())) {
-        results.push({ email: to, company: r.company, ok: false, skipped: true, error: "Already contacted previously — skipped to avoid duplicate outreach." });
+        results.push({ email: to, company: r.company, ok: false, skipped: true, error: "Already contacted previously, skipped to avoid duplicate outreach." });
         try {
           await db.from("broadcasts").insert({ company: r.company || null, email: to, subject: personalize(subject, r), status: "skipped" });
         } catch (logErr) {
@@ -89,9 +89,9 @@ export async function POST(req: NextRequest) {
       const personalizedHtml = personalize(bodyHtml, r);
 
       const sent = await sendMail({ to, subject: personalizedSubject, html: personalizedHtml });
-      results.push({ email: to, company: r.company, ok: !!sent.ok, error: sent.ok ? undefined : "Send failed — check Gmail credentials/quota." });
+      results.push({ email: to, company: r.company, ok: !!sent.ok, error: sent.ok ? undefined : "Send failed, check Gmail credentials/quota." });
 
-      // Best-effort audit log — never blocks the send.
+      // Best-effort audit log, never blocks the send.
       try {
         await db.from("broadcasts").insert({
           company: r.company || null,

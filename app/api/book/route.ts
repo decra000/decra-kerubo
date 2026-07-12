@@ -2,7 +2,7 @@ export const dynamic = "force-dynamic";
 import { NextRequest, NextResponse } from "next/server";
 import { createBooking } from "@/lib/booking";
 
-// Verifies a Paystack transaction reference server-side — never trust the
+// Verifies a Paystack transaction reference server-side, never trust the
 // amount/status reported by the client alone. Free (no monthly fee),
 // pay-as-you-go; see https://paystack.com/ke/pricing.
 async function verifyPaystackPayment(reference: string, expectedAmountKES: number) {
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
     } = body;
 
     if (amount > 0 && payment_method !== "manual") {
-      // Paystack path — must carry a verified reference before this booking
+      // Paystack path, must carry a verified reference before this booking
       // is ever written to the database as "confirmed".
       if (!payment_reference) {
         return NextResponse.json({ error: "Payment reference missing." }, { status: 400 });
@@ -63,8 +63,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true, booking: result.booking, meet_link: null, status: result.status });
   } catch (err) {
     console.error("Booking error:", err);
-    // Don't leak raw exception text (e.g. "TypeError: fetch failed") to the person booking —
+    // Don't leak raw exception text (e.g. "TypeError: fetch failed") to the person booking,
     // that's a signal to check server logs, not something a client should see verbatim.
-    return NextResponse.json({ error: "We couldn't complete your booking just now — this is usually temporary. Please try again in a minute, or email hello@decrakerubo.com and we'll get you sorted." }, { status: 500 });
+    return NextResponse.json({ error: "We couldn't complete your booking just now, this is usually temporary. Please try again in a minute, or email hello@decrakerubo.com and we'll get you sorted." }, { status: 500 });
   }
 }

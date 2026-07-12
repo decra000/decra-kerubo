@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 
 /**
- * Reading-progress bar driven by native scroll — no scroll hijacking,
+ * Reading-progress bar driven by native scroll, no scroll hijacking,
  * no inertia. Just a simple, honest width update on the real scroll position.
  */
 export function ScrollProgress() {

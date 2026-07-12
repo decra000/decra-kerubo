@@ -6,7 +6,7 @@ import path from "path";
 /**
  * Serves research paper PDFs for inline viewing only.
  *
- * Files are NOT stored in /public — they live in /private/research,
+ * Files are NOT stored in /public, they live in /private/research,
  * which Next.js never exposes as a static route. This handler is the
  * only way to reach them, and it always responds with:
  *   - Content-Disposition: inline   → opens in the in-page viewer,

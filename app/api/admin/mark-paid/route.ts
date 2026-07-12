@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 
 // Used by the admin dashboard's "Mark Paid" button on manual M-Pesa/bank
-// bookings — moves a booking from pending_payment to confirmed once Decra
+// bookings, moves a booking from pending_payment to confirmed once Decra
 // has checked the payment landed. This uses the service-role client, so it
 // bypasses RLS; make sure /admin itself is access-gated (see SETUP_GUIDE.md
 // Step 8) before relying on this in production.

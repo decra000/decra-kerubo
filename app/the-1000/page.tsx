@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { ArrowUpRight } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "The 1000 — Tech Harm Index",
+  title: "The 1000, Tech Harm Index",
   description: "Documenting real cases of technology harm to advocate for better policy. A living index by Decra.",
   keywords: [
     "tech harm index Africa",
@@ -38,7 +38,7 @@ const profiles = [
   },
   {
     id: "003", category: "bullying",
-    headline: "A university student was doxxed across four platforms simultaneously. Each platform acted independently — none coordinated.",
+    headline: "A university student was doxxed across four platforms simultaneously. Each platform acted independently, none coordinated.",
     policyGap: "Cross-platform coordination obligations don't exist in any current African tech regulation framework.",
     jurisdiction: "Uganda", year: 2023, status: "unresolved",
   },
@@ -134,9 +134,9 @@ export default function The1000Page() {
                 </svg>
               </div>
               <div>
-                <p style={{ fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#1DB954", marginBottom: "0.25rem" }}>Now Listening — Spotify Podcast</p>
+                <p style={{ fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "#1DB954", marginBottom: "0.25rem" }}>Now Listening, Spotify Podcast</p>
                 <p style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "1rem", color: "rgba(248,246,241,0.92)", marginBottom: "0.15rem" }}>Nove</p>
-                <p style={{ fontSize: "0.72rem", color: "rgba(248,246,241,0.45)", lineHeight: 1.5 }}>The podcast companion to The 1000 — tech harm, told with context.</p>
+                <p style={{ fontSize: "0.72rem", color: "rgba(248,246,241,0.45)", lineHeight: 1.5 }}>The podcast companion to The 1000, tech harm, told with context.</p>
               </div>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", color: "#1DB954", flexShrink: 0 }}>
@@ -188,7 +188,7 @@ export default function The1000Page() {
               <p className="t-label" style={{ marginBottom: "0.75rem" }}>Contribute to the Index</p>
               <h3 style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "1.05rem", color: "rgba(248,246,241,0.9)", marginBottom: "0.6rem" }}>Know a case that belongs here?</h3>
               <p style={{ fontSize: "0.775rem", color: "rgba(248,246,241,0.5)", lineHeight: 1.7, maxWidth: "36rem" }}>
-                Witnessed or experienced tech harm in Africa? Share it — reviewed, anonymized, and credited only if you ask.
+                Witnessed or experienced tech harm in Africa? Share it, reviewed, anonymized, and credited only if you ask.
               </p>
             </div>
             <a href="mailto:the1000@decrakero.com?subject=Case%20Submission"

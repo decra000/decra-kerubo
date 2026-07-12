@@ -25,7 +25,7 @@ She helps with:
 - Equity, vesting, co-founder agreements
 - Tax compliance: eTIMS, KRA, VAT, PAYE
 - Foreign company branch registration in Kenya
-- Public Benefit Organization (PBO) registration — Kenya's new framework replacing NGOs under the Public Benefit Organizations Act
+- Public Benefit Organization (PBO) registration, Kenya's new framework replacing NGOs under the Public Benefit Organizations Act
 - International expansion into East Africa
 - Technology law, data privacy (ODPC compliance), IP protection
 - Fundraising readiness and investor agreements
@@ -33,10 +33,10 @@ She helps with:
 Your sole purpose: understand where a potential client is in their journey and what they need, then collect enough information to send Decra a clear briefing.
 
 Rules:
-1. Greet warmly. Ask ONE question at a time — never list multiple at once.
+1. Greet warmly. Ask ONE question at a time, never list multiple at once.
 2. Gather over 4-6 natural exchanges: what they're building/doing, what country they're in, what stage (idea / pre-incorporation / incorporated / fundraising / expanding), their main need, their name, their email.
-3. If they mention NGO, nonprofit, foundation, or international branch — clarify: do they need a PBO (local Kenyan entity under the PBO Act) or a foreign company branch registration?
-4. Once you have sufficient context, say exactly: "Perfect — I have everything Decra needs. She'll be in touch within 48 hours." Then on a new line add this block:
+3. If they mention NGO, nonprofit, foundation, or international branch, clarify: do they need a PBO (local Kenyan entity under the PBO Act) or a foreign company branch registration?
+4. Once you have sufficient context, say exactly: "Perfect, I have everything Decra needs. She'll be in touch within 48 hours." Then on a new line add this block:
 <intake_complete>
 {
   "name": "...",
@@ -79,11 +79,11 @@ export default function StartPage() {
         }),
       });
       const d = await res.json();
-      const reply = d.reply || "Hi — tell me a bit about what you're building and where you are right now.";
+      const reply = d.reply || "Hi, tell me a bit about what you're building and where you are right now.";
       setMsgs([{ role: "assistant", text: cleanReply(reply) }]);
       checkForCompletion(reply);
     } catch {
-      setMsgs([{ role: "assistant", text: "Hi — tell me a bit about what you're building and where you are right now." }]);
+      setMsgs([{ role: "assistant", text: "Hi, tell me a bit about what you're building and where you are right now." }]);
     } finally { setLoading(false); }
   };
 
@@ -130,7 +130,7 @@ export default function StartPage() {
       setMsgs([...newMsgs, { role: "assistant", text: cleanReply(reply) }]);
       checkForCompletion(reply);
     } catch {
-      setMsgs([...newMsgs, { role: "assistant", text: "Something went wrong — email hello@decrakerubo.com directly." }]);
+      setMsgs([...newMsgs, { role: "assistant", text: "Something went wrong, email hello@decrakerubo.com directly." }]);
     } finally { setLoading(false); }
   };
 
@@ -146,7 +146,7 @@ export default function StartPage() {
           gap: "clamp(3rem,6vw,7rem)", alignItems: "start",
         }} id="start-grid">
 
-          {/* Left — static context */}
+          {/* Left, static context */}
           <div style={{
             opacity: vis ? 1 : 0,
             transform: vis ? "none" : "translateY(18px)",
@@ -187,7 +187,7 @@ export default function StartPage() {
             </div>
           </div>
 
-          {/* Right — chat */}
+          {/* Right, chat */}
           <div style={{
             opacity: vis ? 1 : 0,
             transform: vis ? "none" : "translateY(18px)",

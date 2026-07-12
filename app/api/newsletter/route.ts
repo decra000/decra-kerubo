@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
           <p>Thank you for downloading the <strong>AI Readiness Guide for Startups & NGOs</strong>.</p>
           <p>The guide covers: what AI readiness actually means, how to assess your current state, common mistakes in AI adoption, and a practical framework for getting started.</p>
           <p>If you have questions after reading, just reply to this email.</p>
-          <p style="margin-top: 40px;">— Decra Kerubo</p>
+          <p style="margin-top: 40px;">Decra Kerubo</p>
         </div>
       `,
     });

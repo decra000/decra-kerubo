@@ -21,7 +21,7 @@ const fade = (vis: boolean, delay = 0): React.CSSProperties => ({
   transition: `opacity 0.85s cubic-bezier(0.16,1,0.3,1) ${delay}s, transform 0.85s cubic-bezier(0.16,1,0.3,1) ${delay}s`,
 });
 
-/* A more expressive sibling to `fade` — lets different sections feel distinct
+/* A more expressive sibling to `fade`, lets different sections feel distinct
    instead of every element doing the same up-fade. */
 const reveal = (vis: boolean, opts: { delay?: number; dir?: "up" | "down" | "left" | "right" | "scale"; distance?: number } = {}): React.CSSProperties => {
   const { delay = 0, dir = "up", distance = 26 } = opts;
@@ -56,7 +56,7 @@ const SEC: React.CSSProperties = {
   padding: "var(--space-section) var(--space-x)",
 };
 
-/* Shared AI-intake modal trigger — used by Hero, Services, and Who I Work With */
+/* Shared AI-intake modal trigger, used by Hero, Services, and Who I Work With */
 const OPEN_PARTNER_MODAL_EVENT = "decra:open-partner-modal";
 const PRODUCT_COUNSEL_GROUP = {
   key: "product-counsel",
@@ -65,18 +65,18 @@ const PRODUCT_COUNSEL_GROUP = {
 };
 const SPOTIFY_GROUP = {
   key: "the-1000",
-  label: "The 1000 — Podcast",
+  label: "The 1000: Podcast",
   opening: "Hi, I'm interested in The 1000 podcast and would like to explore how I can be involved.",
 };
 const PACK_GROUP = {
   key: "startup-pack",
   label: "Full Startup Advisory Pack",
-  opening: "Hi, tell me about the Full Startup Advisory Pack — what's included and how it works.",
+  opening: "Hi, tell me about the Full Startup Advisory Pack, what's included and how it works.",
 };
 const POST_LAUNCH_REVIEW_GROUP = {
   key: "post-launch-review",
   label: "Post-Launch Review",
-  opening: "Hi, tell me about the Post-Launch Review — I already have a product live and want it looked at.",
+  opening: "Hi, tell me about the Post-Launch Review, I already have a product live and want it looked at.",
 };
 const EVENTS_GROUP = {
   key: "events-conferences",
@@ -89,7 +89,7 @@ const TECH_DEV_GROUP = {
   opening: "Hi, I'd like to secure Decra's tech development services and go through a build discovery for my website or product.",
 };
 
-/* Shared "line button" style — outline only, no fill, used for every CTA on the page */
+/* Shared "line button" style, outline only, no fill, used for every CTA on the page */
 const lineBtn = (opts?: { light?: boolean }): React.CSSProperties => ({
   display: "inline-flex", alignItems: "center", gap: "0.6rem",
   fontFamily: "var(--font-manjari)", fontWeight: 700,
@@ -107,14 +107,14 @@ function Hero() {
   useEffect(() => { const t = setTimeout(() => setVis(true), 60); return () => clearTimeout(t); }, []);
   return (
     <section id="hero" className="hero-sec" style={{ position: "relative", overflow: "hidden", background: "#0A0A0A", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      {/* Background photo — wide studio shot on larger screens, portrait selfie on small screens */}
+      {/* Background photo, wide studio shot on larger screens, portrait selfie on small screens */}
       <div aria-hidden className="hero-bg hero-kenburns" style={{
         position: "absolute", inset: 0, backgroundSize: "cover", backgroundRepeat: "no-repeat", zIndex: 0,
       }} />
-      {/* Dark overlay so text stays legible — deeper on mobile where the portrait shot needs more contrast */}
+      {/* Dark overlay so text stays legible, deeper on mobile where the portrait shot needs more contrast */}
       <div aria-hidden className="hero-overlay" style={{ position: "absolute", inset: 0, zIndex: 1 }} />
 
-      {/* Corner glows in brand teal + cream, echoing the reference mood boards but on-palette — slow ambient drift so the hero doesn't feel static */}
+      {/* Corner glows in brand teal + cream, echoing the reference mood boards but on-palette, slow ambient drift so the hero doesn't feel static */}
       <div aria-hidden className="hero-glow-a" style={{
         position: "absolute", top: "-18%", left: "-14%", width: "min(60vw,620px)", height: "min(60vw,620px)",
         borderRadius: "50%", pointerEvents: "none", zIndex: 1,
@@ -161,7 +161,7 @@ function Hero() {
         .hero-sec { height: 100vh; }
         @supports (height: 100svh) { .hero-sec { height: 100svh; } }
 
-        /* Slow, continuous zoom on the hero photo — keeps the hero feeling alive rather than a static poster */
+        /* Slow, continuous zoom on the hero photo, keeps the hero feeling alive rather than a static poster */
         .hero-kenburns { animation: heroKenBurns 22s ease-in-out infinite alternate; }
         @keyframes heroKenBurns { from { transform: scale(1); } to { transform: scale(1.08); } }
 
@@ -172,9 +172,9 @@ function Hero() {
         @keyframes heroGlowB { from { transform: translate(0,0) scale(1); } to { transform: translate(-3%,-4%) scale(1.1); } }
         @media (prefers-reduced-motion: reduce) { .hero-kenburns, .hero-glow-a, .hero-glow-b { animation: none; } }
 
-        /* Wide studio shot for larger screens — subject sits right-of-centre, copy hugs the left edge */
+        /* Wide studio shot for larger screens, subject sits right-of-centre, copy hugs the left edge */
         .hero-bg { background-image: url('/decra-hero-wide.jpg'); background-position: 68% 22%; }
-        /* No darkening over the face — the wash only picks up a little below it, on the right/lower two-thirds */
+        /* No darkening over the face, the wash only picks up a little below it, on the right/lower two-thirds */
         .hero-overlay {
           background:
             linear-gradient(180deg, rgba(10,10,10,0) 0%, rgba(10,10,10,0) 42%, rgba(10,10,10,0.5) 62%, rgba(10,10,10,0.75) 100%),
@@ -208,7 +208,7 @@ function About() {
           lineHeight: 1.6,
           ...reveal(vis, { dir: "scale", distance: 10 }),
         }}>
-          I am a Technology Lawyer and Technical Product Counsel with dual degrees in Computer Science (AI) and Law (LLB). I help developers, technology entrepreneurs, investors, and technology procurers develop, evaluate, commercialize, and adopt safe, compliant, and scalable technology products. I also actively conduct research on technology law and policy.
+          I am a Technology Lawyer and Technical Product Counsel with dual degrees in Computer Science (AI) and Law (LLB). I help developers, techpreneurs, investors, regulators, and technology procurers develop, evaluate, commercialize, and adopt safe, compliant, and scalable technology products. I also actively conduct research on technology law and policy.
         </p>
       </div>
     </section>
@@ -220,14 +220,14 @@ const SERVICES = [
   {
     id: "regulatory",
     label: "Technology & Regulatory Law",
-    body: "The legal architecture technology companies operate inside — Kenyan and pan-African regulation, translated into clear positions.",
+    body: "The legal architecture technology companies operate inside, Kenyan and pan-African regulation, translated into clear positions.",
     items: ["Data protection & ODPC compliance", "Data controller & processor licensing", "Cybersecurity law", "Digital commerce & platform regulation", "Licensing & policy engagement"],
-    opening: "Hi, I need help with technology & regulatory law — data protection, data controller/processor licensing, cybersecurity, or digital commerce compliance.",
+    opening: "Hi, I need help with technology & regulatory law, data protection, data controller/processor licensing, cybersecurity, or digital commerce compliance.",
   },
   {
     id: "product-counsel",
     label: "Product Counsel",
-    body: "Embedded legal partnership with your product and engineering team — in the room as things get built, not called in after they ship.",
+    body: "Embedded legal partnership with your product and engineering team, in the room as things get built, not called in after they ship.",
     items: ["Pre-launch legal review", "Privacy-by-design & data flow review", "Intellectual property protection & licensing", "Terms of service & policy drafting", "Ongoing embedded advisory"],
     opening: PRODUCT_COUNSEL_GROUP.opening,
   },
@@ -236,7 +236,7 @@ const SERVICES = [
     label: "Founder & Startup Advisory",
     body: "Practical legal guidance for founders and builders making fast decisions with real, lasting consequences.",
     items: ["Company incorporation & structure", "Founder & co-founder agreements", "Equity, vesting & cap table", "Tax structuring (eTIMS, VAT, PAYE)", "Fundraising legal readiness", "Foreign branches & PBO registration"],
-    opening: "Hi, I'm a founder looking for legal advisory — incorporation, equity, tax structuring, fundraising readiness, or setting up a foreign branch or PBO.",
+    opening: "Hi, I'm a founder looking for legal advisory, incorporation, equity, tax structuring, fundraising readiness, or setting up a foreign branch or PBO.",
   },
 ];
 
@@ -325,7 +325,7 @@ function Services() {
   );
 }
 
-/* ── Section 3+7: Who I work with & How to work with Decra — unified ── */
+/* ── Section 3+7: Who I work with & How to work with Decra, unified ── */
 type ChatMsg = { role: "user" | "assistant"; text: string; options?: { items: string[]; multi: boolean }; rateLimited?: boolean };
 
 /* Parses a trailing <options>[...]</options> or <multi_options>[...]</multi_options> block out of an
@@ -352,50 +352,50 @@ const ENGAGE_GROUPS = [
   { key: "innovation-ecosystems", label: "Innovation Ecosystems", opening: "Hi, I'm with an investor, incubator, accelerator, or ecosystem body and would like to discuss legal support or partnership opportunities." },
 ];
 
-/* Full set offered inside the Partner modal picker — includes Events & Conferences,
+/* Full set offered inside the Partner modal picker, includes Events & Conferences,
    which is intentionally left off the "Who I work with" pill row on the homepage. */
 const PARTNER_GROUPS = [...ENGAGE_GROUPS, EVENTS_GROUP];
 
 const ENGAGE_SYSTEM = `You are Decra Kerubo's AI intake advisor on decrakerubo.com.
 Decra is a Nairobi-based lawyer and computer scientist specialising in technology law and startup legal advisory in Kenya and across Africa.
-She works with: startup founders needing incorporation, equity, co-founder agreements, eTIMS/KRA tax, fundraising, foreign branches, PBO registration; technology companies needing ODPC/data protection, product legal review, tech contracts; law firms needing tech law support or compliance; innovation ecosystem players — investors, incubators, and accelerators — seeking legal support or partnership; and event/conference organizers seeking Decra as a speaker, panelist, or partner.
+She works with: startup founders needing incorporation, equity, co-founder agreements, eTIMS/KRA tax, fundraising, foreign branches, PBO registration; technology companies needing ODPC/data protection, product legal review, tech contracts; law firms needing tech law support or compliance; innovation ecosystem players, investors, incubators, and accelerators, seeking legal support or partnership; and event/conference organizers seeking Decra as a speaker, panelist, or partner.
 
-The Full Startup Advisory Pack is a bundled engagement covering: company incorporation & structure, founder & co-founder agreements, equity/vesting/cap table setup, tax structuring (eTIMS, VAT, PAYE), fundraising legal readiness, and foreign branch/PBO registration — the complete legal foundation from formation through fundraising. If someone asks about "the pack" or the Full Startup Advisory Pack, briefly explain what's included in 2-3 sentences FIRST, before moving into intake questions.
+The Full Startup Advisory Pack is a bundled engagement covering: company incorporation & structure, founder & co-founder agreements, equity/vesting/cap table setup, tax structuring (eTIMS, VAT, PAYE), fundraising legal readiness, and foreign branch/PBO registration, the complete legal foundation from formation through fundraising. If someone asks about "the pack" or the Full Startup Advisory Pack, briefly explain what's included in 2-3 sentences FIRST, before moving into intake questions.
 
-Post-Launch Review is for products already live, not still being built — a one-time legal review covering compliance exposure, liability, privacy-by-design, terms of service, third-party/API integrations, and regulatory gaps, versus Product Counsel which is ongoing embedded support during the build itself. If someone asks about Post-Launch Review, briefly explain this distinction in 2-3 sentences FIRST, before moving into intake questions.
+Post-Launch Review is for products already live, not still being built, a one-time legal review covering compliance exposure, liability, privacy-by-design, terms of service, third-party/API integrations, and regulatory gaps, versus Product Counsel which is ongoing embedded support during the build itself. If someone asks about Post-Launch Review, briefly explain this distinction in 2-3 sentences FIRST, before moving into intake questions.
 
-The 1000 is Decra's upcoming podcast on technology law in Africa, launching soon on Spotify — not yet live. If someone expresses interest in The 1000, first find out how they'd like to be involved (e.g. featured guest, topic suggestion, sponsor/partner, or just notified when it launches), then continue normal intake gathering name and email.
+The 1000 is Decra's upcoming podcast on technology law in Africa, launching soon on Spotify, not yet live. If someone expresses interest in The 1000, first find out how they'd like to be involved (e.g. featured guest, topic suggestion, sponsor/partner, or just notified when it launches), then continue normal intake gathering name and email.
 
-Tech Development Services is Decra building the actual product — websites, web apps, and MVPs — not legal work. If someone opens this conversation (mentions wanting a site/app/product built, or the opening message says "tech development services" or "build discovery"), you switch personas entirely: for this flow ONLY, you are not a legal intake assistant — you are acting as a senior solution strategist, product designer, AND technical architect running a real discovery/scoping call. Speak with the specificity and confidence of someone who has actually shipped products — reference real technology, real font names, real hex codes, real trade-offs. Never sound like a generic customer-service form. Every question should demonstrate you understood the last answer.
+Tech Development Services is Decra building the actual product, websites, web apps, and MVPs, not legal work. If someone opens this conversation (mentions wanting a site/app/product built, or the opening message says "tech development services" or "build discovery"), you switch personas entirely: for this flow ONLY, you are not a legal intake assistant, you are acting as a senior solution strategist, product designer, AND technical architect running a real discovery/scoping call. Speak with the specificity and confidence of someone who has actually shipped products, reference real technology, real font names, real hex codes, real trade-offs. Never sound like a generic customer-service form. Every question should demonstrate you understood the last answer.
 
-CHIP TOOLS — you can present clickable options instead of making the person type freeform answers. Use these often in this flow, always preceded by a short sentence of context:
+CHIP TOOLS, you can present clickable options instead of making the person type freeform answers. Use these often in this flow, always preceded by a short sentence of context:
 - Single-select (person picks one, sent immediately): end your message with <options>["Option A","Option B","Option C"]</options>
 - Multi-select (person can pick several, then hits Continue): end your message with <multi_options>["Option A","Option B","Option C"]</multi_options>
-Only ONE chip block per message, always as the very last thing in the message, valid JSON array of strings. Always include an escape hatch chip like "Other — I'll describe it" or "Not sure — recommend one" where relevant so the person is never stuck.
+Only ONE chip block per message, always as the very last thing in the message, valid JSON array of strings. Always include an escape hatch chip like "Other (I'll describe it)" or "Not sure (recommend one)" where relevant so the person is never stuck.
 
 Run the discovery in this order:
-1. Entity/business name, AND the actual goal — what they're trying to achieve, for whom, and what outcome success looks like. Do not move on until you genuinely understand the goal — ask a real follow-up if the first answer is vague (e.g. "an app for my business" needs a follow-up: what does the business do, who's the end user).
-2. Jurisdiction — which country/countries this will operate in or serve, since compliance requirements (data protection law, cookie/consent rules, payment regulations) differ by jurisdiction. Ask directly.
-3. ONLY once you understand the goal: reason about what functionality actually fits THIS specific goal (don't ask generic questions) and present a tailored <multi_options> chip list of the features most relevant to their type of product (e.g. an e-commerce goal gets chips like product catalog, cart & checkout, M-Pesa/card payments, inventory management, order tracking, reviews — a booking/service goal gets chips like calendar/scheduling, client accounts, automated reminders, staff management). Always include "Other — I'll describe it".
-4. Ask if there are any special or custom interactions/user flows beyond the standard ones for this kind of product — open-ended, no chips needed here.
-5. For any feature area where it's a real fork (commonly: search, customer support/chat, content or recommendation features), briefly explain in plain, non-technical language the difference between a traditional (rule-based, cheaper, predictable) approach and an AI-powered (smarter, handles nuance, has ongoing cost and needs more data) approach, and what that means for their budget and timeline — THEN offer the choice via <options> chips: ["Traditional","AI-powered","Not sure — recommend for me"]. Skip this step entirely if nothing in their scope actually needs it.
-6. Ask about cookie consent banners and bot/spam protection (e.g. CAPTCHA) — briefly note these matter for the jurisdiction they gave in step 2 — via <multi_options>: ["Cookie consent banner","Bot/spam protection (CAPTCHA)","Neither needed right now"].
-7. Ask about analytics via <options>: ["Google Analytics","Privacy-friendly analytics (e.g. Plausible)","No analytics needed","Not sure — recommend"].
-8. Fonts — ask if they have brand fonts already. If not, pull from the free Google Fonts library and offer 3-4 real, well-paired combinations suited to their brand tone via <options>, e.g. ["Playfair Display + Inter","DM Serif Display + Plus Jakarta Sans","Poppins + Roboto","Space Grotesk + Work Sans"], plus "I have my own fonts".
-9. Colors — ask if they have brand colors already. If not, offer 3-4 real curated palettes (as if pulled from a free tool like Coolors or Adobe Color) with actual hex codes written into each chip label, e.g. ["Forest & Cream — #0E3D32 / #F5F4F1 / #C9A24B","Ocean Blue — #123C69 / #4F98CA / #EAF6FF","Warm Terracotta — #B3542A / #F2E4D8 / #2B2B2B"], via <options>, plus "I have brand colors already".
-10. Logo — <options>: ["I have a logo","I need one designed","Not sure yet"].
-11. Roughly how many pages/screens, if known — <options>: ["Just a landing page","3-5 pages","6-10 pages","10+ / full app","Not sure yet"].
+1. Entity/business name, AND the actual goal, what they're trying to achieve, for whom, and what outcome success looks like. Do not move on until you genuinely understand the goal, ask a real follow-up if the first answer is vague (e.g. "an app for my business" needs a follow-up: what does the business do, who's the end user).
+2. Jurisdiction, which country/countries this will operate in or serve, since compliance requirements (data protection law, cookie/consent rules, payment regulations) differ by jurisdiction. Ask directly.
+3. ONLY once you understand the goal: reason about what functionality actually fits THIS specific goal (don't ask generic questions) and present a tailored <multi_options> chip list of the features most relevant to their type of product (e.g. an e-commerce goal gets chips like product catalog, cart & checkout, M-Pesa/card payments, inventory management, order tracking, reviews, a booking/service goal gets chips like calendar/scheduling, client accounts, automated reminders, staff management). Always include "Other (I'll describe it)".
+4. Ask if there are any special or custom interactions/user flows beyond the standard ones for this kind of product, open-ended, no chips needed here.
+5. For any feature area where it's a real fork (commonly: search, customer support/chat, content or recommendation features), briefly explain in plain, non-technical language the difference between a traditional (rule-based, cheaper, predictable) approach and an AI-powered (smarter, handles nuance, has ongoing cost and needs more data) approach, and what that means for their budget and timeline, THEN offer the choice via <options> chips: ["Traditional","AI-powered","Not sure (recommend for me)"]. Skip this step entirely if nothing in their scope actually needs it.
+6. Ask about cookie consent banners and bot/spam protection (e.g. CAPTCHA), briefly note these matter for the jurisdiction they gave in step 2, via <multi_options>: ["Cookie consent banner","Bot/spam protection (CAPTCHA)","Neither needed right now"].
+7. Ask about analytics via <options>: ["Google Analytics","Privacy-friendly analytics (e.g. Plausible)","No analytics needed","Not sure (recommend)"].
+8. Fonts, ask if they have brand fonts already. If not, pull from the free Google Fonts library and offer 3-4 real, well-paired combinations suited to their brand tone via <options>, e.g. ["Playfair Display + Inter","DM Serif Display + Plus Jakarta Sans","Poppins + Roboto","Space Grotesk + Work Sans"], plus "I have my own fonts".
+9. Colors, ask if they have brand colors already. If not, offer 3-4 real curated palettes (as if pulled from a free tool like Coolors or Adobe Color) with actual hex codes written into each chip label, e.g. ["Forest & Cream: #0E3D32 / #F5F4F1 / #C9A24B","Ocean Blue: #123C69 / #4F98CA / #EAF6FF","Warm Terracotta: #B3542A / #F2E4D8 / #2B2B2B"], via <options>, plus "I have brand colors already".
+10. Logo, <options>: ["I have a logo","I need one designed","Not sure yet"].
+11. Roughly how many pages/screens, if known, <options>: ["Just a landing page","3-5 pages","6-10 pages","10+ / full app","Not sure yet"].
 12. Any reference sites/apps whose feel they like (optional, don't dwell).
 13. Tell them this scope is exactly what Decra needs to put together a quick, accurate pricing quote.
 14. Finally, name and email.
-Keep it warm and conversational, one step at a time, briefly acknowledging their previous answer before moving on — like a real discovery call, never a form. Once complete, say exactly: "Perfect — I have everything Decra needs. She'll be in touch within 48 hours with a scoped quote." Then on a new line output the intake_complete block, including these additional keys beyond name/email/summary: entityName, purpose, jurisdiction, functionalities, specialInteractions, aiVsTraditional, cookiesAndBots, analytics, fontPreference, colorPreference, hasLogo, pageCount, referenceSites. Example:
+Keep it warm and conversational, one step at a time, briefly acknowledging their previous answer before moving on, like a real discovery call, never a form. Once complete, say exactly: "Perfect, I have everything Decra needs. She'll be in touch within 48 hours with a scoped quote." Then on a new line output the intake_complete block, including these additional keys beyond name/email/summary: entityName, purpose, jurisdiction, functionalities, specialInteractions, aiVsTraditional, cookiesAndBots, analytics, fontPreference, colorPreference, hasLogo, pageCount, referenceSites. Example:
 <intake_complete>
 {"name":"...","email":"...","summary":"2-3 sentence briefing for Decra","entityName":"...","purpose":"...","jurisdiction":"...","functionalities":"...","specialInteractions":"...","aiVsTraditional":"...","cookiesAndBots":"...","analytics":"...","fontPreference":"...","colorPreference":"...","hasLogo":"...","pageCount":"...","referenceSites":"..."}
 </intake_complete>
 
 Your job for every OTHER flow (not Tech Development): warm natural conversation, ONE question at a time. Gather over 4-6 exchanges: what they need, their context/stage, name, email.
 If they mention NGO, nonprofit, or international branch, ask: PBO (local Kenyan entity) or foreign company branch?
-Once done say exactly: "Perfect — I have everything Decra needs. She'll be in touch within 48 hours." Then on a new line:
+Once done say exactly: "Perfect, I have everything Decra needs. She'll be in touch within 48 hours." Then on a new line:
 <intake_complete>
 {"name":"...","email":"...","summary":"2-3 sentence briefing for Decra"}
 </intake_complete>
@@ -437,7 +437,7 @@ function WorkWithDecra() {
   // or accidental tab close doesn't erase what someone already typed.
   const storageKey = (groupKey: string) => `decra-chat:${groupKey}`;
   const saveConversation = (groupKey: string, messages: ChatMsg[]) => {
-    try { window.localStorage.setItem(storageKey(groupKey), JSON.stringify(messages)); } catch { /* storage unavailable — non-fatal */ }
+    try { window.localStorage.setItem(storageKey(groupKey), JSON.stringify(messages)); } catch { /* storage unavailable, non-fatal */ }
   };
   const loadConversation = (groupKey: string): ChatMsg[] | null => {
     try {
@@ -475,7 +475,7 @@ function WorkWithDecra() {
       const { text: reply, options } = extractOptions(rawReply);
       setMsgs([{ role: "assistant", text: reply, options, rateLimited: !!data.rateLimited }]);
       if (voiceOn && !data.rateLimited) speak(reply);
-    } catch { setMsgs([{ role: "assistant", text: "Something went wrong. Your spot in the conversation is saved — try again in a moment.", rateLimited: true }]); }
+    } catch { setMsgs([{ role: "assistant", text: "Something went wrong. Your spot in the conversation is saved, try again in a moment.", rateLimited: true }]); }
     setLoading(false);
     setTimeout(() => inputRef.current?.focus(), 150);
   };
@@ -499,7 +499,7 @@ function WorkWithDecra() {
   }, []);
 
   // Closing the modal keeps the cached conversation (so reopening the same
-  // engagement resumes it) — only a completed intake clears its cache.
+  // engagement resumes it), only a completed intake clears its cache.
   const closeModal = () => { setModalOpen(false); setActive(null); setMsgs([]); setDone(false); setInput(""); setChipSelections({}); setFallbackFormOpen(false); setFallbackSent(false); stopSpeaking(); };
 
   const submitFallbackForm = async () => {
@@ -508,8 +508,8 @@ function WorkWithDecra() {
     try {
       await fetch("/api/intake", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({
         name: fallbackForm.name.trim(), email: fallbackForm.email.trim(),
-        summary: fallbackForm.message.trim() || "No message provided — the assistant was unavailable when they reached out.",
-        engagement: active ? `${active} (assistant unavailable — submitted via fallback form)` : "assistant-unavailable",
+        summary: fallbackForm.message.trim() || "No message provided, the assistant was unavailable when they reached out.",
+        engagement: active ? `${active} (assistant unavailable, submitted via fallback form)` : "assistant-unavailable",
       }) });
       setFallbackSent(true);
     } catch { /* the button's own error state below handles this */ }
@@ -523,7 +523,7 @@ function WorkWithDecra() {
     const next = [...msgs, { role: "user" as const, text: userText }];
     setMsgs(next); setLoading(true);
     try {
-      // Rate-limit apology messages are UI-only — never feed them back to the
+      // Rate-limit apology messages are UI-only, never feed them back to the
       // model as if they were something it actually said.
       const historyForModel = msgs.filter(m => !m.rateLimited);
       const res = await fetch("/api/chat", { method: "POST", headers: { "Content-Type": "application/json" },
@@ -540,7 +540,7 @@ function WorkWithDecra() {
       const { text: cleanReply, options } = extractOptions(reply);
       setMsgs([...next, { role: "assistant", text: cleanReply, options, rateLimited: !!data.rateLimited }]);
       if (voiceOn && !data.rateLimited) speak(cleanReply);
-    } catch { setMsgs([...next, { role: "assistant", text: "Something went wrong. Your message is saved — try again in a moment.", rateLimited: true }]); }
+    } catch { setMsgs([...next, { role: "assistant", text: "Something went wrong. Your message is saved, try again in a moment.", rateLimited: true }]); }
     setLoading(false);
   };
 
@@ -666,7 +666,7 @@ function WorkWithDecra() {
               <>
                 <div style={{ flex: 1, overflowY: "auto", padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
                   {(() => {
-                    // Counts consecutive failures ending at the latest message — one
+                    // Counts consecutive failures ending at the latest message, one
                     // hiccup just gets "Try again"; genuinely repeated failure ("truly
                     // fails") also surfaces the no-lost-lead fallback options.
                     let trailingFailures = 0;
@@ -747,7 +747,7 @@ function WorkWithDecra() {
                         {m.rateLimited && isLatest && !loading && !done && trailingFailures >= 2 && (
                           <div style={{ width: "100%", maxWidth: "92%", background: "var(--c-surface)", border: "1px solid var(--c-border-strong)", borderRadius: "10px", padding: "1rem", marginTop: "0.25rem" }}>
                             <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.76rem", color: "var(--c-ink-muted)", lineHeight: 1.6, marginBottom: "0.85rem" }}>
-                              The assistant isn&apos;t cooperating right now — here are two ways to reach Decra directly instead:
+                              The assistant isn&apos;t cooperating right now, here are two ways to reach Decra directly instead:
                             </p>
                             {!fallbackFormOpen && !fallbackSent && (
                               <div style={{ display: "flex", flexWrap: "wrap", gap: "0.6rem" }}>
@@ -793,7 +793,7 @@ function WorkWithDecra() {
                             )}
                             {fallbackSent && (
                               <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.78rem", color: "var(--c-accent)" }}>
-                                Sent — Decra will follow up by email shortly.
+                                Sent, Decra will follow up by email shortly.
                               </p>
                             )}
                           </div>
@@ -907,7 +907,7 @@ function The1000() {
         </div>
       </div>
 
-      {/* Coming soon — sits over the open photo, no card/background of its own */}
+      {/* Coming soon, sits over the open photo, no card/background of its own */}
       <p style={{
         position: "absolute", left: "50%", transform: "translateX(-50%)", bottom: "clamp(1.25rem,2.75vw,2rem)",
         zIndex: 1, margin: 0, textAlign: "center",
@@ -944,7 +944,7 @@ const PAPERS: Paper[] = [
     slug: "democratization-decarbonization-ai",
     title: "Democratization and Decarbonization of AI Solutions",
     partner: "In association with the Bevisioneers Mercedes-Benz Program",
-    dates: "May 2024 — Present",
+    dates: "May 2024 to Present",
     status: "current",
     abstract:
       "This paper addresses two crucial challenges: the failure of many AI solutions to reach their intended users due to poor accessibility, and the significant environmental toll of AI development. Despite the transformative potential of AI, much of its promise remains unrealized for those who need it most, as deployment practices often overlook inclusivity. At the same time, data centers, which power AI, consume vast amounts of energy and clean water, contributing heavily to carbon emissions and resource depletion. To tackle both issues, this paper advocates for greener AI technologies to reduce their environmental footprint and explores edge computing as a key solution. By performing AI inference closer to the data source, edge computing not only cuts down on energy consumption but also enhances accessibility, ensuring that AI's benefits reach broader and more diverse communities. Both democratization and decarbonization are vital for ensuring AI solutions are impactful, sustainable, and equitably distributed.",
@@ -953,7 +953,7 @@ const PAPERS: Paper[] = [
     slug: "ai-enabled-regulation",
     title: "AI-Enabled Regulation as a Means to Digital Safety",
     partner: "In association with the African Leadership University",
-    dates: "Aug 2023 — Apr 2024",
+    dates: "Aug 2023 to Apr 2024",
     status: "complete",
     abstract:
       "An in-depth research to establish the effectiveness of current social media regulation technical and legal measures. The weaknesses emerging inform the proposed strategy of real-time detection and alleviation, and pre-interaction AI assisted strategies. The paper concludes with the development of an AI-powered Chrome Extension that actively listens, evaluates, and controls information flow on social media.",
@@ -963,7 +963,7 @@ const PAPERS: Paper[] = [
     slug: "cross-border-data-transfer",
     title: "Analyzing Inefficiencies in Current Cross-Border Data Transfer Laws",
     partner: "In association with Africa Nazarene University",
-    dates: "Jan — Nov 2022",
+    dates: "Jan to Nov 2022",
     status: "complete",
     abstract:
       "This paper examines the current legal framework governing cross-border data transfers, focusing on key regulations such as the GDPR, DPA, and other relevant legal instruments. It explores the dynamic nature of data transfer, driven by evolving digital and business needs, including data usage for AI research and training, software-shared data, and the extensive data collection practices of companies like WorldCoin. The analysis also considers how long data is stored beyond its primary purpose. Critical factors such as time, purpose, duration, type, and licensing are pivotal to this research. Finally, the paper proposes recommendations for improving legal efficiencies and highlights existing frameworks that could be adapted to strengthen data transfer regulations.",
@@ -972,7 +972,7 @@ const PAPERS: Paper[] = [
     slug: "unbiased-hiring-algorithms",
     title: "Unbiased Hiring Algorithms",
     partner: "In association with the United Nations Academic Impact",
-    dates: "Aug — Dec 2021",
+    dates: "Aug to Dec 2021",
     status: "complete",
     abstract:
       "As organizations increasingly adopt automated solutions, many are turning to AI for hiring processes. While this approach simplifies recruitment and is seen as reducing human bias, algorithmic discrimination remains a significant concern, potentially leading to unfair outcomes and legal liabilities. This research aims to develop an effective tool that addresses discriminatory elements while maintaining efficiency, ensuring a more equitable and compliant hiring process.",
@@ -1043,7 +1043,7 @@ function PaperViewer({ paper, onClose }: { paper: Paper; onClose: () => void }) 
           </button>
         </div>
 
-        {/* Abstract — always shown so the reader knows what the paper covers before viewing */}
+        {/* Abstract, always shown so the reader knows what the paper covers before viewing */}
         <div style={{ padding: "1.5rem 1.5rem 0", flexShrink: 0 }}>
           <p style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.55rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(240,237,232,0.4)", marginBottom: "0.6rem" }}>
             Abstract
@@ -1291,7 +1291,7 @@ function CredCard({ c, i, vis, size = "sm" }: { c: Cred; i: number; vis: boolean
 
 function Accreditations() {
   const { ref, vis } = useReveal();
-  // Two rows of four — the two degree-granting institutions lead each row, rest follow by tier.
+  // Two rows of four, the two degree-granting institutions lead each row, rest follow by tier.
   const row1 = [CREDENTIALS[0], CREDENTIALS[1], CREDENTIALS[3], CREDENTIALS[2]]; // ALU, Nazarene, Oxford, KSL
   const row2 = [CREDENTIALS[4], CREDENTIALS[5], CREDENTIALS[6], CREDENTIALS[7]]; // CMU, Cisco, HKUST, Qualys
   return (
@@ -1345,7 +1345,7 @@ function TechDevSection() {
             Need the product actually built, not just reviewed?
           </h2>
           <p style={{ ...BODY, fontSize: "0.88rem" }}>
-            Decra also builds — websites and product MVPs, from brand fundamentals through a shipped build. A short discovery conversation scopes exactly what you need, for a quick pricing quote.
+            Decra also builds, websites and product MVPs, from brand fundamentals through a shipped build. A short discovery conversation scopes exactly what you need, for a quick pricing quote.
           </p>
         </div>
 
@@ -1378,7 +1378,8 @@ export default function Home() {
       <About />
       <Services />
       <ResearchSection />
-      <TechDevSection />
+      {/* Tech Development section temporarily hidden, TechDevSection component preserved below, just not rendered.
+      <TechDevSection /> */}
       <Accreditations />
       <The1000 />
       <WorkWithDecra />

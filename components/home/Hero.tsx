@@ -20,7 +20,7 @@ export function Hero({ intent }: { intent: Intent }) {
       overflow: "hidden",
     }}>
 
-      {/* Photo — nearly full viewport height */}
+      {/* Photo, nearly full viewport height */}
       <div style={{
         width: "clamp(240px, 32vw, 420px)",
         aspectRatio: "4/5",
@@ -35,7 +35,7 @@ export function Hero({ intent }: { intent: Intent }) {
           style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top", display: "block" }} />
       </div>
 
-      {/* Identity — minimal, centred */}
+      {/* Identity, minimal, centred */}
       <div style={{
         textAlign: "center",
         opacity: vis ? 1 : 0,

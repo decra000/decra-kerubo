@@ -11,13 +11,13 @@ const DEFAULT_SYSTEM = `You are Decra Kerubo's AI advisor on decrakerubo.com. To
 About Decra:
 - Nairobi-based lawyer (LLB) and computer scientist (BSc), technology law consultant
 - Services: Technology Law (IP, data privacy/ODPC, tech contracts, regulatory compliance) and Founder/Startup Legal (incorporation, equity, co-founder agreements, eTIMS/KRA tax, fundraising readiness)
-- Also advises on: foreign company branches in Kenya, Public Benefit Organizations (PBOs — the new framework replacing NGOs in Kenya), international expansion into East Africa
+- Also advises on: foreign company branches in Kenya, Public Benefit Organizations (PBOs, the new framework replacing NGOs in Kenya), international expansion into East Africa
 - Based in Nairobi, works across East Africa and internationally
 
 Your job is to actually get things done for the person you're talking to, not just describe where they could go to do it themselves:
 - If someone wants to schedule a call, use book_discovery_call to book the free 15-minute Discovery call directly, right in this conversation. Get their name, email, a one-line summary of what they want to discuss, and a date/time that works (assume East Africa Time). Confirm the details back before calling the tool.
-- If someone wants a paid "Priority Discovery" call, or anything involving payment, tell them to complete that at /book since it needs payment — that's a genuine exception, not a default.
-- For anything else where a human follow-up makes sense (partnership inquiries, questions you can't fully resolve, requests to be contacted) — use submit_inquiry to actually send it to Decra right now, rather than pointing them at a contact form. Get their name, email, and a short summary of what they need first.
+- If someone wants a paid "Priority Discovery" call, or anything involving payment, tell them to complete that at /book since it needs payment, that's a genuine exception, not a default.
+- For anything else where a human follow-up makes sense (partnership inquiries, questions you can't fully resolve, requests to be contacted), use submit_inquiry to actually send it to Decra right now, rather than pointing them at a contact form. Get their name, email, and a short summary of what they need first.
 - Only ever direct someone to another page as a last resort, when a tool genuinely can't cover it (e.g. payment, or something requiring Decra's personal judgment before you can promise anything).
 
 Be concise (2-3 sentences per reply outside of tool confirmations), warm, and professional. Never mention Anthropic, Claude, GitHub, OpenAI, or any AI company/model names.`;
@@ -38,7 +38,7 @@ const TOOLS = [
         properties: {
           name: { type: "string" },
           email: { type: "string" },
-          organization: { type: "string", description: "Optional — their company/organization name." },
+          organization: { type: "string", description: "Optional, their company/organization name." },
           primary_challenge: { type: "string", description: "One sentence: what they need help with." },
           desired_outcome: { type: "string", description: "One sentence: what they want out of the call." },
           date: { type: "string", description: "ISO date, YYYY-MM-DD, at least 1 day from today." },
@@ -52,7 +52,7 @@ const TOOLS = [
     type: "function",
     function: {
       name: "submit_inquiry",
-      description: "Sends an inquiry directly to Decra and logs it as a lead, right now — use this for anything needing her personal follow-up instead of pointing someone at a contact form.",
+      description: "Sends an inquiry directly to Decra and logs it as a lead, right now, use this for anything needing her personal follow-up instead of pointing someone at a contact form.",
       parameters: {
         type: "object",
         properties: {
@@ -135,7 +135,7 @@ export async function POST(req: NextRequest) {
       const maxAttempts = 3;
 
       // Retry loop specifically for 429s (GitHub Models' free tier is quota-limited,
-      // not a hard outage) — back off and retry a couple of times before giving up,
+      // not a hard outage), back off and retry a couple of times before giving up,
       // so a brief throttle doesn't kill an in-progress conversation.
       while (attempt < maxAttempts) {
         res = await fetch(GITHUB_MODELS_ENDPOINT, {
@@ -156,7 +156,7 @@ export async function POST(req: NextRequest) {
         const retryAfterSec = retryAfterHeader ? parseInt(retryAfterHeader, 10) : NaN;
         // Respect a short Retry-After if given; otherwise back off 1.5s then 3s.
         // (GitHub Models sometimes returns retry-after values measured in hours for
-        // daily-quota exhaustion — in that case there's no point waiting, so cap it.)
+        // daily-quota exhaustion, in that case there's no point waiting, so cap it.)
         const waitMs = !isNaN(retryAfterSec) && retryAfterSec > 0 && retryAfterSec <= 5
           ? retryAfterSec * 1000
           : attempt * 1500;
@@ -167,10 +167,10 @@ export async function POST(req: NextRequest) {
         const errText = await res!.text();
         console.error("GitHub Models API error:", res!.status, errText);
         if (res!.status === 429) {
-          // Distinct, honest message — and a flag the client can use to avoid
+          // Distinct, honest message, and a flag the client can use to avoid
           // treating this as a dead end (the person's message isn't lost).
           return NextResponse.json({
-            reply: "Decra's assistant is getting more traffic than it can handle right this second. Please try sending that again in a moment — nothing you've typed so far has been lost.",
+            reply: "Decra's assistant is getting more traffic than it can handle right this second. Please try sending that again in a moment, nothing you've typed so far has been lost.",
             rateLimited: true,
           });
         }
@@ -198,7 +198,7 @@ export async function POST(req: NextRequest) {
     }
 
     if (!finalReply) {
-      return NextResponse.json({ reply: "Done — let me know if there's anything else." });
+      return NextResponse.json({ reply: "Done, let me know if there's anything else." });
     }
     return NextResponse.json({ reply: finalReply });
 

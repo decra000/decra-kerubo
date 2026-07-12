@@ -11,11 +11,11 @@ type HistoryRow = { email: string; company: string | null; subject: string | nul
 const DEFAULT_SUBJECT = "Product counsel for {{company}}";
 const DEFAULT_BODY = `Hi {{contact}},
 
-I'm Decra Kerubo, a technology lawyer working with founders and product teams as embedded product counsel — the legal partner who sits close enough to the roadmap to catch issues before they become expensive ones.
+I'm Decra Kerubo, a technology lawyer working with founders and product teams as embedded product counsel, the legal partner who sits close enough to the roadmap to catch issues before they become expensive ones.
 
 I came across {{company}} and thought there could be a fit for ongoing or project-based counsel: terms & privacy, data protection, commercial contracts, IP, and the day-to-day legal calls that come with shipping product.
 
-Open to a short call if it's useful — happy to work around your schedule.
+Open to a short call if it's useful, happy to work around your schedule.
 
 Best,
 Decra`;
@@ -150,7 +150,7 @@ export default function BroadcastPage() {
       }
       setResults([...allResults]);
       setProgress(Math.min(i + BATCH_SIZE, recipients.length));
-      // A brief pause between batches — easier on Gmail's sending limits than firing everything at once.
+      // A brief pause between batches, easier on Gmail's sending limits than firing everything at once.
       if (i + BATCH_SIZE < recipients.length) await new Promise(r => setTimeout(r, 1200));
     }
     setSending(false);
@@ -189,7 +189,7 @@ export default function BroadcastPage() {
       <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem", background: "var(--c-bg)" }}>
         <div className="card" style={{ maxWidth: "22rem", width: "100%", textAlign: "center" }}>
           <Lock size={22} style={{ color: "var(--c-ink-muted)", marginBottom: "1rem" }} />
-          <p style={{ fontFamily: "var(--font-serif)", fontSize: "1.15rem", color: "var(--c-ink)", marginBottom: "1.5rem" }}>Private — Broadcast Tool</p>
+          <p style={{ fontFamily: "var(--font-serif)", fontSize: "1.15rem", color: "var(--c-ink)", marginBottom: "1.5rem" }}>Private, Broadcast Tool</p>
           <input
             type="password"
             className="field"
@@ -216,7 +216,7 @@ export default function BroadcastPage() {
     <div style={{ minHeight: "100vh", background: "var(--c-bg)", padding: "7rem var(--space-page-x) 5rem" }}>
       <div style={{ maxWidth: "46rem", margin: "0 auto" }}>
         <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "1rem", marginBottom: "0.5rem" }}>
-          <p style={labelStyle}>Private — do not share this URL</p>
+          <p style={labelStyle}>Private, do not share this URL</p>
           <button
             onClick={toggleHistory}
             style={{
@@ -230,13 +230,13 @@ export default function BroadcastPage() {
           </button>
         </div>
         <h1 style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(1.6rem,3vw,2.1rem)", color: "var(--c-ink)", marginBottom: "0.5rem" }}>
-          Product Counsel — Outreach Broadcast
+          Product Counsel, Outreach Broadcast
         </h1>
         <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.85rem", color: "var(--c-ink-muted)", marginBottom: "2.5rem", lineHeight: 1.6 }}>
-          Upload a CSV of companies you&apos;re considering, write one email, and send a personalized copy to each — {"{{company}}"}, {"{{contact}}"} and {"{{email}}"} get swapped in automatically. Sent in small batches to stay within Gmail&apos;s sending limits.
+          Upload a CSV of companies you&apos;re considering, write one email, and send a personalized copy to each, {"{{company}}"}, {"{{contact}}"} and {"{{email}}"} get swapped in automatically. Sent in small batches to stay within Gmail&apos;s sending limits.
         </p>
 
-        {/* History dashboard — everyone this tool has ever emailed, so you can see at a glance who's already been contacted */}
+        {/* History dashboard, everyone this tool has ever emailed, so you can see at a glance who's already been contacted */}
         {showHistory && (
           <div className="card" style={{ marginBottom: "1.5rem" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
@@ -285,7 +285,7 @@ export default function BroadcastPage() {
                     {filteredHistory.map((r, i) => (
                       <tr key={i} style={{ borderTop: "1px solid var(--c-border)" }}>
                         <td style={{ padding: "0.5rem 0.75rem", color: "var(--c-ink-muted)", whiteSpace: "nowrap" }}>{new Date(r.created_at).toLocaleDateString()}</td>
-                        <td style={{ padding: "0.5rem 0.75rem", color: "var(--c-ink)" }}>{r.company || "—"}</td>
+                        <td style={{ padding: "0.5rem 0.75rem", color: "var(--c-ink)" }}>{r.company || "N/A"}</td>
                         <td style={{ padding: "0.5rem 0.75rem", color: "var(--c-ink)" }}>{r.email}</td>
                         <td style={{ padding: "0.5rem 0.75rem" }}>
                           <span style={{
@@ -302,7 +302,7 @@ export default function BroadcastPage() {
           </div>
         )}
 
-        {/* Step 1 — Upload */}
+        {/* Step 1, Upload */}
         <div className="card" style={{ marginBottom: "1.5rem" }}>
           <p style={labelStyle}>1. Upload spreadsheet (CSV)</p>
           <label style={{
@@ -311,7 +311,7 @@ export default function BroadcastPage() {
             cursor: "pointer", fontSize: "0.8rem", color: "var(--c-ink-muted)",
           }}>
             <Upload size={16} />
-            {fileName ? `${fileName} — ${recipients.length} valid recipient${recipients.length === 1 ? "" : "s"}` : "Click to choose a .csv file"}
+            {fileName ? `${fileName}, ${recipients.length} valid recipient${recipients.length === 1 ? "" : "s"}` : "Click to choose a .csv file"}
             <input type="file" accept=".csv,text/csv" style={{ display: "none" }}
               onChange={e => e.target.files?.[0] && handleFile(e.target.files[0])} />
           </label>
@@ -333,8 +333,8 @@ export default function BroadcastPage() {
                 <tbody>
                   {recipients.map((r, i) => (
                     <tr key={i} style={{ borderTop: "1px solid var(--c-border)" }}>
-                      <td style={{ padding: "0.5rem 0.75rem", color: "var(--c-ink)" }}>{r.company || "—"}</td>
-                      <td style={{ padding: "0.5rem 0.75rem", color: "var(--c-ink)" }}>{r.contact || "—"}</td>
+                      <td style={{ padding: "0.5rem 0.75rem", color: "var(--c-ink)" }}>{r.company || "N/A"}</td>
+                      <td style={{ padding: "0.5rem 0.75rem", color: "var(--c-ink)" }}>{r.contact || "N/A"}</td>
                       <td style={{ padding: "0.5rem 0.75rem", color: "var(--c-ink)" }}>{r.email}</td>
                       <td style={{ padding: "0.5rem 0.75rem", textAlign: "right" }}>
                         <button onClick={() => removeRow(i)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--c-ink-muted)" }} aria-label="Remove">
@@ -349,7 +349,7 @@ export default function BroadcastPage() {
           )}
         </div>
 
-        {/* Step 2 — Compose */}
+        {/* Step 2, Compose */}
         <div className="card" style={{ marginBottom: "1.5rem" }}>
           <p style={labelStyle}>2. Write the email</p>
           <label style={{ ...labelStyle, marginTop: 0 }}>Subject</label>
@@ -360,18 +360,18 @@ export default function BroadcastPage() {
 
           {preview && (
             <div style={{ marginTop: "1.25rem", padding: "1rem", background: "var(--c-surface)", borderRadius: "8px", border: "1px solid var(--c-border)" }}>
-              <p style={{ ...labelStyle, marginBottom: "0.75rem" }}>Preview — {preview.company || preview.email}</p>
+              <p style={{ ...labelStyle, marginBottom: "0.75rem" }}>Preview, {preview.company || preview.email}</p>
               <p style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--c-ink)", marginBottom: "0.5rem" }}>{previewSubject}</p>
               <p style={{ fontSize: "0.8rem", color: "var(--c-ink-muted)", whiteSpace: "pre-wrap", lineHeight: 1.6 }}>{previewBody}</p>
             </div>
           )}
         </div>
 
-        {/* Step 3 — Send */}
+        {/* Step 3, Send */}
         <div className="card">
           <p style={labelStyle}>3. Send</p>
           <p style={{ fontSize: "0.78rem", color: "var(--c-ink-muted)", marginBottom: "1rem", lineHeight: 1.6 }}>
-            Sends in batches of 5, with a short pause in between. For large lists, consider spreading sends across a few days — Gmail may flag an account that sends too many near-identical emails at once.
+            Sends in batches of 5, with a short pause in between. For large lists, consider spreading sends across a few days, Gmail may flag an account that sends too many near-identical emails at once.
           </p>
 
           <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "0.78rem", color: "var(--c-ink)", marginBottom: "1.25rem", cursor: "pointer" }}>
@@ -400,7 +400,7 @@ export default function BroadcastPage() {
                     color: r.ok ? "var(--c-ink)" : r.skipped ? "var(--c-ink-muted)" : "#B3524A",
                   }}>
                     {r.ok ? <CheckCircle2 size={13} /> : r.skipped ? <MinusCircle size={13} /> : <XCircle size={13} />}
-                    {r.company || r.email} {!r.ok && `— ${r.error}`}
+                    {r.company || r.email} {!r.ok && `: ${r.error}`}
                   </div>
                 ))}
               </div>

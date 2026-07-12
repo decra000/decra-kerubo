@@ -8,7 +8,7 @@ type Msg = { role: "user" | "assistant"; text: string };
 const STARTERS = [
   "I need help with startup incorporation",
   "I have an IP exposure issue",
-  "I want to fundraise — where do I start?",
+  "I want to fundraise, where do I start?",
   "I need a data privacy review",
 ];
 
@@ -45,7 +45,7 @@ export function BookingCTA() {
       const data = await res.json();
       setMsgs(prev => [...prev, { role: "assistant", text: data.reply || "Book a call and Decra will be in touch." }]);
     } catch {
-      setMsgs(prev => [...prev, { role: "assistant", text: "Connection issue — book a call directly." }]);
+      setMsgs(prev => [...prev, { role: "assistant", text: "Connection issue, book a call directly." }]);
     } finally {
       setLoading(false);
     }
@@ -77,7 +77,7 @@ export function BookingCTA() {
               fontSize: "0.85rem", color: "var(--c-ink-muted)", lineHeight: 1.85,
               maxWidth: "20rem", marginBottom: "2.5rem",
             }}>
-              Ask the AI — it knows Decra's practice areas and can guide you to the right track.
+              Ask the AI, it knows Decra's practice areas and can guide you to the right track.
             </p>
             <Link href="/book" style={{
               display: "inline-flex", alignItems: "center", gap: "0.5rem",

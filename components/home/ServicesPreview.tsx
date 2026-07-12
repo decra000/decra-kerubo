@@ -23,7 +23,7 @@ const tracks = [
 ];
 
 const faqs = [
-  { q: "What's the difference between the two tracks?", a: "Technology Law covers your company's legal exposure — IP, contracts, data, regulation. Founder Legal covers you personally — equity, structure, tax, governance. Some need both." },
+  { q: "What's the difference between the two tracks?", a: "Technology Law covers your company's legal exposure, IP, contracts, data, regulation. Founder Legal covers you personally, equity, structure, tax, governance. Some need both." },
   { q: "Do you work outside Kenya?", a: "Yes. Based in Nairobi, working across East Africa and internationally. Most sessions are remote." },
   { q: "What does an engagement look like?", a: "Discovery call, then a scoped piece of work. Some clients engage once; others retain ongoing support." },
 ];
@@ -73,7 +73,7 @@ export function ServicesPreview({ intent }: { intent?: string | null }) {
           }}>Two tracks.<br />One question.</h2>
         </div>
 
-        {/* Track rows — accordion, text only */}
+        {/* Track rows, accordion, text only */}
         <div style={{ borderTop: "1px solid var(--c-border)" }}>
           {tracks.map((t, i) => {
             const open = active === i;

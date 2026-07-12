@@ -15,9 +15,9 @@ const tracks = [
     label: "Tech Policy & Startup Law",
     audience: "For companies and products",
     tagline: "When your product, data, or technology faces legal exposure.",
-    distinction: "This track is about your company's legal surface — the contracts you sign, the data you collect, the IP you build, and the regulations you must navigate. It's about protecting what you've built from the outside in.",
-    problem: "Technology moves fast. Law moves slow. The gap between them is where most startups get exposed — through poor IP protection, weak contracts, or data privacy violations they didn't know they were committing. By the time it surfaces, it's expensive.",
-    solution: "Legal advisory specifically for technology companies and startups — helping you map and reduce your legal exposure before it finds you. This includes tech policy research where your sector needs it.",
+    distinction: "This track is about your company's legal surface, the contracts you sign, the data you collect, the IP you build, and the regulations you must navigate. It's about protecting what you've built from the outside in.",
+    problem: "Technology moves fast. Law moves slow. The gap between them is where most startups get exposed, through poor IP protection, weak contracts, or data privacy violations they didn't know they were committing. By the time it surfaces, it's expensive.",
+    solution: "Legal advisory specifically for technology companies and startups, helping you map and reduce your legal exposure before it finds you. This includes tech policy research where your sector needs it.",
     process: [
       "Legal audit of current structure and exposure",
       "IP strategy and protection planning",
@@ -36,10 +36,10 @@ const tracks = [
     number: "02",
     label: "Founder Legal",
     audience: "For founders and entrepreneurs",
-    tagline: "When the legal decisions are about you — not just your company.",
-    distinction: "This track is about the founder as a person — how you structure your ownership, protect your equity, navigate tax decisions, and set up governance that doesn't come back to haunt you. It's inside-out: your rights, your risks, your future.",
-    problem: "Most founders treat legal structure as paperwork. Wrong company type, informal equity arrangements, no vesting, unclear tax positions — these aren't administrative oversights. They determine how much of what you build you actually keep.",
-    solution: "Helping founders make sound legal decisions at the right time — from the first day of incorporation through to fundraising readiness. The focus is always on what this decision means for you, not just the entity.",
+    tagline: "When the legal decisions are about you, not just your company.",
+    distinction: "This track is about the founder as a person, how you structure your ownership, protect your equity, navigate tax decisions, and set up governance that doesn't come back to haunt you. It's inside-out: your rights, your risks, your future.",
+    problem: "Most founders treat legal structure as paperwork. Wrong company type, informal equity arrangements, no vesting, unclear tax positions, these aren't administrative oversights. They determine how much of what you build you actually keep.",
+    solution: "Helping founders make sound legal decisions at the right time, from the first day of incorporation through to fundraising readiness. The focus is always on what this decision means for you, not just the entity.",
     process: [
       "Founder situation assessment",
       "Structure and incorporation advisory",
@@ -56,11 +56,11 @@ const tracks = [
 ];
 
 const faqs = [
-  { q: "What's the difference between the two tracks?", a: "Tech Policy & Startup Law protects your company and product — IP, contracts, data, regulation. Founder Legal protects you as a person — your equity, structure, tax position, and governance rights. Some clients need both; many start with one." },
+  { q: "What's the difference between the two tracks?", a: "Tech Policy & Startup Law protects your company and product, IP, contracts, data, regulation. Founder Legal protects you as a person, your equity, structure, tax position, and governance rights. Some clients need both; many start with one." },
   { q: "Do you work with clients outside Kenya?", a: "Yes. Based in Nairobi, I work across East Africa and internationally. Most sessions are via Google Meet." },
   { q: "What does a typical engagement look like?", a: "It starts with a discovery call, followed by a scoped engagement based on your specific needs. Some clients engage for a single strategy session; others retain ongoing support." },
   { q: "Are you a practising advocate?", a: "I hold a Bachelor of Laws and advise at a strategic level. For formal legal representation or filing, I refer to practising advocates within my network." },
-  { q: "I'm not sure which track I need.", a: "Book a discovery call. In 15 minutes we'll identify the right starting point — no pressure, no obligation." },
+  { q: "I'm not sure which track I need.", a: "Book a discovery call. In 15 minutes we'll identify the right starting point, no pressure, no obligation." },
 ];
 
 export default function ServicesPage() {
@@ -79,7 +79,7 @@ export default function ServicesPage() {
           </div>
           <div>
             <p className="t-body" style={{ marginBottom: "1.5rem" }}>
-              Most legal problems for founders and tech organizations fall into one of two categories — exposure at the company level, or vulnerability at the founder level. The advisory is structured accordingly.
+              Most legal problems for founders and tech organizations fall into one of two categories, exposure at the company level, or vulnerability at the founder level. The advisory is structured accordingly.
             </p>
           </div>
         </div>

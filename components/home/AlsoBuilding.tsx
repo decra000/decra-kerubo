@@ -37,7 +37,7 @@ export function AlsoBuilding() {
             fontSize: "0.875rem", color: "var(--c-ink-muted)",
             lineHeight: 1.85, maxWidth: "22rem", marginBottom: "2rem",
           }}>
-            AI engineering and software development for organisations that need real technical depth — not just advice.
+            AI engineering and software development for organisations that need real technical depth, not just advice.
           </p>
           <a href="https://entrorasystems.com" target="_blank" rel="noopener noreferrer" style={{
             display: "inline-flex", alignItems: "center", gap: "0.3rem",
@@ -53,7 +53,7 @@ export function AlsoBuilding() {
         <div style={{ paddingTop: "3.5rem" }}>
           {[
             ["AI Document Systems", "Custom pipelines for document classification, extraction, and review."],
-            ["Legal Tech Development", "Software built for legal workflows — by someone who understands both sides."],
+            ["Legal Tech Development", "Software built for legal workflows, by someone who understands both sides."],
             ["AI Adoption Advisory", "Scoping, readiness, and implementation without enterprise budgets."],
           ].map(([title, body], i) => (
             <div key={title} style={{

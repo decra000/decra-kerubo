@@ -34,7 +34,7 @@ export default function AdminPage() {
     <div className="bg-[#FAF8F3] min-h-screen pt-32 pb-24 px-6">
       <div className="max-w-7xl mx-auto">
         <h1 className="font-display text-4xl font-semibold text-[#0F4D3F] mb-2">Admin Dashboard</h1>
-        <p className="text-sm text-[#8EA89B] mb-12">Private — do not share this URL.</p>
+        <p className="text-sm text-[#8EA89B] mb-12">Private, do not share this URL.</p>
 
         {/* Metrics */}
         <div className="grid md:grid-cols-3 gap-6 mb-12">
@@ -125,7 +125,7 @@ export default function AdminPage() {
                   <tr key={l.id} className="border-b border-[#8EA89B]/10 hover:bg-[#FAF8F3] transition-colors">
                     <td className="px-6 py-4 text-[#222] font-medium">{l.name}</td>
                     <td className="px-6 py-4 text-[#666]">{l.email}</td>
-                    <td className="px-6 py-4 text-[#666]">{l.organization || "—"}</td>
+                    <td className="px-6 py-4 text-[#666]">{l.organization || "N/A"}</td>
                     <td className="px-6 py-4 text-[#666]">{l.source}</td>
                     <td className="px-6 py-4 text-[#666]">{new Date(l.created_at).toLocaleDateString()}</td>
                   </tr>
