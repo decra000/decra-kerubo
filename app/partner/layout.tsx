@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Partner & Collaborate",
   description:
-    "Partner with Decra Kerubo — technology lawyer and product counsel — on tech policy research, product counsel, and founder advisory across Kenya and Africa.",
+    "Partner with Decra Kerubo — technology lawyer and product counsel — on tech policy research, product strategy & governance, and technical due diligence across Kenya and Africa.",
   keywords: [
     "technology lawyer Kenya partnership",
     "product counsel collaboration Africa",
