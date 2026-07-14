@@ -208,7 +208,7 @@ function About() {
           lineHeight: 1.6,
           ...reveal(vis, { dir: "scale", distance: 10 }),
         }}>
-          I help developers, techpreneurs, investors, regulators, and technology procurers develop, evaluate, commercialize, and adopt safe, compliant, and scalable technology products.
+          Product Counsel, providing integrated technical and legal support throughout the technology product lifecycle. I help developers, founders, investors, regulators, and technology procurers design, evaluate, commercialize, govern, and adopt safe, compliant, and scalable technology products.
         </p>
       </div>
     </section>
@@ -218,25 +218,53 @@ function About() {
 /* ── Section 2: Services ── */
 const SERVICES = [
   {
-    id: "regulatory",
-    label: "Technology & Regulatory Law",
-    body: "The legal architecture technology companies operate inside, Kenyan and pan-African regulation, translated into clear positions.",
-    items: ["Data protection & ODPC compliance", "Data controller & processor licensing", "Cybersecurity law", "Digital commerce & platform regulation", "Licensing & policy engagement"],
-    opening: "Hi, I need help with technology & regulatory law, data protection, data controller/processor licensing, cybersecurity, or digital commerce compliance.",
+    id: "product-strategy-advisory",
+    label: "Product Strategy & Advisory",
+    body: "Developing technology products with integrated technical and legal guidance.",
+    items: ["Product strategy", "Product architecture reviews", "Feature & roadmap advisory", "Go-to-market readiness", "Startup incorporation", "Product lifecycle planning"],
+    opening: "Hi, I need help with product strategy, architecture reviews, feature & roadmap advisory, go-to-market readiness, or startup incorporation.",
   },
   {
-    id: "product-counsel",
-    label: "Product Counsel",
-    body: "Embedded legal partnership with your product and engineering team, in the room as things get built, not called in after they ship.",
-    items: ["Pre-launch legal review", "Privacy-by-design & data flow review", "Intellectual property protection & licensing", "Terms of service & policy drafting", "Ongoing embedded advisory"],
+    id: "product-governance",
+    label: "Product Governance & Standards",
+    body: "Establishing governance frameworks for responsible, compliant, and scalable products.",
+    items: ["AI governance", "Data governance", "Digital governance", "Regulatory compliance", "Governance frameworks", "Internal policies", "ISO readiness and implementation"],
+    opening: "Hi, I need help with product governance, AI or data governance, regulatory compliance, governance frameworks, internal policies, or ISO readiness.",
+  },
+  {
+    id: "product-safety-privacy",
+    label: "Product Safety & Privacy",
+    body: "Embedding safety, trust, and privacy into products from the outset.",
+    items: ["Privacy by Design", "Safety by Design", "Data protection", "Responsible AI", "Security governance", "Product design reviews"],
     opening: PRODUCT_COUNSEL_GROUP.opening,
   },
   {
-    id: "founder-advisory",
-    label: "Founder & Startup Advisory",
-    body: "Practical legal guidance for founders and builders making fast decisions with real, lasting consequences.",
-    items: ["Company incorporation & structure", "Founder & co-founder agreements", "Equity, vesting & cap table", "Tax structuring (eTIMS, VAT, PAYE)", "Fundraising legal readiness", "Foreign branches & PBO registration"],
-    opening: "Hi, I'm a founder looking for legal advisory, incorporation, equity, tax structuring, fundraising readiness, or setting up a foreign branch or PBO.",
+    id: "risk-assurance",
+    label: "Risk & Assurance",
+    body: "Evaluating products for technical, legal, and regulatory resilience.",
+    items: ["Product stress testing", "Product audits", "Privacy impact assessments", "AI impact assessments", "Risk assessments", "Launch readiness"],
+    opening: "Hi, I need help with risk & assurance, product stress testing, audits, privacy or AI impact assessments, risk assessments, or launch readiness.",
+  },
+  {
+    id: "intellectual-property",
+    label: "Intellectual Property",
+    body: "Protecting innovation, software, and digital assets.",
+    items: ["IP strategy", "Software licensing", "Open-source governance", "Open-source compliance", "Technology ownership"],
+    opening: "Hi, I need help with intellectual property, IP strategy, software licensing, open-source governance or compliance, or technology ownership.",
+  },
+  {
+    id: "technology-transactions",
+    label: "Technology Transactions",
+    body: "Structuring agreements that enable technology development and commercialization.",
+    items: ["SaaS agreements", "Platform agreements", "Technology procurement", "Software licensing", "Vendor agreements", "Commercial partnerships"],
+    opening: "Hi, I need help with technology transactions, SaaS or platform agreements, technology procurement, vendor agreements, or commercial partnerships.",
+  },
+  {
+    id: "technical-due-diligence",
+    label: "Technical Due Diligence",
+    body: "Assessing technology products for investment, acquisition, and strategic growth.",
+    items: ["Technology due diligence", "Product due diligence", "AI due diligence", "IP due diligence", "Technology audits", "Investment readiness"],
+    opening: "Hi, I need help with technical due diligence, technology or product due diligence, AI or IP due diligence, technology audits, or investment readiness.",
   },
 ];
 
@@ -252,8 +280,8 @@ function Services() {
             <div key={s.id} style={{
               padding: "2.25rem 2rem",
               borderTop: "1px solid var(--c-border)",
-              borderLeft: i > 0 ? "1px solid var(--c-border)" : "none",
-              ...reveal(vis, { delay: 0.08 * i, dir: i % 2 === 0 ? "left" : "right", distance: 22 }),
+              borderLeft: i % 3 !== 0 ? "1px solid var(--c-border)" : "none",
+              ...reveal(vis, { delay: 0.06 * i, dir: i % 2 === 0 ? "left" : "right", distance: 22 }),
             }}>
               <h3 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(1.05rem,1.6vw,1.3rem)", color: "var(--c-ink)", lineHeight: 1.25, marginBottom: "1rem" }}>{s.label}</h3>
               <p style={{ ...BODY, fontSize: "0.84rem", marginBottom: "1.5rem" }}>{s.body}</p>
@@ -265,7 +293,7 @@ function Services() {
                   </li>
                 ))}
               </ul>
-              {s.id === "founder-advisory" && (
+              {s.id === "product-strategy-advisory" && (
                 <button
                   onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: PACK_GROUP }))}
                   style={{
@@ -283,7 +311,7 @@ function Services() {
                   See the full Startup Advisory Pack →
                 </button>
               )}
-              {s.id === "product-counsel" && (
+              {s.id === "risk-assurance" && (
                 <button
                   onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: POST_LAUNCH_REVIEW_GROUP }))}
                   style={{

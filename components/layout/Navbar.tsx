@@ -90,6 +90,11 @@ export function Navbar() {
               onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink-mid)"}>
               {theme === "dark" ? <Sun size={13} strokeWidth={1.5} /> : <Moon size={13} strokeWidth={1.5} />}
             </button>
+            <Link href="/engineering" style={lk}
+              onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"}
+              onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink-mid)"}>
+              Engineering
+            </Link>
           </nav>
 
           <div className="nav-mob-btn" style={{ display: "none", alignItems: "center", gap: "1rem" }}>
@@ -116,6 +121,11 @@ export function Navbar() {
               padding: "0.7rem 1rem", borderRadius: "2px", textAlign: "center",
             }}>
               Book Appointment
+            </Link>
+            <Link href="/engineering" onClick={() => setMob(false)} style={{ ...lk, fontSize: "0.75rem" }}
+              onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"}
+              onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink-mid)"}>
+              Engineering
             </Link>
           </div>
         )}
