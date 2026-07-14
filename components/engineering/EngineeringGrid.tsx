@@ -1,7 +1,10 @@
 "use client";
 
 import { useState } from "react";
+<<<<<<< HEAD
 import { BookOpen } from "lucide-react";
+=======
+>>>>>>> 314f6cef77d17054e18fd6bb4a724a2a22a82282
 
 export type EngineeringProject = {
   title: string;
@@ -9,7 +12,10 @@ export type EngineeringProject = {
   description: string;
   image: string;
   category: string;
+<<<<<<< HEAD
   research?: string;
+=======
+>>>>>>> 314f6cef77d17054e18fd6bb4a724a2a22a82282
 };
 
 const categories = [
@@ -85,6 +91,7 @@ export function EngineeringGrid({ projects }: { projects: EngineeringProject[] }
               <p style={{ fontSize: "0.775rem", color: "var(--c-ink-muted)", lineHeight: 1.7 }}>
                 {p.description}
               </p>
+<<<<<<< HEAD
               {p.research && (
                 <div style={{ display: "flex", alignItems: "flex-start", gap: "0.4rem", marginTop: "0.9rem", paddingTop: "0.9rem", borderTop: "1px solid var(--c-border)" }}>
                   <BookOpen size={12} strokeWidth={1.5} style={{ color: "var(--c-forest)", flexShrink: 0, marginTop: "0.15rem" }} />
@@ -93,6 +100,8 @@ export function EngineeringGrid({ projects }: { projects: EngineeringProject[] }
                   </p>
                 </div>
               )}
+=======
+>>>>>>> 314f6cef77d17054e18fd6bb4a724a2a22a82282
             </div>
           </article>
         ))}

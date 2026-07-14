@@ -8,6 +8,7 @@ const links = [
   { href: "/#about",       label: "About" },
   { href: "/#services",   label: "Services" },
   { href: "/#research",   label: "Research" },
+  { href: "/engineering", label: "Engineering" },
   { href: "/#spotify",    label: "Spotify" },
   { href: "/#collaborate", label: "Collaborate" },
 ];

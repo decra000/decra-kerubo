@@ -23,7 +23,10 @@ const projects: EngineeringProject[] = [
     subtitle: "For Entrepreneurs",
     description: "A Chrome extension to track a user's inferences and estimate their carbon footprint and energy consumption.",
     image: "/engineering/chrome.png",
+<<<<<<< HEAD
     research: "Democratization and Decarbonization of AI Solutions",
+=======
+>>>>>>> 314f6cef77d17054e18fd6bb4a724a2a22a82282
   },
   {
     category: "ai",
@@ -31,7 +34,10 @@ const projects: EngineeringProject[] = [
     subtitle: "For Entrepreneurs",
     description: "A Chrome extension that assists users to flag harmful sites and analyze the safety of text.",
     image: "/engineering/pure.png",
+<<<<<<< HEAD
     research: "Harnessing Online Users' Safety Using AI",
+=======
+>>>>>>> 314f6cef77d17054e18fd6bb4a724a2a22a82282
   },
   {
     category: "ai",
@@ -83,6 +89,23 @@ const projects: EngineeringProject[] = [
   // Research & Writing
   {
     category: "research",
+<<<<<<< HEAD
+=======
+    title: "Democratization and Decarbonization of AI Solutions",
+    subtitle: "AI, Green-tech, Decarbonization",
+    description: "Addresses two crucial challenges: the failure of many AI solutions to reach their intended users due to poor accessibility, and the environmental toll of AI development. Advocates for greener AI and explores edge computing as a key solution.",
+    image: "/engineering/ai.png",
+  },
+  {
+    category: "research",
+    title: "Harnessing Online Users' Safety Using AI",
+    subtitle: "AI, NLP, Real-time Detection",
+    description: "Leverages AI to establish the effectiveness of current social media regulation measures and proposes real-time detection strategies, culminating in a Chrome extension for controlling information flow on social media.",
+    image: "/engineering/pure.png",
+  },
+  {
+    category: "research",
+>>>>>>> 314f6cef77d17054e18fd6bb4a724a2a22a82282
     title: "Analyzing Inefficiencies in Current Cross-Border Data Transfer Laws",
     subtitle: "Legal Frameworks, Data Protection",
     description: "Examines the legal framework governing cross-border data transfers, focusing on key regulations like the GDPR, and proposes recommendations for improving legal efficiencies.",
@@ -110,7 +133,11 @@ export default function EngineeringPage() {
           </div>
           <h1 className="t-display t-display-xl" style={{ marginBottom: "1.25rem" }}>Selected builds.</h1>
           <p className="t-body" style={{ maxWidth: "34rem" }}>
+<<<<<<< HEAD
             AI tools, apps, and websites built directly and in collaboration with teams, across industries, frameworks, and languages, several of them grown out of my own research.
+=======
+            AI tools, apps, websites, and applied research built along the way, the engineering side of the same practice.
+>>>>>>> 314f6cef77d17054e18fd6bb4a724a2a22a82282
           </p>
         </div>
       </section>
