@@ -12,6 +12,8 @@ const links = [
   { href: "/#collaborate", label: "Collaborate" },
 ];
 
+const engineeringLink = { href: "/engineering", label: "Engineering" };
+
 const lk: React.CSSProperties = {
   fontFamily: "var(--font-manjari)", fontWeight: 700,
   fontSize: "0.58rem", letterSpacing: "0.2em", textTransform: "uppercase",
@@ -90,6 +92,11 @@ export function Navbar() {
               onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink-mid)"}>
               {theme === "dark" ? <Sun size={13} strokeWidth={1.5} /> : <Moon size={13} strokeWidth={1.5} />}
             </button>
+            <Link href={engineeringLink.href} style={lk}
+              onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"}
+              onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink-mid)"}>
+              {engineeringLink.label}
+            </Link>
           </nav>
 
           <div className="nav-mob-btn" style={{ display: "none", alignItems: "center", gap: "1rem" }}>
@@ -111,6 +118,11 @@ export function Navbar() {
                 {l.label}
               </Link>
             ))}
+            <Link href={engineeringLink.href} onClick={() => setMob(false)} style={{ ...lk, fontSize: "0.75rem" }}
+              onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"}
+              onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink-mid)"}>
+              {engineeringLink.label}
+            </Link>
             <Link href="/book" onClick={() => setMob(false)} style={{
               ...lk, fontSize: "0.75rem", color: "var(--c-bg)", background: "var(--c-ink)",
               padding: "0.7rem 1rem", borderRadius: "2px", textAlign: "center",
