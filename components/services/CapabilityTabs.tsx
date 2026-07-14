@@ -9,6 +9,7 @@ export type Capability = {
   number: string;
   label: string;
   body: string;
+  detail: string;
   items: string[];
 };
 
@@ -69,9 +70,7 @@ export function CapabilityTabs({ capabilities }: { capabilities: Capability[] })
 
         {/* Supporting paragraph — the scope of the capability, in prose */}
         <p className="t-body" style={{ marginBottom: "2.5rem", maxWidth: "36rem" }}>
-          This includes {active.items.slice(0, -1).join(", ")}
-          {active.items.length > 1 ? ", and " : ""}
-          {active.items[active.items.length - 1]}.
+          {active.detail}
         </p>
 
         <Link href="/book" className="cap-tab-link">

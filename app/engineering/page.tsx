@@ -4,7 +4,7 @@ import { EngineeringGrid, type EngineeringProject } from "@/components/engineeri
 export const metadata: Metadata = {
   title: "Engineering",
   description:
-    "Selected engineering builds from Decra Kerubo, AI tools, apps, websites, and applied research at the intersection of technology and law.",
+    "Selected engineering builds from Decra Kerubo, AI tools, apps, websites, and applied research I have directly and collaboratively built with different languages and frameworks cross-industry.",
   alternates: { canonical: "https://decrakerubo.com/engineering" },
 };
 
@@ -122,7 +122,7 @@ export default function EngineeringPage() {
           </div>
           <h1 className="t-display t-display-xl" style={{ marginBottom: "1.25rem" }}>Selected builds.</h1>
           <p className="t-body" style={{ maxWidth: "34rem" }}>
-            AI tools, apps, websites, and applied research built along the way, the engineering side of the same practice.
+            AI tools, apps, websites, and applied research I have directly and collaboratively built with different languages and frameworks cross-industry.
           </p>
         </div>
       </section>

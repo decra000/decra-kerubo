@@ -13,6 +13,8 @@ const capabilities = [
     number: "01",
     label: "Product Strategy & Advisory",
     body: "Developing technology products with integrated technical and legal guidance.",
+    detail:
+      "This spans product strategy and architecture reviews, feature and roadmap advisory, go-to-market readiness, startup incorporation, and lifecycle planning, so decisions are sound from both a build and a business standpoint from day one.",
     items: [
       "Product strategy",
       "Product architecture reviews",
@@ -27,6 +29,8 @@ const capabilities = [
     number: "02",
     label: "Product Governance & Standards",
     body: "Establishing governance frameworks for responsible, compliant, and scalable products.",
+    detail:
+      "It covers AI governance, data and digital governance, and regulatory compliance, together with the internal policies and ISO readiness that keep a growing product accountable as it scales.",
     items: [
       "AI governance",
       "Data governance",
@@ -42,6 +46,8 @@ const capabilities = [
     number: "03",
     label: "Product Safety & Privacy",
     body: "Embedding safety, trust, and privacy into products from the outset.",
+    detail:
+      "It brings privacy by design and safety by design into the build process itself, from data protection and responsible AI practices through to security governance and structured product design reviews.",
     items: [
       "Privacy by Design",
       "Safety by Design",
@@ -56,6 +62,8 @@ const capabilities = [
     number: "04",
     label: "Risk & Assurance",
     body: "Evaluating products for technical, legal, and regulatory resilience.",
+    detail:
+      "It includes product stress testing and audits, privacy and AI impact assessments, and the risk assessments and launch readiness checks that catch exposure before it becomes a liability.",
     items: [
       "Product stress testing",
       "Product audits",
@@ -70,6 +78,8 @@ const capabilities = [
     number: "05",
     label: "Intellectual Property",
     body: "Protecting innovation, software, and digital assets.",
+    detail:
+      "It covers IP strategy, software licensing, and open-source governance and compliance, addressing the broader question of who owns what as a product and its underlying technology take shape.",
     items: [
       "IP strategy",
       "Software licensing",
@@ -83,6 +93,8 @@ const capabilities = [
     number: "06",
     label: "Technology Transactions",
     body: "Structuring agreements that enable technology development and commercialization.",
+    detail:
+      "It includes SaaS and platform agreements, technology procurement, software licensing, and the vendor and commercial partnership agreements that keep technology relationships clear and enforceable.",
     items: [
       "SaaS agreements",
       "Platform agreements",
@@ -97,6 +109,8 @@ const capabilities = [
     number: "07",
     label: "Technical Due Diligence",
     body: "Assessing technology products for investment, acquisition, and strategic growth.",
+    detail:
+      "It spans technology, product, AI, and IP due diligence, alongside technology audits and the investment readiness work that gives investors, acquirers, and partners confidence in what they're evaluating.",
     items: [
       "Technology due diligence",
       "Product due diligence",
