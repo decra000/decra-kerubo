@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
-import { CapabilityTabs } from "@/components/services/CapabilityTabs";
+import { CapabilityAccordion } from "@/components/services/CapabilityAccordion";
+
+
+
 
 export const metadata: Metadata = {
   title: "Services",
@@ -141,7 +144,11 @@ export default function ServicesPage() {
       {/* ── Capabilities ── */}
       <section className="page-x" style={{ paddingBottom: "var(--space-section)" }}>
         <div className="inner" style={{ borderTop: "1px solid var(--c-border)" }}>
+<<<<<<< HEAD
           <CapabilityTabs capabilities={capabilities} />
+=======
+          <CapabilityAccordion capabilities={capabilities} />
+>>>>>>> 1146865707a961d13d98a941ecb3a00edb2aaf08
         </div>
       </section>
 
