@@ -288,7 +288,7 @@ function Services() {
           }}
         >
           {/* Left, the index of services */}
-          <div className="svc-nav" style={{ display: "flex", flexDirection: "column", gap: "1.4rem" }}>
+          <div className="svc-nav" style={{ display: "flex", flexDirection: "column", gap: "1.1rem" }}>
             {SERVICES.map((item, i) => {
               const on = i === active;
               return (
@@ -300,14 +300,19 @@ function Services() {
                     textAlign: "left", display: "block",
                   }}
                 >
-                  <span style={{
-                    fontFamily: "var(--font-serif)", fontWeight: 400,
-                    fontSize: "clamp(1.35rem, 2.4vw, 2rem)", lineHeight: 1.15,
-                    color: on ? "var(--c-ink)" : "var(--c-ink-muted)",
-                    borderBottom: `1px solid ${on ? "var(--c-accent)" : "transparent"}`,
-                    paddingBottom: "0.3rem", display: "inline-block",
-                    transition: "color 0.3s ease, border-color 0.3s ease",
-                  }}>{item.label}</span>
+                  <span style={{ position: "relative", display: "inline-block", paddingBottom: "0.3rem" }}>
+                    <span style={{
+                      fontFamily: "var(--font-serif)", fontWeight: 400,
+                      fontSize: "clamp(1.05rem, 1.6vw, 1.3rem)", lineHeight: 1.25,
+                      color: on ? "var(--c-ink)" : "var(--c-ink-muted)",
+                      transition: "color 0.3s ease",
+                    }}>{item.label}</span>
+                    <span style={{
+                      position: "absolute", left: 0, bottom: 0, height: "1px",
+                      width: on ? "100%" : "0%", background: "var(--c-accent)",
+                      transition: "width 0.4s cubic-bezier(0.16,1,0.3,1)",
+                    }} />
+                  </span>
                 </button>
               );
             })}
@@ -315,52 +320,16 @@ function Services() {
 
           {/* Right, the selected service's detail */}
           <div key={s.id} style={{ animation: "svcDetailFade 0.5s cubic-bezier(0.16,1,0.3,1)" }}>
-            <h3 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(1.4rem,2vw,1.9rem)", color: "var(--c-ink)", lineHeight: 1.2, marginBottom: "1.25rem" }}>{s.label}</h3>
-            <p style={{ ...BODY, fontSize: "1rem", lineHeight: 1.8, marginBottom: "2.25rem", maxWidth: "40rem" }}>{s.body}</p>
-            <ul className="svc-items" style={{ listStyle: "none", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem 2rem", marginBottom: "2.25rem" }}>
+            <h3 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(1.05rem,1.6vw,1.3rem)", color: "var(--c-ink)", lineHeight: 1.25, marginBottom: "1rem" }}>{s.label}</h3>
+            <p style={{ ...BODY, fontSize: "0.84rem", marginBottom: "1.5rem", maxWidth: "40rem" }}>{s.body}</p>
+            <ul className="svc-items" style={{ listStyle: "none", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.6rem 2rem", marginBottom: "1.5rem" }}>
               {s.items.map(item => (
-                <li key={item} style={{ display: "flex", gap: "0.85rem", ...BODY, fontSize: "0.86rem" }}>
+                <li key={item} style={{ display: "flex", gap: "0.85rem", ...BODY, fontSize: "0.82rem" }}>
                   <span style={{ width: "3px", height: "3px", borderRadius: "50%", background: "var(--c-accent)", marginTop: "0.5rem", flexShrink: 0 }} />
                   {item}
                 </li>
               ))}
             </ul>
-            {s.id === "product-strategy-advisory" && (
-              <button
-                onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: PACK_GROUP }))}
-                style={{
-                  display: "block", background: "none", border: "none",
-                  padding: 0, marginBottom: "1.75rem", cursor: "pointer",
-                  textAlign: "left",
-                  fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400,
-                  fontSize: "0.9rem", color: "var(--c-accent)",
-                  textDecoration: "underline", textUnderlineOffset: "3px",
-                  textDecorationColor: "var(--c-border)",
-                }}
-                onMouseEnter={e => (e.currentTarget as HTMLElement).style.textDecorationColor = "var(--c-accent)"}
-                onMouseLeave={e => (e.currentTarget as HTMLElement).style.textDecorationColor = "var(--c-border)"}
-              >
-                See the full Startup Advisory Pack →
-              </button>
-            )}
-            {s.id === "risk-assurance" && (
-              <button
-                onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: POST_LAUNCH_REVIEW_GROUP }))}
-                style={{
-                  display: "block", background: "none", border: "none",
-                  padding: 0, marginBottom: "1.75rem", cursor: "pointer",
-                  textAlign: "left",
-                  fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 400,
-                  fontSize: "0.9rem", color: "var(--c-accent)",
-                  textDecoration: "underline", textUnderlineOffset: "3px",
-                  textDecorationColor: "var(--c-border)",
-                }}
-                onMouseEnter={e => (e.currentTarget as HTMLElement).style.textDecorationColor = "var(--c-accent)"}
-                onMouseLeave={e => (e.currentTarget as HTMLElement).style.textDecorationColor = "var(--c-border)"}
-              >
-                Already built? See Post-Launch Review →
-              </button>
-            )}
             <button
               onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: { key: s.id, label: s.label, opening: s.opening } }))}
               style={{
