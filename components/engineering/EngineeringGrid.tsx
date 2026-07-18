@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowUpRight, Puzzle, Award, Link2, FileText } from "lucide-react";
+import { ArrowUpRight, Puzzle, Award, Link2, FileText, ChevronLeft, ChevronRight } from "lucide-react";
 import type { EngineeringProject } from "@/lib/engineering-projects";
 import { PaperLink } from "@/components/research/PaperLink";
 
@@ -32,6 +32,9 @@ const categories = [
 
 export function EngineeringGrid({ projects }: { projects: EngineeringProject[] }) {
   const [active, setActive] = useState<string>("all");
+  const [slide, setSlide] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const touchStartX = useRef<number | null>(null);
 
   const visible = active === "all" ? projects : projects.filter((p) => p.categories.includes(active));
   const featured = visible.filter((p) => p.featured);
@@ -55,6 +58,22 @@ export function EngineeringGrid({ projects }: { projects: EngineeringProject[] }
     featuredCards.map((p) => p.relatedSlug).filter((s): s is string => !!s)
   );
   const rest = visible.filter((p) => !p.featured && !(p.slug && pairedResearchSlugs.has(p.slug)));
+
+  const slideCount = featuredCards.length;
+
+  // Changing filters can shrink the deck — never point past the last slide.
+  useEffect(() => {
+    if (slide >= slideCount) setSlide(0);
+  }, [slide, slideCount]);
+
+  // Auto-advance every 6.5s; pauses while hovered, and sits out entirely
+  // for people who've asked their OS for reduced motion.
+  useEffect(() => {
+    if (slideCount <= 1 || paused) return;
+    if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const t = setInterval(() => setSlide((s) => (s + 1) % slideCount), 6500);
+    return () => clearInterval(t);
+  }, [slideCount, paused]);
 
   return (
     <div>
@@ -95,7 +114,27 @@ export function EngineeringGrid({ projects }: { projects: EngineeringProject[] }
         ))}
       </div>
 
-      {/* ── Featured project(s) — full width ── */}
+      {/* ── Featured slides — full width, one pair/project per slide ── */}
+      {slideCount > 0 && (
+      <div
+        style={{ marginBottom: "1.25rem" }}
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+        onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
+        onTouchEnd={(e) => {
+          if (touchStartX.current == null) return;
+          const dx = e.changedTouches[0].clientX - touchStartX.current;
+          touchStartX.current = null;
+          if (Math.abs(dx) < 40 || slideCount <= 1) return;
+          setSlide((s) => (dx < 0 ? (s + 1) % slideCount : (s - 1 + slideCount) % slideCount));
+        }}
+      >
+      <div style={{ overflow: "hidden" }}>
+      <div style={{
+        display: "flex",
+        transform: `translateX(-${Math.min(slide, slideCount - 1) * 100}%)`,
+        transition: "transform 0.65s cubic-bezier(0.16,1,0.3,1)",
+      }}>
       {featuredCards.map((p) => {
         // Only render the 3-column research pairing when `p` is the tool
         // side (research items don't get a nested research column pointing
@@ -109,7 +148,8 @@ export function EngineeringGrid({ projects }: { projects: EngineeringProject[] }
             key={p.title}
             className="card eng-featured"
             style={{
-              padding: 0, overflow: "hidden", marginBottom: "1.25rem",
+              padding: 0, overflow: "hidden",
+              flex: "0 0 100%", minWidth: 0,
               display: "grid",
               gridTemplateColumns: pairedResearch ? "0.85fr 1fr 1.3fr" : "1.1fr 1fr",
               border: "1px solid var(--c-border-strong)",
@@ -228,6 +268,64 @@ export function EngineeringGrid({ projects }: { projects: EngineeringProject[] }
           </article>
         );
       })}
+      </div>
+      </div>
+
+      {/* Slide controls: arrows + dots, only when there's more than one slide */}
+      {slideCount > 1 && (
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "1rem", marginTop: "1rem" }}>
+          <button
+            type="button"
+            aria-label="Previous slide"
+            onClick={() => setSlide((s) => (s - 1 + slideCount) % slideCount)}
+            style={{
+              display: "flex", alignItems: "center", justifyContent: "center",
+              width: "1.9rem", height: "1.9rem", borderRadius: "50%",
+              background: "none", border: "1px solid var(--c-border-strong)",
+              color: "var(--c-ink-muted)", cursor: "pointer", transition: "color 0.2s, border-color 0.2s",
+            }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-accent)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-ink-muted)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-border-strong)"; }}
+          >
+            <ChevronLeft size={14} />
+          </button>
+
+          <div style={{ display: "flex", gap: "0.45rem" }}>
+            {featuredCards.map((p, i) => (
+              <button
+                key={p.title}
+                type="button"
+                aria-label={`Go to slide ${i + 1}: ${p.title}`}
+                onClick={() => setSlide(i)}
+                style={{
+                  width: i === slide ? "1.4rem" : "0.45rem", height: "0.45rem",
+                  borderRadius: "999px", border: "none", cursor: "pointer", padding: 0,
+                  background: i === slide ? "var(--c-accent)" : "var(--c-border-strong)",
+                  transition: "width 0.3s cubic-bezier(0.16,1,0.3,1), background 0.3s",
+                }}
+              />
+            ))}
+          </div>
+
+          <button
+            type="button"
+            aria-label="Next slide"
+            onClick={() => setSlide((s) => (s + 1) % slideCount)}
+            style={{
+              display: "flex", alignItems: "center", justifyContent: "center",
+              width: "1.9rem", height: "1.9rem", borderRadius: "50%",
+              background: "none", border: "1px solid var(--c-border-strong)",
+              color: "var(--c-ink-muted)", cursor: "pointer", transition: "color 0.2s, border-color 0.2s",
+            }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-accent)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-ink-muted)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-border-strong)"; }}
+          >
+            <ChevronRight size={14} />
+          </button>
+        </div>
+      )}
+      </div>
+      )}
 
       {/* ── Project grid ── */}
       <div className="eng-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.25rem" }}>

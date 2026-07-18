@@ -1008,7 +1008,12 @@ function ResearchSection() {
             {PAPERS.map((paper, i) => (
               <button
                 key={paper.slug}
-                onClick={() => setActive(paper)}
+                onClick={() => {
+                  // Externally published papers open their record directly —
+                  // no intermediate modal, less navigation to the reading.
+                  if (paper.externalUrl) window.open(paper.externalUrl, "_blank", "noopener,noreferrer");
+                  else setActive(paper);
+                }}
                 style={{
                   display: "block", width: "100%", textAlign: "left",
                   background: "none", border: "none", cursor: "pointer",

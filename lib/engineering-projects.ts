@@ -30,13 +30,9 @@ export type EngineeringProject = {
 
 export const engineeringProjects: EngineeringProject[] = [
   // AI Projects
-  {
-    categories: ["ai"],
-    title: "Legal Chatbot",
-    subtitle: "For Entrepreneurs",
-    description: "Helps entrepreneurs make the right early stage business legal decisions.",
-    image: "/engineering/updatedteresya.png",
-  },
+  // Note: featured entries render as slides in the carousel at the top of
+  // /engineering, in array order — tool+research pairs first, then the
+  // standalone research and tools.
   {
     categories: ["ai"],
     slug: "ai-footprint-tracker",
@@ -144,6 +140,7 @@ export const engineeringProjects: EngineeringProject[] = [
   },
   {
     categories: ["research"],
+    featured: true,
     paperSlug: "cross-border-data-transfer",
     title: "Analyzing Inefficiencies in Current Cross-Border Data Transfer Laws",
     subtitle: "Legal Frameworks, Data Protection",
@@ -157,5 +154,16 @@ export const engineeringProjects: EngineeringProject[] = [
     subtitle: "AI, Advanced Algorithms",
     description: "Develops a tool that addresses discriminatory elements in AI hiring processes while maintaining efficiency, for a more equitable and compliant hiring process.",
     image: "/engineering/hiring.png",
+  },
+  {
+    categories: ["ai"],
+    slug: "legal-chatbot",
+    featured: true,
+    title: "Legal Chatbot",
+    subtitle: "AI Chatbot · For Entrepreneurs",
+    description: "Helps entrepreneurs make the right early stage business legal decisions.",
+    detail:
+      "An AI chatbot that guides entrepreneurs through early-stage business legal decisions — the questions founders face before they can afford counsel: what structure to incorporate under, what agreements they need in place, and which regulatory obligations apply to what they're building. It turns those first legal calls from guesswork into a guided conversation.",
+    image: "/engineering/updatedteresya.png",
   },
 ];
