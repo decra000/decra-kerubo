@@ -85,7 +85,7 @@ export function Navbar() {
             }}
               onMouseEnter={e => (e.currentTarget as HTMLElement).style.opacity = "0.82"}
               onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = "1"}>
-              Book Appointment
+              Talk
             </Link>
             <button onClick={toggle} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--c-ink-muted)", lineHeight: 0, transition: "color 0.2s" }}
               onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"}
@@ -127,7 +127,7 @@ export function Navbar() {
               ...lk, fontSize: "0.75rem", color: "var(--c-bg)", background: "var(--c-ink)",
               padding: "0.7rem 1rem", borderRadius: "2px", textAlign: "center",
             }}>
-              Book Appointment
+              Talk
             </Link>
           </div>
         )}

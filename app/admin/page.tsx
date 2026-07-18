@@ -1,8 +1,9 @@
 "use client";
 export const dynamic = "force-dynamic";
 import { useEffect, useState } from "react";
-import { Calendar, Mail, TrendingUp, Lock, Loader2, RefreshCw, CalendarPlus } from "lucide-react";
+import { Calendar, Mail, TrendingUp, Lock, Loader2, RefreshCw, CalendarPlus, Radio } from "lucide-react";
 import { CONSULTATION_TYPES } from "@/lib/types";
+import { BroadcastPanel } from "@/components/admin/BroadcastPanel";
 
 type Booking = {
   id: string; name: string; email: string; organization?: string;
@@ -15,6 +16,10 @@ type Lead = { id: string; name: string; email: string; organization?: string; so
 type Subscriber = { id: string; email: string; name?: string; created_at: string };
 
 const PASSWORD_KEY = "decra-admin-password";
+
+const labelStyle = { display: "block", fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "var(--c-ink-muted)", marginBottom: "0.5rem" };
+const thStyle = { textAlign: "left" as const, padding: "0.6rem 0.85rem", color: "var(--c-ink-muted)", fontWeight: 700, textTransform: "uppercase" as const, fontSize: "0.6rem", letterSpacing: "0.08em", whiteSpace: "nowrap" as const };
+const tdStyle = { padding: "0.7rem 0.85rem", fontSize: "0.8rem", color: "var(--c-ink)" };
 
 /** Builds a Google Calendar "add event" link so a booking lands on Decra's
  *  main calendar in one click — duration comes from the consultation type. */
@@ -40,6 +45,14 @@ function googleCalendarUrl(b: Booking) {
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
 }
 
+const TABS = [
+  { id: "bookings", label: "Bookings" },
+  { id: "leads", label: "Leads" },
+  { id: "subscribers", label: "Subscribers" },
+  { id: "broadcast", label: "Broadcast" },
+] as const;
+type TabId = (typeof TABS)[number]["id"];
+
 export default function AdminPage() {
   const [password, setPassword] = useState("");
   const [unlocked, setUnlocked] = useState(false);
@@ -49,7 +62,7 @@ export default function AdminPage() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
-  const [tab, setTab] = useState<"bookings" | "leads" | "subscribers">("bookings");
+  const [tab, setTab] = useState<TabId>("bookings");
   const [marking, setMarking] = useState<string | null>(null);
 
   async function load(pw: string) {
@@ -102,88 +115,98 @@ export default function AdminPage() {
     .sort((a, b) => new Date(a.scheduled_at).getTime() - new Date(b.scheduled_at).getTime());
   const past = bookings.filter(b => new Date(b.scheduled_at).getTime() < now);
 
-  const metrics = [
-    { label: "Upcoming", value: upcoming.length, icon: Calendar, color: "#0F4D3F" },
-    { label: "Total Bookings", value: bookings.length, icon: TrendingUp, color: "#C8A95B" },
-    { label: "Leads", value: leads.length, icon: TrendingUp, color: "#8EA89B" },
-    { label: "Subscribers", value: subscribers.length, icon: Mail, color: "#8EA89B" },
-  ];
-
   if (!unlocked) {
     return (
-      <div className="bg-[#FAF8F3] min-h-screen flex items-center justify-center px-6">
-        <div className="bg-white rounded-2xl border border-[#8EA89B]/15 p-8 w-full max-w-sm">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-[#0F4D3F]/10 flex items-center justify-center">
-              <Lock size={16} className="text-[#0F4D3F]" />
-            </div>
-            <div>
-              <h1 className="font-display text-lg font-semibold text-[#0F4D3F]">Admin</h1>
-              <p className="text-xs text-[#8EA89B]">Bookings, leads &amp; subscribers</p>
-            </div>
-          </div>
+      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem", background: "var(--c-bg)" }}>
+        <div className="card" style={{ maxWidth: "22rem", width: "100%", textAlign: "center" }}>
+          <Lock size={22} style={{ color: "var(--c-ink-muted)", marginBottom: "1rem" }} />
+          <p style={{ fontFamily: "var(--font-serif)", fontSize: "1.15rem", color: "var(--c-ink)", marginBottom: "0.4rem" }}>Private, Admin</p>
+          <p style={{ fontSize: "0.75rem", color: "var(--c-ink-muted)", marginBottom: "1.5rem" }}>Bookings, leads, subscribers &amp; broadcast</p>
           <input
             type="password"
+            className="field"
+            placeholder="Password"
             value={password}
             onChange={e => setPassword(e.target.value)}
-            onKeyDown={e => { if (e.key === "Enter") load(password); }}
-            placeholder="Password"
-            className="w-full border border-[#8EA89B]/30 rounded-xl px-4 py-3 text-sm mb-3 outline-none focus:border-[#0F4D3F]"
+            onKeyDown={e => e.key === "Enter" && load(password)}
+            style={{ marginBottom: "1rem" }}
           />
-          <button
-            onClick={() => load(password)}
-            disabled={loading || !password}
-            className="w-full bg-[#0F4D3F] text-white rounded-xl py-3 text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2"
-          >
-            {loading ? <Loader2 size={14} className="animate-spin" /> : null}
-            Unlock
+          {authError && <p style={{ color: "#B3524A", fontSize: "0.8rem", marginBottom: "1rem" }}>{authError}</p>}
+          <button className="btn-primary" style={{ border: "none", width: "100%" }} onClick={() => load(password)} disabled={loading || !password}>
+            {loading ? "Checking…" : "Unlock"}
           </button>
-          {authError && <p className="text-xs text-red-600 mt-3">{authError}</p>}
         </div>
       </div>
     );
   }
 
+  const metrics = [
+    { label: "Upcoming", value: upcoming.length, icon: Calendar },
+    { label: "Total bookings", value: bookings.length, icon: TrendingUp },
+    { label: "Leads", value: leads.length, icon: TrendingUp },
+    { label: "Subscribers", value: subscribers.length, icon: Mail },
+  ];
+
+  const bookingHead = (
+    <tr style={{ background: "var(--c-surface)" }}>
+      {["Client", "Type", "When", "Status", "Payment", ""].map((h, i) => (
+        <th key={i} style={thStyle}>{h}</th>
+      ))}
+    </tr>
+  );
+
   const bookingRow = (b: Booking) => (
-    <tr key={b.id} className="border-b border-[#8EA89B]/10 hover:bg-[#FAF8F3] transition-colors">
-      <td className="px-6 py-4">
-        <p className="text-[#222] font-medium">{b.name}</p>
-        <a href={`mailto:${b.email}`} className="text-xs text-[#8EA89B] hover:text-[#0F4D3F]">{b.email}</a>
+    <tr key={b.id} style={{ borderTop: "1px solid var(--c-border)" }}>
+      <td style={tdStyle}>
+        <span style={{ display: "block", fontWeight: 600 }}>{b.name}</span>
+        <a href={`mailto:${b.email}`} style={{ fontSize: "0.72rem", color: "var(--c-ink-muted)", textDecoration: "none" }}>{b.email}</a>
       </td>
-      <td className="px-6 py-4 text-[#666]">{CONSULTATION_TYPES.find(t => t.id === b.consultation_type)?.label || b.consultation_type}</td>
-      <td className="px-6 py-4 text-[#666] whitespace-nowrap">
+      <td style={tdStyle}>{CONSULTATION_TYPES.find(t => t.id === b.consultation_type)?.label || b.consultation_type}</td>
+      <td style={{ ...tdStyle, whiteSpace: "nowrap" }}>
         {new Date(b.scheduled_at).toLocaleString("en-KE", { dateStyle: "medium", timeStyle: "short" })}
       </td>
-      <td className="px-6 py-4">
-        <span className={`text-xs px-2 py-1 rounded-full whitespace-nowrap ${b.status === "pending_payment" ? "bg-[#C8A95B]/15 text-[#8A6D2B]" : b.status === "cancelled" ? "bg-red-100 text-red-700" : "bg-[#0F4D3F]/10 text-[#0F4D3F]"}`}>
+      <td style={tdStyle}>
+        <span style={{
+          fontSize: "0.66rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", whiteSpace: "nowrap",
+          color: b.status === "pending_payment" ? "#8A6D2B" : b.status === "cancelled" ? "#B3524A" : "#2F5D50",
+        }}>
           {b.status.replace("_", " ")}
         </span>
       </td>
-      <td className="px-6 py-4 text-[#666]">
+      <td style={tdStyle}>
         {b.payment_method === "manual" && b.status === "pending_payment" ? (
-          <div className="flex items-center gap-2">
-            <span className="text-xs">{b.payment_reference ? `ref: ${b.payment_reference}` : "no ref given"}</span>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", whiteSpace: "nowrap" }}>
+            <span style={{ fontSize: "0.72rem", color: "var(--c-ink-muted)" }}>{b.payment_reference ? `ref: ${b.payment_reference}` : "no ref"}</span>
             <button
               onClick={() => markPaid(b.id)}
               disabled={marking === b.id}
-              className="text-xs px-2 py-1 rounded-full bg-[#0F4D3F] text-white hover:opacity-85 transition-opacity disabled:opacity-50"
+              style={{
+                fontSize: "0.66rem", fontWeight: 700, letterSpacing: "0.05em", textTransform: "uppercase",
+                background: "var(--c-ink)", color: "var(--c-bg)", border: "none", borderRadius: "999px",
+                padding: "0.35rem 0.8rem", cursor: "pointer", opacity: marking === b.id ? 0.6 : 1,
+              }}
             >
-              {marking === b.id ? "…" : "Mark Paid"}
+              {marking === b.id ? "…" : "Mark paid"}
             </button>
-          </div>
+          </span>
         ) : (b.amount_paid || 0) > 0 ? (
-          <span className="text-xs">KES {Number(b.amount_paid).toLocaleString("en-KE")}</span>
+          <span style={{ fontSize: "0.75rem" }}>KES {Number(b.amount_paid).toLocaleString("en-KE")}</span>
         ) : (
-          <span className="text-xs text-[#8EA89B]">Free</span>
+          <span style={{ fontSize: "0.75rem", color: "var(--c-ink-muted)" }}>Free</span>
         )}
       </td>
-      <td className="px-6 py-4">
+      <td style={{ ...tdStyle, textAlign: "right" }}>
         <a
           href={googleCalendarUrl(b)}
           target="_blank"
           rel="noopener noreferrer"
           title="Add to Google Calendar"
-          className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-full border border-[#0F4D3F]/25 text-[#0F4D3F] hover:bg-[#0F4D3F] hover:text-white transition-colors whitespace-nowrap"
+          style={{
+            display: "inline-flex", alignItems: "center", gap: "0.35rem", whiteSpace: "nowrap",
+            fontSize: "0.66rem", fontWeight: 700, letterSpacing: "0.05em", textTransform: "uppercase",
+            color: "var(--c-accent)", border: "1px solid var(--c-border-strong)", borderRadius: "999px",
+            padding: "0.35rem 0.8rem", textDecoration: "none",
+          }}
         >
           <CalendarPlus size={12} /> Calendar
         </a>
@@ -191,117 +214,121 @@ export default function AdminPage() {
     </tr>
   );
 
-  const bookingHead = (
-    <tr className="border-b border-[#8EA89B]/15">
-      {["Client", "Type", "When", "Status", "Payment", ""].map((h, i) => (
-        <th key={i} className="text-left text-xs uppercase tracking-widest text-[#8EA89B] px-6 py-4">{h}</th>
-      ))}
-    </tr>
+  const bookingsTable = (rows: Booking[], emptyText: string) => (
+    <div style={{ border: "1px solid var(--c-border)", borderRadius: "10px", overflow: "hidden" }}>
+      <div style={{ overflowX: "auto" }}>
+        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+          <thead>{bookingHead}</thead>
+          <tbody>
+            {rows.length === 0 && (
+              <tr><td colSpan={6} style={{ ...tdStyle, textAlign: "center", color: "var(--c-ink-muted)", padding: "1.75rem" }}>{emptyText}</td></tr>
+            )}
+            {rows.map(bookingRow)}
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 
   return (
-    <div className="bg-[#FAF8F3] min-h-screen pt-32 pb-24 px-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex items-end justify-between mb-12 flex-wrap gap-4">
+    <div style={{ minHeight: "100vh", background: "var(--c-bg)", padding: "7rem var(--space-x) 5rem" }}>
+      <div style={{ maxWidth: "64rem", margin: "0 auto" }}>
+        <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem", marginBottom: "2.5rem" }}>
           <div>
-            <h1 className="font-display text-4xl font-semibold text-[#0F4D3F] mb-2">Admin Dashboard</h1>
-            <p className="text-sm text-[#8EA89B]">Private, do not share this URL.</p>
+            <p style={labelStyle}>Private, do not share this URL</p>
+            <h1 style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(1.6rem,3vw,2.1rem)", color: "var(--c-ink)" }}>
+              Admin
+            </h1>
           </div>
           <button
             onClick={() => load(password)}
             disabled={loading}
-            className="inline-flex items-center gap-2 text-sm px-4 py-2 rounded-xl border border-[#8EA89B]/30 text-[#0F4D3F] hover:bg-white transition-colors disabled:opacity-50"
+            style={{
+              display: "flex", alignItems: "center", gap: "0.4rem",
+              background: "none", border: "1px solid var(--c-border-strong)", borderRadius: "999px",
+              padding: "0.4rem 0.85rem", fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.08em",
+              textTransform: "uppercase", color: "var(--c-ink-muted)", cursor: "pointer",
+            }}
           >
-            <RefreshCw size={14} className={loading ? "animate-spin" : ""} /> Refresh
+            <RefreshCw size={12} className={loading ? "spin" : ""} /> Refresh
           </button>
         </div>
 
         {/* Metrics */}
-        <div className="grid md:grid-cols-4 gap-6 mb-12">
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(9rem, 1fr))", gap: "1rem", marginBottom: "2.5rem" }}>
           {metrics.map((m) => {
             const Icon = m.icon;
             return (
-              <div key={m.label} className="bg-white rounded-2xl p-6 border border-[#8EA89B]/15">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${m.color}15` }}>
-                    <Icon size={18} style={{ color: m.color }} />
-                  </div>
-                  <span className="text-xs uppercase tracking-widest text-[#8EA89B]">{m.label}</span>
+              <div key={m.label} className="card" style={{ padding: "1.1rem 1.25rem" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.6rem" }}>
+                  <Icon size={13} style={{ color: "var(--c-accent)" }} />
+                  <span style={{ fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--c-ink-muted)" }}>{m.label}</span>
                 </div>
-                <p className="font-display text-4xl font-semibold text-[#0F4D3F]">{m.value}</p>
+                <p style={{ fontFamily: "var(--font-serif)", fontSize: "1.9rem", color: "var(--c-ink)", lineHeight: 1 }}>{m.value}</p>
               </div>
             );
           })}
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-4 mb-8 border-b border-[#8EA89B]/20">
-          {(["bookings", "leads", "subscribers"] as const).map((t) => (
-            <button
-              key={t}
-              onClick={() => setTab(t)}
-              className={`pb-3 text-sm font-medium capitalize transition-colors border-b-2 -mb-px ${
-                tab === t ? "border-[#0F4D3F] text-[#0F4D3F]" : "border-transparent text-[#8EA89B] hover:text-[#444]"
-              }`}
-            >
-              {t}
-            </button>
-          ))}
+        <div style={{ display: "flex", gap: "1.75rem", marginBottom: "2rem", borderBottom: "1px solid var(--c-border)" }}>
+          {TABS.map((t) => {
+            const on = tab === t.id;
+            return (
+              <button
+                key={t.id}
+                onClick={() => setTab(t.id)}
+                style={{
+                  display: "inline-flex", alignItems: "center", gap: "0.4rem",
+                  background: "none", border: "none", cursor: "pointer",
+                  padding: "0 0 0.8rem", marginBottom: "-1px",
+                  fontFamily: "var(--font-manjari)", fontWeight: 700,
+                  fontSize: "0.68rem", letterSpacing: "0.12em", textTransform: "uppercase",
+                  color: on ? "var(--c-accent)" : "var(--c-ink-muted)",
+                  borderBottom: on ? "1px solid var(--c-accent)" : "1px solid transparent",
+                  transition: "color 0.2s, border-color 0.2s",
+                }}
+              >
+                {t.id === "broadcast" && <Radio size={11} />}
+                {t.label}
+              </button>
+            );
+          })}
         </div>
 
         {tab === "bookings" && (
           <>
-            <h2 className="text-xs uppercase tracking-widest text-[#8EA89B] mb-4">Upcoming ({upcoming.length})</h2>
-            <div className="bg-white rounded-2xl border border-[#8EA89B]/15 overflow-hidden mb-10">
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>{bookingHead}</thead>
-                  <tbody>
-                    {upcoming.length === 0 && (
-                      <tr><td colSpan={6} className="px-6 py-8 text-center text-sm text-[#8EA89B]">No upcoming bookings.</td></tr>
-                    )}
-                    {upcoming.map(bookingRow)}
-                  </tbody>
-                </table>
-              </div>
+            <p style={labelStyle}>Upcoming ({upcoming.length})</p>
+            <div style={{ marginBottom: "2.5rem" }}>
+              {bookingsTable(upcoming, "No upcoming bookings.")}
             </div>
-
-            <h2 className="text-xs uppercase tracking-widest text-[#8EA89B] mb-4">Past ({past.length})</h2>
-            <div className="bg-white rounded-2xl border border-[#8EA89B]/15 overflow-hidden">
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>{bookingHead}</thead>
-                  <tbody>
-                    {past.length === 0 && (
-                      <tr><td colSpan={6} className="px-6 py-8 text-center text-sm text-[#8EA89B]">No past bookings.</td></tr>
-                    )}
-                    {past.map(bookingRow)}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+            <p style={labelStyle}>Past ({past.length})</p>
+            {bookingsTable(past, "No past bookings.")}
           </>
         )}
 
         {tab === "leads" && (
-          <div className="bg-white rounded-2xl border border-[#8EA89B]/15 overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
+          <div style={{ border: "1px solid var(--c-border)", borderRadius: "10px", overflow: "hidden" }}>
+            <div style={{ overflowX: "auto" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse" }}>
                 <thead>
-                  <tr className="border-b border-[#8EA89B]/15">
+                  <tr style={{ background: "var(--c-surface)" }}>
                     {["Name", "Email", "Organization", "Source", "Date"].map((h) => (
-                      <th key={h} className="text-left text-xs uppercase tracking-widest text-[#8EA89B] px-6 py-4">{h}</th>
+                      <th key={h} style={thStyle}>{h}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
+                  {leads.length === 0 && (
+                    <tr><td colSpan={5} style={{ ...tdStyle, textAlign: "center", color: "var(--c-ink-muted)", padding: "1.75rem" }}>No leads yet.</td></tr>
+                  )}
                   {leads.map((l) => (
-                    <tr key={l.id} className="border-b border-[#8EA89B]/10 hover:bg-[#FAF8F3] transition-colors">
-                      <td className="px-6 py-4 text-[#222] font-medium">{l.name}</td>
-                      <td className="px-6 py-4 text-[#666]">{l.email}</td>
-                      <td className="px-6 py-4 text-[#666]">{l.organization || "—"}</td>
-                      <td className="px-6 py-4 text-[#666]">{l.source}</td>
-                      <td className="px-6 py-4 text-[#666]">{new Date(l.created_at).toLocaleDateString()}</td>
+                    <tr key={l.id} style={{ borderTop: "1px solid var(--c-border)" }}>
+                      <td style={{ ...tdStyle, fontWeight: 600 }}>{l.name}</td>
+                      <td style={tdStyle}>{l.email}</td>
+                      <td style={tdStyle}>{l.organization || "—"}</td>
+                      <td style={tdStyle}>{l.source}</td>
+                      <td style={{ ...tdStyle, color: "var(--c-ink-muted)", whiteSpace: "nowrap" }}>{new Date(l.created_at).toLocaleDateString()}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -311,22 +338,25 @@ export default function AdminPage() {
         )}
 
         {tab === "subscribers" && (
-          <div className="bg-white rounded-2xl border border-[#8EA89B]/15 overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
+          <div style={{ border: "1px solid var(--c-border)", borderRadius: "10px", overflow: "hidden" }}>
+            <div style={{ overflowX: "auto" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse" }}>
                 <thead>
-                  <tr className="border-b border-[#8EA89B]/15">
+                  <tr style={{ background: "var(--c-surface)" }}>
                     {["Email", "Name", "Date"].map((h) => (
-                      <th key={h} className="text-left text-xs uppercase tracking-widest text-[#8EA89B] px-6 py-4">{h}</th>
+                      <th key={h} style={thStyle}>{h}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
+                  {subscribers.length === 0 && (
+                    <tr><td colSpan={3} style={{ ...tdStyle, textAlign: "center", color: "var(--c-ink-muted)", padding: "1.75rem" }}>No subscribers yet.</td></tr>
+                  )}
                   {subscribers.map((s) => (
-                    <tr key={s.id} className="border-b border-[#8EA89B]/10 hover:bg-[#FAF8F3] transition-colors">
-                      <td className="px-6 py-4 text-[#222]">{s.email}</td>
-                      <td className="px-6 py-4 text-[#666]">{s.name || "—"}</td>
-                      <td className="px-6 py-4 text-[#666]">{new Date(s.created_at).toLocaleDateString()}</td>
+                    <tr key={s.id} style={{ borderTop: "1px solid var(--c-border)" }}>
+                      <td style={tdStyle}>{s.email}</td>
+                      <td style={tdStyle}>{s.name || "—"}</td>
+                      <td style={{ ...tdStyle, color: "var(--c-ink-muted)", whiteSpace: "nowrap" }}>{new Date(s.created_at).toLocaleDateString()}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -334,7 +364,13 @@ export default function AdminPage() {
             </div>
           </div>
         )}
+
+        {tab === "broadcast" && <BroadcastPanel password={password} />}
       </div>
+      <style>{`
+        .spin { animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      `}</style>
     </div>
   );
 }

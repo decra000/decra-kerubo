@@ -4,7 +4,8 @@ import { supabaseAdmin } from "@/lib/supabase";
 
 export async function GET(req: NextRequest) {
   const password = req.headers.get("x-broadcast-password") || "";
-  const expected = process.env.BROADCAST_PASSWORD;
+  // Broadcast lives inside /admin now, so either password unlocks it.
+  const expected = process.env.BROADCAST_PASSWORD || process.env.ADMIN_PASSWORD;
   if (!expected) {
     return NextResponse.json({ error: "Broadcast is not configured (missing BROADCAST_PASSWORD env var)." }, { status: 500 });
   }
