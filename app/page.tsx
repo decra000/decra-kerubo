@@ -2,8 +2,9 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, X, Mic, Volume2, VolumeX, RefreshCw } from "lucide-react";
 import { useSpeech } from "@/hooks/useSpeech";
-import { PAPERS, type Paper } from "@/lib/papers";
-import { PaperViewer } from "@/components/research/PaperViewer";
+import { PAPERS } from "@/lib/papers";
+import { PaperLink } from "@/components/research/PaperLink";
+import { ResearchSlides } from "@/components/research/ResearchSlides";
 
 /* ── helpers ── */
 function useReveal() {
@@ -972,7 +973,6 @@ function The1000() {
 
 function ResearchSection() {
   const { ref, vis } = useReveal();
-  const [active, setActive] = useState<Paper | null>(null);
   const [open, setOpen] = useState(false);
 
   return (
@@ -1003,43 +1003,31 @@ function ResearchSection() {
           transition: "max-height 0.6s cubic-bezier(0.16,1,0.3,1), opacity 0.45s ease",
           marginTop: open ? "2.5rem" : "0px",
         }}>
-          <p style={{ ...LBL, textAlign: "left", marginBottom: "1.5rem" }}>Research</p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "0" }} className="rsc-grid">
+          <p style={{ ...LBL, textAlign: "left", marginBottom: "1.5rem" }}>Research &amp; the products it powers</p>
+
+          {/* One slide per research effort, paper + the tool it produced */}
+          <ResearchSlides />
+
+          {/* Compact index of every paper, external ones open their record
+              directly, PDFs open the protected full-screen reader */}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem 1.75rem", marginTop: "2rem", justifyContent: "flex-start" }}>
             {PAPERS.map((paper, i) => (
-              <button
+              <PaperLink
                 key={paper.slug}
-                onClick={() => {
-                  // Externally published papers open their record directly —
-                  // no intermediate modal, less navigation to the reading.
-                  if (paper.externalUrl) window.open(paper.externalUrl, "_blank", "noopener,noreferrer");
-                  else setActive(paper);
-                }}
+                slug={paper.slug}
                 style={{
-                  display: "block", width: "100%", textAlign: "left",
-                  background: "none", border: "none", cursor: "pointer",
-                  padding: "1.75rem 1.25rem",
-                  borderTop: "1px solid var(--c-border)",
-                  borderLeft: i > 0 ? "1px solid var(--c-border)" : "none",
+                  display: "inline-flex", alignItems: "baseline", gap: "0.5rem",
+                  fontFamily: "var(--font-sans)", fontSize: "0.72rem",
+                  color: "var(--c-ink-muted)", textAlign: "left",
                 }}
               >
-                <span style={{ fontFamily: "var(--font-sans)", fontWeight: 600, fontSize: "0.65rem", color: "var(--c-ink-muted)", display: "block", marginBottom: "1rem" }}>{String(i + 1).padStart(2, "0")}</span>
-                <h3 style={{
-                  fontFamily: "var(--font-serif)", fontWeight: 400,
-                  fontSize: "0.85rem", color: "var(--c-ink)", lineHeight: 1.3,
-                  marginBottom: "0.6rem",
-                }}>{paper.title}</h3>
-                <p style={{
-                  fontFamily: "var(--font-sans)", fontWeight: 400,
-                  fontSize: "0.66rem", color: "var(--c-ink-muted)", lineHeight: 1.5,
-                }}>{paper.partner}</p>
-              </button>
+                <span style={{ fontWeight: 600, fontSize: "0.6rem" }}>{String(i + 1).padStart(2, "0")}</span>
+                <span style={{ borderBottom: "1px solid var(--c-border)", paddingBottom: "0.15rem" }}>{paper.title}</span>
+              </PaperLink>
             ))}
           </div>
         </div>
       </div>
-
-      {active && <PaperViewer paper={active} onClose={() => setActive(null)} />}
-      <style>{`@media(max-width:900px){.rsc-grid{grid-template-columns:repeat(2,1fr)!important}.rsc-grid>button:nth-child(odd){border-left:none!important}.rsc-grid>button:nth-child(n+3){border-top:1px solid var(--c-border)!important}}@media(max-width:560px){.rsc-grid{grid-template-columns:1fr!important}.rsc-grid>button{border-left:none!important;border-top:1px solid var(--c-border)!important}}`}</style>
     </section>
   );
 }

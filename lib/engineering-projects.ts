@@ -140,7 +140,6 @@ export const engineeringProjects: EngineeringProject[] = [
   },
   {
     categories: ["research"],
-    featured: true,
     paperSlug: "cross-border-data-transfer",
     title: "Analyzing Inefficiencies in Current Cross-Border Data Transfer Laws",
     subtitle: "Legal Frameworks, Data Protection",
