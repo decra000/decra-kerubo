@@ -1,5 +1,6 @@
 import { supabaseAdmin } from "@/lib/supabase";
 import { sendMail } from "@/lib/mail";
+import { CONSULTATION_TYPES } from "@/lib/types";
 
 export type BookingInput = {
   name: string;
@@ -87,13 +88,39 @@ export async function createBooking(input: BookingInput): Promise<BookingResult>
     `,
   });
 
-  // Internal notification so Decra sees it land in her own inbox too.
+  // Internal notification so Decra sees it land in her own inbox too, with a
+  // one-click "add to Google Calendar" link so the slot lands on her main
+  // calendar and can't be double-booked by something else.
   const internalTo = process.env.CONTACT_EMAIL || "hello@decrakerubo.com";
+  const typeInfo = CONSULTATION_TYPES.find(t => t.id === input.consultation_type);
+  const start = new Date(input.scheduled_at);
+  const end = new Date(start.getTime() + (typeInfo?.duration || 30) * 60_000);
+  const gcalFmt = (d: Date) => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+  const gcalParams = new URLSearchParams({
+    action: "TEMPLATE",
+    text: `${typeInfo?.label || input.consultation_type} — ${input.name}`,
+    dates: `${gcalFmt(start)}/${gcalFmt(end)}`,
+    details: `Booked via decrakerubo.com\nEmail: ${input.email}\nOrganization: ${input.organization || "—"}\nChallenge: ${input.primary_challenge}\nDesired outcome: ${input.desired_outcome}`,
+  });
+  const gcalUrl = `https://calendar.google.com/calendar/render?${gcalParams.toString()}`;
+
   await sendMail({
     to: internalTo,
     replyTo: input.email,
     subject: `New booking: ${input.name} — ${input.consultation_type}`,
-    text: `${input.name} (${input.email}) booked ${input.consultation_type} for ${input.scheduled_at}.\n\nChallenge: ${input.primary_challenge}\nDesired outcome: ${input.desired_outcome}\nOrganization: ${input.organization || "—"}`,
+    html: `
+      <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; padding: 24px; color: #222;">
+        <p><strong>${input.name}</strong> (${input.email}) booked <strong>${typeInfo?.label || input.consultation_type}</strong> for <strong>${start.toLocaleString("en-KE", { dateStyle: "full", timeStyle: "short", timeZone: "Africa/Nairobi" })}</strong> (Nairobi time).</p>
+        <p>Status: ${status}${input.payment_reference ? ` · ref: ${input.payment_reference}` : ""}</p>
+        <p>Challenge: ${input.primary_challenge || "—"}<br/>
+        Desired outcome: ${input.desired_outcome || "—"}<br/>
+        Organization: ${input.organization || "—"}</p>
+        <p style="margin-top: 24px;">
+          <a href="${gcalUrl}" style="background: #0F4D3F; color: #fff; padding: 12px 20px; text-decoration: none; border-radius: 6px;">Add to Google Calendar</a>
+        </p>
+        <p style="font-size: 13px; color: #666;">Manage all bookings at decrakerubo.com/admin</p>
+      </div>
+    `,
   });
 
   return { ok: true, booking, status };

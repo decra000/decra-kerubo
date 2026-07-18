@@ -1,13 +1,16 @@
 export const dynamic = "force-dynamic";
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
+import { checkAdminPassword } from "@/lib/adminAuth";
 
 // Used by the admin dashboard's "Mark Paid" button on manual M-Pesa/bank
 // bookings, moves a booking from pending_payment to confirmed once Decra
-// has checked the payment landed. This uses the service-role client, so it
-// bypasses RLS; make sure /admin itself is access-gated (see SETUP_GUIDE.md
-// Step 8) before relying on this in production.
+// has checked the payment landed. Uses the service-role client (bypasses
+// RLS), so it's gated by the same admin password as the rest of /admin.
 export async function POST(req: NextRequest) {
+  const denied = checkAdminPassword(req);
+  if (denied) return denied;
+
   try {
     const { id, amount_paid } = await req.json();
     if (!id) return NextResponse.json({ error: "Missing booking id." }, { status: 400 });

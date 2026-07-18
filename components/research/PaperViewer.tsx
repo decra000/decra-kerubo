@@ -45,7 +45,7 @@ export function PaperViewer({ paper, onClose }: { paper: Paper; onClose: () => v
       }}
     >
       <div onClick={e => e.stopPropagation()} style={{
-        width: "100%", maxWidth: "62rem", height: "100%", maxHeight: "92vh",
+        width: "100%", maxWidth: "min(88rem, 96vw)", height: "100%", maxHeight: "96vh",
         background: "#1A1916", borderRadius: "4px", overflow: "hidden",
         display: "flex", flexDirection: "column",
         boxShadow: "0 30px 80px rgba(0,0,0,0.5)",
@@ -75,17 +75,18 @@ export function PaperViewer({ paper, onClose }: { paper: Paper; onClose: () => v
           </button>
         </div>
 
-        {/* Abstract, always shown so the reader knows what the paper covers before viewing */}
-        <div style={{ padding: "1.5rem 1.5rem 0", flexShrink: 0 }}>
-          <p style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.55rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(240,237,232,0.4)", marginBottom: "0.6rem" }}>
+        {/* Abstract, always shown so the reader knows what the paper covers before viewing. Capped and
+            scrollable so a long abstract can't crowd out the actual paper below on shorter screens. */}
+        <div style={{ padding: "1rem 1.5rem 0", flexShrink: 0, maxHeight: "7rem", overflowY: "auto" }}>
+          <p style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.55rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "rgba(240,237,232,0.4)", marginBottom: "0.5rem" }}>
             Abstract
           </p>
-          <p style={{ fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.82rem", color: "rgba(240,237,232,0.72)", lineHeight: 1.75, maxWidth: "44rem" }}>
+          <p style={{ fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.8rem", color: "rgba(240,237,232,0.72)", lineHeight: 1.65, maxWidth: "50rem" }}>
             {paper.abstract}
           </p>
         </div>
 
-        <div style={{ flex: 1, background: "#0A0A0A", marginTop: "1.5rem" }}>
+        <div style={{ flex: 1, background: "#0A0A0A", marginTop: "1rem" }}>
           {isExternal && (
             <div style={{
               width: "100%", height: "100%",
