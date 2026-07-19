@@ -87,10 +87,21 @@ export function Navbar() {
               onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = "1"}>
               Talk
             </Link>
-            <button onClick={toggle} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--c-ink-muted)", lineHeight: 0, transition: "color 0.2s" }}
-              onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"}
-              onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink-mid)"}>
-              {theme === "dark" ? <Sun size={13} strokeWidth={1.5} /> : <Moon size={13} strokeWidth={1.5} />}
+            <button
+              onClick={toggle}
+              aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+              title={theme === "dark" ? "Light mode" : "Dark mode"}
+              className="theme-toggle"
+              style={{
+                display: "flex", alignItems: "center", justifyContent: "center",
+                width: "1.9rem", height: "1.9rem", borderRadius: "50%",
+                background: "none", border: "1px solid var(--c-border-strong)",
+                cursor: "pointer", color: "var(--c-ink)", lineHeight: 0,
+                transition: "color 0.25s, border-color 0.25s, transform 0.35s cubic-bezier(0.16,1,0.3,1)",
+              }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.color = "var(--c-accent)"; el.style.borderColor = "var(--c-accent)"; el.style.transform = "rotate(35deg)"; }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.color = "var(--c-ink)"; el.style.borderColor = "var(--c-border-strong)"; el.style.transform = "rotate(0deg)"; }}>
+              {theme === "dark" ? <Sun size={14} strokeWidth={1.7} /> : <Moon size={14} strokeWidth={1.7} />}
             </button>
             <Link href={engineeringLink.href} style={lk}
               onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"}
@@ -100,8 +111,16 @@ export function Navbar() {
           </nav>
 
           <div className="nav-mob-btn" style={{ display: "none", alignItems: "center", gap: "1rem" }}>
-            <button onClick={toggle} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--c-ink-muted)", lineHeight: 0 }}>
-              {theme === "dark" ? <Sun size={14} strokeWidth={1.5} /> : <Moon size={14} strokeWidth={1.5} />}
+            <button
+              onClick={toggle}
+              aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+              style={{
+                display: "flex", alignItems: "center", justifyContent: "center",
+                width: "1.9rem", height: "1.9rem", borderRadius: "50%",
+                background: "none", border: "1px solid var(--c-border-strong)",
+                cursor: "pointer", color: "var(--c-ink)", lineHeight: 0,
+              }}>
+              {theme === "dark" ? <Sun size={14} strokeWidth={1.7} /> : <Moon size={14} strokeWidth={1.7} />}
             </button>
             <button onClick={() => setMob(v => !v)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--c-ink)", lineHeight: 0 }}>
               {mob ? <X size={18} strokeWidth={1.5} /> : <Menu size={18} strokeWidth={1.5} />}
