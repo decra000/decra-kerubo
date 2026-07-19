@@ -8,7 +8,7 @@ import { checkAdminPassword } from "@/lib/adminAuth";
 // has checked the payment landed. Uses the service-role client (bypasses
 // RLS), so it's gated by the same admin password as the rest of /admin.
 export async function POST(req: NextRequest) {
-  const denied = checkAdminPassword(req);
+  const denied = await checkAdminPassword(req);
   if (denied) return denied;
 
   try {

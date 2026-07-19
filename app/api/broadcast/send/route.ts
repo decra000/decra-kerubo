@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 import { NextRequest, NextResponse } from "next/server";
 import { sendMail } from "@/lib/mail";
 import { supabaseAdmin } from "@/lib/supabase";
+import { checkAdminPassword } from "@/lib/adminAuth";
 
 type Recipient = { company: string; email: string; contact?: string };
 
@@ -17,15 +18,8 @@ function personalize(template: string, r: Recipient) {
 
 export async function POST(req: NextRequest) {
   try {
-    const password = req.headers.get("x-broadcast-password") || "";
-    // Broadcast lives inside /admin now, so either password unlocks it.
-    const expected = process.env.BROADCAST_PASSWORD || process.env.ADMIN_PASSWORD;
-    if (!expected) {
-      return NextResponse.json({ error: "Broadcast is not configured (missing BROADCAST_PASSWORD env var)." }, { status: 500 });
-    }
-    if (password !== expected) {
-      return NextResponse.json({ error: "Incorrect password." }, { status: 401 });
-    }
+    const denied = await checkAdminPassword(req);
+    if (denied) return denied;
 
     const body = await req.json();
     const { subject, bodyHtml, recipients, forceResend } = body as {

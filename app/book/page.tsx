@@ -143,14 +143,27 @@ function BookPageInner() {
   const selectedConsultation = CONSULTATION_TYPES.find(t => t.id === selectedType);
   const isPaid = (selectedConsultation?.price ?? 0) > 0;
   const paystackConfigured = !!process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY;
+  const [paystackScriptFailed, setPaystackScriptFailed] = useState(false);
+  // The card/M-Pesa-via-Paystack path is only actually usable if the script
+  // loaded, not just if a public key is configured. Pinning SRI on Paystack's
+  // script means a silent CDN update on their end fails the integrity check
+  // and the script never runs, this flag catches that and routes people to
+  // the manual bank-transfer/M-Pesa fallback instead of a dead "Pay" button.
+  const paystackUsable = paystackConfigured && !paystackScriptFailed;
 
   // Paystack Inline is a free client-side script, no SDK install needed.
+  // SRI-pinned since it handles payment, if Paystack rotates this script on
+  // their CDN the hash will mismatch and onerror below routes around it
+  // rather than leaving a silently broken "Pay" button.
   useEffect(() => {
     if (!paystackConfigured || document.getElementById("paystack-inline-js")) return;
     const s = document.createElement("script");
     s.id = "paystack-inline-js";
     s.src = "https://js.paystack.co/v1/inline.js";
+    s.integrity = "sha384-QrP0u+4fz1ULjkyrXuG/dik/AMsB81GAIHKFg628v7P2r5s2kN2CiCeXlwd2uK+i";
+    s.crossOrigin = "anonymous";
     s.async = true;
+    s.onerror = () => setPaystackScriptFailed(true);
     document.body.appendChild(s);
   }, [paystackConfigured]);
 
@@ -175,9 +188,10 @@ function BookPageInner() {
     setPayError("");
     if (!isPaid) { handleBooking(); return; }
 
-    // No Paystack account connected, OR the person explicitly prefers bank transfer
-    // (e.g. to avoid Paystack's M-Pesa channel fees), use the manual fallback.
-    if (!paystackConfigured || preferBankTransfer) {
+    // No Paystack account connected, the script failed to load, OR the person
+    // explicitly prefers bank transfer (e.g. to avoid Paystack's M-Pesa
+    // channel fees), use the manual fallback.
+    if (!paystackUsable || preferBankTransfer) {
       if (!manualRef.trim()) {
         setPayError(manualChannel === "mpesa" ? "Enter the M-Pesa confirmation code from your payment SMS." : "Enter the bank transfer reference/receipt number.");
         return;
@@ -399,9 +413,9 @@ function BookPageInner() {
                 ))}
               </div>
             )}
-            {isPaid && (!paystackConfigured || preferBankTransfer) && (
+            {isPaid && (!paystackUsable || preferBankTransfer) && (
               <div className="card" style={{ marginBottom: "2rem" }}>
-                {paystackConfigured && (
+                {paystackUsable && (
                   <button onClick={() => setPreferBankTransfer(false)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--c-ink-muted)", fontSize: "0.7rem", display: "flex", alignItems: "center", gap: "0.3rem", marginBottom: "1rem" }}>
                     <ArrowLeft size={11} /> Back to card / Paystack payment
                   </button>
@@ -451,7 +465,7 @@ function BookPageInner() {
             {payError && (
               <p style={{ fontSize: "0.75rem", color: "#B4453A", marginBottom: "1.25rem" }}>{payError}</p>
             )}
-            {isPaid && paystackConfigured && !preferBankTransfer && (
+            {isPaid && paystackUsable && !preferBankTransfer && (
               <button onClick={() => { setPreferBankTransfer(true); setManualChannel("bank"); }} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--c-ink-muted)", fontSize: "0.72rem", textDecoration: "underline", marginBottom: "1.25rem", display: "block" }}>
                 Prefer to pay by bank transfer instead? (avoids card/mobile money fees)
               </button>
@@ -462,7 +476,7 @@ function BookPageInner() {
                 {loading || paying
                   ? (paying ? "Redirecting to payment..." : "Confirming...")
                   : isPaid
-                    ? ((paystackConfigured && !preferBankTransfer)
+                    ? ((paystackUsable && !preferBankTransfer)
                         ? <>Pay {formatKES(selectedConsultation?.price ?? 0)} &amp; Confirm <ShieldCheck size={13} /></>
                         : <>I've Paid, Submit Booking <ArrowRight size={13} /></>)
                     : <>Confirm Booking <ArrowRight size={13} /></>}
@@ -471,7 +485,7 @@ function BookPageInner() {
             {isPaid && (
               <p style={{ fontSize: "0.68rem", color: "var(--c-ink-muted)", marginTop: "1rem", display: "flex", alignItems: "center", gap: "0.4rem" }}>
                 <ShieldCheck size={12} />
-                {(paystackConfigured && !preferBankTransfer) ? "Secure payment via Paystack, cards & M-Pesa accepted." : "Manual confirmation, payment is verified by hand, not automatically."}
+                {(paystackUsable && !preferBankTransfer) ? "Secure payment via Paystack, cards & M-Pesa accepted." : "Manual confirmation, payment is verified by hand, not automatically."}
               </p>
             )}
           </div>

@@ -12,7 +12,7 @@ import { checkAdminPassword } from "@/lib/adminAuth";
  * admin data at all.
  */
 export async function GET(req: NextRequest) {
-  const denied = checkAdminPassword(req);
+  const denied = await checkAdminPassword(req);
   if (denied) return denied;
 
   try {

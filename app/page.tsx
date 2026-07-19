@@ -189,8 +189,10 @@ function Hero() {
           #hero-content { align-items: center !important; justify-content: flex-end !important; padding-top: 0 !important; padding-bottom: 0rem; }
           .hero-copy { text-align: center !important; }
           .hero-bg { background-image: url('/decra-hero-mobile.jpg'); background-position: center 18%; }
-          /* Overlay stays clear over the face, then goes a lot darker starting just past halfway down */
-          .hero-overlay { background: linear-gradient(180deg, rgba(10,10,10,0.28) 0%, rgba(10,10,10,0.4) 25%, rgba(10,10,10,0.58) 50%, rgba(10,10,10,0.85) 75%, rgba(10,10,10,0.97) 100%); }
+          /* Full wash top-to-bottom (softens the zoomed-out portrait at small
+             sizes, not just legibility for the text), deepening further
+             toward the bottom where the copy sits. */
+          .hero-overlay { background: linear-gradient(180deg, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0.62) 20%, rgba(10,10,10,0.7) 40%, rgba(10,10,10,0.82) 60%, rgba(10,10,10,0.92) 80%, rgba(10,10,10,0.98) 100%); }
           #hero-content h1 { font-size: clamp(1.65rem, 7vw, 2.1rem) !important; margin-bottom: 1.5rem !important; }
           #hero-content button { width: auto; max-width: 82%; white-space: normal; line-height: 1.5; }
         }
