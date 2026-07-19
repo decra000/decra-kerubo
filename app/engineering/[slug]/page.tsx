@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowUpRight, Puzzle, Award, FileText } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Puzzle, Award, FileText, Download } from "lucide-react";
 import { engineeringProjects } from "@/lib/engineering-projects";
 import { PaperLink } from "@/components/research/PaperLink";
 
@@ -113,6 +113,10 @@ export default async function EngineeringProjectPage({
               <a href={project.chromeUrl} target="_blank" rel="noopener noreferrer" className="btn-primary">
                 <Puzzle size={13} /> Add to Chrome
               </a>
+            ) : project.downloadUrl ? (
+              <a href={project.downloadUrl} download className="btn-primary">
+                <Download size={13} /> Download Extension
+              </a>
             ) : (
               <span className="t-body-sm" style={{ display: "inline-flex", alignItems: "center" }}>
                 Chrome Web Store listing coming soon.
@@ -124,6 +128,22 @@ export default async function EngineeringProjectPage({
               </a>
             )}
           </div>
+
+          {project.downloadUrl && !project.chromeUrl && (
+            <div style={{ marginTop: "1.5rem", background: "var(--c-surface)", border: "1px solid var(--c-border)", borderRadius: "10px", padding: "1.5rem" }}>
+              <span className="t-label" style={{ display: "block", marginBottom: "0.85rem" }}>
+                How to install
+              </span>
+              <ol className="t-body-sm" style={{ margin: 0, paddingLeft: "1.1rem", lineHeight: 1.9 }}>
+                <li>Download the .zip above and unzip it.</li>
+                <li>Open <code>chrome://extensions</code> in Chrome and turn on <strong>Developer mode</strong> (top right).</li>
+                <li>Click <strong>Load unpacked</strong> and select the unzipped folder.</li>
+              </ol>
+              <p className="t-body-sm" style={{ marginTop: "0.85rem", marginBottom: 0 }}>
+                Not yet on the Chrome Web Store — this is a direct, if less polished, way to try it today.
+              </p>
+            </div>
+          )}
 
           {related && (
             <div style={{ marginTop: "2.5rem", paddingTop: "2rem", borderTop: "1px solid var(--c-border)" }}>

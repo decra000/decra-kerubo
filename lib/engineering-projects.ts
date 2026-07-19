@@ -13,7 +13,15 @@ export type EngineeringProject = {
   techStack?: string[];
   /** e.g. "Bevisioneers × Mercedes-Benz Fellowship" */
   fellowship?: string;
+  /** Chrome Web Store listing — set once the extension is actually published there. */
   chromeUrl?: string;
+  /**
+   * Direct .zip download (e.g. /downloads/<slug>.zip) for extensions not yet
+   * on the Web Store. Renders a "Download Extension" CTA plus a short
+   * "how to install" (Developer Mode / Load unpacked) block on the detail
+   * page — a real, if less polished, path to trying the extension today.
+   */
+  downloadUrl?: string;
   repoUrl?: string;
   /** Slug of another project this one is directly tied to (shown as "Related work"). */
   relatedSlug?: string;
@@ -47,6 +55,7 @@ export const engineeringProjects: EngineeringProject[] = [
     fellowship: "Bevisioneers × Mercedes-Benz Fellowship",
     relatedSlug: "ai-decarbonization-research",
     pairLabel: "Backed by research",
+    downloadUrl: "/downloads/ai-footprint-tracker.zip",
     image: "/engineering/chrome.png",
   },
   {

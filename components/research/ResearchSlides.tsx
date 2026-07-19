@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowUpRight, FileText, Award, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowUpRight, FileText, Award, ChevronLeft, ChevronRight, Puzzle, Download } from "lucide-react";
 import { engineeringProjects, type EngineeringProject } from "@/lib/engineering-projects";
 import { PaperLink } from "./PaperLink";
 
@@ -158,6 +158,15 @@ export function ResearchSlides() {
                       <Link href={`/engineering/${p.slug}`} className="btn-primary">
                         View project <ArrowUpRight size={13} />
                       </Link>
+                    )}
+                    {p.chromeUrl ? (
+                      <a href={p.chromeUrl} target="_blank" rel="noopener noreferrer" className="btn-outline">
+                        <Puzzle size={13} /> Add to Chrome
+                      </a>
+                    ) : p.downloadUrl && (
+                      <a href={p.downloadUrl} download className="btn-outline">
+                        <Download size={13} /> Download Extension
+                      </a>
                     )}
                   </div>
                 </div>

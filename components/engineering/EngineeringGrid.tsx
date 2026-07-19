@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowUpRight, Puzzle, Award, Link2, FileText } from "lucide-react";
+import { ArrowUpRight, Puzzle, Download, Award, Link2, FileText } from "lucide-react";
 import type { EngineeringProject } from "@/lib/engineering-projects";
 import { PaperLink } from "@/components/research/PaperLink";
 
@@ -218,9 +218,13 @@ export function EngineeringGrid({ projects }: { projects: EngineeringProject[] }
                     View project <ArrowUpRight size={13} />
                   </Link>
                 )}
-                {p.chromeUrl && (
+                {p.chromeUrl ? (
                   <a href={p.chromeUrl} target="_blank" rel="noopener noreferrer" className="btn-outline">
                     <Puzzle size={13} /> Add to Chrome
+                  </a>
+                ) : p.downloadUrl && (
+                  <a href={p.downloadUrl} download className="btn-outline">
+                    <Download size={13} /> Download Extension
                   </a>
                 )}
               </div>
