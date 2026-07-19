@@ -54,7 +54,7 @@ export function BroadcastPanel({ password }: { password: string }) {
 
   const [showHistory, setShowHistory] = useState(false);
   const [historyRows, setHistoryRows] = useState<HistoryRow[]>([]);
-  const [historySummary, setHistorySummary] = useState<{ totalSent: number; totalFailed: number; totalSkipped: number; uniqueRecipientsContacted: number } | null>(null);
+  const [historySummary, setHistorySummary] = useState<{ totalSent: number; totalSkipped: number; uniqueRecipientsContacted: number } | null>(null);
   const [historyLoading, setHistoryLoading] = useState(false);
   const [historyError, setHistoryError] = useState("");
   const [historySearch, setHistorySearch] = useState("");
@@ -209,7 +209,6 @@ export function BroadcastPanel({ password }: { password: string }) {
               <span style={{ color: "var(--c-ink)" }}><strong>{historySummary.uniqueRecipientsContacted}</strong> unique people contacted</span>
               <span style={{ color: "#2F5D50" }}>{historySummary.totalSent} sent</span>
               {historySummary.totalSkipped > 0 && <span style={{ color: "var(--c-ink-muted)" }}>{historySummary.totalSkipped} skipped (dupes avoided)</span>}
-              {historySummary.totalFailed > 0 && <span style={{ color: "#B3524A" }}>{historySummary.totalFailed} failed</span>}
             </div>
           )}
 

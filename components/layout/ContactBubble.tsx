@@ -1,11 +1,13 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { MessageCircle, X, Send, Mic, Volume2, VolumeX } from "lucide-react";
 import { useSpeech } from "@/hooks/useSpeech";
 
 type Msg = { role: "user" | "assistant"; text: string };
 
 export function ContactBubble() {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [msgs, setMsgs] = useState<Msg[]>([{ role: "assistant", text: "What are you working on?" }]);
   const [input, setInput] = useState("");
@@ -36,6 +38,10 @@ export function ContactBubble() {
       const reply = d.reply || "Email hello@decrakerubo.com";
       setMsgs(prev => [...prev, { role: "assistant", text: reply }]);
       if (voiceOn) speak(reply);
+      if (d.redirect?.url) {
+        // Give the person a moment to read the confirmation before the page changes under them.
+        setTimeout(() => router.push(d.redirect.url), 1400);
+      }
     } catch {
       const reply = "Email hello@decrakerubo.com directly.";
       setMsgs(prev => [...prev, { role: "assistant", text: reply }]);

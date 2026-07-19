@@ -1,5 +1,6 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { ArrowRight, ArrowLeft, Clock, CheckCircle2, ShieldCheck, Smartphone, Landmark, SkipForward } from "lucide-react";
 import { CONSULTATION_TYPES } from "@/lib/types";
 
@@ -49,7 +50,35 @@ declare global {
 
 const formatKES = (n: number) => `KES ${n.toLocaleString("en-KE")}`;
 
-export default function BookPage() {
+function BookPageInner() {
+  const searchParams = useSearchParams();
+
+  // A tool in the Decra AI chat (redirect_to_book) sends people here with
+  // whatever it already collected pre-filled via query params, so they don't
+  // have to repeat themselves. Leading fields that arrive this way (typically
+  // name + email) are auto-answered and skipped; a field that arrives out of
+  // order (e.g. primary_challenge, collected before organization/website in
+  // the chat) is left for its normal turn but its text box is pre-populated.
+  const prefill = React.useMemo(() => {
+    const data: Partial<FormState> = {};
+    for (const q of INTAKE_QUESTIONS) {
+      const v = searchParams.get(q.key);
+      if (v) data[q.key] = v;
+    }
+    return data;
+  }, [searchParams]);
+
+  const initialForm = React.useMemo<FormState>(() => ({
+    name: "", email: "", organization: "", website: "", industry: "", team_size: "", primary_challenge: "", desired_outcome: "",
+    ...prefill,
+  }), [prefill]);
+
+  const initialQIndex = React.useMemo(() => {
+    let i = 0;
+    while (i < INTAKE_QUESTIONS.length && prefill[INTAKE_QUESTIONS[i].key]) i++;
+    return i;
+  }, [prefill]);
+
   const [step, setStep] = useState<Step>(1);
   const [selectedType, setSelectedType] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
@@ -64,17 +93,27 @@ export default function BookPage() {
   const [manualRef, setManualRef] = useState("");
   const [manualChannel, setManualChannel] = useState<"mpesa" | "bank">("mpesa");
   const [preferBankTransfer, setPreferBankTransfer] = useState(false);
-  const [form, setForm] = useState<FormState>({ name: "", email: "", organization: "", website: "", industry: "", team_size: "", primary_challenge: "", desired_outcome: "" });
+  const [form, setForm] = useState<FormState>(initialForm);
 
   // Chat-style intake state
-  const [qIndex, setQIndex] = useState(0);
+  const [qIndex, setQIndex] = useState(initialQIndex);
   const [botTyping, setBotTyping] = useState(true);
   const [chatInput, setChatInput] = useState("");
-  const [chatDone, setChatDone] = useState(false);
+  const [chatDone, setChatDone] = useState(initialQIndex >= INTAKE_QUESTIONS.length);
   const chatEndRef = useRef<HTMLDivElement>(null);
   const chatInputRef = useRef<HTMLTextAreaElement>(null);
 
   const currentQuestion = INTAKE_QUESTIONS[qIndex];
+
+  // When we land on a question that the chat already has an answer for (out
+  // of order relative to the auto-skipped leading run above), pre-fill the
+  // input instead of leaving it blank, so the person can just confirm it.
+  useEffect(() => {
+    if (chatDone || !currentQuestion) return;
+    const known = prefill[currentQuestion.key];
+    if (known) setChatInput(known);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [qIndex]);
 
   // Simulate the bot "typing" before each question appears, keeps the pacing
   // conversational instead of every question dumping in instantly.
@@ -458,5 +497,13 @@ export default function BookPage() {
         .chat-thread::-webkit-scrollbar-thumb { background: var(--c-border); border-radius: 4px; }
       `}</style>
     </div>
+  );
+}
+
+export default function BookPage() {
+  return (
+    <Suspense fallback={null}>
+      <BookPageInner />
+    </Suspense>
   );
 }

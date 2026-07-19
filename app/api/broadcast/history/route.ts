@@ -15,9 +15,13 @@ export async function GET(req: NextRequest) {
 
   try {
     const db = supabaseAdmin();
+    // A failed attempt never actually reached anyone, so it doesn't belong in
+    // history (also filters out rows from before sends stopped being logged
+    // on failure).
     const { data, error } = await db
       .from("broadcasts")
       .select("email, company, subject, status, created_at")
+      .neq("status", "failed")
       .order("created_at", { ascending: false })
       .limit(1000);
 
@@ -30,7 +34,6 @@ export async function GET(req: NextRequest) {
       rows,
       summary: {
         totalSent: rows.filter(r => r.status === "sent").length,
-        totalFailed: rows.filter(r => r.status === "failed").length,
         totalSkipped: rows.filter(r => r.status === "skipped").length,
         uniqueRecipientsContacted: uniqueEmails.size,
       },

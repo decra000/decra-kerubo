@@ -92,16 +92,19 @@ export async function POST(req: NextRequest) {
       const sent = await sendMail({ to, subject: personalizedSubject, html: personalizedHtml });
       results.push({ email: to, company: r.company, ok: !!sent.ok, error: sent.ok ? undefined : (sent.error || "Send failed, check Gmail credentials/quota.") });
 
-      // Best-effort audit log, never blocks the send.
-      try {
-        await db.from("broadcasts").insert({
-          company: r.company || null,
-          email: to,
-          subject: personalizedSubject,
-          status: sent.ok ? "sent" : "failed",
-        });
-      } catch (logErr) {
-        console.error("Broadcast log insert failed:", logErr);
+      // Only log actual sends, a failed attempt (bad credentials, quota, etc.)
+      // isn't a contact made, so it shouldn't clutter history or look like one.
+      if (sent.ok) {
+        try {
+          await db.from("broadcasts").insert({
+            company: r.company || null,
+            email: to,
+            subject: personalizedSubject,
+            status: "sent",
+          });
+        } catch (logErr) {
+          console.error("Broadcast log insert failed:", logErr);
+        }
       }
     }
 
