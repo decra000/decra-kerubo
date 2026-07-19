@@ -90,7 +90,7 @@ export async function POST(req: NextRequest) {
       const personalizedHtml = personalize(bodyHtml, r);
 
       const sent = await sendMail({ to, subject: personalizedSubject, html: personalizedHtml });
-      results.push({ email: to, company: r.company, ok: !!sent.ok, error: sent.ok ? undefined : "Send failed, check Gmail credentials/quota." });
+      results.push({ email: to, company: r.company, ok: !!sent.ok, error: sent.ok ? undefined : (sent.error || "Send failed, check Gmail credentials/quota.") });
 
       // Best-effort audit log, never blocks the send.
       try {

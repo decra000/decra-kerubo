@@ -24,7 +24,7 @@ export async function sendMail(opts: {
   const t = getTransporter();
   if (!t) {
     console.error("Email skipped — GMAIL_USER / GMAIL_APP_PASSWORD not set");
-    return { ok: false };
+    return { ok: false, error: "GMAIL_USER / GMAIL_APP_PASSWORD not set" };
   }
   try {
     await t.sendMail({
@@ -38,6 +38,7 @@ export async function sendMail(opts: {
     return { ok: true };
   } catch (err) {
     console.error("Gmail send failed:", err);
-    return { ok: false, error: err };
+    const message = err instanceof Error ? err.message : String(err);
+    return { ok: false, error: message };
   }
 }
