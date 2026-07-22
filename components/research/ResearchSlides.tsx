@@ -43,6 +43,11 @@ export function ResearchSlides() {
         // own slug if one exists, otherwise the research's own slug.
         const exploreSlug = solution?.slug ?? research?.slug ?? p.slug;
 
+        // Fellowship strings are already concise ("X × Y Fellowship"); a
+        // paper's `partner` field reads "In association with X", strip
+        // that prefix so every card's badge matches the same short style.
+        const orgLabel = research?.fellowship || paper?.partner?.replace(/^In association with (the )?/i, "");
+
         return (
           <article
             key={p.title}
@@ -54,35 +59,35 @@ export function ResearchSlides() {
             }}
           >
             <span style={{
-              fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.1em",
-              textTransform: "uppercase", color: "var(--c-accent)", marginBottom: "0.85rem", display: "block",
+              fontSize: "0.54rem", fontWeight: 700, letterSpacing: "0.1em",
+              textTransform: "uppercase", color: "var(--c-accent)", marginBottom: "0.75rem", display: "block",
             }}>
               The research
             </span>
 
             <h3 style={{
               fontFamily: "var(--font-serif)", fontWeight: 400,
-              fontSize: "clamp(1.3rem, 2.2vw, 1.75rem)", color: "var(--c-ink)",
-              lineHeight: 1.25, marginBottom: "1rem", maxWidth: "34rem",
+              fontSize: "clamp(1.05rem, 1.5vw, 1.3rem)", color: "var(--c-ink)",
+              lineHeight: 1.3, marginBottom: "0.85rem", maxWidth: "34rem",
             }}>
               {paper?.title ?? research?.title ?? p.title}
             </h3>
 
-            {(paper?.partner || research?.fellowship) && (
+            {orgLabel && (
               <div style={{
-                display: "inline-flex", alignItems: "center", gap: "0.4rem", width: "fit-content",
-                fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.03em",
+                display: "inline-flex", alignItems: "center", gap: "0.35rem", width: "fit-content",
+                fontSize: "0.58rem", fontWeight: 700, letterSpacing: "0.02em",
                 color: "var(--c-forest)", border: "1px solid var(--c-border-strong)",
-                borderRadius: "100px", padding: "0.35rem 0.8rem", marginBottom: "1.5rem",
+                borderRadius: "100px", padding: "0.3rem 0.7rem", marginBottom: "1.25rem",
               }}>
-                <Award size={12} strokeWidth={2} />
-                {research?.fellowship || paper?.partner}
+                <Award size={11} strokeWidth={2} />
+                {orgLabel}
               </div>
             )}
 
             {solution && (
-              <p style={{ fontSize: "0.72rem", color: "var(--c-ink-muted)", marginBottom: "1.75rem" }}>
-                <span style={{ textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, marginRight: "0.5rem" }}>
+              <p style={{ fontSize: "0.66rem", color: "var(--c-ink-muted)", marginBottom: "1.5rem" }}>
+                <span style={{ textTransform: "uppercase", letterSpacing: "0.06em", fontWeight: 700, marginRight: "0.4rem" }}>
                   Solution
                 </span>
                 {solution.title}

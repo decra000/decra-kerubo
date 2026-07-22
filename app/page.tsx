@@ -2,9 +2,6 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, X, Mic, Volume2, VolumeX, RefreshCw, Plus } from "lucide-react";
 import { useSpeech } from "@/hooks/useSpeech";
-import { PAPERS } from "@/lib/papers";
-import { engineeringProjects } from "@/lib/engineering-projects";
-import { PaperLink } from "@/components/research/PaperLink";
 import { ResearchSlides } from "@/components/research/ResearchSlides";
 
 /* ── helpers ── */
@@ -1073,31 +1070,7 @@ function ResearchSection() {
         }}>
           <p style={{ ...LBL, textAlign: "left", marginBottom: "1.5rem" }}>Research &amp; the products it powers</p>
 
-          {/* Compact index of every paper — each has its own page now
-              (research above, paired solution below, if one exists) */}
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem 1.75rem", marginBottom: "2.5rem", justifyContent: "flex-start" }}>
-            {PAPERS.map((paper, i) => {
-              const entry = engineeringProjects.find((p) => p.paperSlug === paper.slug && p.slug);
-              const itemStyle = {
-                display: "inline-flex", alignItems: "baseline", gap: "0.5rem",
-                fontFamily: "var(--font-sans)", fontSize: "0.72rem",
-                color: "var(--c-ink-muted)", textAlign: "left" as const,
-              };
-              const inner = (
-                <>
-                  <span style={{ fontWeight: 600, fontSize: "0.6rem" }}>{String(i + 1).padStart(2, "0")}</span>
-                  <span style={{ borderBottom: "1px solid var(--c-border)", paddingBottom: "0.15rem" }}>{paper.title}</span>
-                </>
-              );
-              return entry?.slug ? (
-                <a key={paper.slug} href={`/engineering/${entry.slug}`} style={itemStyle}>{inner}</a>
-              ) : (
-                <PaperLink key={paper.slug} slug={paper.slug} style={itemStyle}>{inner}</PaperLink>
-              );
-            })}
-          </div>
-
-          {/* One slide per research effort, paper + the tool it produced */}
+          {/* One card per research effort, paper + the tool it produced */}
           <ResearchSlides />
         </div>
       </div>
