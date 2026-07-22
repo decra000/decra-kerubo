@@ -28,7 +28,7 @@ export function ResearchSlides() {
   if (items.length === 0) return null;
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+    <div className="research-grid" style={{ display: "grid", gridTemplateColumns: `repeat(${items.length}, 1fr)`, gap: "1.25rem" }}>
       {items.map((p) => {
         // Whichever side of the pair carries paperSlug is "the research";
         // the other (if any) is "the solution" it powers.
@@ -95,6 +95,9 @@ export function ResearchSlides() {
           </article>
         );
       })}
+      <style>{`
+        @media (max-width: 860px) { .research-grid { grid-template-columns: 1fr !important; } }
+      `}</style>
     </div>
   );
 }
