@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Plus } from "lucide-react";
 
 export type Capability = {
   id: string;
@@ -13,13 +13,48 @@ export type Capability = {
   items: string[];
 };
 
+function CapabilityDetail({ c }: { c: Capability }) {
+  return (
+    <>
+      <span className="t-label" style={{ marginBottom: "1rem", display: "block" }}>
+        {c.number}
+      </span>
+      <p
+        className="t-display"
+        style={{
+          fontSize: "clamp(1.15rem, 1.8vw, 1.5rem)",
+          fontWeight: 400,
+          lineHeight: 1.4,
+          color: "var(--c-ink)",
+          marginBottom: "1.5rem",
+          maxWidth: "36rem",
+        }}
+      >
+        {c.body}
+      </p>
+      <p className="t-body" style={{ marginBottom: "2.5rem", maxWidth: "36rem" }}>
+        {c.detail}
+      </p>
+      <Link href="/book" className="cap-tab-link">
+        Book a Consultation <ArrowRight size={13} />
+      </Link>
+    </>
+  );
+}
+
 export function CapabilityTabs({ capabilities }: { capabilities: Capability[] }) {
   const [activeId, setActiveId] = useState(capabilities[0]?.id ?? "");
   const active = capabilities.find((c) => c.id === activeId) ?? capabilities[0];
 
+  // Mobile reuses activeId as "which item is expanded", collapsible (tapping
+  // the open one closes it) since there's no separate detail panel to fall
+  // back to, unlike desktop where a tab is always active.
+  const [mobileOpenId, setMobileOpenId] = useState("");
+
   return (
-    <div className="cap-tabs-grid">
-      {/* ── Left: label list ── */}
+    <>
+    {/* ── Desktop: label column + shared detail panel on the right ── */}
+    <div className="cap-tabs-grid cap-tabs-desktop">
       <div className="cap-tabs-nav">
         {capabilities.map((c) => {
           const isActive = c.id === active.id;
@@ -47,36 +82,41 @@ export function CapabilityTabs({ capabilities }: { capabilities: Capability[] })
         })}
       </div>
 
-      {/* ── Right: active capability detail ── */}
       <div key={active.id} className="cap-tab-panel">
-        <span className="t-label" style={{ marginBottom: "1rem", display: "block" }}>
-          {active.number}
-        </span>
-
-        {/* Lede — the headline statement, set larger like a pull-quote */}
-        <p
-          className="t-display"
-          style={{
-            fontSize: "clamp(1.15rem, 1.8vw, 1.5rem)",
-            fontWeight: 400,
-            lineHeight: 1.4,
-            color: "var(--c-ink)",
-            marginBottom: "1.5rem",
-            maxWidth: "36rem",
-          }}
-        >
-          {active.body}
-        </p>
-
-        {/* Supporting paragraph — the scope of the capability, in prose */}
-        <p className="t-body" style={{ marginBottom: "2.5rem", maxWidth: "36rem" }}>
-          {active.detail}
-        </p>
-
-        <Link href="/book" className="cap-tab-link">
-          Book a Consultation <ArrowRight size={13} />
-        </Link>
+        <CapabilityDetail c={active} />
       </div>
+    </div>
+
+    {/* ── Mobile: accordion, each item's detail unfolds directly beneath
+        itself instead of in a shared panel far below the list ── */}
+    <div className="cap-tabs-mobile">
+      {capabilities.map((c) => {
+        const isOpen = c.id === mobileOpenId;
+        return (
+          <div key={c.id} className="cap-accordion-item">
+            <button
+              type="button"
+              onClick={() => setMobileOpenId(isOpen ? "" : c.id)}
+              aria-expanded={isOpen}
+              className="cap-accordion-header"
+            >
+              <span
+                className="t-display t-display-md"
+                style={{ margin: 0, color: isOpen ? "var(--c-forest)" : "var(--c-ink)" }}
+              >
+                {c.label}
+              </span>
+              <Plus size={16} className="cap-accordion-icon" style={{ transform: isOpen ? "rotate(45deg)" : "none" }} />
+            </button>
+            <div className="cap-accordion-panel" style={{ maxHeight: isOpen ? "40rem" : "0px", opacity: isOpen ? 1 : 0 }}>
+              <div style={{ paddingTop: "1.25rem", paddingBottom: "1.75rem" }}>
+                <CapabilityDetail c={c} />
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
 
       <style>{`
         .cap-tabs-grid{
@@ -144,11 +184,45 @@ export function CapabilityTabs({ capabilities }: { capabilities: Capability[] })
           border-color: var(--c-forest);
           gap: 0.7rem;
         }
+
+        .cap-tabs-mobile{ display: none; }
+
         @media(max-width:900px){
-          .cap-tabs-grid{ grid-template-columns: 1fr !important; gap: 2rem !important; }
-          .cap-tabs-nav{ flex-direction: row !important; flex-wrap: wrap; gap: 0.75rem 1.5rem !important; }
+          .cap-tabs-desktop{ display: none !important; }
+          .cap-tabs-mobile{ display: block; padding: 1rem 0; }
+        }
+
+        .cap-accordion-item{
+          border-bottom: 1px solid var(--c-border);
+        }
+        .cap-accordion-item:first-child{
+          border-top: 1px solid var(--c-border);
+        }
+        .cap-accordion-header{
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 1rem;
+          width: 100%;
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 1.15rem 0;
+          text-align: left;
+        }
+        .cap-accordion-icon{
+          flex: none;
+          color: var(--c-ink-muted);
+          transition: transform 0.25s ease, color 0.25s ease;
+        }
+        .cap-accordion-header[aria-expanded="true"] .cap-accordion-icon{
+          color: var(--c-forest);
+        }
+        .cap-accordion-panel{
+          overflow: hidden;
+          transition: max-height 0.45s cubic-bezier(0.16,1,0.3,1), opacity 0.35s ease;
         }
       `}</style>
-    </div>
+    </>
   );
 }

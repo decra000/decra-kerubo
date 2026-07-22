@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, X, Mic, Volume2, VolumeX, RefreshCw } from "lucide-react";
+import { ArrowRight, X, Mic, Volume2, VolumeX, RefreshCw, Plus } from "lucide-react";
 import { useSpeech } from "@/hooks/useSpeech";
 import { PAPERS } from "@/lib/papers";
 import { PaperLink } from "@/components/research/PaperLink";
@@ -189,10 +189,10 @@ function Hero() {
           #hero-content { align-items: center !important; justify-content: flex-end !important; padding-top: 0 !important; padding-bottom: 0rem; }
           .hero-copy { text-align: center !important; }
           .hero-bg { background-image: url('/decra-hero-mobile.jpg'); background-position: center 18%; }
-          /* Full wash top-to-bottom (softens the zoomed-out portrait at small
-             sizes, not just legibility for the text), deepening further
+          /* Heavy wash top-to-bottom, the photo reads as a dark backdrop
+             rather than a clear portrait at small sizes, deepening further
              toward the bottom where the copy sits. */
-          .hero-overlay { background: linear-gradient(180deg, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0.62) 20%, rgba(10,10,10,0.7) 40%, rgba(10,10,10,0.82) 60%, rgba(10,10,10,0.92) 80%, rgba(10,10,10,0.98) 100%); }
+          .hero-overlay { background: linear-gradient(180deg, rgba(10,10,10,0.72) 0%, rgba(10,10,10,0.78) 20%, rgba(10,10,10,0.84) 40%, rgba(10,10,10,0.9) 60%, rgba(10,10,10,0.96) 80%, rgba(10,10,10,0.99) 100%); }
           #hero-content h1 { font-size: clamp(1.65rem, 7vw, 2.1rem) !important; margin-bottom: 1.5rem !important; }
           #hero-content button { width: auto; max-width: 82%; white-space: normal; line-height: 1.5; }
         }
@@ -273,18 +273,55 @@ const SERVICES = [
   },
 ];
 
+function ServiceDetailBody({ s }: { s: (typeof SERVICES)[number] }) {
+  return (
+    <>
+      <p style={{ ...BODY, fontSize: "0.84rem", marginBottom: "1.5rem", maxWidth: "40rem" }}>{s.body}</p>
+      <ul className="svc-items" style={{ listStyle: "none", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.6rem 2rem", marginBottom: "1.5rem" }}>
+        {s.items.map(item => (
+          <li key={item} style={{ display: "flex", gap: "0.85rem", ...BODY, fontSize: "0.82rem" }}>
+            <span style={{ width: "3px", height: "3px", borderRadius: "50%", background: "var(--c-accent)", marginTop: "0.5rem", flexShrink: 0 }} />
+            {item}
+          </li>
+        ))}
+      </ul>
+      <button
+        onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: { key: s.id, label: s.label, opening: s.opening } }))}
+        style={{
+          display: "inline-flex", alignItems: "center", gap: "0.4rem",
+          background: "none", border: "none", borderBottom: "1px solid var(--c-border)",
+          padding: 0, paddingBottom: "0.3rem", cursor: "pointer",
+          fontFamily: "var(--font-manjari)", fontWeight: 700,
+          fontSize: "0.62rem", letterSpacing: "0.16em", textTransform: "uppercase",
+          color: "var(--c-ink-muted)", transition: "color 0.2s, border-color 0.2s",
+        }}
+        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-accent)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"; }}
+        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-ink-muted)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-border)"; }}
+      >
+        Discuss this <ArrowRight size={10} strokeWidth={1.5} />
+      </button>
+    </>
+  );
+}
+
 function Services() {
   const { ref, vis } = useReveal();
   const [active, setActive] = useState(0);
   const s = SERVICES[active];
+
+  // Mobile accordion: which service (if any) is expanded. Kept separate
+  // from `active` since desktop always has one tab active, mobile starts
+  // fully collapsed.
+  const [mobileOpenId, setMobileOpenId] = useState("");
 
   return (
     <section id="services" ref={ref as React.RefObject<HTMLElement>} style={{ ...SEC, borderTop: "none" }}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
         <p style={{ ...LBL, marginBottom: "2.5rem", ...fade(vis) }}>Services</p>
 
+        {/* Desktop/tablet: label column + shared detail panel on the right */}
         <div
-          className="svc-grid"
+          className="svc-grid svc-desktop"
           style={{
             display: "grid", gridTemplateColumns: "minmax(15rem, 0.85fr) 1.15fr",
             gap: "clamp(2.5rem, 6vw, 6rem)", alignItems: "start",
@@ -326,40 +363,68 @@ function Services() {
           {/* Right, the selected service's detail */}
           <div key={s.id} style={{ animation: "svcDetailFade 0.5s cubic-bezier(0.16,1,0.3,1)" }}>
             <h3 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(1.05rem,1.6vw,1.3rem)", color: "var(--c-ink)", lineHeight: 1.25, marginBottom: "1rem" }}>{s.label}</h3>
-            <p style={{ ...BODY, fontSize: "0.84rem", marginBottom: "1.5rem", maxWidth: "40rem" }}>{s.body}</p>
-            <ul className="svc-items" style={{ listStyle: "none", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.6rem 2rem", marginBottom: "1.5rem" }}>
-              {s.items.map(item => (
-                <li key={item} style={{ display: "flex", gap: "0.85rem", ...BODY, fontSize: "0.82rem" }}>
-                  <span style={{ width: "3px", height: "3px", borderRadius: "50%", background: "var(--c-accent)", marginTop: "0.5rem", flexShrink: 0 }} />
-                  {item}
-                </li>
-              ))}
-            </ul>
-            <button
-              onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: { key: s.id, label: s.label, opening: s.opening } }))}
-              style={{
-                display: "inline-flex", alignItems: "center", gap: "0.4rem",
-                background: "none", border: "none", borderBottom: "1px solid var(--c-border)",
-                padding: 0, paddingBottom: "0.3rem", cursor: "pointer",
-                fontFamily: "var(--font-manjari)", fontWeight: 700,
-                fontSize: "0.62rem", letterSpacing: "0.16em", textTransform: "uppercase",
-                color: "var(--c-ink-muted)", transition: "color 0.2s, border-color 0.2s",
-              }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-accent)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-ink-muted)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-border)"; }}
-            >
-              Discuss this <ArrowRight size={10} strokeWidth={1.5} />
-            </button>
+            <ServiceDetailBody s={s} />
           </div>
+        </div>
+
+        {/* Mobile: accordion, each service's detail unfolds directly beneath
+            itself instead of in a shared panel far below a 7-item list */}
+        <div className="svc-mobile" style={{ borderTop: "1px solid var(--c-border)" }}>
+          {SERVICES.map((item) => {
+            const isOpen = item.id === mobileOpenId;
+            return (
+              <div key={item.id} className="svc-accordion-item" style={{ borderBottom: "1px solid var(--c-border)" }}>
+                <button
+                  type="button"
+                  onClick={() => setMobileOpenId(isOpen ? "" : item.id)}
+                  aria-expanded={isOpen}
+                  className="svc-accordion-header"
+                >
+                  <span style={{
+                    fontFamily: "var(--font-serif)", fontWeight: 400,
+                    fontSize: "1.05rem", lineHeight: 1.25,
+                    color: isOpen ? "var(--c-ink)" : "var(--c-ink-muted)",
+                  }}>{item.label}</span>
+                  <Plus size={16} className="svc-accordion-icon" style={{ transform: isOpen ? "rotate(45deg)" : "none" }} />
+                </button>
+                <div className="svc-accordion-panel" style={{ maxHeight: isOpen ? "40rem" : "0px", opacity: isOpen ? 1 : 0 }}>
+                  <div style={{ paddingTop: "0.5rem", paddingBottom: "1.5rem" }}>
+                    <ServiceDetailBody s={item} />
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
       <style>{`
         @keyframes svcDetailFade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+        .svc-mobile{ display: none; }
+
         @media(max-width:860px){
-          .svc-grid{grid-template-columns:1fr!important;gap:2.75rem!important}
+          .svc-desktop{ display: none !important; }
+          .svc-mobile{ display: block; }
         }
         @media(max-width:560px){
           .svc-items{grid-template-columns:1fr!important}
+        }
+
+        .svc-accordion-header{
+          display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+          width: 100%; background: none; border: none; cursor: pointer;
+          padding: 1.15rem 0; text-align: left;
+        }
+        .svc-accordion-icon{
+          flex: none; color: var(--c-ink-muted);
+          transition: transform 0.25s ease, color 0.25s ease;
+        }
+        .svc-accordion-header[aria-expanded="true"] .svc-accordion-icon{
+          color: var(--c-accent);
+        }
+        .svc-accordion-panel{
+          overflow: hidden;
+          transition: max-height 0.45s cubic-bezier(0.16,1,0.3,1), opacity 0.35s ease;
         }
       `}</style>
     </section>
@@ -1007,12 +1072,9 @@ function ResearchSection() {
         }}>
           <p style={{ ...LBL, textAlign: "left", marginBottom: "1.5rem" }}>Research &amp; the products it powers</p>
 
-          {/* One slide per research effort, paper + the tool it produced */}
-          <ResearchSlides />
-
           {/* Compact index of every paper, external ones open their record
               directly, PDFs open the protected full-screen reader */}
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem 1.75rem", marginTop: "2rem", justifyContent: "flex-start" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem 1.75rem", marginBottom: "2.5rem", justifyContent: "flex-start" }}>
             {PAPERS.map((paper, i) => (
               <PaperLink
                 key={paper.slug}
@@ -1028,6 +1090,9 @@ function ResearchSection() {
               </PaperLink>
             ))}
           </div>
+
+          {/* One slide per research effort, paper + the tool it produced */}
+          <ResearchSlides />
         </div>
       </div>
     </section>
