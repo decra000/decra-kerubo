@@ -64,11 +64,6 @@ const PRODUCT_COUNSEL_GROUP = {
   label: "Technical Product Counsel",
   opening: "Hi, I'd like to retain Decra as embedded Technical Product Counsel for my product and engineering team.",
 };
-const SPOTIFY_GROUP = {
-  key: "the-1000",
-  label: "The 1000: Podcast",
-  opening: "Hi, I'm interested in The 1000 podcast and would like to explore how I can be involved.",
-};
 const PACK_GROUP = {
   key: "startup-pack",
   label: "Full Startup Advisory Pack",
@@ -728,7 +723,7 @@ function WorkWithDecra() {
                 <p style={{ ...LBL, marginBottom: "0.35rem" }}>Partner with Decra</p>
                 {active && (
                   <p style={{ fontFamily: "var(--font-serif)", fontSize: "1rem", color: "var(--c-ink)" }}>
-                    {[...PARTNER_GROUPS, PRODUCT_COUNSEL_GROUP, SPOTIFY_GROUP, PACK_GROUP, POST_LAUNCH_REVIEW_GROUP, TECH_DEV_GROUP].find(g => g.key === active)?.label}
+                    {[...PARTNER_GROUPS, PRODUCT_COUNSEL_GROUP, PACK_GROUP, POST_LAUNCH_REVIEW_GROUP, TECH_DEV_GROUP].find(g => g.key === active)?.label}
                   </p>
                 )}
               </div>
@@ -939,94 +934,6 @@ function WorkWithDecra() {
         </div>
       )}
       <style>{`@media(max-width:640px){.wwd-row{gap:0.35rem}}@keyframes dot-pulse{0%,100%{opacity:0.3;transform:translateY(0)}50%{opacity:1;transform:translateY(-3px)}}`}</style>
-    </section>
-  );
-}
-
-/* ── Section 5: The 1000 ── */
-const SpotifyLogo = () => (
-  <svg width="28" height="28" viewBox="0 0 24 24" fill="#1DB954">
-    <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
-  </svg>
-);
-
-function The1000() {
-  const { ref, vis } = useReveal();
-  return (
-    <section id="spotify" ref={ref as React.RefObject<HTMLElement>} style={{
-      minHeight: "clamp(560px,82vh,880px)",
-      position: "relative", overflow: "hidden",
-      display: "flex", alignItems: "flex-end",
-    }}>
-      <img src="/decra-spotify-portrait.jpg" alt="" className="spotify-img" style={{
-        position: "absolute", inset: 0, width: "100%", height: "100%",
-        objectFit: "cover", objectPosition: "58% 25%", display: "block",
-        transform: vis ? "scale(1)" : "scale(1.09)",
-        transition: "transform 1.6s cubic-bezier(0.16,1,0.3,1)",
-      }} />
-      {/* Uniform dark wash over the whole photo, plus a stronger gradient pooling at the bottom behind the copy */}
-      <div style={{
-        position: "absolute", inset: 0,
-        background: "rgba(10,10,10,0.4)",
-      }} />
-      <div style={{
-        position: "absolute", inset: 0,
-        background: `linear-gradient(to top, rgba(10,10,10,0.92) 0%, rgba(10,10,10,0.55) 28%, rgba(10,10,10,0.08) 55%, transparent 72%)`,
-      }} />
-
-
-      <div className="spotify-content" style={{
-        position: "relative", zIndex: 1, width: "100%",
-        maxWidth: "var(--max-w)", margin: "0 auto",
-        padding: "clamp(2.5rem,5vw,4.5rem) var(--space-x) clamp(4.5rem,8vw,7rem)",
-        display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center",
-        ...fade(vis),
-      }}>
-        <div style={{ maxWidth: "26rem", display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.6rem", marginBottom: "1.25rem" }}>
-            <SpotifyLogo />
-            <p style={{
-              fontFamily: "var(--font-manjari)", fontWeight: 700,
-              fontSize: "0.55rem", letterSpacing: "0.24em", textTransform: "uppercase",
-              color: "rgba(255,255,255,0.5)",
-            }}>Podcast</p>
-          </div>
-
-          <p style={{
-            fontFamily: "var(--font-sans)", fontWeight: 400,
-            fontSize: "0.84rem", color: "rgba(255,255,255,0.68)", lineHeight: 1.8,
-            marginBottom: "2.25rem",
-          }}>
-            Technology Law in Africa
-          </p>
-
-          <button
-            onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: SPOTIFY_GROUP }))}
-            style={lineBtn({ light: true })}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "#5FA98F"; (e.currentTarget as HTMLElement).style.color = "#5FA98F"; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.3)"; (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"; }}
-          >
-            Express Interest
-          </button>
-        </div>
-      </div>
-
-      {/* Coming soon, sits over the open photo, no card/background of its own */}
-      <p style={{
-        position: "absolute", left: "50%", transform: "translateX(-50%)", bottom: "clamp(1.25rem,2.75vw,2rem)",
-        zIndex: 1, margin: 0, textAlign: "center",
-        fontFamily: "var(--font-serif)", fontStyle: "italic", fontWeight: 300,
-        fontSize: "clamp(1.35rem,2.6vw,1.9rem)", letterSpacing: "0.14em",
-        color: "rgba(255,255,255,0.75)",
-      }}>Coming soon</p>
-      <style>{`
-        @media(max-width:640px){
-          #spotify{ flex-direction: column !important; align-items: center !important; justify-content: flex-end !important; }
-          #spotify p[style*="position: absolute"]{position:static!important;transform:none!important;width:100%!important;margin:0.5rem 0 0!important;padding:1.25rem 1.5rem clamp(2.5rem,8vw,3.5rem)!important;color:rgba(255,255,255,0.55)!important;box-sizing:border-box!important;}
-          .spotify-img{ object-position: 58% 20% !important; }
-          #spotify .spotify-content{ padding-left: 1.5rem !important; padding-right: 1.5rem !important; padding-bottom: 0 !important; padding-top: clamp(2rem,8vw,3rem) !important; }
-        }
-      `}</style>
     </section>
   );
 }
@@ -1284,7 +1191,6 @@ export default function Home() {
       {/* Tech Development section temporarily hidden, TechDevSection component preserved below, just not rendered.
       <TechDevSection /> */}
       <Accreditations />
-      <The1000 />
       <WorkWithDecra />
     </>
   );
