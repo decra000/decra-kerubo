@@ -696,6 +696,7 @@ function WorkWithDecra() {
                 className={selectedGroup ? "wwd-partner-btn is-active" : "wwd-partner-btn"}
                 style={{
                   ...lineBtn(),
+                  position: "relative",
                   ...(selectedGroup ? {
                     background: "var(--c-accent)",
                     borderColor: "var(--c-accent)",
@@ -705,7 +706,13 @@ function WorkWithDecra() {
                 onMouseEnter={e => { if (!selectedGroup) (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"; }}
                 onMouseLeave={e => { if (!selectedGroup) (e.currentTarget as HTMLElement).style.borderColor = "var(--c-border)"; }}
               >
-                {selectedGroup ? `Partner as ${selectedGroup.label}` : "Partner"}
+                {selectedGroup && (
+                  <span className="wwd-partner-badge" aria-hidden="true">
+                    <span className="wwd-partner-badge-ping" />
+                    <span className="wwd-partner-badge-dot" />
+                  </span>
+                )}
+                Partner
                 <ArrowRight size={12} strokeWidth={1.5} />
               </button>
             );
@@ -714,7 +721,16 @@ function WorkWithDecra() {
         <style>{`
           @keyframes wwdPartnerActivate { 0% { transform: scale(0.96); } 50% { transform: scale(1.04); } 100% { transform: scale(1); } }
           .wwd-partner-btn.is-active { animation: wwdPartnerActivate 0.4s cubic-bezier(0.34,1.3,0.64,1); }
-          @media (prefers-reduced-motion: reduce) { .wwd-partner-btn.is-active { animation: none; } }
+
+          .wwd-partner-badge { position: absolute; top: -5px; right: -5px; width: 12px; height: 12px; }
+          .wwd-partner-badge-dot { position: absolute; inset: 0; border-radius: 50%; background: var(--c-gold); }
+          .wwd-partner-badge-ping { position: absolute; inset: 0; border-radius: 50%; background: var(--c-gold); animation: wwdPing 1.4s cubic-bezier(0,0,0.2,1) infinite; }
+          @keyframes wwdPing { 0% { transform: scale(1); opacity: 0.7; } 75%, 100% { transform: scale(2.2); opacity: 0; } }
+
+          @media (prefers-reduced-motion: reduce) {
+            .wwd-partner-btn.is-active { animation: none; }
+            .wwd-partner-badge-ping { animation: none; opacity: 0.5; }
+          }
         `}</style>
       </div>
 
