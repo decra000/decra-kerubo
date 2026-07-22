@@ -56,7 +56,7 @@ export const engineeringProjects: EngineeringProject[] = [
     relatedSlug: "ai-decarbonization-research",
     pairLabel: "Backed by research",
     downloadUrl: "/downloads/ai-footprint-tracker.zip",
-    image: "/engineering/chrome.png",
+    image: "/engineering/ai-footprint-dashboard.png",
   },
   {
     categories: ["ai"],
