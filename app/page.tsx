@@ -214,7 +214,7 @@ function About() {
           lineHeight: 1.6,
           ...reveal(vis, { dir: "scale", distance: 10 }),
         }}>
-          Product Counsel, providing integrated technical and legal support throughout the technology product lifecycle. I help developers, founders, investors, regulators, and technology procurers design, evaluate, commercialize, govern, and adopt safe, compliant, and scalable technology products.
+I guide technology developers towards safe and compliant tech. I help investors and procurers buy compliant, safe and scalable tech.
         </p>
       </div>
     </section>
