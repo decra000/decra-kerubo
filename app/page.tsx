@@ -177,15 +177,13 @@ function Hero() {
             linear-gradient(90deg, rgba(10,10,10,0.7) 0%, rgba(10,10,10,0.25) 38%, rgba(10,10,10,0) 55%);
         }
 
-        /* Portrait selfie for smaller screens */
+        /* No background photo on small screens, plain dark section
+           background instead (already set on #hero itself) */
         @media (max-width: 640px) {
           #hero-content { align-items: center !important; justify-content: flex-end !important; padding-top: 0 !important; padding-bottom: 0rem; }
           .hero-copy { text-align: center !important; }
-          .hero-bg { background-image: url('/decra-hero-mobile.jpg'); background-position: center 18%; }
-          /* Heavy wash top-to-bottom, the photo reads as a dark backdrop
-             rather than a clear portrait at small sizes, deepening further
-             toward the bottom where the copy sits. */
-          .hero-overlay { background: linear-gradient(180deg, rgba(10,10,10,0.72) 0%, rgba(10,10,10,0.78) 20%, rgba(10,10,10,0.84) 40%, rgba(10,10,10,0.9) 60%, rgba(10,10,10,0.96) 80%, rgba(10,10,10,0.99) 100%); }
+          .hero-bg { background-image: none !important; animation: none !important; }
+          .hero-overlay { background: none !important; }
           #hero-content h1 { font-size: clamp(1.65rem, 7vw, 2.1rem) !important; margin-bottom: 1.5rem !important; }
           #hero-content button { width: auto; max-width: 82%; white-space: normal; line-height: 1.5; }
         }
