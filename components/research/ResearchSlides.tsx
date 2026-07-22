@@ -2,20 +2,21 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowUpRight, FileText, Award, ChevronLeft, ChevronRight, Puzzle, Download } from "lucide-react";
+import { ArrowUpRight, Award, ChevronLeft, ChevronRight } from "lucide-react";
 import { engineeringProjects, type EngineeringProject } from "@/lib/engineering-projects";
-import { PaperLink } from "./PaperLink";
+import { PAPERS } from "@/lib/papers";
 
 /**
  * The homepage Research section's slideshow: one slide per research effort,
- * pairing each paper with the product it powers where one exists.
- * Slide deck (in order): AI Footprint Tracker + its decarbonization paper,
- * Cybersecurity Detection Tool + its online-safety paper, and the
- * cross-border data transfer dissertation on its own.
+ * pairing each paper with the product it powers where one exists. Each
+ * slide is deliberately minimal — research title, organization, the paired
+ * solution's title if any, and a single "Explore" action — the full detail
+ * (abstract, embedded paper, solution image, how to try it) lives on that
+ * item's own page at /engineering/<slug>, not crammed into the slide.
  */
 const SLIDE_PICKS: Array<(p: EngineeringProject) => boolean> = [
   (p) => p.slug === "ai-footprint-tracker",
-  (p) => p.slug === "cybersecurity-detection-tool",
+  (p) => p.slug === "cyberbullying-detection-tool",
   (p) => p.paperSlug === "cross-border-data-transfer",
 ];
 
@@ -60,116 +61,69 @@ export function ResearchSlides() {
           transition: "transform 0.65s cubic-bezier(0.16,1,0.3,1)",
         }}>
           {slides.map((p) => {
-            const pairedResearch = !p.paperSlug && p.relatedSlug
+            // Whichever side of the pair carries paperSlug is "the research";
+            // the other (if any) is "the solution" it powers.
+            const isResearch = !!p.paperSlug;
+            const solution = isResearch && p.relatedSlug
               ? engineeringProjects.find((x) => x.slug === p.relatedSlug)
-              : undefined;
+              : (!isResearch ? p : undefined);
+            const research = isResearch ? p : (p.relatedSlug ? engineeringProjects.find((x) => x.slug === p.relatedSlug) : undefined);
+            const paper = research?.paperSlug ? PAPERS.find((x) => x.slug === research.paperSlug) : undefined;
+
+            // Explore always lands on the merged detail page: the solution's
+            // own slug if one exists, otherwise the research's own slug.
+            const exploreSlug = solution?.slug ?? research?.slug ?? p.slug;
 
             return (
               <article
                 key={p.title}
                 className="card rsc-slide"
                 style={{
-                  padding: 0, overflow: "hidden",
+                  padding: "clamp(2rem, 4vw, 3.5rem)",
                   flex: "0 0 100%", minWidth: 0,
-                  display: "grid", textAlign: "left",
-                  gridTemplateColumns: pairedResearch ? "0.85fr 1fr 1.3fr" : "1.1fr 1fr",
+                  textAlign: "left",
                   border: "1px solid var(--c-border-strong)",
                 }}
               >
-                {pairedResearch && (
-                  <div className="rsc-slide-research" style={{
-                    display: "flex", flexDirection: "column", justifyContent: "center",
-                    padding: "clamp(1.25rem, 2.5vw, 2rem)",
-                    background: "var(--c-surface)",
-                    borderRight: "1px solid var(--c-border)",
+                <span style={{
+                  fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.1em",
+                  textTransform: "uppercase", color: "var(--c-accent)", marginBottom: "0.85rem", display: "block",
+                }}>
+                  The research
+                </span>
+
+                <h3 style={{
+                  fontFamily: "var(--font-serif)", fontWeight: 400,
+                  fontSize: "clamp(1.3rem, 2.2vw, 1.75rem)", color: "var(--c-ink)",
+                  lineHeight: 1.25, marginBottom: "1rem", maxWidth: "34rem",
+                }}>
+                  {paper?.title ?? research?.title ?? p.title}
+                </h3>
+
+                {(paper?.partner || research?.fellowship) && (
+                  <div style={{
+                    display: "inline-flex", alignItems: "center", gap: "0.4rem", width: "fit-content",
+                    fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.03em",
+                    color: "var(--c-forest)", border: "1px solid var(--c-border-strong)",
+                    borderRadius: "100px", padding: "0.35rem 0.8rem", marginBottom: "1.5rem",
                   }}>
-                    <span style={{
-                      fontSize: "0.58rem", fontWeight: 700, letterSpacing: "0.1em",
-                      textTransform: "uppercase", color: "var(--c-accent)", marginBottom: "0.75rem",
-                    }}>
-                      The research
-                    </span>
-                    <h4 style={{
-                      fontFamily: "var(--font-serif)", fontWeight: 400,
-                      fontSize: "clamp(1rem, 1.6vw, 1.2rem)", color: "var(--c-ink)",
-                      lineHeight: 1.3, marginBottom: "1rem",
-                    }}>
-                      {pairedResearch.title}
-                    </h4>
-                    {pairedResearch.paperSlug && (
-                      <PaperLink
-                        slug={pairedResearch.paperSlug}
-                        style={{
-                          display: "inline-flex", alignItems: "center", gap: "0.35rem", width: "fit-content",
-                          fontFamily: "var(--font-manjari)", fontWeight: 700,
-                          fontSize: "0.6rem", letterSpacing: "0.08em", textTransform: "uppercase",
-                          color: "var(--c-ink-muted)", borderBottom: "1px solid var(--c-border-strong)", paddingBottom: "0.2rem",
-                        }}
-                      >
-                        Read the paper <FileText size={11} />
-                      </PaperLink>
-                    )}
+                    <Award size={12} strokeWidth={2} />
+                    {research?.fellowship || paper?.partner}
                   </div>
                 )}
 
-                <div style={{ aspectRatio: "16 / 11", overflow: "hidden", background: "var(--c-surface)" }}>
-                  <img
-                    src={p.image}
-                    alt={p.title}
-                    loading="lazy"
-                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                  />
-                </div>
-
-                <div style={{ padding: "clamp(1.5rem, 3vw, 2.5rem)", display: "flex", flexDirection: "column", justifyContent: "center" }}>
-                  <span style={{
-                    display: "inline-block", fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.1em",
-                    textTransform: "uppercase", color: "var(--c-forest)", marginBottom: "0.9rem",
-                  }}>
-                    {p.subtitle}
-                  </span>
-
-                  <h3 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(1.3rem, 2.2vw, 1.75rem)", color: "var(--c-ink)", marginBottom: "0.75rem", lineHeight: 1.2 }}>
-                    {p.title}
-                  </h3>
-
-                  <p style={{ fontSize: "0.85rem", color: "var(--c-ink-muted)", lineHeight: 1.75, marginBottom: "1.25rem" }}>
-                    {p.description}
+                {solution && (
+                  <p style={{ fontSize: "0.72rem", color: "var(--c-ink-muted)", marginBottom: "1.75rem" }}>
+                    <span style={{ textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, marginRight: "0.5rem" }}>
+                      Solution
+                    </span>
+                    {solution.title}
                   </p>
+                )}
 
-                  {p.fellowship && (
-                    <div style={{
-                      display: "inline-flex", alignItems: "center", gap: "0.4rem", width: "fit-content",
-                      fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.05em",
-                      color: "var(--c-forest)", border: "1px solid var(--c-border-strong)",
-                      borderRadius: "100px", padding: "0.35rem 0.8rem", marginBottom: "1.5rem",
-                    }}>
-                      <Award size={12} strokeWidth={2} />
-                      {p.fellowship}
-                    </div>
-                  )}
-
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
-                    {p.paperSlug ? (
-                      <PaperLink slug={p.paperSlug} className="btn-primary">
-                        Read the paper <FileText size={13} />
-                      </PaperLink>
-                    ) : p.slug && (
-                      <Link href={`/engineering/${p.slug}`} className="btn-primary">
-                        View project <ArrowUpRight size={13} />
-                      </Link>
-                    )}
-                    {p.chromeUrl ? (
-                      <a href={p.chromeUrl} target="_blank" rel="noopener noreferrer" className="btn-outline">
-                        <Puzzle size={13} /> Add to Chrome
-                      </a>
-                    ) : p.downloadUrl && (
-                      <a href={p.downloadUrl} download className="btn-outline">
-                        <Download size={13} /> Download Extension
-                      </a>
-                    )}
-                  </div>
-                </div>
+                <Link href={`/engineering/${exploreSlug}`} className="btn-primary">
+                  Explore <ArrowUpRight size={13} />
+                </Link>
               </article>
             );
           })}
@@ -229,10 +183,6 @@ export function ResearchSlides() {
           </button>
         </div>
       )}
-
-      <style>{`
-        @media(max-width: 760px){ .rsc-slide{ grid-template-columns: 1fr !important; } }
-      `}</style>
     </div>
   );
 }

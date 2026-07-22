@@ -13,7 +13,7 @@ import type { Paper } from "@/lib/papers";
  * screenshot — nothing rendered on a screen can prevent that — but every
  * casual extraction path is closed.)
  */
-function ProtectedPdfPages({ slug, title }: { slug: string; title: string }) {
+export function ProtectedPdfPages({ slug, title }: { slug: string; title: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [state, setState] = useState<"loading" | "ready" | "error">("loading");
   const [progress, setProgress] = useState({ done: 0, total: 0 });
