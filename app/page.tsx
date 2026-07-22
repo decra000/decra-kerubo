@@ -687,16 +687,35 @@ function WorkWithDecra() {
             );
           })}
           <span style={{ flex: 1, minWidth: "1.5rem" }} />
-          <button
-            onClick={openPartnerModal}
-            style={lineBtn()}
-            onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"}
-            onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--c-border)"}
-          >
-            Partner
-            <ArrowRight size={12} strokeWidth={1.5} />
-          </button>
+          {(() => {
+            const selectedGroup = ENGAGE_GROUPS.find(g => g.key === selected);
+            return (
+              <button
+                key={selected || "none"}
+                onClick={openPartnerModal}
+                className={selectedGroup ? "wwd-partner-btn is-active" : "wwd-partner-btn"}
+                style={{
+                  ...lineBtn(),
+                  ...(selectedGroup ? {
+                    background: "var(--c-accent)",
+                    borderColor: "var(--c-accent)",
+                    color: "var(--c-bg)",
+                  } : {}),
+                }}
+                onMouseEnter={e => { if (!selectedGroup) (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"; }}
+                onMouseLeave={e => { if (!selectedGroup) (e.currentTarget as HTMLElement).style.borderColor = "var(--c-border)"; }}
+              >
+                {selectedGroup ? `Partner as ${selectedGroup.label}` : "Partner"}
+                <ArrowRight size={12} strokeWidth={1.5} />
+              </button>
+            );
+          })()}
         </div>
+        <style>{`
+          @keyframes wwdPartnerActivate { 0% { transform: scale(0.96); } 50% { transform: scale(1.04); } 100% { transform: scale(1); } }
+          .wwd-partner-btn.is-active { animation: wwdPartnerActivate 0.4s cubic-bezier(0.34,1.3,0.64,1); }
+          @media (prefers-reduced-motion: reduce) { .wwd-partner-btn.is-active { animation: none; } }
+        `}</style>
       </div>
 
       {modalOpen && (
