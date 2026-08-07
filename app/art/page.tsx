@@ -42,15 +42,10 @@ export default function ArtPage() {
           aria-label="A sheet of paper burned through the middle, its edges curled and scorched, resting on black."
         />
 
-        {/* The poem is untitled, so the page's heading is the section label
-            itself rather than an invented title over her work. */}
-        <div className="art-stage-copy">
-          <div className="art-eyebrow">
-            <span className="art-rule" />
-            <h1 className="art-eyebrow-heading">Art</h1>
-          </div>
-          <p className="art-byline">A poem — Decra Kerubo</p>
-        </div>
+        {/* The hero carries the image and nothing else. The page still needs
+            a heading for the document outline and for anyone arriving by
+            screen reader, so it is here but not drawn. */}
+        <h1 className="art-sr-only">Art — a poem by Decra Kerubo</h1>
 
         <div className="art-stage-fade" aria-hidden="true" />
       </section>
@@ -77,14 +72,14 @@ export default function ArtPage() {
       </section>
 
       <section className="art-outro">
-        {/* ── See more ── */}
+        {/* ── More works ── */}
         <a
           className="art-more"
           href={POETRY_URL}
           target="_blank"
           rel="noopener noreferrer"
         >
-          <span className="art-more-label">See more</span>
+          <span className="art-more-label">More works</span>
           <span className="art-more-arrow" aria-hidden="true">
             <svg viewBox="0 0 24 34" width="22" height="30" fill="none">
               <path d="M12 1 V30" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" />
@@ -111,50 +106,27 @@ export default function ArtPage() {
           align-items: center;
         }
         /* contain, never cover: the shape of the burnt sheet is the image,
-           and cropping it to fill the viewport would cut exactly that away. */
+           and cropping it to fill the viewport would cut exactly that away.
+           With nothing else in the hero it sits dead centre. */
         .art-canvas {
           position: absolute;
           inset: 0;
           background-image: url('${HERO_IMAGE}');
           background-repeat: no-repeat;
           background-size: contain;
-          background-position: 92% center;
+          background-position: center;
+          /* Deliberately no entrance animation. The image is the entire hero
+             now, and an opacity-0 start would leave the page looking blank
+             for anyone whose animations never run. */
         }
-        /* The sheet sits right of centre, so the label takes the black space
-           beside it rather than fighting the paper for the same ground. */
-        .art-stage-copy {
-          position: relative;
-          z-index: 2;
-          width: 100%;
-          max-width: var(--max-w);
-          margin: 0 auto;
-          padding: 0 var(--space-page-x);
-          animation: artRise 1.6s cubic-bezier(0.16,1,0.3,1) 0.2s both;
-        }
-        .art-eyebrow {
-          display: flex; align-items: center; gap: 0.7rem;
-          margin-bottom: 1.4rem;
-          font-family: var(--font-manjari), sans-serif;
-          font-weight: 700; font-size: 0.58rem;
-          letter-spacing: 0.28em; text-transform: uppercase;
-          color: rgba(214, 186, 152, 0.75);
-        }
-        .art-rule { display: block; width: 1.6rem; height: 1px; background: rgba(214, 186, 152, 0.5); }
-        /* The h1 carries the page's heading without looking like one. */
-        .art-eyebrow-heading {
-          font: inherit;
-          letter-spacing: inherit;
-          text-transform: inherit;
-          color: inherit;
-          margin: 0;
-        }
-        .art-byline {
-          font-family: var(--font-serif), Georgia, serif;
-          font-style: italic;
-          font-size: clamp(1.05rem, 1.7vw, 1.4rem);
-          letter-spacing: 0.01em;
-          color: rgba(243, 232, 220, 0.72);
-          margin: 0;
+        /* Present to assistive tech and to the document outline, drawn nowhere. */
+        .art-sr-only {
+          position: absolute;
+          width: 1px; height: 1px;
+          margin: -1px; padding: 0; border: 0;
+          overflow: hidden;
+          clip-path: inset(50%);
+          white-space: nowrap;
         }
         .art-stage-fade {
           position: absolute; left: 0; right: 0; bottom: 0; height: 22vh;
@@ -221,7 +193,7 @@ export default function ArtPage() {
           padding: clamp(3rem, 7vw, 5rem) var(--space-page-x) clamp(5rem, 12vw, 9rem);
         }
 
-        /* ── See more ── */
+        /* ── More works ── */
         .art-more {
           display: flex;
           flex-direction: column;
@@ -255,21 +227,14 @@ export default function ArtPage() {
           50%      { transform: translateY(5px);  opacity: 1;    }
         }
 
-        /* On a phone the sheet fills the width, so there is no black column
-           beside it — the label moves below it instead, centred. */
+        /* On a phone the sheet takes a little more of the width, so it isn't
+           marooned in the middle of a tall black screen. */
         @media (max-width: 820px) {
-          .art-stage { align-items: flex-end; }
-          .art-canvas { background-position: center 24%; background-size: 106%; }
-          .art-stage-copy {
-            text-align: center;
-            padding-bottom: clamp(2.5rem, 8vh, 4.5rem);
-          }
-          .art-eyebrow { justify-content: center; margin-bottom: 1rem; }
+          .art-canvas { background-size: 112%; }
         }
 
         @media (prefers-reduced-motion: reduce) {
-          .art-stage-copy,
-          .art-stanza { animation: none !important; opacity: 1; transform: none; filter: none; }
+          .art-line { animation: none !important; opacity: 1; transform: none; filter: none; }
           .art-portrait-img,
           .art-more-arrow { animation: none !important; }
         }
