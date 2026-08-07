@@ -70,18 +70,18 @@ export function Navbar() {
       }}>
         <div style={{ maxWidth: "var(--max-w)", margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <Link href="/" style={{ textDecoration: "none" }}>
-            <span style={{ fontFamily: "var(--font-serif)", fontSize: "1.1rem", color: "var(--c-ink)" }}>Decra Kerubo</span>
+            <span className="nav-logo" style={{ fontFamily: "var(--font-serif)", fontSize: "1.1rem", color: "var(--c-ink)" }}>Decra Kerubo</span>
           </Link>
 
           <nav className="nav-links">
             {links.map(l => (
-              <Link key={l.href} href={l.href} style={lk}
+              <Link key={l.href} href={l.href} className="nav-link" style={lk}
                 onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"}
                 onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink-mid)"}>
                 {l.label}
               </Link>
             ))}
-            <Link href="/book" style={{
+            <Link href="/book" className="nav-cta" style={{
               ...lk, color: "var(--c-bg)", background: "var(--c-ink)",
               padding: "0.55rem 1rem", borderRadius: "2px",
             }}
@@ -105,7 +105,7 @@ export function Navbar() {
               onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.color = "var(--c-ink)"; el.style.borderColor = "var(--c-border-strong)"; el.style.transform = "rotate(0deg)"; }}>
               {theme === "dark" ? <Sun size={14} strokeWidth={1.7} /> : <Moon size={14} strokeWidth={1.7} />}
             </button>
-            <Link href={featureLink.href} style={lk}
+            <Link href={featureLink.href} className="nav-link" style={lk}
               onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"}
               onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink-mid)"}>
               {featureLink.label}
@@ -116,6 +116,7 @@ export function Navbar() {
             <button
               onClick={toggle}
               aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+              className="theme-toggle"
               style={{
                 display: "flex", alignItems: "center", justifyContent: "center",
                 width: "1.9rem", height: "1.9rem", borderRadius: "50%",
@@ -124,7 +125,7 @@ export function Navbar() {
               }}>
               {theme === "dark" ? <Sun size={14} strokeWidth={1.7} /> : <Moon size={14} strokeWidth={1.7} />}
             </button>
-            <button onClick={() => setMob(v => !v)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--c-ink)", lineHeight: 0 }}>
+            <button onClick={() => setMob(v => !v)} className="nav-mob-toggle" style={{ background: "none", border: "none", cursor: "pointer", color: "var(--c-ink)", lineHeight: 0 }}>
               {mob ? <X size={18} strokeWidth={1.5} /> : <Menu size={18} strokeWidth={1.5} />}
             </button>
           </div>
@@ -133,18 +134,18 @@ export function Navbar() {
         {mob && (
           <div style={{ padding: "1.5rem var(--space-x)", display: "flex", flexDirection: "column", gap: "1.25rem", borderTop: "1px solid var(--c-border)", marginTop: "0.75rem" }}>
             {links.map(l => (
-              <Link key={l.href} href={l.href} onClick={() => setMob(false)} style={{ ...lk, fontSize: "0.75rem" }}
+              <Link key={l.href} href={l.href} onClick={() => setMob(false)} className="nav-link" style={{ ...lk, fontSize: "0.75rem" }}
                 onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"}
                 onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink-mid)"}>
                 {l.label}
               </Link>
             ))}
-            <Link href={featureLink.href} onClick={() => setMob(false)} style={{ ...lk, fontSize: "0.75rem" }}
+            <Link href={featureLink.href} onClick={() => setMob(false)} className="nav-link" style={{ ...lk, fontSize: "0.75rem" }}
               onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"}
               onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink-mid)"}>
               {featureLink.label}
             </Link>
-            <Link href="/book" onClick={() => setMob(false)} style={{
+            <Link href="/book" onClick={() => setMob(false)} className="nav-cta" style={{
               ...lk, fontSize: "0.75rem", color: "var(--c-bg)", background: "var(--c-ink)",
               padding: "0.7rem 1rem", borderRadius: "2px", textAlign: "center",
             }}>

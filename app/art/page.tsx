@@ -97,6 +97,33 @@ export default function ArtPage() {
           color: #F3E8DC;
         }
 
+        /* This page paints its own black whatever theme the visitor is in, so
+           the navbar's ink-coloured links disappear into it — in light mode
+           they were #2E2E2E on black. Lift them for this page only. :has()
+           scopes it here without the navbar having to know about this page,
+           and !important is required because those colours are inline styles
+           (the hover handlers set them on the element directly). */
+        body:has(.art-page) .nav-logo {
+          color: rgba(244, 234, 220, 0.94) !important;
+        }
+        body:has(.art-page) .nav-link {
+          color: rgba(244, 234, 220, 0.72) !important;
+        }
+        body:has(.art-page) .nav-link:hover {
+          color: #FFFFFF !important;
+        }
+        body:has(.art-page) .theme-toggle,
+        body:has(.art-page) .nav-mob-toggle {
+          color: rgba(244, 234, 220, 0.9) !important;
+          border-color: rgba(244, 234, 220, 0.32) !important;
+        }
+        /* The CTA is a filled block, so it needs the inverse treatment: a light
+           plate with dark type, rather than dark-on-dark. */
+        body:has(.art-page) .nav-cta {
+          background: #F4EADC !important;
+          color: #0A0A0A !important;
+        }
+
         /* ── Stage ── */
         .art-stage {
           position: relative;
