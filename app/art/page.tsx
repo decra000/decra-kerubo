@@ -120,25 +120,24 @@ export default function ArtPage() {
           color: #0A0A0A !important;
         }
 
-        /* ── Stage ── */
+        /* ── Stage ──
+           A square strip: full width, height to match. Because the photograph
+           is itself square, cover fits it exactly — it fills the strip edge to
+           edge with nothing cropped away. */
         .art-stage {
           position: relative;
-          min-height: 100svh;
+          width: 100%;
+          aspect-ratio: 1 / 1;
           overflow: hidden;
           display: flex;
           align-items: center;
         }
-        /* The portrait's own ground is true black, so it sits on this page
-           with no visible edge and needs no cropping. Sized as a framed
-           square rather than filled to the viewport: cover turned it into an
-           extreme close-up on wide screens, which is not what the photograph
-           is. Held clear of both edges so it reads as a portrait. */
         .art-canvas {
           position: absolute;
           inset: 0;
           background-image: url('${HERO_IMAGE}');
           background-repeat: no-repeat;
-          background-size: min(74vh, 84vw);
+          background-size: cover;
           background-position: center;
           /* Deliberately no entrance animation. The image is the entire hero,
              and an opacity-0 start would leave the page looking blank for

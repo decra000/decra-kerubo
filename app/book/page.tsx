@@ -20,6 +20,40 @@ const INTAKE_QUESTIONS: { key: keyof FormState; bot: string; placeholder: string
   { key: "desired_outcome", bot: "And what would a successful outcome look like for you?", placeholder: "Type your answer...", type: "textarea", required: true },
 ];
 
+/**
+ * Answers were only ever checked for being non-empty, so "f" passed as an
+ * email address and the booking arrived with no way to reach the person.
+ * Returns an empty string when the answer is fine, otherwise the message to
+ * show under the input.
+ */
+function validateAnswer(question: (typeof INTAKE_QUESTIONS)[number], raw: string): string {
+  const value = raw.trim();
+  if (!value) return question.required ? "This one's needed before we go on." : "";
+
+  switch (question.key) {
+    case "name":
+      if (value.length < 2 || !/\p{L}/u.test(value)) return "Please enter your name.";
+      return "";
+    case "email":
+      // Deliberately loose — the job is to catch typos and obvious junk, not
+      // to adjudicate the RFC. Anything stricter rejects real addresses.
+      return /^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/.test(value)
+        ? ""
+        : "That doesn't look like an email address — check for a typo.";
+    case "website":
+      return /^(https?:\/\/)?[\w-]+(\.[\w-]+)+([/?#].*)?$/.test(value)
+        ? ""
+        : "That doesn't look like a web address. You can skip this one.";
+    case "primary_challenge":
+    case "desired_outcome":
+      return value.length < 10
+        ? "A sentence or two helps Decra prepare properly."
+        : "";
+    default:
+      return "";
+  }
+}
+
 const TIME_SLOTS: { label: string; value: string }[] = [
   { label: "09:00 AM", value: "09:00" },
   { label: "10:00 AM", value: "10:00" },
@@ -97,6 +131,10 @@ function BookPageInner() {
 
   // Chat-style intake state
   const [qIndex, setQIndex] = useState(initialQIndex);
+  // The furthest question reached, so stepping back to edit doesn't lose the
+  // place. `chatError` is the validation message under the current input.
+  const [furthest, setFurthest] = useState(initialQIndex);
+  const [chatError, setChatError] = useState("");
   const [botTyping, setBotTyping] = useState(true);
   const [chatInput, setChatInput] = useState("");
   const [chatDone, setChatDone] = useState(initialQIndex >= INTAKE_QUESTIONS.length);
@@ -105,39 +143,71 @@ function BookPageInner() {
 
   const currentQuestion = INTAKE_QUESTIONS[qIndex];
 
-  // When we land on a question that the chat already has an answer for (out
-  // of order relative to the auto-skipped leading run above), pre-fill the
-  // input instead of leaving it blank, so the person can just confirm it.
+  // When we land on a question that already has an answer — prefilled from the
+  // chat, or revisited to be corrected — put it back in the input so the
+  // person can confirm or amend it rather than retyping from nothing.
   useEffect(() => {
     if (chatDone || !currentQuestion) return;
-    const known = prefill[currentQuestion.key];
+    const known = form[currentQuestion.key];
     if (known) setChatInput(known);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qIndex]);
 
   // Simulate the bot "typing" before each question appears, keeps the pacing
-  // conversational instead of every question dumping in instantly.
+  // conversational instead of every question dumping in instantly. Skipped
+  // when stepping back to an answered question — that should feel immediate,
+  // not like being asked again.
   useEffect(() => {
     if (chatDone) return;
+    if (currentQuestion && form[currentQuestion.key]) {
+      setBotTyping(false);
+      return;
+    }
     setBotTyping(true);
     const t = setTimeout(() => { setBotTyping(false); chatInputRef.current?.focus(); }, qIndex === 0 ? 350 : 500 + Math.random() * 350);
     return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qIndex, chatDone]);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   }, [qIndex, botTyping, chatDone]);
 
-  const submitAnswer = (skip?: boolean) => {
-    const value = skip ? "" : chatInput.trim();
-    if (currentQuestion.required && !value) return;
-    setForm(f => ({ ...f, [currentQuestion.key]: value }));
+  // Moves on after an answer. When someone has stepped back to correct an
+  // earlier answer, this returns them to where they were rather than making
+  // them walk forward through everything they'd already answered.
+  const advance = () => {
     setChatInput("");
-    if (qIndex < INTAKE_QUESTIONS.length - 1) {
-      setQIndex(i => i + 1);
-    } else {
+    setChatError("");
+    const next = qIndex < furthest ? furthest : qIndex + 1;
+    if (next >= INTAKE_QUESTIONS.length) {
+      setFurthest(INTAKE_QUESTIONS.length);
       setChatDone(true);
+    } else {
+      setQIndex(next);
+      setFurthest(f => Math.max(f, next));
     }
+  };
+
+  const submitAnswer = (skip?: boolean) => {
+    if (skip) {
+      setForm(f => ({ ...f, [currentQuestion.key]: "" }));
+      advance();
+      return;
+    }
+    const value = chatInput.trim();
+    const problem = validateAnswer(currentQuestion, value);
+    if (problem) { setChatError(problem); return; }
+    setForm(f => ({ ...f, [currentQuestion.key]: value }));
+    advance();
+  };
+
+  // Step back to an earlier question to change the answer.
+  const editAnswer = (index: number) => {
+    setChatDone(false);
+    setChatError("");
+    setQIndex(index);
+    setChatInput(form[INTAKE_QUESTIONS[index].key] || "");
   };
 
   const selectedConsultation = CONSULTATION_TYPES.find(t => t.id === selectedType);
@@ -285,7 +355,16 @@ function BookPageInner() {
               {INTAKE_QUESTIONS.slice(0, qIndex).map((q, i) => (
                 <div key={q.key} className="chat-bubble-in">
                   <div className="chat-bubble chat-bubble-bot">{q.bot}</div>
-                  <div className="chat-bubble chat-bubble-user">{form[q.key] ? form[q.key] : <span style={{ opacity: 0.6, fontStyle: "italic" }}>Skipped</span>}</div>
+                  {/* An answer isn't final: click it to go back and change it. */}
+                  <button
+                    type="button"
+                    onClick={() => editAnswer(i)}
+                    className="chat-bubble chat-bubble-user chat-bubble-editable"
+                    title="Click to change this answer"
+                  >
+                    {form[q.key] ? form[q.key] : <span style={{ opacity: 0.6, fontStyle: "italic" }}>Skipped</span>}
+                    <span className="chat-edit-hint" aria-hidden="true">Edit</span>
+                  </button>
                 </div>
               ))}
 
@@ -314,7 +393,7 @@ function BookPageInner() {
                     ref={chatInputRef}
                     rows={2}
                     value={chatInput}
-                    onChange={e => setChatInput(e.target.value)}
+                    onChange={e => { setChatInput(e.target.value); if (chatError) setChatError(""); }}
                     onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); submitAnswer(); } }}
                     placeholder={currentQuestion.placeholder}
                     className="field"
@@ -325,11 +404,16 @@ function BookPageInner() {
                     ref={chatInputRef as unknown as React.RefObject<HTMLInputElement>}
                     type={currentQuestion.type === "email" ? "email" : "text"}
                     value={chatInput}
-                    onChange={e => setChatInput(e.target.value)}
+                    onChange={e => { setChatInput(e.target.value); if (chatError) setChatError(""); }}
                     onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); submitAnswer(); } }}
                     placeholder={currentQuestion.placeholder}
                     className="field"
                   />
+                )}
+                {chatError && (
+                  <p role="alert" style={{ fontSize: "0.75rem", color: "#B4453A", marginTop: "0.5rem" }}>
+                    {chatError}
+                  </p>
                 )}
                 <div style={{ display: "flex", gap: "0.6rem", marginTop: "0.75rem" }}>
                   <button
@@ -338,7 +422,7 @@ function BookPageInner() {
                     className="btn-primary"
                     style={{ border: "none", opacity: (currentQuestion.required && !chatInput.trim()) ? 0.4 : 1, padding: "0.65rem 1.5rem" }}
                   >
-                    Send <ArrowRight size={13} />
+                    {qIndex < furthest ? "Save" : "Send"} <ArrowRight size={13} />
                   </button>
                   {currentQuestion.skippable && (
                     <button onClick={() => submitAnswer(true)} className="btn-outline" style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", padding: "0.65rem 1.1rem" }}>
@@ -505,6 +589,22 @@ function BookPageInner() {
         .chat-bubble { font-size: 0.8rem; line-height: 1.55; padding: 0.7rem 1rem; border-radius: 14px; max-width: 84%; word-break: break-word; white-space: pre-wrap; }
         .chat-bubble-bot { align-self: flex-start; background: rgba(14,61,50,0.06); color: var(--c-forest); border-bottom-left-radius: 4px; }
         .chat-bubble-user { align-self: flex-end; background: var(--c-forest); color: white; border-bottom-right-radius: 4px; }
+
+        /* Answers are buttons, so they need the bubble's look without the
+           browser's button defaults. */
+        .chat-bubble-editable {
+          border: none; font: inherit; font-size: 0.8rem; text-align: left;
+          cursor: pointer; position: relative;
+          transition: opacity 0.2s ease;
+        }
+        .chat-bubble-editable:hover { opacity: 0.86; }
+        .chat-bubble-editable:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; }
+        .chat-edit-hint {
+          display: block; margin-top: 0.2rem;
+          font-family: var(--font-manjari), sans-serif; font-weight: 700;
+          font-size: 0.54rem; letter-spacing: 0.16em; text-transform: uppercase;
+          opacity: 0.6;
+        }
 
         .chat-typing { display: flex; align-items: center; gap: 0.3rem; padding: 0.85rem 1.1rem; }
         .chat-typing span { width: 5px; height: 5px; border-radius: 50%; background: var(--c-forest); opacity: 0.5; animation: chatDot 1.1s infinite ease-in-out; }
