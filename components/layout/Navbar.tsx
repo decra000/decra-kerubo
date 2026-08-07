@@ -11,7 +11,10 @@ const links = [
   { href: "/#collaborate", label: "Collaborate" },
 ];
 
-const engineeringLink = { href: "/engineering", label: "Engineering" };
+// Engineering is deliberately not in the nav over the hero any more — the
+// page and its /engineering/<slug> detail pages are still live and still
+// linked from the Research section, it just isn't a top-level destination.
+const featureLink = { href: "/art", label: "Art" };
 
 const lk: React.CSSProperties = {
   fontFamily: "var(--font-manjari)", fontWeight: 700,
@@ -102,10 +105,10 @@ export function Navbar() {
               onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.color = "var(--c-ink)"; el.style.borderColor = "var(--c-border-strong)"; el.style.transform = "rotate(0deg)"; }}>
               {theme === "dark" ? <Sun size={14} strokeWidth={1.7} /> : <Moon size={14} strokeWidth={1.7} />}
             </button>
-            <Link href={engineeringLink.href} style={lk}
+            <Link href={featureLink.href} style={lk}
               onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"}
               onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink-mid)"}>
-              {engineeringLink.label}
+              {featureLink.label}
             </Link>
           </nav>
 
@@ -136,10 +139,10 @@ export function Navbar() {
                 {l.label}
               </Link>
             ))}
-            <Link href={engineeringLink.href} onClick={() => setMob(false)} style={{ ...lk, fontSize: "0.75rem" }}
+            <Link href={featureLink.href} onClick={() => setMob(false)} style={{ ...lk, fontSize: "0.75rem" }}
               onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"}
               onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink-mid)"}>
-              {engineeringLink.label}
+              {featureLink.label}
             </Link>
             <Link href="/book" onClick={() => setMob(false)} style={{
               ...lk, fontSize: "0.75rem", color: "var(--c-bg)", background: "var(--c-ink)",

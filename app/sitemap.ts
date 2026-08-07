@@ -15,6 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/book",
     "/the-1000",
     "/entrora",
+    "/art",
   ];
 
   return routes.map((route) => ({
