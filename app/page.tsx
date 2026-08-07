@@ -177,13 +177,35 @@ function Hero() {
             linear-gradient(90deg, rgba(10,10,10,0.7) 0%, rgba(10,10,10,0.25) 38%, rgba(10,10,10,0) 55%);
         }
 
-        /* No background photo on small screens, plain dark section
-           background instead (already set on #hero itself) */
+        /* Small screens get the black-and-white portrait instead of the wide
+           studio shot, which crops badly at portrait aspect. The copy sits at
+           the bottom, so the overlay stays clear over her face and deepens
+           underneath it, where the heading and button actually land. */
         @media (max-width: 640px) {
-          #hero-content { align-items: center !important; justify-content: flex-end !important; padding-top: 0 !important; padding-bottom: 0rem; }
+          /* height:100% is what actually makes the flex-end below bite — without
+             it the content box is only as tall as its text, so it sat centred,
+             directly over her face. Dropping the copy to the lower third keeps
+             her face clear and puts the text on the dark tank top and backdrop. */
+          #hero-content {
+            align-items: center !important;
+            justify-content: flex-end !important;
+            height: 100%;
+            padding-top: 0 !important;
+            padding-bottom: clamp(3rem, 9vh, 5rem) !important;
+          }
           .hero-copy { text-align: center !important; }
-          .hero-bg { background-image: none !important; animation: none !important; }
-          .hero-overlay { background: none !important; }
+          .hero-bg {
+            background-image: url('/decra-portrait-bw.webp') !important;
+            /* The portrait is a wide 2000x889 frame; at phone aspect it crops
+               hard to the centre, so nudge right to keep her face centred. */
+            background-position: 53% 22% !important;
+          }
+          /* Clear across her face (roughly 15-45% down), then ramping hard from
+             the midpoint so the heading and button below always have contrast. */
+          .hero-overlay {
+            background:
+              linear-gradient(180deg, rgba(10,10,10,0.60) 0%, rgba(10,10,10,0.12) 22%, rgba(10,10,10,0.18) 45%, rgba(10,10,10,0.62) 64%, rgba(10,10,10,0.88) 80%, rgba(10,10,10,0.96) 100%) !important;
+          }
           #hero-content h1 { font-size: clamp(1.65rem, 7vw, 2.1rem) !important; margin-bottom: 1.5rem !important; }
           #hero-content button { width: auto; max-width: 82%; white-space: normal; line-height: 1.5; }
         }
