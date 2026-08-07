@@ -32,18 +32,19 @@ export default function ArtPage() {
     <div className="art-page">
       {/* ── The piece ── */}
       <section className="art-stage">
-        <div
-          className="art-canvas"
-          role="img"
-          aria-label="A black-and-white portrait of Decra Kerubo, lit against a dark ground."
-        />
+        <div className="art-frame">
+          <div
+            className="art-canvas"
+            role="img"
+            aria-label="A black-and-white portrait of Decra Kerubo, lit against a dark ground."
+          />
+          <div className="art-stage-fade" aria-hidden="true" />
+        </div>
 
         {/* The hero carries the image and nothing else. The page still needs
             a heading for the document outline and for anyone arriving by
             screen reader, so it is here but not drawn. */}
         <h1 className="art-sr-only">Art — a poem by Decra Kerubo</h1>
-
-        <div className="art-stage-fade" aria-hidden="true" />
       </section>
 
       {/* ── The poem ── */}
@@ -121,16 +122,24 @@ export default function ArtPage() {
         }
 
         /* ── Stage ──
-           A square strip: full width, height to match. Because the photograph
-           is itself square, cover fits it exactly — it fills the strip edge to
-           edge with nothing cropped away. */
+           The portrait is held to a readable size and centred, rather than
+           run to the full width: at 1278px across, a face is too big to take
+           in as a face. The frame stays square so the square photograph fills
+           it with nothing cropped. */
         .art-stage {
           position: relative;
           width: 100%;
-          aspect-ratio: 1 / 1;
-          overflow: hidden;
+          min-height: 100svh;
           display: flex;
           align-items: center;
+          justify-content: center;
+          padding: clamp(5rem, 12vh, 8rem) var(--space-page-x);
+        }
+        .art-frame {
+          position: relative;
+          width: min(100%, 32rem);
+          aspect-ratio: 1 / 1;
+          overflow: hidden;
         }
         .art-canvas {
           position: absolute;
@@ -152,23 +161,22 @@ export default function ArtPage() {
           clip-path: inset(50%);
           white-space: nowrap;
         }
-        /* The strip is square, so on a wide screen it is taller than the
-           viewport and you land on the top of the frame — a wall of hair
-           filling the screen edge to edge. Both ends now dissolve into the
-           page instead of being cut off by it: black at the top, clear
-           through the middle where her face is, black again into the poem. */
+        /* Dissolves the frame's top and bottom edges into the page, so the
+           square has no hard horizontal cut. Gentler than before: the frame
+           is now small enough that a heavy fade would eat the portrait. Its
+           left and right edges need nothing — the photograph's own ground is
+           already black. */
         .art-stage-fade {
           position: absolute; inset: 0;
           background: linear-gradient(
             180deg,
             #000 0%,
-            rgba(0,0,0,0.92) 8%,
-            rgba(0,0,0,0.55) 20%,
-            rgba(0,0,0,0.12) 32%,
-            rgba(0,0,0,0) 42%,
-            rgba(0,0,0,0) 64%,
-            rgba(0,0,0,0.30) 78%,
-            rgba(0,0,0,0.85) 92%,
+            rgba(0,0,0,0.62) 7%,
+            rgba(0,0,0,0.15) 18%,
+            rgba(0,0,0,0) 28%,
+            rgba(0,0,0,0) 74%,
+            rgba(0,0,0,0.22) 85%,
+            rgba(0,0,0,0.70) 95%,
             #000 100%
           );
           z-index: 1; pointer-events: none;
