@@ -178,10 +178,11 @@ function Hero() {
             linear-gradient(90deg, rgba(10,10,10,0.7) 0%, rgba(10,10,10,0.25) 38%, rgba(10,10,10,0) 55%);
         }
 
-        /* Small screens get the black-and-white portrait instead of the wide
-           studio shot, which crops badly at portrait aspect. The copy sits at
-           the bottom, so the overlay stays clear over her face and deepens
-           underneath it, where the heading and button actually land. */
+        /* Small screens get the portrait-orientation shot instead of the wide
+           studio one, which crops badly at phone aspect. Same warm palette as
+           the desktop hero. The copy sits at the bottom, so the overlay stays
+           clear over her face and deepens underneath it, where the heading and
+           button actually land. */
         @media (max-width: 640px) {
           /* height:100% is what actually makes the flex-end below bite — without
              it the content box is only as tall as its text, so it sat centred,
@@ -196,10 +197,8 @@ function Hero() {
           }
           .hero-copy { text-align: center !important; }
           .hero-bg {
-            background-image: url('/decra-portrait-bw.webp') !important;
-            /* The portrait is a wide 2000x889 frame; at phone aspect it crops
-               hard to the centre, so nudge right to keep her face centred. */
-            background-position: 53% 22% !important;
+            background-image: url('/decra-hero-mobile.jpg') !important;
+            background-position: 50% 28% !important;
           }
           /* Clear across her face (roughly 15-45% down), then ramping hard from
              the midpoint so the heading and button below always have contrast. */

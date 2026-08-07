@@ -1,6 +1,7 @@
 export const dynamic = "force-dynamic";
 import { NextRequest, NextResponse } from "next/server";
 import { createBooking } from "@/lib/booking";
+import { CONSULTATION_TYPES } from "@/lib/types";
 
 // Verifies a Paystack transaction reference server-side, never trust the
 // amount/status reported by the client alone. Free (no monthly fee),
@@ -34,8 +35,19 @@ export async function POST(req: NextRequest) {
     const {
       name, email, organization, website, industry, team_size,
       primary_challenge, desired_outcome, consultation_type, scheduled_at,
-      amount, payment_reference, payment_method,
+      payment_reference, payment_method,
     } = body;
+
+    // The price is read from the server's own catalogue, never from the
+    // request. Taking the client's `amount` would let someone book the paid
+    // consultation, send amount: 1, pay one shilling, and have verification
+    // pass — the check would be comparing the payment against a figure the
+    // payer chose.
+    const consultation = CONSULTATION_TYPES.find(t => t.id === consultation_type);
+    if (!consultation) {
+      return NextResponse.json({ error: "Unknown consultation type." }, { status: 400 });
+    }
+    const amount = consultation.price;
 
     if (amount > 0 && payment_method !== "manual") {
       // Paystack path, must carry a verified reference before this booking

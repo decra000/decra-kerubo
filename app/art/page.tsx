@@ -10,11 +10,7 @@ export const metadata: Metadata = {
 const POETRY_URL =
   "https://www.amazon.com/s?i=digital-text&rh=p_27%3ADecra+the+Poet&s=relevancerank&text=Decra+the+Poet&ref=dp_byline_sr_ebooks_2";
 
-/* The burnt sheet, photographed on black. Sitting in its own file rather
-   than being drawn means the char reads as real paper: the curl, the
-   scorch bleeding through the fibres, the torn wound in the middle. The
-   surrounding black matches the page, so it needs no framing. */
-const HERO_IMAGE = "/art-burnt-paper.webp";
+const HERO_IMAGE = "/art-hero-portrait.webp";
 
 /* ── The poem ──
    Untitled, and set exactly as written: one block, the poet's own line
@@ -39,7 +35,7 @@ export default function ArtPage() {
         <div
           className="art-canvas"
           role="img"
-          aria-label="A sheet of paper burned through the middle, its edges curled and scorched, resting on black."
+          aria-label="A black-and-white portrait of Decra Kerubo, lit against a dark ground."
         />
 
         {/* The hero carries the image and nothing else. The page still needs
@@ -90,8 +86,8 @@ export default function ArtPage() {
       </section>
 
       <style>{`
-        /* Pure black, so the photograph's own background is indistinguishable
-           from the page and the sheet appears to float. */
+        /* Pure black, so the hero photograph runs edge to edge into the page
+           and the poem below sits in the same dark. */
         .art-page {
           background: #000;
           color: #F3E8DC;
@@ -132,19 +128,24 @@ export default function ArtPage() {
           display: flex;
           align-items: center;
         }
-        /* contain, never cover: the shape of the burnt sheet is the image,
-           and cropping it to fill the viewport would cut exactly that away.
-           With nothing else in the hero it sits dead centre. */
+        /* cover, not contain: the portrait's own background is rgb(47,47,47),
+           not black, so letterboxing it on this page would draw a visible
+           grey square. Filling the frame removes every edge. Nudged right of
+           and above centre so her face survives the crop at phone aspect,
+           where only the middle ~46% of the width is on screen. */
         .art-canvas {
           position: absolute;
           inset: 0;
           background-image: url('${HERO_IMAGE}');
           background-repeat: no-repeat;
-          background-size: contain;
-          background-position: center;
-          /* Deliberately no entrance animation. The image is the entire hero
-             now, and an opacity-0 start would leave the page looking blank
-             for anyone whose animations never run. */
+          background-size: cover;
+          /* The horizontal figure only bites on narrow screens (on desktop the
+             crop is vertical), the vertical only on wide ones. 63/42 centres
+             her face in both. */
+          background-position: 63% 42%;
+          /* Deliberately no entrance animation. The image is the entire hero,
+             and an opacity-0 start would leave the page looking blank for
+             anyone whose animations never run. */
         }
         /* Present to assistive tech and to the document outline, drawn nowhere. */
         .art-sr-only {
@@ -252,12 +253,6 @@ export default function ArtPage() {
         @keyframes artBeckon {
           0%, 100% { transform: translateY(-4px); opacity: 0.55; }
           50%      { transform: translateY(5px);  opacity: 1;    }
-        }
-
-        /* On a phone the sheet takes a little more of the width, so it isn't
-           marooned in the middle of a tall black screen. */
-        @media (max-width: 820px) {
-          .art-canvas { background-size: 112%; }
         }
 
         @media (prefers-reduced-motion: reduce) {
