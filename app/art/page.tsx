@@ -7,8 +7,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://decrakerubo.com/art" },
 };
 
-const POETRY_URL =
-  "https://www.amazon.com/s?i=digital-text&rh=p_27%3ADecra+the+Poet&s=relevancerank&text=Decra+the+Poet&ref=dp_byline_sr_ebooks_2";
+const POETRY_URL = "https://a.co/d/02koN5PF";
 
 const HERO_IMAGE = "/art-hero-portrait.webp";
 
@@ -17,14 +16,9 @@ const HERO_IMAGE = "/art-hero-portrait.webp";
    breaks, no stanza divisions invented for it and no typographic
    emphasis added to the closing lines. */
 const POEM = [
-  "Lenny, the soles of your feet are made of fragments of my yard,",
-  "my love, my pain, my home,",
-  "and still you keep crawling back to it.",
-  "You knew how to tie your laces when you were four.",
-  "Nations are changing, Lenny,",
-  "and you're stood there like you're immortal.",
-  "Another light goes out. We don't ask whose.",
-  "Where are you going, Lenny.",
+  "The soles of your feet are made of fragments of my yard,",
+  "why is your existence an act of mercy?",
+  "Is the boy I raised ever coming back?",
 ];
 
 export default function ArtPage() {
@@ -125,7 +119,10 @@ export default function ArtPage() {
            The portrait is held to a readable size and centred, rather than
            run to the full width: at 1278px across, a face is too big to take
            in as a face. The frame stays square so the square photograph fills
-           it with nothing cropped. */
+           it with nothing cropped. Sized up again — the previous 62rem cap
+           read as small on wide screens, so the hard rem cap is dropped
+           entirely in favour of a near-full-bleed width, held back only by a
+           small side margin and a vh ceiling for square-aspect tall screens. */
         .art-stage {
           position: relative;
           width: 100%;
@@ -133,11 +130,17 @@ export default function ArtPage() {
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: clamp(5rem, 12vh, 8rem) var(--space-page-x);
+          padding: clamp(1.5rem, 3vh, 2.5rem) clamp(0.75rem, 2vw, 2rem);
         }
+        /* No rem cap — width is driven by the viewport itself (minus a small
+           side margin). The vh ceiling has been raised twice now: 96vh →
+           134vh (+40%) → 147vh (+10% more). On most desktop viewports the
+           100% term now governs regardless (147vh only binds on unusually
+           tall/narrow windows), so the practical effect is the frame filling
+           essentially the full stage width. */
         .art-frame {
           position: relative;
-          width: min(100%, 32rem);
+          width: min(100%, 147vh);
           aspect-ratio: 1 / 1;
           overflow: hidden;
         }
@@ -147,7 +150,10 @@ export default function ArtPage() {
           background-image: url('${HERO_IMAGE}');
           background-repeat: no-repeat;
           background-size: cover;
-          background-position: center;
+          background-position: center 80%;
+          /* Pushed further from 78% to 80% — another small nudge, cropping a
+             touch more off the top and shifting the visible subject higher
+             still in the frame. */
           /* Deliberately no entrance animation. The image is the entire hero,
              and an opacity-0 start would leave the page looking blank for
              anyone whose animations never run. */
@@ -166,19 +172,40 @@ export default function ArtPage() {
            is now small enough that a heavy fade would eat the portrait. Its
            left and right edges need nothing — the photograph's own ground is
            already black. */
+        /* Dissolves the frame's edges into the page. Originally this only
+           needed to handle the top/bottom edges — the frame sat inset with
+           side padding, so the page's own black background naturally
+           letterboxed the left/right sides. Now that the frame runs full
+           width edge-to-edge, that letterboxing is gone, so a horizontal
+           fade is layered in as well (via a second background/mask-style
+           gradient) to stop the image ending in a hard vertical line at the
+           viewport edges. The top fade has been increased (0/6/14/22 →
+           0/10/22/34): darker through the upper-mid stop and reaching full
+           transparency later, so more of the top of the frame is blended
+           into the page black before the clear middle begins. */
         .art-stage-fade {
           position: absolute; inset: 0;
-          background: linear-gradient(
-            180deg,
-            #000 0%,
-            rgba(0,0,0,0.62) 7%,
-            rgba(0,0,0,0.15) 18%,
-            rgba(0,0,0,0) 28%,
-            rgba(0,0,0,0) 74%,
-            rgba(0,0,0,0.22) 85%,
-            rgba(0,0,0,0.70) 95%,
-            #000 100%
-          );
+          background:
+            linear-gradient(
+              180deg,
+              #000 0%,
+              rgba(0,0,0,0.72) 10%,
+              rgba(0,0,0,0.28) 22%,
+              rgba(0,0,0,0) 34%,
+              rgba(0,0,0,0) 74%,
+              rgba(0,0,0,0.22) 85%,
+              rgba(0,0,0,0.70) 95%,
+              #000 100%
+            ),
+            linear-gradient(
+              90deg,
+              #000 0%,
+              rgba(0,0,0,0.45) 3%,
+              rgba(0,0,0,0) 9%,
+              rgba(0,0,0,0) 91%,
+              rgba(0,0,0,0.45) 97%,
+              #000 100%
+            );
           z-index: 1; pointer-events: none;
         }
 
@@ -193,10 +220,13 @@ export default function ArtPage() {
           max-width: 44rem;
           margin: 0 auto;
         }
+        /* Font size stepped down from the original clamp(1.05rem, 1.6vw, 1.3rem)
+           — the poem is longer now, so a touch smaller keeps the block from
+           reading as oversized against the frame above it. */
         .art-stanza {
           font-family: var(--font-serif), Georgia, serif;
-          font-size: clamp(1.05rem, 1.6vw, 1.3rem);
-          line-height: 2.15;
+          font-size: clamp(0.92rem, 1.35vw, 1.12rem);
+          line-height: 2.05;
           color: rgba(243, 232, 220, 0.9);
           margin: 0;
           text-align: center;
@@ -279,6 +309,50 @@ export default function ArtPage() {
           .art-line { animation: none !important; opacity: 1; transform: none; filter: none; }
           .art-portrait-img,
           .art-more-arrow { animation: none !important; }
+        }
+
+        /* ── Mobile: hero runs full width, edge to edge ──
+           Below 640px the side padding and the width cap are dropped so the
+           square strip fills the viewport's full width rather than sitting
+           inset like the desktop frame. Top/bottom padding stays so the
+           fades still have room to breathe.
+
+           Both overlays (.art-stage-fade on the hero, .art-portrait-grade on
+           the lower portrait) are unconditional in the base styles above, so
+           they were always rendering on mobile — but with the frame now
+           edge-to-edge there's no side letterboxing to help them read as an
+           overlay, and the portrait strip is shorter here, so both gradients
+           are restated with stronger stops for this breakpoint rather than
+           left to inherit values tuned for a taller desktop frame. */
+        @media (max-width: 640px) {
+          .art-stage {
+            padding-left: 0;
+            padding-right: 0;
+          }
+          .art-frame {
+            width: 100vw;
+            max-width: 100vw;
+          }
+          .art-stage-fade {
+            background: linear-gradient(
+              180deg,
+              #000 0%,
+              rgba(0,0,0,0.7) 6%,
+              rgba(0,0,0,0.2) 16%,
+              rgba(0,0,0,0) 26%,
+              rgba(0,0,0,0) 72%,
+              rgba(0,0,0,0.3) 84%,
+              rgba(0,0,0,0.78) 94%,
+              #000 100%
+            );
+          }
+          .art-portrait {
+            height: clamp(220px, 42vh, 380px);
+          }
+          .art-portrait-grade {
+            background:
+              linear-gradient(180deg, #000 0%, rgba(0,0,0,0.45) 14%, rgba(0,0,0,0) 38%, rgba(0,0,0,0.5) 80%, #000 100%);
+          }
         }
       `}</style>
     </div>
