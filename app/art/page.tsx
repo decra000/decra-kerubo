@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Art",
   description:
-    "Right at the End of the Noise — a poem by Decra Kerubo. Poetry and visual work alongside the law and the code.",
+    "An untitled poem by Decra Kerubo. Poetry and visual work alongside the law and the code.",
   alternates: { canonical: "https://decrakerubo.com/art" },
 };
 
@@ -16,78 +16,19 @@ const POETRY_URL =
    surrounding black matches the page, so it needs no framing. */
 const HERO_IMAGE = "/art-burnt-paper.webp";
 
-/* ── The poem ── */
-const TITLE = "Right at the End of the Noise";
-
-const STANZAS: string[][] = [
-  [
-    "There is a room past the shouting.",
-    "You reach it the way you reach sleep —",
-    "not by trying. By stopping.",
-  ],
-  [
-    "All evening the world kept its engines running:",
-    "the sirens, the arguing water in the pipes,",
-    "my own heart, that small unstoppable drum,",
-    "insisting, insisting.",
-  ],
-  [
-    "And then a slackening.",
-    "Not silence — silence is a wall.",
-    "This is the other thing:",
-    "the hush that opens.",
-  ],
-  [
-    "Put your mouth against the hour",
-    "and let it go soft.",
-    "Somewhere the last horn lets out its held breath.",
-    "Somewhere a door decides not to close.",
-  ],
-  [
-    "I have been loud my whole life.",
-    "Let me be the quiet after.",
-  ],
-  [
-    "It comes the way warmth comes into a hand —",
-    "you never feel it arrive,",
-    "you only notice you were cold before.",
-    "Slowly. Then entirely.",
-  ],
-  [
-    "This is not the dark they promised,",
-    "all teeth and falling.",
-    "This is the long unclenching,",
-    "a fist remembering it was a palm.",
-  ],
-  [
-    "Take everything in me that was noise",
-    "and set it down.",
-    "The wanting — put it down.",
-    "The proving — put it down.",
-    "Even the name: put it down.",
-    "It was only ever a way of being called back.",
-  ],
-  [
-    "I am spilling gently past my edges.",
-    "I am the sound just after the bell,",
-    "which is not the bell,",
-    "and is not nothing,",
-    "and is the sweetest part.",
-  ],
-  [
-    "Hold me here.",
-    "Hold me while the last of it goes out —",
-    "warm, and wide, and unhurried.",
-  ],
-];
-
-/* The closing lines, given their own treatment below: each one fainter and
-   more widely spaced than the last, so the poem lands rather than stops. */
-const CODA = [
-  "and right at the end of the noise,",
-  "quiet,",
-  "and quiet,",
-  "and enough.",
+/* ── The poem ──
+   Untitled, and set exactly as written: one block, the poet's own line
+   breaks, no stanza divisions invented for it and no typographic
+   emphasis added to the closing lines. */
+const POEM = [
+  "Lenny, the soles of your feet are made of fragments of my yard,",
+  "my love, my pain, my home,",
+  "and still you keep crawling back to it.",
+  "You knew how to tie your laces when you were four.",
+  "Nations are changing, Lenny,",
+  "and you're stood there like you're immortal.",
+  "Another light goes out. We don't ask whose.",
+  "Where are you going, Lenny.",
 ];
 
 export default function ArtPage() {
@@ -101,12 +42,13 @@ export default function ArtPage() {
           aria-label="A sheet of paper burned through the middle, its edges curled and scorched, resting on black."
         />
 
+        {/* The poem is untitled, so the page's heading is the section label
+            itself rather than an invented title over her work. */}
         <div className="art-stage-copy">
           <div className="art-eyebrow">
             <span className="art-rule" />
-            <span>Art</span>
+            <h1 className="art-eyebrow-heading">Art</h1>
           </div>
-          <h1 className="art-title">{TITLE}</h1>
           <p className="art-byline">A poem — Decra Kerubo</p>
         </div>
 
@@ -116,26 +58,14 @@ export default function ArtPage() {
       {/* ── The poem ── */}
       <section className="art-poem-wrap">
         <div className="art-poem">
-          {STANZAS.map((lines, i) => (
-            <p key={i} className="art-stanza" style={{ animationDelay: `${0.25 + i * 0.14}s` }}>
-              {lines.map((line, j) => (
-                <span key={j}>
-                  {line}
-                  {j < lines.length - 1 && <br />}
-                </span>
-              ))}
-            </p>
-          ))}
-
-          {/* The closing lines slow down on the page the way they slow
-              down in the mouth. */}
-          <p className="art-stanza art-coda" style={{ animationDelay: `${0.25 + STANZAS.length * 0.14}s` }}>
-            {CODA.map((line, i) => (
-              <span key={i} className={`art-coda-${i + 1}`}>{line}</span>
+          <p className="art-stanza">
+            {POEM.map((line, i) => (
+              <span key={i} className="art-line" style={{ animationDelay: `${0.2 + i * 0.13}s` }}>
+                {line}
+              </span>
             ))}
           </p>
         </div>
-
       </section>
 
       {/* ── Full-width portrait: the poem ends, then her face, then the way
@@ -190,7 +120,7 @@ export default function ArtPage() {
           background-size: contain;
           background-position: 92% center;
         }
-        /* The sheet sits right of centre, so the title takes the black space
+        /* The sheet sits right of centre, so the label takes the black space
            beside it rather than fighting the paper for the same ground. */
         .art-stage-copy {
           position: relative;
@@ -210,21 +140,20 @@ export default function ArtPage() {
           color: rgba(214, 186, 152, 0.75);
         }
         .art-rule { display: block; width: 1.6rem; height: 1px; background: rgba(214, 186, 152, 0.5); }
-        .art-title {
-          font-family: var(--font-serif), Georgia, serif;
-          font-weight: 400; font-style: italic;
-          font-size: clamp(2.4rem, 5vw, 4.2rem);
-          line-height: 0.98;
-          letter-spacing: -0.02em;
-          color: #F4EADC;
-          margin: 0 0 1rem;
-          max-width: 8ch;
+        /* The h1 carries the page's heading without looking like one. */
+        .art-eyebrow-heading {
+          font: inherit;
+          letter-spacing: inherit;
+          text-transform: inherit;
+          color: inherit;
+          margin: 0;
         }
         .art-byline {
-          font-family: var(--font-sans), sans-serif;
-          font-size: 0.82rem;
-          letter-spacing: 0.02em;
-          color: rgba(243, 232, 220, 0.55);
+          font-family: var(--font-serif), Georgia, serif;
+          font-style: italic;
+          font-size: clamp(1.05rem, 1.7vw, 1.4rem);
+          letter-spacing: 0.01em;
+          color: rgba(243, 232, 220, 0.72);
           margin: 0;
         }
         .art-stage-fade {
@@ -237,28 +166,27 @@ export default function ArtPage() {
         .art-poem-wrap {
           padding: clamp(4rem, 10vw, 8rem) var(--space-page-x) clamp(3.5rem, 8vw, 6rem);
         }
+        /* Wide enough that the longest line has real headroom — at 36rem it
+           cleared by 7px, which a font fallback would have wiped out, and a
+           wrapped line would break the poet's line breaks. */
         .art-poem {
-          max-width: 36rem;
+          max-width: 44rem;
           margin: 0 auto;
         }
         .art-stanza {
           font-family: var(--font-serif), Georgia, serif;
-          font-size: clamp(1.02rem, 1.5vw, 1.22rem);
-          line-height: 2.05;
+          font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+          line-height: 2.15;
           color: rgba(243, 232, 220, 0.9);
-          margin: 0 0 2.4rem;
+          margin: 0;
           text-align: center;
-          animation: artRise 1.5s cubic-bezier(0.16,1,0.3,1) both;
         }
-        .art-stanza:nth-child(odd) { color: rgba(243, 232, 220, 0.82); }
-
-        /* The last lines fall one per line, each a little fainter and a
-           little wider, so the poem lands rather than stops. */
-        .art-coda span { display: block; font-style: italic; }
-        .art-coda-1 { opacity: 0.92; }
-        .art-coda-2 { opacity: 0.80; }
-        .art-coda-3 { opacity: 0.66; letter-spacing: 0.05em; }
-        .art-coda-4 { opacity: 0.52; letter-spacing: 0.16em; }
+        /* Each line is its own block so the poet's line breaks hold at every
+           width instead of reflowing, and so they can arrive in sequence. */
+        .art-line {
+          display: block;
+          animation: artRise 1.4s cubic-bezier(0.16,1,0.3,1) both;
+        }
 
         /* ── Full-width portrait ── */
         .art-portrait {
@@ -328,18 +256,15 @@ export default function ArtPage() {
         }
 
         /* On a phone the sheet fills the width, so there is no black column
-           beside it — the title moves below it instead, centred. */
+           beside it — the label moves below it instead, centred. */
         @media (max-width: 820px) {
           .art-stage { align-items: flex-end; }
-          /* Sheet sits high and a little smaller, to leave the lower third
-             clear for the title, which runs to two lines at this width. */
-          .art-canvas { background-position: center 20%; background-size: 104%; }
+          .art-canvas { background-position: center 24%; background-size: 106%; }
           .art-stage-copy {
             text-align: center;
-            padding-bottom: clamp(2rem, 6vh, 3.5rem);
+            padding-bottom: clamp(2.5rem, 8vh, 4.5rem);
           }
           .art-eyebrow { justify-content: center; margin-bottom: 1rem; }
-          .art-title { font-size: clamp(1.9rem, 8.4vw, 2.6rem); max-width: none; }
         }
 
         @media (prefers-reduced-motion: reduce) {
