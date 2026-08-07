@@ -152,9 +152,25 @@ export default function ArtPage() {
           clip-path: inset(50%);
           white-space: nowrap;
         }
+        /* The strip is square, so on a wide screen it is taller than the
+           viewport and you land on the top of the frame — a wall of hair
+           filling the screen edge to edge. Both ends now dissolve into the
+           page instead of being cut off by it: black at the top, clear
+           through the middle where her face is, black again into the poem. */
         .art-stage-fade {
-          position: absolute; left: 0; right: 0; bottom: 0; height: 22vh;
-          background: linear-gradient(180deg, rgba(0,0,0,0) 0%, #000 100%);
+          position: absolute; inset: 0;
+          background: linear-gradient(
+            180deg,
+            #000 0%,
+            rgba(0,0,0,0.92) 8%,
+            rgba(0,0,0,0.55) 20%,
+            rgba(0,0,0,0.12) 32%,
+            rgba(0,0,0,0) 42%,
+            rgba(0,0,0,0) 64%,
+            rgba(0,0,0,0.30) 78%,
+            rgba(0,0,0,0.85) 92%,
+            #000 100%
+          );
           z-index: 1; pointer-events: none;
         }
 
