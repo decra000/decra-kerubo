@@ -16,9 +16,10 @@ const HERO_IMAGE = "/art-hero-portrait.webp";
    breaks, no stanza divisions invented for it and no typographic
    emphasis added to the closing lines. */
 const POEM = [
-  "The soles of your feet are made of fragments of my yard,",
-  "why is your existence an act of mercy?",
-  "Is the boy I raised ever coming back?",
+  "The soles of your feet are made of the fragments of my yard,",
+  "A nurture for a thousand generations back,",
+  "Why is your life an act of mercy like you're lack of devotion?",
+  "Why are you glued to that spot like you're lack of morals?",
 ];
 
 export default function ArtPage() {
@@ -132,15 +133,13 @@ export default function ArtPage() {
           justify-content: center;
           padding: clamp(1.5rem, 3vh, 2.5rem) clamp(0.75rem, 2vw, 2rem);
         }
-        /* No rem cap — width is driven by the viewport itself (minus a small
-           side margin). The vh ceiling has been raised twice now: 96vh →
-           134vh (+40%) → 147vh (+10% more). On most desktop viewports the
-           100% term now governs regardless (147vh only binds on unusually
-           tall/narrow windows), so the practical effect is the frame filling
-           essentially the full stage width. */
+        /* Fixed at 800px rather than driven by the viewport: the frame is
+           square, so its width sets how large the face is drawn, and past
+           roughly this size it stops reading as a portrait. The 100% term
+           only takes over on screens narrower than 800px. */
         .art-frame {
           position: relative;
-          width: min(100%, 147vh);
+          width: min(100%, 50rem);
           aspect-ratio: 1 / 1;
           overflow: hidden;
         }
