@@ -128,21 +128,18 @@ export default function ArtPage() {
           display: flex;
           align-items: center;
         }
-        /* cover, not contain: the portrait's own background is rgb(47,47,47),
-           not black, so letterboxing it on this page would draw a visible
-           grey square. Filling the frame removes every edge. Nudged right of
-           and above centre so her face survives the crop at phone aspect,
-           where only the middle ~46% of the width is on screen. */
+        /* The portrait's own ground is true black, so it sits on this page
+           with no visible edge and needs no cropping. Sized as a framed
+           square rather than filled to the viewport: cover turned it into an
+           extreme close-up on wide screens, which is not what the photograph
+           is. Held clear of both edges so it reads as a portrait. */
         .art-canvas {
           position: absolute;
           inset: 0;
           background-image: url('${HERO_IMAGE}');
           background-repeat: no-repeat;
-          background-size: cover;
-          /* The horizontal figure only bites on narrow screens (on desktop the
-             crop is vertical), the vertical only on wide ones. 63/42 centres
-             her face in both. */
-          background-position: 63% 42%;
+          background-size: min(74vh, 84vw);
+          background-position: center;
           /* Deliberately no entrance animation. The image is the entire hero,
              and an opacity-0 start would leave the page looking blank for
              anyone whose animations never run. */
