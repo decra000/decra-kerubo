@@ -11,7 +11,7 @@ type FormState = { name: string; email: string; organization: string; website: s
 // `textarea` fields submit on Enter (Shift+Enter for a newline); others submit on Enter.
 const INTAKE_QUESTIONS: { key: keyof FormState; bot: string; placeholder: string; required: boolean; type?: "email" | "textarea"; skippable?: boolean }[] = [
   { key: "name", bot: "Hi, I'm glad you're here. What's your name?", placeholder: "Your full name", required: true },
-  { key: "email", bot: "Nice to meet you. What's the best email to send your confirmation to?", placeholder: "your@email.com", type: "email", required: true },
+  { key: "email", bot: "Nice to meet you. What's the best email for Decra to reach you on about this request?", placeholder: "your@email.com", type: "email", required: true },
   { key: "organization", bot: "Are you reaching out for a company, NGO, or on your own behalf?", placeholder: "Company / NGO / Personal", required: false, skippable: true },
   { key: "website", bot: "Got a website I should take a look at beforehand?", placeholder: "https://...", required: false, skippable: true },
   { key: "industry", bot: "What industry or sector are you in?", placeholder: "e.g. Legal Tech, NGO, FinTech", required: false, skippable: true },
@@ -86,7 +86,7 @@ function BookPageInner() {
   const [loading, setLoading] = useState(false);
   const [paying, setPaying] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
-  const [bookingStatus, setBookingStatus] = useState<"confirmed" | "pending_payment">("confirmed");
+  const [bookingStatus, setBookingStatus] = useState<"pending" | "pending_payment" | "confirmed">("pending");
   const [meetLink, setMeetLink] = useState("");
   const [paidRef, setPaidRef] = useState("");
   const [payError, setPayError] = useState("");
@@ -220,18 +220,23 @@ function BookPageInner() {
   const labelStyle = { display: "block", fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase" as const, color: "var(--c-ink-muted)", marginBottom: "0.5rem" };
 
   if (confirmed) {
-    const pending = bookingStatus === "pending_payment";
+    // Nothing submitted here is confirmed on the spot — a submission is a
+    // request for a slot, which Decra confirms by email. `awaitingPayment`
+    // only adds the extra "we're still verifying the money" line.
+    const awaitingPayment = bookingStatus === "pending_payment";
     return (
       <div style={{ background: "var(--c-bg)", minHeight: "100svh", paddingTop: "6rem", display: "flex", alignItems: "center", justifyContent: "center", padding: "6rem var(--space-page-x)" }}>
         <div style={{ maxWidth: "32rem", width: "100%", textAlign: "center" }}>
           <div style={{ width: "3.5rem", height: "3.5rem", borderRadius: "50%", background: "rgba(14,61,50,0.07)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 2rem" }}>
             <CheckCircle2 size={24} style={{ color: "var(--c-forest)" }} />
           </div>
-          <h1 className="t-display t-display-lg" style={{ marginBottom: "0.75rem" }}>{pending ? "Booking received." : "Booking confirmed."}</h1>
+          <h1 className="t-display t-display-lg" style={{ marginBottom: "0.75rem" }}>Request received.</h1>
+          <p className="t-body" style={{ marginBottom: "1rem" }}>
+            Your request is being processed. We&apos;ve emailed an acknowledgement to <strong>{form.email}</strong>.
+            {awaitingPayment && <> We&apos;re verifying your M-Pesa/bank payment alongside it.</>}
+          </p>
           <p className="t-body" style={{ marginBottom: "2rem" }}>
-            {pending
-              ? <>Your slot is held while we confirm your M-Pesa payment. A confirmation email is on its way to <strong>{form.email}</strong>.</>
-              : <>A confirmation email has been sent to <strong>{form.email}</strong>.</>}
+            This isn&apos;t a confirmation yet, Decra reviews every request personally and will email you to confirm this time, or propose the nearest alternative if it isn&apos;t free.
           </p>
           {meetLink && (
             <a href={meetLink} target="_blank" rel="noopener noreferrer" className="btn-outline" style={{ marginBottom: "2rem", display: "inline-flex" }}>
@@ -239,7 +244,7 @@ function BookPageInner() {
             </a>
           )}
           <div className="card" style={{ textAlign: "left" }}>
-            {[["Type", selectedConsultation?.label], ["Date", selectedDate], ["Time", `${timeLabel(selectedTime)} EAT`], ...(isPaid ? [[pending ? "Amount due" : "Amount paid", formatKES(selectedConsultation?.price ?? 0)], ["Reference", paidRef || "N/A"]] : [])].map(([k, v]) => (
+            {[["Type", selectedConsultation?.label], ["Date requested", selectedDate], ["Time requested", `${timeLabel(selectedTime)} EAT`], ...(isPaid ? [[awaitingPayment ? "Amount due" : "Amount paid", formatKES(selectedConsultation?.price ?? 0)], ["Reference", paidRef || "N/A"]] : [])].map(([k, v]) => (
               <div key={k as string} style={{ display: "flex", justifyContent: "space-between", gap: "1rem", fontSize: "0.8rem", padding: "0.65rem 0", borderBottom: "1px solid var(--c-border)" }}>
                 <span style={{ color: "var(--c-ink-muted)", flexShrink: 0 }}>{k as string}</span>
                 <span style={{ color: "var(--c-forest)", fontWeight: 700, textAlign: "right", wordBreak: "break-all" }}>{v as string}</span>
@@ -458,7 +463,7 @@ function BookPageInner() {
                   </>
                 )}
                 <p style={{ fontSize: "0.68rem", color: "var(--c-ink-muted)", marginTop: "0.75rem" }}>
-                  Your slot is held as soon as you submit, Decra confirms the payment by hand, usually within a few hours.
+                  Decra verifies the payment by hand and confirms your time by email, usually within a few hours.
                 </p>
               </div>
             )}
@@ -474,12 +479,12 @@ function BookPageInner() {
               <button onClick={() => setStep(2)} className="btn-outline" style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}><ArrowLeft size={13} /> Back</button>
               <button disabled={!selectedDate || !selectedTime || loading || paying} onClick={handleConfirm} className="btn-primary" style={{ border: "none", opacity: (!selectedDate || !selectedTime || loading || paying) ? 0.4 : 1 }}>
                 {loading || paying
-                  ? (paying ? "Redirecting to payment..." : "Confirming...")
+                  ? (paying ? "Redirecting to payment..." : "Sending request...")
                   : isPaid
                     ? ((paystackUsable && !preferBankTransfer)
-                        ? <>Pay {formatKES(selectedConsultation?.price ?? 0)} &amp; Confirm <ShieldCheck size={13} /></>
-                        : <>I've Paid, Submit Booking <ArrowRight size={13} /></>)
-                    : <>Confirm Booking <ArrowRight size={13} /></>}
+                        ? <>Pay {formatKES(selectedConsultation?.price ?? 0)} &amp; Send Request <ShieldCheck size={13} /></>
+                        : <>I've Paid, Send Request <ArrowRight size={13} /></>)
+                    : <>Send Request <ArrowRight size={13} /></>}
               </button>
             </div>
             {isPaid && (

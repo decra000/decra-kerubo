@@ -4,13 +4,19 @@
 -- ============================================
 
 -- Bookings table
--- If this table already exists in your Supabase project (schema was applied
--- before payments were added), run this once to add the new columns:
+--
+-- A booking is a REQUEST for a slot: it lands on 'pending' and only becomes
+-- 'confirmed' when Decra confirms it in /admin, which is what sends the
+-- client their confirmation email. Nothing is auto-confirmed.
+--
+-- If this table already exists in your Supabase project, run this once so
+-- 'pending' is accepted and is the default for new rows:
 --   alter table bookings add column if not exists amount_paid numeric default 0;
 --   alter table bookings add column if not exists payment_reference text;
 --   alter table bookings add column if not exists payment_method text;
 --   alter table bookings drop constraint if exists bookings_status_check;
 --   alter table bookings add constraint bookings_status_check check (status in ('pending','pending_payment','confirmed','cancelled'));
+--   alter table bookings alter column status set default 'pending';
 create table if not exists bookings (
   id uuid default gen_random_uuid() primary key,
   name text not null,
@@ -28,7 +34,7 @@ create table if not exists bookings (
   amount_paid numeric default 0,
   payment_reference text,
   payment_method text, -- 'paystack' | 'manual' | null (free booking)
-  status text default 'confirmed' check (status in ('pending', 'pending_payment', 'confirmed', 'cancelled')),
+  status text default 'pending' check (status in ('pending', 'pending_payment', 'confirmed', 'cancelled')),
   created_at timestamptz default now()
 );
 

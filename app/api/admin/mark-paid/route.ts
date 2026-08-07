@@ -2,10 +2,13 @@ export const dynamic = "force-dynamic";
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 import { checkAdminPassword } from "@/lib/adminAuth";
+import { sendBookingConfirmedEmail } from "@/lib/booking";
 
-// Used by the admin dashboard's "Mark Paid" button on manual M-Pesa/bank
-// bookings, moves a booking from pending_payment to confirmed once Decra
-// has checked the payment landed. Uses the service-role client (bypasses
+// Confirms a booking from the admin dashboard: the "Confirm" button on a
+// pending meeting request, and "Mark paid" on manual M-Pesa/bank bookings
+// once Decra has checked the payment landed. Both move the booking to
+// confirmed and send the client the confirmation they were promised when
+// their request was acknowledged. Uses the service-role client (bypasses
 // RLS), so it's gated by the same admin password as the rest of /admin.
 export async function POST(req: NextRequest) {
   const denied = await checkAdminPassword(req);
@@ -24,6 +27,14 @@ export async function POST(req: NextRequest) {
       .single();
 
     if (error) throw error;
+
+    // Best-effort: the status change is the source of truth, a mail hiccup
+    // shouldn't make the confirmation look like it failed.
+    if (data) {
+      const mailed = await sendBookingConfirmedEmail(data);
+      if (!mailed.ok) console.error("Confirmation email failed for booking", id, mailed.error);
+      return NextResponse.json({ success: true, booking: data, emailed: mailed.ok });
+    }
     return NextResponse.json({ success: true, booking: data });
   } catch (err) {
     console.error("Mark-paid error:", err);

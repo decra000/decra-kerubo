@@ -96,7 +96,10 @@ export default function AdminPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  async function markPaid(id: string) {
+  // Confirms a booking and emails the client. Serves both the "Confirm"
+  // button on a pending meeting request and "Mark paid" on a manual payment —
+  // both are the same transition to confirmed.
+  async function confirmBooking(id: string) {
     setMarking(id);
     try {
       const res = await fetch("/api/admin/mark-paid", {
@@ -167,18 +170,35 @@ export default function AdminPage() {
       </td>
       <td style={tdStyle}>
         <span style={{
+          display: "block", marginBottom: b.status === "pending" ? "0.4rem" : 0,
           fontSize: "0.66rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", whiteSpace: "nowrap",
-          color: b.status === "pending_payment" ? "#8A6D2B" : b.status === "cancelled" ? "#B3524A" : "#2F5D50",
+          color: b.status === "pending_payment" || b.status === "pending" ? "#8A6D2B" : b.status === "cancelled" ? "#B3524A" : "#2F5D50",
         }}>
-          {b.status.replace("_", " ")}
+          {b.status === "pending" ? "Awaiting you" : b.status.replace("_", " ")}
         </span>
+        {/* A pending request has been acknowledged to the client but not
+            confirmed — this button is what actually sends them the
+            confirmation email. */}
+        {b.status === "pending" && (
+          <button
+            onClick={() => confirmBooking(b.id)}
+            disabled={marking === b.id}
+            style={{
+              fontSize: "0.66rem", fontWeight: 700, letterSpacing: "0.05em", textTransform: "uppercase",
+              background: "var(--c-forest)", color: "#fff", border: "none", borderRadius: "999px",
+              padding: "0.35rem 0.8rem", cursor: "pointer", opacity: marking === b.id ? 0.6 : 1, whiteSpace: "nowrap",
+            }}
+          >
+            {marking === b.id ? "…" : "Confirm"}
+          </button>
+        )}
       </td>
       <td style={tdStyle}>
         {b.payment_method === "manual" && b.status === "pending_payment" ? (
           <span style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", whiteSpace: "nowrap" }}>
             <span style={{ fontSize: "0.72rem", color: "var(--c-ink-muted)" }}>{b.payment_reference ? `ref: ${b.payment_reference}` : "no ref"}</span>
             <button
-              onClick={() => markPaid(b.id)}
+              onClick={() => confirmBooking(b.id)}
               disabled={marking === b.id}
               style={{
                 fontSize: "0.66rem", fontWeight: 700, letterSpacing: "0.05em", textTransform: "uppercase",
