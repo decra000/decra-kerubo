@@ -35,6 +35,15 @@ const SOCIALS = [
   },
 ];
 
+const ROLE_LINKS: [string, string][] = [
+  ["/technology-lawyer-kenya", "Technology Lawyer"],
+  ["/technical-product-counsel-kenya", "Product Counsel"],
+  ["/startup-advisor-kenya", "Startup Advisor"],
+  ["/ai-engineer-kenya", "AI Engineer"],
+  ["/technology-law-researcher-kenya", "Tech Law Researcher"],
+  ["/tech-writer-kenya", "Tech Writer"],
+];
+
 export function Footer() {
   return (
     <footer style={{ borderTop: "1px solid var(--c-border)", padding: "2.75rem var(--space-x)" }}>
@@ -63,6 +72,17 @@ export function Footer() {
         </div>
 
         <p style={{ fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "0.68rem", color: "var(--c-ink-muted)" }}>{new Date().getFullYear()} · Nairobi</p>
+      </div>
+
+      {/* Secondary, low-emphasis link row — not primary nav, present for internal linking */}
+      <div style={{ maxWidth: "var(--max-w)", margin: "1.75rem auto 0", paddingTop: "1.5rem", borderTop: "1px solid var(--c-border)", display: "flex", flexWrap: "wrap", gap: "0.6rem 1.4rem" }}>
+        {ROLE_LINKS.map(([href, label]) => (
+          <Link key={href} href={href} style={{ fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "0.68rem", color: "var(--c-ink-muted)", textDecoration: "none", opacity: 0.75, transition: "opacity 0.2s" }}
+            onMouseEnter={e => (e.currentTarget as HTMLElement).style.opacity = "1"}
+            onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = "0.75"}>
+            {label}
+          </Link>
+        ))}
       </div>
     </footer>
   );

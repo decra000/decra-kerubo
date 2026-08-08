@@ -15,6 +15,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/book",
     "/the-1000",
     "/entrora",
+    "/technology-lawyer-kenya",
+    "/technical-product-counsel-kenya",
+    "/startup-advisor-kenya",
+    "/ai-engineer-kenya",
+    "/technology-law-researcher-kenya",
+    "/tech-writer-kenya",
   ];
 
   return routes.map((route) => ({
