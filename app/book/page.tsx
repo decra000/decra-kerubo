@@ -1,10 +1,10 @@
 "use client";
 import React, { Suspense, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { ArrowRight, ArrowLeft, Clock, CheckCircle2, ShieldCheck, Smartphone, Landmark, SkipForward } from "lucide-react";
+import { ArrowRight, ArrowLeft, CheckCircle2, ShieldCheck, Smartphone, Landmark, SkipForward } from "lucide-react";
 import { CONSULTATION_TYPES } from "@/lib/types";
 
-type Step = 1 | 2 | 3;
+type Step = 1 | 2;
 type FormState = { name: string; email: string; organization: string; website: string; industry: string; team_size: string; primary_challenge: string; desired_outcome: string };
 
 // Step 1 as a guided conversation, one question at a time instead of an 8-field wall.
@@ -80,7 +80,9 @@ function BookPageInner() {
   }, [prefill]);
 
   const [step, setStep] = useState<Step>(1);
-  const [selectedType, setSelectedType] = useState("");
+  // Only one consultation type exists, so it's selected automatically, no
+  // "which call do you need?" step for the person to click through.
+  const [selectedType] = useState(CONSULTATION_TYPES[0]?.id || "");
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [loading, setLoading] = useState(false);
@@ -262,10 +264,10 @@ function BookPageInner() {
 
         {/* Progress */}
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "3rem" }}>
-          {[1, 2, 3].map((s) => (
+          {[1, 2].map((s) => (
             <div key={s} style={{ display: "flex", alignItems: "center", flex: 1 }}>
               <div style={{ width: "1.75rem", height: "1.75rem", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.65rem", fontWeight: 700, background: step >= s ? "var(--c-forest)" : "transparent", color: step >= s ? "white" : "var(--c-ink-muted)", border: step >= s ? "none" : "1px solid var(--c-border)", flexShrink: 0 }}>{s}</div>
-              {s < 3 && <div style={{ flex: 1, height: "1px", background: step > s ? "var(--c-forest)" : "var(--c-border)", margin: "0 0.5rem" }} />}
+              {s < 2 && <div style={{ flex: 1, height: "1px", background: step > s ? "var(--c-forest)" : "var(--c-border)", margin: "0 0.5rem" }} />}
             </div>
           ))}
         </div>
@@ -355,35 +357,6 @@ function BookPageInner() {
         {/* Step 2 */}
         {step === 2 && (
           <div>
-            <h2 style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "1.05rem", color: "var(--c-forest)", marginBottom: "1.5rem" }}>Which call do you need?</h2>
-            <div className="consult-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem", marginBottom: "2rem" }}>
-              {CONSULTATION_TYPES.map((type) => (
-                <button key={type.id} onClick={() => setSelectedType(type.id)}
-                  style={{ textAlign: "left", padding: "1.25rem", borderRadius: "12px", border: `1.5px solid ${selectedType === type.id ? "var(--c-forest)" : "var(--c-border)"}`, background: selectedType === type.id ? "rgba(14,61,50,0.04)" : "transparent", cursor: "pointer", transition: "border-color 0.2s" }}
-                >
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", marginBottom: "0.4rem" }}>
-                    <Clock size={11} style={{ color: "var(--c-gold)" }} />
-                    <span style={{ fontSize: "0.65rem", color: "var(--c-gold)" }}>{type.duration} min</span>
-                    <span style={{ fontSize: "0.65rem", color: "var(--c-ink-muted)" }}>·</span>
-                    <span style={{ fontSize: "0.65rem", color: "var(--c-ink-muted)", fontWeight: 700 }}>{type.price > 0 ? formatKES(type.price) : "Free"}</span>
-                  </div>
-                  <p style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.825rem", color: "var(--c-forest)", marginBottom: "0.3rem" }}>{type.label}</p>
-                  <p style={{ fontSize: "0.7rem", color: "var(--c-ink-muted)", lineHeight: 1.5 }}>{type.description}</p>
-                </button>
-              ))}
-            </div>
-            <div style={{ display: "flex", gap: "0.75rem" }}>
-              <button onClick={() => setStep(1)} className="btn-outline" style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}><ArrowLeft size={13} /> Back</button>
-              <button disabled={!selectedType} onClick={() => setStep(3)} className="btn-primary" style={{ border: "none", opacity: !selectedType ? 0.4 : 1 }}>
-                Continue <ArrowRight size={13} />
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Step 3 */}
-        {step === 3 && (
-          <div>
             <h2 style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "1.05rem", color: "var(--c-forest)", marginBottom: "0.35rem" }}>Pick a date and time.</h2>
             <p style={{ fontSize: "0.75rem", color: "var(--c-ink-muted)", marginBottom: "2rem" }}>All times are East Africa Time (EAT, UTC+3).</p>
             <div style={{ marginBottom: "1.75rem" }}>
@@ -471,7 +444,7 @@ function BookPageInner() {
               </button>
             )}
             <div style={{ display: "flex", gap: "0.75rem" }}>
-              <button onClick={() => setStep(2)} className="btn-outline" style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}><ArrowLeft size={13} /> Back</button>
+              <button onClick={() => setStep(1)} className="btn-outline" style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem" }}><ArrowLeft size={13} /> Back</button>
               <button disabled={!selectedDate || !selectedTime || loading || paying} onClick={handleConfirm} className="btn-primary" style={{ border: "none", opacity: (!selectedDate || !selectedTime || loading || paying) ? 0.4 : 1 }}>
                 {loading || paying
                   ? (paying ? "Redirecting to payment..." : "Confirming...")

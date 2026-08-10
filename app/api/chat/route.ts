@@ -1,8 +1,6 @@
 export const dynamic = "force-dynamic";
 import { NextRequest, NextResponse } from "next/server";
-import { createBooking } from "@/lib/booking";
 import { submitInquiry } from "@/lib/inquiry";
-import { CONSULTATION_TYPES } from "@/lib/types";
 
 const today = new Date().toISOString().slice(0, 10);
 
@@ -15,8 +13,7 @@ About Decra:
 - Based in Nairobi, works across East Africa and internationally
 
 Your job is to actually get things done for the person you're talking to, not just describe where they could go to do it themselves:
-- If someone wants to schedule a call, use book_discovery_call to book the free 15-minute Discovery call directly, right in this conversation. Get their name, email, a one-line summary of what they want to discuss, and a date/time that works (assume East Africa Time). Confirm the details back before calling the tool.
-- If someone wants a paid "Priority Discovery" call, or anything involving payment, use redirect_to_book to actually send them to the booking page right now, that's the genuine exception where a tool hands off to a page instead of finishing the job itself, since payment can't happen in this chat. Pass along whatever you've already learned in this conversation (name, email, organization, what they want to discuss) so the booking page can pre-fill it and they don't have to repeat themselves.
+- If someone wants to schedule a call, use redirect_to_book to send them straight to the booking page, since Decra now runs a single paid Discovery call and payment can't happen in this chat. Pass along whatever you've already learned in this conversation (name, email, organization, what they want to discuss) so the booking page can pre-fill it and they don't have to repeat themselves.
 - For anything else where a human follow-up makes sense (partnership inquiries, questions you can't fully resolve, requests to be contacted), use submit_inquiry to actually send it to Decra right now, rather than pointing them at a contact form. Get their name, email, and a short summary of what they need first.
 - Never just tell someone to go to a page themselves when a tool exists for it. Only describe another page in words as an absolute last resort, when none of the tools apply at all.
 
@@ -25,34 +22,12 @@ Be concise (2-3 sentences per reply outside of tool confirmations), warm, and pr
 const GITHUB_MODELS_ENDPOINT = "https://models.github.ai/inference/chat/completions";
 const GITHUB_MODELS_MODEL = "openai/gpt-4o-mini";
 
-const DISCOVERY = CONSULTATION_TYPES.find(c => c.id === "discovery");
-
 const TOOLS = [
   {
     type: "function",
     function: {
-      name: "book_discovery_call",
-      description: "Creates a real, immediately-confirmed booking for the free 15-minute Discovery call. No payment required. Use this whenever someone wants to schedule a call and hasn't specifically asked for the paid Priority option.",
-      parameters: {
-        type: "object",
-        properties: {
-          name: { type: "string" },
-          email: { type: "string" },
-          organization: { type: "string", description: "Optional, their company/organization name." },
-          primary_challenge: { type: "string", description: "One sentence: what they need help with." },
-          desired_outcome: { type: "string", description: "One sentence: what they want out of the call." },
-          date: { type: "string", description: "ISO date, YYYY-MM-DD, at least 1 day from today." },
-          time: { type: "string", description: "24-hour time, HH:MM, East Africa Time (UTC+3)." },
-        },
-        required: ["name", "email", "primary_challenge", "desired_outcome", "date", "time"],
-      },
-    },
-  },
-  {
-    type: "function",
-    function: {
       name: "redirect_to_book",
-      description: "Sends the person to the /book page to complete a paid booking or anything else requiring payment, which this chat can't process. Pass whatever you've already collected in this conversation so the booking page can pre-fill it instead of asking again.",
+      description: "Sends the person to the /book page to schedule and pay for Decra's Discovery call, which this chat can't process. Pass whatever you've already collected in this conversation so the booking page can pre-fill it instead of asking again.",
       parameters: {
         type: "object",
         properties: {
@@ -88,22 +63,6 @@ type ToolResult = { content: string; redirect?: { url: string } };
 
 async function runTool(name: string, args: Record<string, unknown>): Promise<ToolResult> {
   try {
-    if (name === "book_discovery_call") {
-      const { name: personName, email, organization, primary_challenge, desired_outcome, date, time } = args as Record<string, string>;
-      if (!/^\d{4}-\d{2}-\d{2}$/.test(date || "") || !/^\d{1,2}:\d{2}$/.test(time || "")) {
-        return { content: "Error: date must be YYYY-MM-DD and time must be 24-hour HH:MM. Ask the person to confirm and try again." };
-      }
-      const scheduled_at = `${date}T${time.padStart(5, "0")}:00+03:00`;
-      const result = await createBooking({
-        name: personName, email, organization,
-        primary_challenge, desired_outcome,
-        consultation_type: DISCOVERY?.label || "Discovery",
-        scheduled_at,
-        amount: 0,
-      });
-      if (!result.ok) return { content: `Error: ${result.error}` };
-      return { content: `Success: Discovery call confirmed for ${date} at ${time} EAT. Confirmation email sent to ${email}.` };
-    }
     if (name === "redirect_to_book") {
       const { name: personName, email, organization, primary_challenge } = args as Record<string, string>;
       const params = new URLSearchParams();

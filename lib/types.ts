@@ -40,19 +40,15 @@ export interface ConsultationType {
   price: number; // KES. 0 = free.
 }
 
+// Only one call type is offered, a single paid consultation. Kept as an
+// array (rather than a lone object) so downstream code that maps/finds over
+// CONSULTATION_TYPES doesn't need special-casing if another tier is ever added back.
 export const CONSULTATION_TYPES: ConsultationType[] = [
   {
     id: "discovery",
-    label: "Discovery",
-    duration: 15,
-    description: "A quick call to see if we're a fit. Time subject to change.",
-    price: 0,
-  },
-  {
-    id: "priority-discovery",
-    label: "Priority Discovery",
+    label: "Discovery Call",
     duration: 35,
-    description: "More time, priority scheduling.",
+    description: "A focused call to scope your situation and next steps.",
     price: 2000,
   },
 ];
