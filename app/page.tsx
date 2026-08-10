@@ -141,7 +141,7 @@ function Hero() {
             fontSize: "clamp(1.75rem,4vw,2.75rem)", color: "#F0EEE9",
             lineHeight: 1.15, letterSpacing: "-0.01em", marginBottom: "1.75rem",
           }}>
-            Technology Lawyer &amp; Technical Product Counsel.
+            Technical Product Counsel &amp; AI Engineer
           </h1>
           <button
             onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: PRODUCT_COUNSEL_GROUP }))}
@@ -213,7 +213,7 @@ I guide technology developers towards safe and compliant tech. I help investors 
 }
 
 /* ── Section 2: Services ──
-   Five lifecycle stages (Discover → Engineer → Test → Govern → Transact),
+   Four lifecycle stages (Engineer → Test → Govern → Transact),
    each holding its own service list. Stage tabs sit above the existing
    nav/detail panel (desktop) and accordion (mobile); those keep their
    original svc-grid/svc-desktop/svc-mobile/svc-nav/svc-items/
@@ -237,57 +237,7 @@ type ServiceGroup = {
 
 const SERVICE_GROUPS: ServiceGroup[] = [
   // ===================================================================
-  // 01 — DISCOVER
-  // ===================================================================
-  {
-    id: "discover",
-    label: "Discover & Strategize",
-    description:
-      "Understanding the problem, users, workflows, technology, and commercial objectives before systems are designed or built.",
-    services: [
-      {
-        id: "product-strategy",
-        label: "Product Strategy & Advisory",
-        body: "Turning ideas, business requirements, and technology opportunities into clear product strategies and actionable plans.",
-        items: [
-          "Product discovery", "Problem & opportunity analysis", "Product vision & strategy",
-          "Target-user analysis", "MVP definition", "Feature prioritization",
-          "Product requirements", "User stories & acceptance criteria", "Product roadmap",
-          "Go-to-market readiness", "Product lifecycle planning", "Build vs buy analysis",
-          "Technology strategy", "Startup & product structuring",
-        ],
-        opening: "Hi, I need help with product discovery, product strategy, MVP definition, requirements, feature prioritization, roadmap planning, technology strategy, or go-to-market readiness.",
-      },
-      {
-        id: "requirements-workflow-engineering",
-        label: "Requirements & Workflow Engineering",
-        body: "Translating real-world processes into precise system requirements, workflows, rules, states, and executable specifications.",
-        items: [
-          "Requirements engineering", "Functional requirements", "Non-functional requirements",
-          "User-flow analysis", "Workflow modelling", "Process mapping", "State modelling",
-          "Business-rule modelling", "Decision trees", "Use-case analysis",
-          "Exception & edge-case mapping", "Acceptance criteria", "Requirements traceability",
-          "Process automation analysis",
-        ],
-        opening: "Hi, I need help translating a business process or product idea into system requirements, user flows, workflows, business rules, states, or technical specifications.",
-      },
-      {
-        id: "technology-strategy",
-        label: "Technology Strategy",
-        body: "Making technology decisions that align architecture, product objectives, operational realities, cost, and long-term growth.",
-        items: [
-          "Technology-stack assessment", "Technology selection", "Build vs buy decisions",
-          "Cloud strategy", "Platform strategy", "Architecture strategy",
-          "Vendor dependency analysis", "Technology lifecycle planning", "Modernization strategy",
-          "Migration strategy", "Technical debt strategy", "Scalability planning",
-        ],
-        opening: "Hi, I need help making technology-stack, architecture, cloud, platform, modernization, migration, or scalability decisions.",
-      },
-    ],
-  },
-
-  // ===================================================================
-  // 02 — ENGINEER
+  // 01 — ENGINEER
   // ===================================================================
   {
     id: "engineer",
@@ -402,7 +352,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
   },
 
   // ===================================================================
-  // 03 — TEST
+  // 02 — TEST
   // ===================================================================
   {
     id: "test",
@@ -524,7 +474,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
   },
 
   // ===================================================================
-  // 04 — GOVERN
+  // 03 — GOVERN
   // ===================================================================
   {
     id: "govern",
@@ -596,7 +546,7 @@ const SERVICE_GROUPS: ServiceGroup[] = [
   },
 
   // ===================================================================
-  // 05 — TRANSACT
+  // 04 — TRANSACT
   // ===================================================================
   {
     id: "transact",
