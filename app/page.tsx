@@ -1,7 +1,8 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { ArrowRight, X, Mic, Volume2, VolumeX, RefreshCw, Plus } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, ArrowUpRight, X, Mic, Volume2, VolumeX, RefreshCw } from "lucide-react";
 import { useSpeech } from "@/hooks/useSpeech";
 import { ResearchSlides } from "@/components/research/ResearchSlides";
 
@@ -213,210 +214,69 @@ I guide technology developers towards safe and compliant tech. I help investors 
 }
 
 /* ── Section 2: Services ── */
-const SERVICES = [
+const SERVICE_GROUPS = [
   {
-    id: "product-strategy-advisory",
-    label: "Product Strategy & Advisory",
-    body: "Developing technology products with integrated technical and legal guidance.",
-    items: ["Product strategy", "Product architecture reviews", "Feature & roadmap advisory", "Go-to-market readiness", "Startup incorporation", "Product lifecycle planning"],
-    opening: "Hi, I need help with product strategy, architecture reviews, feature & roadmap advisory, go-to-market readiness, or startup incorporation.",
+    id: "strategy-governance",
+    label: "Strategy & Governance",
+    body: "Setting direction for products, from architecture and roadmap decisions through to AI, data, and regulatory governance frameworks.",
   },
   {
-    id: "product-governance",
-    label: "Product Governance & Standards",
-    body: "Establishing governance frameworks for responsible, compliant, and scalable products.",
-    items: ["AI governance", "Data governance", "Digital governance", "Regulatory compliance", "Governance frameworks", "Internal policies", "ISO readiness and implementation"],
-    opening: "Hi, I need help with product governance, AI or data governance, regulatory compliance, governance frameworks, internal policies, or ISO readiness.",
+    id: "safety-risk",
+    label: "Safety, Privacy & Risk",
+    body: "Embedding safety and privacy by design, then stress-testing and assessing products against technical, legal, and regulatory risk.",
   },
   {
-    id: "product-safety-privacy",
-    label: "Product Safety & Privacy",
-    body: "Embedding safety, trust, and privacy into products from the outset.",
-    items: ["Privacy by Design", "Safety by Design", "Data protection", "Responsible AI", "Security governance", "Product design reviews"],
-    opening: PRODUCT_COUNSEL_GROUP.opening,
+    id: "ip-transactions",
+    label: "IP & Transactions",
+    body: "Protecting innovation and structuring the agreements that let technology be licensed, procured, and commercialized.",
   },
   {
-    id: "risk-assurance",
-    label: "Risk & Assurance",
-    body: "Evaluating products for technical, legal, and regulatory resilience.",
-    items: ["Product stress testing", "Product audits", "Privacy impact assessments", "AI impact assessments", "Risk assessments", "Launch readiness"],
-    opening: "Hi, I need help with risk & assurance, product stress testing, audits, privacy or AI impact assessments, risk assessments, or launch readiness.",
-  },
-  {
-    id: "intellectual-property",
-    label: "Intellectual Property",
-    body: "Protecting innovation, software, and digital assets.",
-    items: ["IP strategy", "Software licensing", "Open-source governance", "Open-source compliance", "Technology ownership"],
-    opening: "Hi, I need help with intellectual property, IP strategy, software licensing, open-source governance or compliance, or technology ownership.",
-  },
-  {
-    id: "technology-transactions",
-    label: "Technology Transactions",
-    body: "Structuring agreements that enable technology development and commercialization.",
-    items: ["SaaS agreements", "Platform agreements", "Technology procurement", "Software licensing", "Vendor agreements", "Commercial partnerships"],
-    opening: "Hi, I need help with technology transactions, SaaS or platform agreements, technology procurement, vendor agreements, or commercial partnerships.",
-  },
-  {
-    id: "technical-due-diligence",
-    label: "Technical Due Diligence",
-    body: "Assessing technology products for investment, acquisition, and strategic growth.",
-    items: ["Technology due diligence", "Product due diligence", "AI due diligence", "IP due diligence", "Technology audits", "Investment readiness"],
-    opening: "Hi, I need help with technical due diligence, technology or product due diligence, AI or IP due diligence, technology audits, or investment readiness.",
+    id: "diligence-audits",
+    label: "Diligence & Audits",
+    body: "Independent technology, product, AI, and IP due diligence and technology audits for investment, acquisition, and strategic growth.",
   },
 ];
 
-function ServiceDetailBody({ s }: { s: (typeof SERVICES)[number] }) {
-  return (
-    <>
-      <p style={{ ...BODY, fontSize: "0.84rem", marginBottom: "1.5rem", maxWidth: "40rem" }}>{s.body}</p>
-      <ul className="svc-items" style={{ listStyle: "none", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.6rem 2rem", marginBottom: "1.5rem" }}>
-        {s.items.map(item => (
-          <li key={item} style={{ display: "flex", gap: "0.85rem", ...BODY, fontSize: "0.82rem" }}>
-            <span style={{ width: "3px", height: "3px", borderRadius: "50%", background: "var(--c-accent)", marginTop: "0.5rem", flexShrink: 0 }} />
-            {item}
-          </li>
-        ))}
-      </ul>
-      <button
-        onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: { key: s.id, label: s.label, opening: s.opening } }))}
-        style={{
-          display: "inline-flex", alignItems: "center", gap: "0.4rem",
-          background: "none", border: "none", borderBottom: "1px solid var(--c-border)",
-          padding: 0, paddingBottom: "0.3rem", cursor: "pointer",
-          fontFamily: "var(--font-manjari)", fontWeight: 700,
-          fontSize: "0.62rem", letterSpacing: "0.16em", textTransform: "uppercase",
-          color: "var(--c-ink-muted)", transition: "color 0.2s, border-color 0.2s",
-        }}
-        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-accent)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"; }}
-        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-ink-muted)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-border)"; }}
-      >
-        Discuss this <ArrowRight size={10} strokeWidth={1.5} />
-      </button>
-    </>
-  );
-}
-
 function Services() {
   const { ref, vis } = useReveal();
-  const [active, setActive] = useState(0);
-  const s = SERVICES[active];
-
-  // Mobile accordion: which service (if any) is expanded. Kept separate
-  // from `active` since desktop always has one tab active, mobile starts
-  // fully collapsed.
-  const [mobileOpenId, setMobileOpenId] = useState("");
 
   return (
     <section id="services" ref={ref as React.RefObject<HTMLElement>} style={{ ...SEC, borderTop: "none" }}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
         <p style={{ ...LBL, marginBottom: "2.5rem", ...fade(vis) }}>Services</p>
 
-        {/* Desktop/tablet: label column + shared detail panel on the right */}
         <div
-          className="svc-grid svc-desktop"
+          className="svc-groups"
           style={{
-            display: "grid", gridTemplateColumns: "minmax(15rem, 0.85fr) 1.15fr",
-            gap: "clamp(2.5rem, 6vw, 6rem)", alignItems: "start",
+            display: "grid", gridTemplateColumns: "repeat(2, 1fr)",
+            gap: "clamp(2.5rem, 5vw, 4rem)",
             borderTop: "1px solid var(--c-border)", paddingTop: "3.5rem",
             ...reveal(vis, { delay: 0.05, dir: "up", distance: 22 }),
           }}
         >
-          {/* Left, the index of services */}
-          <div className="svc-nav" style={{ display: "flex", flexDirection: "column", gap: "1.1rem" }}>
-            {SERVICES.map((item, i) => {
-              const on = i === active;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => setActive(i)}
-                  style={{
-                    background: "none", border: "none", padding: 0, cursor: "pointer",
-                    textAlign: "left", display: "block",
-                  }}
-                >
-                  <span style={{ position: "relative", display: "inline-block", paddingBottom: "0.3rem" }}>
-                    <span style={{
-                      fontFamily: "var(--font-serif)", fontWeight: 400,
-                      fontSize: "clamp(1.05rem, 1.6vw, 1.3rem)", lineHeight: 1.25,
-                      color: on ? "var(--c-ink)" : "var(--c-ink-muted)",
-                      transition: "color 0.3s ease",
-                    }}>{item.label}</span>
-                    <span style={{
-                      position: "absolute", left: 0, bottom: 0, height: "1px",
-                      width: on ? "100%" : "0%", background: "var(--c-accent)",
-                      transition: "width 0.4s cubic-bezier(0.16,1,0.3,1)",
-                    }} />
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Right, the selected service's detail */}
-          <div key={s.id} style={{ animation: "svcDetailFade 0.5s cubic-bezier(0.16,1,0.3,1)" }}>
-            <h3 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(1.05rem,1.6vw,1.3rem)", color: "var(--c-ink)", lineHeight: 1.25, marginBottom: "1rem" }}>{s.label}</h3>
-            <ServiceDetailBody s={s} />
-          </div>
+          {SERVICE_GROUPS.map((g, i) => (
+            <div key={g.id}>
+              <span style={{ ...LBL, display: "block", marginBottom: "0.85rem" }}>{String(i + 1).padStart(2, "0")}</span>
+              <h3 style={{
+                fontFamily: "var(--font-serif)", fontWeight: 400,
+                fontSize: "clamp(1.05rem, 1.6vw, 1.3rem)", color: "var(--c-ink)",
+                lineHeight: 1.25, marginBottom: "0.75rem",
+              }}>{g.label}</h3>
+              <p style={{ ...BODY, fontSize: "0.84rem" }}>{g.body}</p>
+            </div>
+          ))}
         </div>
 
-        {/* Mobile: accordion, each service's detail unfolds directly beneath
-            itself instead of in a shared panel far below a 7-item list */}
-        <div className="svc-mobile" style={{ borderTop: "1px solid var(--c-border)" }}>
-          {SERVICES.map((item) => {
-            const isOpen = item.id === mobileOpenId;
-            return (
-              <div key={item.id} className="svc-accordion-item" style={{ borderBottom: "1px solid var(--c-border)" }}>
-                <button
-                  type="button"
-                  onClick={() => setMobileOpenId(isOpen ? "" : item.id)}
-                  aria-expanded={isOpen}
-                  className="svc-accordion-header"
-                >
-                  <span style={{
-                    fontFamily: "var(--font-serif)", fontWeight: 400,
-                    fontSize: "1.05rem", lineHeight: 1.25,
-                    color: isOpen ? "var(--c-ink)" : "var(--c-ink-muted)",
-                  }}>{item.label}</span>
-                  <Plus size={16} className="svc-accordion-icon" style={{ transform: isOpen ? "rotate(45deg)" : "none" }} />
-                </button>
-                <div className="svc-accordion-panel" style={{ maxHeight: isOpen ? "40rem" : "0px", opacity: isOpen ? 1 : 0 }}>
-                  <div style={{ paddingTop: "0.5rem", paddingBottom: "1.5rem" }}>
-                    <ServiceDetailBody s={item} />
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+        <div style={{ marginTop: "3.5rem", ...fade(vis, 0.15) }}>
+          <Link href="/services" style={lineBtn()}>
+            Explore all services <ArrowUpRight size={13} />
+          </Link>
         </div>
       </div>
+
       <style>{`
-        @keyframes svcDetailFade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-
-        .svc-mobile{ display: none; }
-
-        @media(max-width:860px){
-          .svc-desktop{ display: none !important; }
-          .svc-mobile{ display: block; }
-        }
-        @media(max-width:560px){
-          .svc-items{grid-template-columns:1fr!important}
-        }
-
-        .svc-accordion-header{
-          display: flex; align-items: center; justify-content: space-between; gap: 1rem;
-          width: 100%; background: none; border: none; cursor: pointer;
-          padding: 1.15rem 0; text-align: left;
-        }
-        .svc-accordion-icon{
-          flex: none; color: var(--c-ink-muted);
-          transition: transform 0.25s ease, color 0.25s ease;
-        }
-        .svc-accordion-header[aria-expanded="true"] .svc-accordion-icon{
-          color: var(--c-accent);
-        }
-        .svc-accordion-panel{
-          overflow: hidden;
-          transition: max-height 0.45s cubic-bezier(0.16,1,0.3,1), opacity 0.35s ease;
+        @media(max-width:700px){
+          .svc-groups{ grid-template-columns: 1fr !important; gap: 2.25rem !important; }
         }
       `}</style>
     </section>
