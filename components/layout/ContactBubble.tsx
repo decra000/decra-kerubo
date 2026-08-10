@@ -3,8 +3,9 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { MessageCircle, X, Send, Mic, Volume2, VolumeX } from "lucide-react";
 import { useSpeech } from "@/hooks/useSpeech";
+import { AiFallbackForm } from "@/components/shared/AiFallbackForm";
 
-type Msg = { role: "user" | "assistant"; text: string };
+type Msg = { role: "user" | "assistant"; text: string; down?: boolean };
 
 export function ContactBubble() {
   const router = useRouter();
@@ -36,16 +37,15 @@ export function ContactBubble() {
       const res = await fetch("/api/chat", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: text, history: msgs }) });
       const d = await res.json();
       const reply = d.reply || "Email hello@decrakerubo.com";
-      setMsgs(prev => [...prev, { role: "assistant", text: reply }]);
-      if (voiceOn) speak(reply);
+      setMsgs(prev => [...prev, { role: "assistant", text: reply, down: !!d.down }]);
+      if (voiceOn && !d.down) speak(reply);
       if (d.redirect?.url) {
         // Give the person a moment to read the confirmation before the page changes under them.
         setTimeout(() => router.push(d.redirect.url), 1400);
       }
     } catch {
-      const reply = "Email hello@decrakerubo.com directly.";
-      setMsgs(prev => [...prev, { role: "assistant", text: reply }]);
-      if (voiceOn) speak(reply);
+      const reply = "Connection issue, leave your details below instead.";
+      setMsgs(prev => [...prev, { role: "assistant", text: reply, down: true }]);
     } finally { setLoading(false); }
   };
 
@@ -100,6 +100,11 @@ export function ContactBubble() {
             <div key={i}>
               {m.role === "assistant" && <p style={{ fontFamily: "var(--font-serif)", fontSize: "0.6rem", color: "var(--c-accent)", marginBottom: "0.2rem" }}>Decra AI</p>}
               <p style={{ fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "0.82rem", lineHeight: 1.7, color: m.role === "user" ? "var(--c-ink)" : "var(--c-ink-mid)" }}>{m.text}</p>
+              {m.down && i === msgs.length - 1 && !loading && (
+                <div style={{ marginTop: "0.6rem" }}>
+                  <AiFallbackForm engagement="contact-bubble" />
+                </div>
+              )}
             </div>
           ))}
           {loading && <div style={{ display: "flex", gap: "3px" }}>{[0,1,2].map(j => <span key={j} style={{ width: "4px", height: "4px", borderRadius: "50%", background: "var(--c-ink-muted)", animation: `bd3 1.2s ease ${j*0.2}s infinite` }} />)}</div>}

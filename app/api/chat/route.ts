@@ -144,7 +144,9 @@ export async function POST(req: NextRequest) {
 
     const apiKey = process.env.GITHUB_MODELS_TOKEN || process.env.GITHUB_TOKEN;
     if (!apiKey) {
-      return NextResponse.json({ reply: "Reach Decra directly at hello@decrakerubo.com or use the Talk page." });
+      // No credentials configured at all, this is a hard, non-transient failure.
+      // `down: true` tells the client to stop retrying and offer the fallback form immediately.
+      return NextResponse.json({ reply: "Decra's assistant is offline right now. Leave your details below and she'll follow up directly.", down: true });
     }
 
     const messages: ChatMessage[] = [
@@ -208,13 +210,13 @@ export async function POST(req: NextRequest) {
             rateLimited: true,
           });
         }
-        return NextResponse.json({ reply: "I'm having trouble connecting right now. Email hello@decrakerubo.com or use the Talk page." });
+        return NextResponse.json({ reply: "Decra's assistant is having trouble connecting right now. Leave your details below and she'll follow up directly.", down: true });
       }
 
       const data = await res!.json();
       const choice = data.choices?.[0]?.message;
       if (!choice) {
-        return NextResponse.json({ reply: "Something went wrong. Email hello@decrakerubo.com or use the Talk page." });
+        return NextResponse.json({ reply: "Decra's assistant hit a snag. Leave your details below and she'll follow up directly.", down: true });
       }
 
       if (choice.tool_calls?.length) {
@@ -239,6 +241,6 @@ export async function POST(req: NextRequest) {
 
   } catch (error) {
     console.error("Chat route error:", error);
-    return NextResponse.json({ reply: "Email hello@decrakerubo.com or use the Talk page to reach Decra." });
+    return NextResponse.json({ reply: "Decra's assistant is unavailable right now. Leave your details below and she'll follow up directly.", down: true });
   }
 }

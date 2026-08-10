@@ -1,10 +1,11 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Send } from "lucide-react";
+import { AiFallbackForm } from "@/components/shared/AiFallbackForm";
 
 /* ── Types ── */
 type Stage = "intro" | "chat" | "done";
-type Msg = { role: "user" | "assistant"; text: string };
+type Msg = { role: "user" | "assistant"; text: string; down?: boolean };
 
 /* ── Shared styles ── */
 const LBL: React.CSSProperties = {
@@ -80,10 +81,10 @@ export default function StartPage() {
       });
       const d = await res.json();
       const reply = d.reply || "Hi, tell me a bit about what you're building and where you are right now.";
-      setMsgs([{ role: "assistant", text: cleanReply(reply) }]);
+      setMsgs([{ role: "assistant", text: cleanReply(reply), down: !!d.down }]);
       checkForCompletion(reply);
     } catch {
-      setMsgs([{ role: "assistant", text: "Hi, tell me a bit about what you're building and where you are right now." }]);
+      setMsgs([{ role: "assistant", text: "Connection issue, leave your details below instead.", down: true }]);
     } finally { setLoading(false); }
   };
 
@@ -127,10 +128,10 @@ export default function StartPage() {
       });
       const d = await res.json();
       const reply = d.reply || "Could you tell me a bit more about that?";
-      setMsgs([...newMsgs, { role: "assistant", text: cleanReply(reply) }]);
+      setMsgs([...newMsgs, { role: "assistant", text: cleanReply(reply), down: !!d.down }]);
       checkForCompletion(reply);
     } catch {
-      setMsgs([...newMsgs, { role: "assistant", text: "Something went wrong, email hello@decrakerubo.com directly." }]);
+      setMsgs([...newMsgs, { role: "assistant", text: "Something went wrong, leave your details below instead.", down: true }]);
     } finally { setLoading(false); }
   };
 
@@ -274,6 +275,11 @@ export default function StartPage() {
                         color: m.role === "user" ? "var(--c-ink)" : "var(--c-ink-mid)",
                         fontStyle: m.role === "user" ? "normal" : "normal",
                       }}>{m.text}</p>
+                      {m.down && i === msgs.length - 1 && !loading && (
+                        <div style={{ marginTop: "0.75rem" }}>
+                          <AiFallbackForm engagement="start-page" onSent={() => setStage("done")} />
+                        </div>
+                      )}
                     </div>
                   ))}
                   {loading && (

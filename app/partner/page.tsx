@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Send } from "lucide-react";
+import { AiFallbackForm } from "@/components/shared/AiFallbackForm";
 
 function useReveal() {
   const ref = useRef<HTMLElement>(null);
@@ -51,7 +52,7 @@ const inp: React.CSSProperties = {
    then summarises and posts to Decra — no long static form up front.
 */
 type ChatStage = "intro" | "chat" | "confirm" | "done";
-type Msg = { role: "user" | "assistant"; text: string };
+type Msg = { role: "user" | "assistant"; text: string; down?: boolean };
 
 function buildSystemPrompt(engagement: string, focusFields: string, openingContext: string) {
   return `You are Decra Kerubo's intake advisor on decrakerubo.com/partner, helping with a "${engagement}" inquiry.
@@ -164,10 +165,10 @@ function IntakeChat({ engagement, formSubject }: { engagement: string; formSubje
       });
       const d = await res.json();
       const reply = d.reply || "Hi — tell me a bit more about what you need.";
-      setMsgs([{ role: "assistant", text: cleanReply(reply) }]);
+      setMsgs([{ role: "assistant", text: cleanReply(reply), down: !!d.down }]);
       checkForCompletion(reply);
     } catch {
-      setMsgs([{ role: "assistant", text: "Hi — tell me a bit more about what you need." }]);
+      setMsgs([{ role: "assistant", text: "Connection issue — leave your details below instead.", down: true }]);
     } finally { setLoading(false); }
   };
 
@@ -186,10 +187,10 @@ function IntakeChat({ engagement, formSubject }: { engagement: string; formSubje
       });
       const d = await res.json();
       const reply = d.reply || "Could you say a bit more about that?";
-      setMsgs([...newMsgs, { role: "assistant", text: cleanReply(reply) }]);
+      setMsgs([...newMsgs, { role: "assistant", text: cleanReply(reply), down: !!d.down }]);
       checkForCompletion(reply);
     } catch {
-      setMsgs([...newMsgs, { role: "assistant", text: "Something went wrong — email hello@decrakerubo.com directly." }]);
+      setMsgs([...newMsgs, { role: "assistant", text: "Something went wrong — leave your details below instead.", down: true }]);
     } finally { setLoading(false); }
   };
 
@@ -242,6 +243,11 @@ function IntakeChat({ engagement, formSubject }: { engagement: string; formSubje
               <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "0.58rem", color: "var(--c-accent)", marginBottom: "0.25rem" }}>Advisor</p>
             )}
             <p style={{ fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.84rem", lineHeight: 1.7, color: m.role === "user" ? "var(--c-ink)" : "var(--c-ink-mid)" }}>{m.text}</p>
+            {m.down && i === msgs.length - 1 && !loading && (
+              <div style={{ marginTop: "0.75rem" }}>
+                <AiFallbackForm engagement={engagement} onSent={() => setStage("done")} />
+              </div>
+            )}
           </div>
         ))}
         {loading && (
