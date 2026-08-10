@@ -53,6 +53,6 @@ export const CONSULTATION_TYPES: ConsultationType[] = [
     label: "Priority Discovery",
     duration: 35,
     description: "More time, priority scheduling.",
-    price: 1000,
+    price: 2000,
   },
 ];

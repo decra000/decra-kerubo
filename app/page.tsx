@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { ArrowRight, X, Mic, Volume2, VolumeX, RefreshCw, Plus } from "lucide-react";
 import { useSpeech } from "@/hooks/useSpeech";
 import { ResearchSlides } from "@/components/research/ResearchSlides";
@@ -470,22 +471,32 @@ CHIP TOOLS, you can present clickable options instead of making the person type 
 - Multi-select (person can pick several, then hits Continue): end your message with <multi_options>["Option A","Option B","Option C"]</multi_options>
 Only ONE chip block per message, always as the very last thing in the message, valid JSON array of strings. Always include an escape hatch chip like "Other (I'll describe it)" or "Not sure (recommend one)" where relevant so the person is never stuck.
 
-Run the discovery in this order:
+Run the discovery in TWO passes: a short REQUIRED pass, then an OPTIONAL pass the person explicitly opts into. Never make someone sit through the optional pass to get a quote, most people just want a quote fast.
+
+REQUIRED pass (always ask these, in order, one at a time):
 1. Entity/business name, AND the actual goal, what they're trying to achieve, for whom, and what outcome success looks like. Do not move on until you genuinely understand the goal, ask a real follow-up if the first answer is vague (e.g. "an app for my business" needs a follow-up: what does the business do, who's the end user).
 2. Jurisdiction, which country/countries this will operate in or serve, since compliance requirements (data protection law, cookie/consent rules, payment regulations) differ by jurisdiction. Ask directly.
 3. ONLY once you understand the goal: reason about what functionality actually fits THIS specific goal (don't ask generic questions) and present a tailored <multi_options> chip list of the features most relevant to their type of product (e.g. an e-commerce goal gets chips like product catalog, cart & checkout, M-Pesa/card payments, inventory management, order tracking, reviews, a booking/service goal gets chips like calendar/scheduling, client accounts, automated reminders, staff management). Always include "Other (I'll describe it)".
-4. Ask if there are any special or custom interactions/user flows beyond the standard ones for this kind of product, open-ended, no chips needed here.
-5. For any feature area where it's a real fork (commonly: search, customer support/chat, content or recommendation features), briefly explain in plain, non-technical language the difference between a traditional (rule-based, cheaper, predictable) approach and an AI-powered (smarter, handles nuance, has ongoing cost and needs more data) approach, and what that means for their budget and timeline, THEN offer the choice via <options> chips: ["Traditional","AI-powered","Not sure (recommend for me)"]. Skip this step entirely if nothing in their scope actually needs it.
-6. Ask about cookie consent banners and bot/spam protection (e.g. CAPTCHA), briefly note these matter for the jurisdiction they gave in step 2, via <multi_options>: ["Cookie consent banner","Bot/spam protection (CAPTCHA)","Neither needed right now"].
-7. Ask about analytics via <options>: ["Google Analytics","Privacy-friendly analytics (e.g. Plausible)","No analytics needed","Not sure (recommend)"].
-8. Fonts, ask if they have brand fonts already. If not, pull from the free Google Fonts library and offer 3-4 real, well-paired combinations suited to their brand tone via <options>, e.g. ["Playfair Display + Inter","DM Serif Display + Plus Jakarta Sans","Poppins + Roboto","Space Grotesk + Work Sans"], plus "I have my own fonts".
-9. Colors, ask if they have brand colors already. If not, offer 3-4 real curated palettes (as if pulled from a free tool like Coolors or Adobe Color) with actual hex codes written into each chip label, e.g. ["Forest & Cream: #0E3D32 / #F5F4F1 / #C9A24B","Ocean Blue: #123C69 / #4F98CA / #EAF6FF","Warm Terracotta: #B3542A / #F2E4D8 / #2B2B2B"], via <options>, plus "I have brand colors already".
-10. Logo, <options>: ["I have a logo","I need one designed","Not sure yet"].
-11. Roughly how many pages/screens, if known, <options>: ["Just a landing page","3-5 pages","6-10 pages","10+ / full app","Not sure yet"].
-12. Any reference sites/apps whose feel they like (optional, don't dwell).
-13. Tell them this scope is exactly what Decra needs to put together a quick, accurate pricing quote.
-14. Finally, name and email.
-Keep it warm and conversational, one step at a time, briefly acknowledging their previous answer before moving on, like a real discovery call, never a form. Once complete, say exactly: "Perfect, I have everything Decra needs. She'll be in touch within 48 hours with a scoped quote." Then on a new line output the intake_complete block, including these additional keys beyond name/email/summary: entityName, purpose, jurisdiction, functionalities, specialInteractions, aiVsTraditional, cookiesAndBots, analytics, fontPreference, colorPreference, hasLogo, pageCount, referenceSites. Example:
+4. Name and email.
+
+Once you have all four of the above, tell them briefly that's genuinely enough for Decra to put together a rough scope and quote, then offer the choice via <options>: ["That's enough, submit now","Add a bit more detail"]. Never skip this choice, and never assume, always ask it explicitly.
+
+- If they pick "That's enough, submit now" (or anything equivalent), stop asking questions immediately, leave the OPTIONAL fields below empty/omitted, and go straight to the closing line and intake_complete block.
+- If they pick "Add a bit more detail" (or start volunteering more themselves), continue into the OPTIONAL pass below, one step at a time, same warm conversational style.
+
+OPTIONAL pass (only if they opted in):
+5. Ask if there are any special or custom interactions/user flows beyond the standard ones for this kind of product, open-ended, no chips needed here.
+6. For any feature area where it's a real fork (commonly: search, customer support/chat, content or recommendation features), briefly explain in plain, non-technical language the difference between a traditional (rule-based, cheaper, predictable) approach and an AI-powered (smarter, handles nuance, has ongoing cost and needs more data) approach, and what that means for their budget and timeline, THEN offer the choice via <options> chips: ["Traditional","AI-powered","Not sure (recommend for me)"]. Skip this step entirely if nothing in their scope actually needs it.
+7. Ask about cookie consent banners and bot/spam protection (e.g. CAPTCHA), briefly note these matter for the jurisdiction they gave in step 2, via <multi_options>: ["Cookie consent banner","Bot/spam protection (CAPTCHA)","Neither needed right now"].
+8. Ask about analytics via <options>: ["Google Analytics","Privacy-friendly analytics (e.g. Plausible)","No analytics needed","Not sure (recommend)"].
+9. Fonts, ask if they have brand fonts already. If not, pull from the free Google Fonts library and offer 3-4 real, well-paired combinations suited to their brand tone via <options>, e.g. ["Playfair Display + Inter","DM Serif Display + Plus Jakarta Sans","Poppins + Roboto","Space Grotesk + Work Sans"], plus "I have my own fonts".
+10. Colors, ask if they have brand colors already. If not, offer 3-4 real curated palettes (as if pulled from a free tool like Coolors or Adobe Color) with actual hex codes written into each chip label, e.g. ["Forest & Cream: #0E3D32 / #F5F4F1 / #C9A24B","Ocean Blue: #123C69 / #4F98CA / #EAF6FF","Warm Terracotta: #B3542A / #F2E4D8 / #2B2B2B"], via <options>, plus "I have brand colors already".
+11. Logo, <options>: ["I have a logo","I need one designed","Not sure yet"].
+12. Roughly how many pages/screens, if known, <options>: ["Just a landing page","3-5 pages","6-10 pages","10+ / full app","Not sure yet"].
+13. Any reference sites/apps whose feel they like (optional, don't dwell).
+14. At the end of the optional pass, tell them this fuller scope is exactly what Decra needs for an even more accurate quote.
+
+Keep it warm and conversational, one step at a time, briefly acknowledging their previous answer before moving on, like a real discovery call, never a form. Once complete (whichever pass they finished), say exactly: "Perfect, I have everything Decra needs. She'll be in touch within 48 hours with a scoped quote." Then on a new line output the intake_complete block, including these additional keys beyond name/email/summary: entityName, purpose, jurisdiction, functionalities, specialInteractions, aiVsTraditional, cookiesAndBots, analytics, fontPreference, colorPreference, hasLogo, pageCount, referenceSites. Omit (don't invent) any optional key they skipped by choosing "That's enough, submit now". Example:
 <intake_complete>
 {"name":"...","email":"...","summary":"2-3 sentence briefing for Decra","entityName":"...","purpose":"...","jurisdiction":"...","functionalities":"...","specialInteractions":"...","aiVsTraditional":"...","cookiesAndBots":"...","analytics":"...","fontPreference":"...","colorPreference":"...","hasLogo":"...","pageCount":"...","referenceSites":"..."}
 </intake_complete>
@@ -570,8 +581,9 @@ function WorkWithDecra() {
       const data = await res.json();
       const rawReply = data.reply || "Something went wrong. Email hello@decrakerubo.com.";
       const { text: reply, options } = extractOptions(rawReply);
-      setMsgs([{ role: "assistant", text: reply, options, rateLimited: !!data.rateLimited }]);
-      if (voiceOn && !data.rateLimited) speak(reply);
+      const failed = !!data.rateLimited || !!data.down;
+      setMsgs([{ role: "assistant", text: reply, options, rateLimited: failed }]);
+      if (voiceOn && !failed) speak(reply);
     } catch { setMsgs([{ role: "assistant", text: "Something went wrong. Your spot in the conversation is saved, try again in a moment.", rateLimited: true }]); }
     setLoading(false);
     setTimeout(() => inputRef.current?.focus(), 150);
@@ -594,6 +606,24 @@ function WorkWithDecra() {
     window.addEventListener(OPEN_PARTNER_MODAL_EVENT, onExternalOpen as EventListener);
     return () => window.removeEventListener(OPEN_PARTNER_MODAL_EVENT, onExternalOpen as EventListener);
   }, []);
+
+  // Lets other pages (e.g. /engineering) send someone straight into a specific
+  // intake conversation via `?engage=<key>`, e.g. "Request a build" linking to
+  // /?engage=tech-development#collaborate. Cleans the param off the URL after.
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  useEffect(() => {
+    const engageKey = searchParams.get("engage");
+    if (!engageKey) return;
+    const group = PARTNER_GROUPS.find(g => g.key === engageKey);
+    if (group) {
+      setModalOpen(true);
+      startGroup(group.key, group.opening);
+    }
+    router.replace(pathname, { scroll: false });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   // Closing the modal keeps the cached conversation (so reopening the same
   // engagement resumes it), only a completed intake clears its cache.
@@ -635,8 +665,9 @@ function WorkWithDecra() {
         if (active) clearConversation(active);
       }
       const { text: cleanReply, options } = extractOptions(reply);
-      setMsgs([...next, { role: "assistant", text: cleanReply, options, rateLimited: !!data.rateLimited }]);
-      if (voiceOn && !data.rateLimited) speak(cleanReply);
+      const failed = !!data.rateLimited || !!data.down;
+      setMsgs([...next, { role: "assistant", text: cleanReply, options, rateLimited: failed }]);
+      if (voiceOn && !failed) speak(cleanReply);
     } catch { setMsgs([...next, { role: "assistant", text: "Something went wrong. Your message is saved, try again in a moment.", rateLimited: true }]); }
     setLoading(false);
   };
@@ -798,9 +829,9 @@ function WorkWithDecra() {
               <>
                 <div style={{ flex: 1, overflowY: "auto", padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
                   {(() => {
-                    // Counts consecutive failures ending at the latest message, one
-                    // hiccup just gets "Try again"; genuinely repeated failure ("truly
-                    // fails") also surfaces the no-lost-lead fallback options.
+                    // Counts consecutive failures ending at the latest message. The
+                    // no-lost-lead fallback options surface after a single failure,
+                    // so a broken assistant never strands someone mid-conversation.
                     let trailingFailures = 0;
                     for (let j = msgs.length - 1; j >= 0; j--) {
                       if (msgs[j].role === "assistant" && msgs[j].rateLimited) trailingFailures++;
@@ -876,7 +907,7 @@ function WorkWithDecra() {
                             <RefreshCw size={11} strokeWidth={1.5} /> Try again
                           </button>
                         )}
-                        {m.rateLimited && isLatest && !loading && !done && trailingFailures >= 2 && (
+                        {m.rateLimited && isLatest && !loading && !done && trailingFailures >= 1 && (
                           <div style={{ width: "100%", maxWidth: "92%", background: "var(--c-surface)", border: "1px solid var(--c-border-strong)", borderRadius: "10px", padding: "1rem", marginTop: "0.25rem" }}>
                             <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.76rem", color: "var(--c-ink-muted)", lineHeight: 1.6, marginBottom: "0.85rem" }}>
                               The assistant isn&apos;t cooperating right now, here are two ways to reach Decra directly instead:
