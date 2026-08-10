@@ -166,7 +166,17 @@ export default async function EngineeringProjectPage({
               )}
 
               <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem", borderTop: "1px solid var(--c-border)", paddingTop: "2rem" }}>
-                {productSide.chromeUrl ? (
+                {productSide.liveUrl ? (
+                  productSide.liveUrl.startsWith("/") ? (
+                    <Link href={productSide.liveUrl} className="btn-primary">
+                      Try it live <ArrowUpRight size={13} />
+                    </Link>
+                  ) : (
+                    <a href={productSide.liveUrl} target="_blank" rel="noopener noreferrer" className="btn-primary">
+                      Try it live <ArrowUpRight size={13} />
+                    </a>
+                  )
+                ) : productSide.chromeUrl ? (
                   <a href={productSide.chromeUrl} target="_blank" rel="noopener noreferrer" className="btn-primary">
                     <Puzzle size={13} /> Add to Chrome
                   </a>

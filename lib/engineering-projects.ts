@@ -23,6 +23,12 @@ export type EngineeringProject = {
    */
   downloadUrl?: string;
   repoUrl?: string;
+  /**
+   * Internal or external URL to try the actual live product (e.g. "/teresya").
+   * Takes priority in the CTA over chromeUrl/downloadUrl on the detail page,
+   * since "try it now" beats "here's how to install it" whenever both exist.
+   */
+  liveUrl?: string;
   /** Slug of another project this one is directly tied to (shown as "Related work"). */
   relatedSlug?: string;
   /** Short label for the pairing badge, e.g. "Backed by research" or "Powers a shipped tool". Only shown when relatedSlug is set. */
@@ -173,7 +179,9 @@ export const engineeringProjects: EngineeringProject[] = [
     subtitle: "AI Chatbot · For Entrepreneurs",
     description: "Helps entrepreneurs make the right early stage business legal decisions.",
     detail:
-      "An AI chatbot that guides entrepreneurs through early-stage business legal decisions — the questions founders face before they can afford counsel: what structure to incorporate under, what agreements they need in place, and which regulatory obligations apply to what they're building. It turns those first legal calls from guesswork into a guided conversation.",
+      "Teresya is an AI legal-research assistant scoped specifically to the questions founders face before they can afford counsel: what structure to incorporate under, what agreements they need in place, and which regulatory obligations apply to what they're building. It's grounded in kenyalaw.org (with citations, not invented answers), and deliberately narrow, it stays in its lane on entrepreneurial legal decisions rather than acting as a general-purpose legal chatbot.",
+    techStack: ["Next.js", "GroqCloud (groq/compound)", "kenyalaw.org grounding"],
+    liveUrl: "/teresya",
     image: "/engineering/updatedteresya.png",
   },
 ];
