@@ -199,13 +199,14 @@ function About() {
   return (
     <section id="about" ref={ref as React.RefObject<HTMLElement>} style={SEC}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
+        <p style={{ ...LBL, marginBottom: "1.25rem", ...fade(vis) }}>Parallel Technical & Legal Direction</p>
         <p style={{
           ...SERIF("clamp(1.2rem,1.7vw,1.45rem)"),
           maxWidth: "820px",
           lineHeight: 1.6,
-          ...reveal(vis, { dir: "scale", distance: 10 }),
+          ...reveal(vis, { dir: "scale", distance: 10, delay: 0.05 }),
         }}>
-I guide technology developers towards safe and compliant tech. I help investors and procurers buy compliant, safe and scalable tech.
+I codevelop with and guide technology developers towards safe and compliant tech. I help investors and procurers buy compliant, safe and scalable tech, through immersive technical audits and legal health assurance.
         </p>
       </div>
     </section>
