@@ -707,10 +707,16 @@ function WorkWithDecra() {
   useEffect(() => {
     const engageKey = searchParams.get("engage");
     if (!engageKey) return;
-    const group = PARTNER_GROUPS.find(g => g.key === engageKey);
+    // Falls back to the service catalogue, so every one of the twenty-five
+    // services can be requested by name from its stage page and arrives here
+    // with its own opening rather than a generic "how can I help".
+    const group =
+      PARTNER_GROUPS.find(g => g.key === engageKey) ??
+      SERVICE_GROUPS.flatMap(g => g.services).find(s => s.id === engageKey);
     if (group) {
+      const key = "key" in group ? group.key : group.id;
       setModalOpen(true);
-      startGroup(group.key, group.opening);
+      startGroup(key, group.opening);
     }
     router.replace(pathname, { scroll: false });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -878,7 +884,11 @@ function WorkWithDecra() {
                 <p style={{ ...LBL, marginBottom: "0.35rem" }}>Partner with Decra</p>
                 {active && (
                   <p style={{ fontFamily: "var(--font-serif)", fontSize: "1rem", color: "var(--c-ink)" }}>
-                    {[...PARTNER_GROUPS, PRODUCT_COUNSEL_GROUP, PACK_GROUP, POST_LAUNCH_REVIEW_GROUP, TECH_DEV_GROUP].find(g => g.key === active)?.label}
+                    {/* Services are keyed by id, engagements by key, and the
+                        header went blank for anything arriving from a stage
+                        page until both were looked up here. */}
+                    {[...PARTNER_GROUPS, PRODUCT_COUNSEL_GROUP, PACK_GROUP, POST_LAUNCH_REVIEW_GROUP, TECH_DEV_GROUP].find(g => g.key === active)?.label
+                      ?? SERVICE_GROUPS.flatMap(g => g.services).find(s => s.id === active)?.label}
                   </p>
                 )}
               </div>

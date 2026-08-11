@@ -110,7 +110,7 @@ export default async function StagePage({ params }: { params: Promise<{ stage: s
               </div>
               <div>
                 <p className="t-body" style={{ marginBottom: "1.5rem" }}>{s.body}</p>
-                <ul style={{ listStyle: "none", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.8rem 2.5rem" }} className="stage-items">
+                <ul style={{ listStyle: "none", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.8rem 2.5rem", marginBottom: "1.75rem" }} className="stage-items">
                   {s.items.map((item) => (
                     <li key={item} style={{ display: "flex", gap: "0.7rem", alignItems: "baseline", fontFamily: "var(--font-sans)", fontSize: "0.85rem", color: "var(--c-ink-mid)", lineHeight: 1.5 }}>
                       <span style={{ width: "3px", height: "3px", borderRadius: "50%", background: "var(--c-accent)", flexShrink: 0, transform: "translateY(-0.25em)" }} />
@@ -118,6 +118,24 @@ export default async function StagePage({ params }: { params: Promise<{ stage: s
                     </li>
                   ))}
                 </ul>
+
+                {/* Opens the intake conversation already primed with this
+                    service's own opening line, so someone arriving from a
+                    search for one specific thing doesn't land in a generic
+                    "how can I help you" and have to re-explain themselves. */}
+                <Link
+                  href={`/?engage=${s.id}#collaborate`}
+                  style={{
+                    display: "inline-flex", alignItems: "center", gap: "0.4rem",
+                    borderBottom: "1px solid var(--c-border)", paddingBottom: "0.3rem",
+                    textDecoration: "none",
+                    fontFamily: "var(--font-manjari)", fontWeight: 700,
+                    fontSize: "0.62rem", letterSpacing: "0.16em", textTransform: "uppercase",
+                    color: "var(--c-ink-muted)",
+                  }}
+                >
+                  Request {s.label} <ArrowRight size={10} strokeWidth={1.5} />
+                </Link>
               </div>
             </article>
           ))}
