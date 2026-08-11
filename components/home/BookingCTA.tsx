@@ -2,8 +2,9 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Send } from "lucide-react";
 import Link from "next/link";
+import { AiFallbackForm } from "@/components/shared/AiFallbackForm";
 
-type Msg = { role: "user" | "assistant"; text: string };
+type Msg = { role: "user" | "assistant"; text: string; down?: boolean };
 
 const STARTERS = [
   "I need help with startup incorporation",
@@ -43,9 +44,9 @@ export function BookingCTA() {
         body: JSON.stringify({ message: text, history: msgs }),
       });
       const data = await res.json();
-      setMsgs(prev => [...prev, { role: "assistant", text: data.reply || "Book a call and Decra will be in touch." }]);
+      setMsgs(prev => [...prev, { role: "assistant", text: data.reply || "Book a call and Decra will be in touch.", down: !!data.down }]);
     } catch {
-      setMsgs(prev => [...prev, { role: "assistant", text: "Connection issue, book a call directly." }]);
+      setMsgs(prev => [...prev, { role: "assistant", text: "Connection issue, leave your details below instead.", down: true }]);
     } finally {
       setLoading(false);
     }
@@ -116,6 +117,11 @@ export function BookingCTA() {
                     fontSize: "0.875rem", lineHeight: 1.75,
                     color: m.role === "user" ? "var(--c-ink)" : "var(--c-ink-mid)",
                   }}>{m.text}</p>
+                  {m.down && i === msgs.length - 1 && !loading && (
+                    <div style={{ marginTop: "0.75rem", maxWidth: "22rem" }}>
+                      <AiFallbackForm engagement="booking-cta" />
+                    </div>
+                  )}
                 </div>
               ))}
               {loading && (

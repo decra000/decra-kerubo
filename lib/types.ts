@@ -44,15 +44,8 @@ export const CONSULTATION_TYPES: ConsultationType[] = [
   {
     id: "discovery",
     label: "Discovery",
-    duration: 15,
-    description: "A quick call to see if we're a fit. Time subject to change.",
-    price: 0,
-  },
-  {
-    id: "priority-discovery",
-    label: "Priority Discovery",
     duration: 35,
-    description: "More time, priority scheduling.",
-    price: 1000,
+    description: "A focused call to see if we're a fit, with priority scheduling.",
+    price: 3000,
   },
 ];

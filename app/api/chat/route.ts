@@ -150,8 +150,13 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({
           reply: result.retryable
             ? "Decra's assistant is getting more traffic than it can handle right this second. Please try sending that again in a moment, nothing you've typed so far has been lost."
-            : "I'm having trouble connecting right now. Email hello@decrakerubo.com or use the Talk page.",
+            : "Decra's assistant is having trouble connecting right now. Leave your details below and she'll follow up directly.",
           rateLimited: result.retryable,
+          // ContactBubble, BookingCTA, /partner and the homepage intake all
+          // open their fallback form on `down`. The keyless rewrite dropped
+          // the flag; without it a hard failure leaves the person holding an
+          // apology and no other way to reach Decra.
+          down: !result.retryable,
         });
       }
 
@@ -188,6 +193,6 @@ export async function POST(req: NextRequest) {
 
   } catch (error) {
     console.error("Chat route error:", error);
-    return NextResponse.json({ reply: "Email hello@decrakerubo.com or use the Talk page to reach Decra." });
+    return NextResponse.json({ reply: "Email hello@decrakerubo.com or use the Talk page to reach Decra.", down: true });
   }
 }
