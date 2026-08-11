@@ -1,10 +1,17 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
+import Link from "next/link";
 import { CapabilityTabs } from "@/components/services/CapabilityTabs";
+import { SERVICE_GROUPS } from "@/lib/services";
 
 export const metadata: Metadata = {
   title: "Services",
   description:
     "Product Counsel, providing integrated technical and legal support throughout the technology product lifecycle, from Decra Kerubo.",
+  // Without its own entry this inherited the root layout's canonical of "/",
+  // so the page told Google it was a duplicate of the homepage and asked not
+  // to be indexed — on the one page most likely to be searched for.
+  alternates: { canonical: "/services" },
 };
 
 const capabilities = [
@@ -130,9 +137,31 @@ const faqs = [
   { q: "I'm not sure which capability I need.", a: "Book a discovery call. In 15 minutes we'll identify the right starting point, no pressure, no obligation." },
 ];
 
-export default function ServicesPage() {
+// Mirrors the FAQ block rendered below. Google reads this to build the
+// "People also ask"-style expandable results, which is the cheapest way onto
+// a results page already crowded with established firms.
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+
+export default async function ServicesPage() {
+  // Same nonce plumbing as the root layout: CSP sets script-src with a
+  // per-request nonce, so an inline JSON-LD tag without it is blocked.
+  const nonce = (await headers()).get("x-nonce") || undefined;
+
   return (
     <div style={{ background: "var(--c-bg)", paddingTop: "6rem" }}>
+      <script
+        type="application/ld+json"
+        nonce={nonce}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
 
       {/* ── Header ── */}
       <section className="section page-x" style={{ borderBottom: "1px solid var(--c-border)" }}>
@@ -156,6 +185,28 @@ export default function ServicesPage() {
       <section className="page-x" style={{ paddingBottom: "var(--space-section)" }}>
         <div className="inner" style={{ borderTop: "1px solid var(--c-border)" }}>
           <CapabilityTabs capabilities={capabilities} />
+        </div>
+      </section>
+
+      {/* ── The lifecycle stages ──
+          Every stage page is reachable from here. A page nothing links to is
+          a page search engines treat as unimportant, however good it is. */}
+      <section className="section page-x" style={{ borderTop: "1px solid var(--c-border)" }}>
+        <div className="inner">
+          <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "1.5rem" }}>
+            <span style={{ display: "inline-block", width: "1.5rem", height: "1px", background: "var(--c-gold)" }} />
+            <span className="t-label">By lifecycle stage</span>
+          </div>
+          <h2 className="t-display t-display-md" style={{ marginBottom: "2.5rem" }}>Where your product is right now.</h2>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(15rem, 1fr))", gap: "1.5rem" }}>
+            {SERVICE_GROUPS.map((g) => (
+              <Link key={g.id} href={`/services/${g.id}`} style={{ textDecoration: "none", border: "1px solid var(--c-border)", padding: "1.5rem", display: "block" }}>
+                <h3 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "1.05rem", color: "var(--c-ink)", marginBottom: "0.6rem" }}>{g.label}</h3>
+                <p className="t-body-sm" style={{ marginBottom: "0.75rem" }}>{g.description}</p>
+                <span className="t-label" style={{ color: "var(--c-ink-muted)" }}>{g.services.length} services</span>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
