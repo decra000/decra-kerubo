@@ -4,7 +4,7 @@ export const metadata: Metadata = {
   title: "Art",
   description:
     "An untitled poem by Decra Kerubo. Poetry and visual work alongside the law and the code.",
-  alternates: { canonical: "https://decrakerubo.com/art" },
+  alternates: { canonical: "/art" },
 };
 
 const POETRY_URL = "https://a.co/d/02koN5PF";

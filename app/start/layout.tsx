@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     "technical product counsel Kenya",
     "startup legal advisory Kenya",
   ],
-  alternates: { canonical: "https://decrakerubo.com/start" },
+  alternates: { canonical: "/start" },
 };
 
 export default function StartLayout({ children }: { children: React.ReactNode }) {

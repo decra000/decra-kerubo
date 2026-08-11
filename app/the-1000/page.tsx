@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     "Decra Kerubo technology lawyer",
     "product counsel Kenya research",
   ],
-  alternates: { canonical: "https://decrakerubo.com/the-1000" },
+  alternates: { canonical: "/the-1000" },
 };
 
 const categories = [

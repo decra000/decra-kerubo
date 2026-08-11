@@ -1,6 +1,7 @@
 import { supabaseAdmin } from "@/lib/supabase";
 import { sendMail } from "@/lib/mail";
 import { CONSULTATION_TYPES } from "@/lib/types";
+import { SITE_URL } from "@/lib/site";
 
 export type BookingInput = {
   name: string;
@@ -118,7 +119,7 @@ export async function createBooking(input: BookingInput): Promise<BookingResult>
   });
   const gcalUrl = `https://calendar.google.com/calendar/render?${gcalParams.toString()}`;
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://decrakerubo.com";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || SITE_URL;
 
   await sendMail({
     to: internalTo,

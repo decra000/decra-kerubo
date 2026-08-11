@@ -7,8 +7,7 @@ import { Footer } from "@/components/layout/Footer";
 import { ContactBubble } from "@/components/layout/ContactBubble";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
 import { ScrollProgress } from "@/components/layout/ScrollProgress";
-
-const SITE_URL = "https://decrakerubo.com";
+import { SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -75,7 +74,7 @@ export const metadata: Metadata = {
   creator: "Decra Kerubo",
   publisher: "Decra Kerubo",
   category: "Legal Services",
-  alternates: { canonical: SITE_URL },
+  alternates: { canonical: "/" },
   robots: {
     index: true,
     follow: true,

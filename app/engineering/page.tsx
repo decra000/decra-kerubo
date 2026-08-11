@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: "Engineering",
   description:
     "Selected engineering builds from Decra Kerubo, AI tools, apps, websites, and applied research I have directly and collaboratively built with different languages and frameworks cross-industry.",
-  alternates: { canonical: "https://decrakerubo.com/engineering" },
+  alternates: { canonical: "/engineering" },
 };
 
 export default function EngineeringPage() {

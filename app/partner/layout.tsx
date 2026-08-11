@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     "technical product counsel Kenya",
     "tech policy research partner Africa",
   ],
-  alternates: { canonical: "https://decrakerubo.com/partner" },
+  alternates: { canonical: "/partner" },
 };
 
 export default function PartnerLayout({ children }: { children: React.ReactNode }) {

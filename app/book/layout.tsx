@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     "technical product counsel booking",
     "startup lawyer consultation Kenya",
   ],
-  alternates: { canonical: "https://decrakerubo.com/book" },
+  alternates: { canonical: "/book" },
 };
 
 export default function BookLayout({ children }: { children: React.ReactNode }) {

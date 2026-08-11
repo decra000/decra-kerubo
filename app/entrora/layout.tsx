@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     "technology lawyer Kenya venture",
     "product counsel Africa",
   ],
-  alternates: { canonical: "https://decrakerubo.com/entrora" },
+  alternates: { canonical: "/entrora" },
 };
 
 export default function EntroraLayout({ children }: { children: React.ReactNode }) {
