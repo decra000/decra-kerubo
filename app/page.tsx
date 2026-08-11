@@ -226,7 +226,8 @@ function About() {
           lineHeight: 1.6,
           ...reveal(vis, { dir: "scale", distance: 10 }),
         }}>
-I guide technology developers towards safe and compliant tech. I help investors and procurers buy compliant, safe and scalable tech.
+I develop in parallel with, and guide technology developers towards safe and compliant tech. 
+I help investors and procurers buy compliant, safe and scalable tech through technical and legal audits.
         </p>
       </div>
     </section>
@@ -244,7 +245,7 @@ const SERVICES = [
   },
   {
     id: "product-governance",
-    label: "Product Governance & Standards",
+    label: "Governance & Standards",
     body: "Establishing governance frameworks for responsible, compliant, and scalable products.",
     items: ["AI governance", "Data governance", "Digital governance", "Regulatory compliance", "Governance frameworks", "Internal policies", "ISO readiness and implementation"],
     opening: "Hi, I need help with product governance, AI or data governance, regulatory compliance, governance frameworks, internal policies, or ISO readiness.",
@@ -289,12 +290,21 @@ const SERVICES = [
 function ServiceDetailBody({ s }: { s: (typeof SERVICES)[number] }) {
   return (
     <>
-      <p style={{ ...BODY, fontSize: "0.84rem", marginBottom: "1.5rem", maxWidth: "40rem" }}>{s.body}</p>
-      <ul className="svc-items" style={{ listStyle: "none", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.6rem 2rem", marginBottom: "1.5rem" }}>
+      {/* Intro sits on a shorter measure than the panel is wide, two lines of
+          text rather than one long one, so it reads as a lead-in to the list
+          instead of a full-width paragraph. */}
+      <p style={{ ...BODY, fontSize: "0.9rem", lineHeight: 1.7, marginBottom: "1.9rem", maxWidth: "30rem" }}>{s.body}</p>
+      <ul className="svc-items" style={{ listStyle: "none", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.8rem 2.5rem", marginBottom: "2.1rem" }}>
         {s.items.map(item => (
-          <li key={item} style={{ display: "flex", gap: "0.85rem", ...BODY, fontSize: "0.82rem" }}>
-            <span style={{ width: "3px", height: "3px", borderRadius: "50%", background: "var(--c-accent)", marginTop: "0.5rem", flexShrink: 0 }} />
-            {item}
+          <li key={item} style={{
+            display: "flex", gap: "0.7rem", alignItems: "baseline",
+            fontFamily: "var(--font-sans)", fontWeight: 400,
+            fontSize: "0.85rem", color: "var(--c-ink-mid)", lineHeight: 1.5,
+          }}>
+            {/* Baseline-aligned rather than nudged with a magic top margin, so
+                the dot stays on the first line's baseline at any text size. */}
+            <span style={{ width: "3px", height: "3px", borderRadius: "50%", background: "var(--c-accent)", flexShrink: 0, transform: "translateY(-0.25em)" }} />
+            <span>{item}</span>
           </li>
         ))}
       </ul>
@@ -336,8 +346,16 @@ function Services() {
         <div
           className="svc-grid svc-desktop"
           style={{
-            display: "grid", gridTemplateColumns: "minmax(15rem, 0.85fr) 1.15fr",
-            gap: "clamp(2.5rem, 6vw, 6rem)", alignItems: "start",
+            /* The index column is capped rather than proportional. Left as a
+               fraction it grew to 439px for labels that need ~240px, opening a
+               gulf between a service and its own detail. */
+            display: "grid", gridTemplateColumns: "minmax(11rem, 17rem) 1fr",
+            /* Half the gutter. The panel's own padding-left supplies the other
+               half, so the rule between them sits centred. */
+            /* stretch, not start: the panel takes the full row height so its
+               left rule runs the whole way down beside the index instead of
+               stopping short wherever that service's content happens to end. */
+            gap: "clamp(1.5rem, 3vw, 2.5rem)", alignItems: "stretch",
             borderTop: "1px solid var(--c-border)", paddingTop: "3.5rem",
             ...reveal(vis, { delay: 0.05, dir: "up", distance: 22 }),
           }}
@@ -349,7 +367,10 @@ function Services() {
               return (
                 <button
                   key={item.id}
+                  id={`svc-tab-${item.id}`}
                   onClick={() => setActive(i)}
+                  aria-current={on}
+                  aria-controls="svc-detail"
                   style={{
                     background: "none", border: "none", padding: 0, cursor: "pointer",
                     textAlign: "left", display: "block",
@@ -373,9 +394,21 @@ function Services() {
             })}
           </div>
 
-          {/* Right, the selected service's detail */}
-          <div key={s.id} style={{ animation: "svcDetailFade 0.5s cubic-bezier(0.16,1,0.3,1)" }}>
-            <h3 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(1.05rem,1.6vw,1.3rem)", color: "var(--c-ink)", lineHeight: 1.25, marginBottom: "1rem" }}>{s.label}</h3>
+          {/* Right, the selected service's detail.
+              The heading is present for screen readers but not drawn: on screen
+              the active item in the index already names the panel, and printing
+              it twice was the section's loudest piece of redundancy.
+              min-height holds the tallest service (7 items over 4 rows) so
+              switching tabs doesn't shunt the rest of the page up and down. */}
+          <div
+            key={s.id}
+            id="svc-detail"
+            role="region"
+            aria-labelledby={`svc-tab-${s.id}`}
+            className="svc-detail"
+            style={{ animation: "svcDetailFade 0.45s ease" }}
+          >
+            <h3 className="svc-sr-only">{s.label}</h3>
             <ServiceDetailBody s={s} />
           </div>
         </div>
@@ -411,7 +444,23 @@ function Services() {
         </div>
       </div>
       <style>{`
-        @keyframes svcDetailFade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+        /* Opacity only. The old 10px rise re-fired on every tab click, so
+           switching services twitched instead of simply changing. */
+        @keyframes svcDetailFade{from{opacity:0}to{opacity:1}}
+
+        /* A hairline tying the index to its panel, in the same 1px border
+           language as the section rule above it. */
+        .svc-detail{
+          border-left: 1px solid var(--c-border);
+          padding-left: clamp(1.5rem, 3vw, 2.5rem);
+          min-height: 17rem;
+        }
+
+        .svc-sr-only{
+          position: absolute; width: 1px; height: 1px;
+          padding: 0; margin: -1px; overflow: hidden;
+          clip-path: inset(50%); white-space: nowrap; border: 0;
+        }
 
         .svc-mobile{ display: none; }
 
