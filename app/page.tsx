@@ -2,10 +2,10 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { ArrowRight, X, Mic, Volume2, VolumeX, RefreshCw, Plus } from "lucide-react";
+import { ArrowRight, X, Mic, Volume2, VolumeX, RefreshCw } from "lucide-react";
 import { useSpeech } from "@/hooks/useSpeech";
 import { ResearchSlides } from "@/components/research/ResearchSlides";
-import { SERVICE_GROUPS, type ServiceDef } from "@/lib/services";
+import { SERVICE_GROUPS } from "@/lib/services";
 
 /* ── helpers ── */
 function useReveal() {
@@ -237,277 +237,102 @@ I codevelop with and guide technology developers towards safe and compliant tech
 }
 
 /* ── Section 2: Services ──
-   Four lifecycle stages (Engineer → Test → Govern → Transact),
-   each holding its own service list. Stage tabs sit above the existing
-   nav/detail panel (desktop) and accordion (mobile); those keep their
-   original svc-grid/svc-desktop/svc-mobile/svc-nav/svc-items/
-   svc-accordion-* classes untouched. New classes: svc-stage-tabs,
-   svc-stage-tab. */
-
-
-/* Unchanged from your original file — still renders a single service's
-   body / items / "Discuss this" CTA. Only the type annotation changed
-   from `(typeof SERVICES)[number]` to `ServiceDef` since services now
-   live inside groups. */
-function ServiceDetailBody({ s }: { s: ServiceDef }) {
-  return (
-    <>
-      {/* Intro sits on a shorter measure than the panel is wide, two lines of
-          text rather than one long one, so it reads as a lead-in to the list
-          instead of a full-width paragraph. */}
-      <p style={{ ...BODY, fontSize: "0.9rem", lineHeight: 1.7, marginBottom: "1.9rem", maxWidth: "30rem" }}>{s.body}</p>
-      <ul className="svc-items" style={{ listStyle: "none", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.8rem 2.5rem", marginBottom: "2.1rem" }}>
-        {s.items.map(item => (
-          <li key={item} style={{
-            display: "flex", gap: "0.7rem", alignItems: "baseline",
-            fontFamily: "var(--font-sans)", fontWeight: 400,
-            fontSize: "0.85rem", color: "var(--c-ink-mid)", lineHeight: 1.5,
-          }}>
-            {/* Baseline-aligned rather than nudged with a magic top margin, so
-                the dot stays on the first line's baseline at any text size. */}
-            <span style={{ width: "3px", height: "3px", borderRadius: "50%", background: "var(--c-accent)", flexShrink: 0, transform: "translateY(-0.25em)" }} />
-            <span>{item}</span>
-          </li>
-        ))}
-      </ul>
-      <button
-        onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: { key: s.id, label: s.label, opening: s.opening } }))}
-        style={{
-          display: "inline-flex", alignItems: "center", gap: "0.4rem",
-          background: "none", border: "none", borderBottom: "1px solid var(--c-border)",
-          padding: 0, paddingBottom: "0.3rem", cursor: "pointer",
-          fontFamily: "var(--font-manjari)", fontWeight: 700,
-          fontSize: "0.62rem", letterSpacing: "0.16em", textTransform: "uppercase",
-          color: "var(--c-ink-muted)", transition: "color 0.2s, border-color 0.2s",
-        }}
-        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-accent)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"; }}
-        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-ink-muted)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-border)"; }}
-      >
-        Discuss this <ArrowRight size={11} strokeWidth={1.5} />
-      </button>
-    </>
-  );
-}
+   Four lifecycle stages, all four on screen at once as columns. The stage
+   chips, the shared nav/detail panel and the mobile accordion are gone:
+   with every category visible there was nothing left to switch between,
+   and the per-service detail they used to reveal now lives on the
+   /services/<stage> pages. */
 
 function Services() {
   const { ref, vis } = useReveal();
 
-  // Which lifecycle stage is selected, and which service within that
-  // stage. Switching stage resets to that stage's first service.
-  const [activeGroup, setActiveGroup] = useState(0);
-  const [active, setActive] = useState(0);
-
-  // Mobile accordion: which service (if any) is expanded within the
-  // currently selected stage. Kept separate from `active` since desktop
-  // always has one tab active, mobile starts fully collapsed.
-  const [mobileOpenId, setMobileOpenId] = useState("");
-
-  const group = SERVICE_GROUPS[activeGroup];
-  const s = group.services[active];
-
-  const selectGroup = (i: number) => {
-    setActiveGroup(i);
-    setActive(0);
-    setMobileOpenId("");
-  };
-
+  // No selected stage and no selected service. Every category is on screen at
+  // once, in its own column, which is what removed the row of stage chips
+  // that used to sit above this: with all four visible there is nothing left
+  // to switch between. Each service opens its own intake conversation, and
+  // the depth that used to live in the detail panel now lives on the stage
+  // pages, linked from the column headings.
   return (
     <section id="services" ref={ref as React.RefObject<HTMLElement>} style={{ ...SEC, borderTop: "none" }}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
         <p style={{ ...LBL, marginBottom: "1.75rem", ...fade(vis) }}>Services</p>
 
-        {/* Stage tabs — Discover / Engineer / Test / Govern / Transact */}
-        <div className="svc-stage-tabs" style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginBottom: "2.25rem", ...fade(vis, 0.03) }}>
-          {SERVICE_GROUPS.map((g, i) => {
-            const on = i === activeGroup;
-            return (
-              <button
-                key={g.id}
-                className="svc-stage-tab"
-                onClick={() => selectGroup(i)}
-                style={{
-                  fontFamily: "var(--font-manjari)", fontWeight: 700,
-                  fontSize: "0.6rem", letterSpacing: "0.16em", textTransform: "uppercase",
-                  padding: "0.6rem 1.1rem", cursor: "pointer",
-                  background: on ? "var(--c-accent)" : "transparent",
-                  color: on ? "var(--c-bg)" : "var(--c-ink-muted)",
-                  border: `1px solid ${on ? "var(--c-accent)" : "var(--c-border)"}`,
-                  borderRadius: "999px",
-                  transition: "background 0.25s ease, color 0.25s ease, border-color 0.25s ease",
-                }}
-              >
-                {g.label}
-              </button>
-            );
-          })}
-        </div>
-
-        <p style={{ ...BODY, fontSize: "0.82rem", maxWidth: "38rem", marginBottom: "2.5rem", ...fade(vis, 0.05) }}>
-          {group.description}
-        </p>
-
-        {/* Desktop/tablet: label column + shared detail panel on the right */}
         <div
-          key={group.id}
-          className="svc-grid svc-desktop"
+          className="svc-columns"
           style={{
-            /* The index column is capped rather than proportional. Left as a
-               fraction it grew to 439px for labels that need ~240px, opening a
-               gulf between a service and its own detail. */
-            display: "grid", gridTemplateColumns: "minmax(11rem, 17rem) 1fr",
-            /* Half the gutter. The panel's own padding-left supplies the other
-               half, so the rule between them sits centred. */
-            /* stretch, not start: the panel takes the full row height so its
-               left rule runs the whole way down beside the index instead of
-               stopping short wherever that service's content happens to end. */
-            gap: "clamp(1.5rem, 3vw, 2.5rem)", alignItems: "stretch",
-            borderTop: "1px solid var(--c-border)", paddingTop: "3.5rem",
+            display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
+            gap: "clamp(1.25rem, 2.5vw, 2.25rem)",
+            borderTop: "1px solid var(--c-border)", paddingTop: "3rem",
             ...reveal(vis, { delay: 0.05, dir: "up", distance: 22 }),
           }}
         >
-          {/* Left, the index of services within the selected stage */}
-          <div className="svc-nav" style={{ display: "flex", flexDirection: "column", gap: "1.1rem" }}>
-            {group.services.map((item, i) => {
-              const on = i === active;
-              return (
-                <button
-                  key={item.id}
-                  id={`svc-tab-${item.id}`}
-                  onClick={() => setActive(i)}
-                  aria-current={on}
-                  aria-controls="svc-detail"
+          {SERVICE_GROUPS.map((g) => (
+            <div key={g.id} className="svc-column">
+              <h3 style={{ marginBottom: "0.75rem" }}>
+                <Link
+                  href={`/services/${g.id}`}
+                  className="svc-col-head"
                   style={{
-                    background: "none", border: "none", padding: 0, cursor: "pointer",
-                    textAlign: "left", display: "block",
+                    fontFamily: "var(--font-serif)", fontWeight: 400,
+                    fontSize: "clamp(1rem, 1.3vw, 1.15rem)", lineHeight: 1.25,
+                    color: "var(--c-ink)", textDecoration: "none",
                   }}
                 >
-                  <span style={{ position: "relative", display: "inline-block", paddingBottom: "0.3rem" }}>
-                    <span style={{
-                      fontFamily: "var(--font-serif)", fontWeight: 400,
-                      fontSize: "clamp(1.05rem, 1.6vw, 1.3rem)", lineHeight: 1.25,
-                      color: on ? "var(--c-ink)" : "var(--c-ink-muted)",
-                      transition: "color 0.3s ease",
-                    }}>{item.label}</span>
-                    <span style={{
-                      position: "absolute", left: 0, bottom: 0, height: "1px",
-                      width: on ? "100%" : "0%", background: "var(--c-accent)",
-                      transition: "width 0.4s cubic-bezier(0.16,1,0.3,1)",
-                    }} />
-                  </span>
-                </button>
-              );
-            })}
-          </div>
+                  {g.label}
+                </Link>
+              </h3>
 
-          {/* Right, the selected service's detail.
-              The heading is present for screen readers but not drawn: on screen
-              the active item in the index already names the panel, and printing
-              it twice was the section's loudest piece of redundancy.
-              min-height holds the tallest service (7 items over 4 rows) so
-              switching tabs doesn't shunt the rest of the page up and down. */}
-          <div
-            key={s.id}
-            id="svc-detail"
-            role="region"
-            aria-labelledby={`svc-tab-${s.id}`}
-            className="svc-detail"
-            style={{ animation: "svcDetailFade 0.45s ease" }}
-          >
-            <h3 className="svc-sr-only">{s.label}</h3>
-            <ServiceDetailBody s={s} />
-          </div>
-        </div>
+              <p style={{ ...BODY, fontSize: "0.78rem", lineHeight: 1.6, marginBottom: "1.25rem" }}>
+                {g.description}
+              </p>
 
-        {/* Mobile: accordion, each service's detail unfolds directly beneath
-            itself instead of in a shared panel far below a long list */}
-        <div key={`${group.id}-mobile`} className="svc-mobile" style={{ borderTop: "1px solid var(--c-border)" }}>
-          {group.services.map((item) => {
-            const isOpen = item.id === mobileOpenId;
-            return (
-              <div key={item.id} className="svc-accordion-item" style={{ borderBottom: "1px solid var(--c-border)" }}>
-                <button
-                  type="button"
-                  onClick={() => setMobileOpenId(isOpen ? "" : item.id)}
-                  aria-expanded={isOpen}
-                  className="svc-accordion-header"
-                >
-                  <span style={{
-                    fontFamily: "var(--font-serif)", fontWeight: 400,
-                    fontSize: "1.05rem", lineHeight: 1.25,
-                    color: isOpen ? "var(--c-ink)" : "var(--c-ink-muted)",
-                  }}>{item.label}</span>
-                  <Plus size={16} className="svc-accordion-icon" style={{ transform: isOpen ? "rotate(45deg)" : "none" }} />
-                </button>
-                <div className="svc-accordion-panel" data-open={isOpen} style={{ opacity: isOpen ? 1 : 0 }}>
-                  <div style={{ paddingTop: "0.5rem", paddingBottom: "1.5rem" }}>
-                    <ServiceDetailBody s={item} />
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+              <ul className="svc-service-list" style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "0.55rem" }}>
+                {g.services.map((s) => (
+                  <li key={s.id}>
+                    <button
+                      type="button"
+                      className="svc-service-btn"
+                      onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: { key: s.id, label: s.label, opening: s.opening } }))}
+                    >
+                      <span aria-hidden style={{ width: "3px", height: "3px", borderRadius: "50%", background: "var(--c-accent)", flexShrink: 0, transform: "translateY(-0.25em)" }} />
+                      <span>{s.label}</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       </div>
+
       <style>{`
-        /* Opacity only. The old 10px rise re-fired on every tab click, so
-           switching services twitched instead of simply changing. */
-        @keyframes svcDetailFade{from{opacity:0}to{opacity:1}}
+        .svc-col-head:hover{ color: var(--c-accent) !important; }
 
-        /* A hairline tying the index to its panel, in the same 1px border
-           language as the section rule above it. */
-        .svc-detail{
-          border-left: 1px solid var(--c-border);
-          padding-left: clamp(1.5rem, 3vw, 2.5rem);
-          /* Covers the tallest panel in the shortest stage. On Engineer and
-             Test the index column is longer than any panel and sets the row
-             height on its own; on Govern and Transact it isn't, so without a
-             floor here the panel resizes from service to service and shunts
-             the page. Measured worst case is 389px. */
-          min-height: 25rem;
+        .svc-service-btn{
+          display: flex; align-items: baseline; gap: 0.6rem;
+          width: 100%; background: none; border: none; padding: 0;
+          text-align: left; cursor: pointer;
+          font-family: var(--font-sans); font-weight: 400;
+          font-size: 0.82rem; line-height: 1.45; color: var(--c-ink-mid);
+          transition: color 0.2s ease;
         }
+        .svc-service-btn:hover{ color: var(--c-accent); }
 
-        .svc-sr-only{
-          position: absolute; width: 1px; height: 1px;
-          padding: 0; margin: -1px; overflow: hidden;
-          clip-path: inset(50%); white-space: nowrap; border: 0;
+        /* Two columns before one, so the four categories don't collapse
+           straight into a single long strip on a tablet. */
+        @media(max-width:900px){
+          .svc-columns{ grid-template-columns: repeat(2, minmax(0, 1fr)) !important; row-gap: 2.75rem !important; }
         }
+        @media(max-width:540px){
+          .svc-columns{ grid-template-columns: 1fr !important; row-gap: 2.5rem !important; }
 
-        .svc-mobile{ display: none; }
-
-        @media(max-width:860px){
-          .svc-desktop{ display: none !important; }
-          .svc-mobile{ display: block; }
+          /* On a phone these are the only way into a service, and as plain
+             text lines they were about 19px tall — well under a usable tap
+             target. The padding does the work and the list gap gives way to
+             it, so the column doesn't just get taller. */
+          .svc-service-list{ gap: 0 !important; }
+          .svc-service-btn{ padding: 0.6rem 0; min-height: 2.75rem; align-items: center; }
         }
-        @media(max-width:560px){
-          .svc-items{grid-template-columns:1fr!important}
-        }
-
-        .svc-stage-tab:hover{ border-color: var(--c-accent) !important; }
-
-        .svc-accordion-header{
-          display: flex; align-items: center; justify-content: space-between; gap: 1rem;
-          width: 100%; background: none; border: none; cursor: pointer;
-          padding: 1.15rem 0; text-align: left;
-        }
-        .svc-accordion-icon{
-          flex: none; color: var(--c-ink-muted);
-          transition: transform 0.25s ease, color 0.25s ease;
-        }
-        .svc-accordion-header[aria-expanded="true"] .svc-accordion-icon{
-          color: var(--c-accent);
-        }
-        /* Animated with grid rows rather than a max-height ceiling. The old
-           40rem cap silently clipped any panel taller than it — the longer
-           service lists pushed "AI & Intelligent Systems" to 720px, losing
-           80px including the Discuss button. 0fr→1fr resolves to the
-           content's own height, so it cannot clip whatever gets added later. */
-        .svc-accordion-panel{
-          display: grid;
-          grid-template-rows: 0fr;
-          transition: grid-template-rows 0.45s cubic-bezier(0.16,1,0.3,1), opacity 0.35s ease;
-        }
-        .svc-accordion-panel[data-open="true"]{ grid-template-rows: 1fr; }
-        .svc-accordion-panel > div{ overflow: hidden; min-height: 0; }
       `}</style>
     </section>
   );
