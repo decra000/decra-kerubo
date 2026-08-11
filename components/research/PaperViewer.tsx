@@ -89,7 +89,7 @@ export function ProtectedPdfPages({ slug, title }: { slug: string; title: string
       )}
       {state === "error" && (
         <p style={{ textAlign: "center", color: "rgba(240,237,232,0.6)", fontFamily: "var(--font-sans)", fontSize: "0.85rem", paddingTop: "3rem" }}>
-          Couldn&apos;t open this paper just now — please try again in a moment.
+          Couldn&apos;t open this paper just now, please try again in a moment.
         </p>
       )}
       {state === "ready" && progress.done < progress.total && (
@@ -132,7 +132,7 @@ export function PaperViewer({ paper, onClose }: { paper: Paper; onClose: () => v
         display: "flex", flexDirection: "column",
       }}
     >
-      {/* Slim header — everything else is reading space */}
+      {/* Slim header, everything else is reading space */}
       <div style={{
         display: "flex", alignItems: "center", justifyContent: "space-between", gap: "1rem",
         padding: "0.65rem 1.25rem", borderBottom: "1px solid rgba(240,237,232,0.12)", flexShrink: 0,
@@ -174,7 +174,7 @@ export function PaperViewer({ paper, onClose }: { paper: Paper; onClose: () => v
         </div>
       </div>
 
-      {/* Collapsible abstract strip — hidden by default so the paper gets the space */}
+      {/* Collapsible abstract strip, hidden by default so the paper gets the space */}
       {showAbstract && (
         <div style={{ padding: "0.9rem 1.25rem", background: "#1A1916", borderBottom: "1px solid rgba(240,237,232,0.12)", flexShrink: 0, maxHeight: "9rem", overflowY: "auto" }}>
           <p style={{ fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.8rem", color: "rgba(240,237,232,0.72)", lineHeight: 1.65, maxWidth: "56rem" }}>
@@ -183,7 +183,7 @@ export function PaperViewer({ paper, onClose }: { paper: Paper; onClose: () => v
         </div>
       )}
 
-      {/* The paper itself — protected canvas pages, fills everything left */}
+      {/* The paper itself, protected canvas pages, fills everything left */}
       <div style={{ flex: 1, minHeight: 0 }}>
         <ProtectedPdfPages slug={paper.slug} title={paper.title} />
       </div>

@@ -23,7 +23,7 @@ export async function sendMail(opts: {
 }) {
   const t = getTransporter();
   if (!t) {
-    console.error("Email skipped — GMAIL_USER / GMAIL_APP_PASSWORD not set");
+    console.error("Email skipped, GMAIL_USER / GMAIL_APP_PASSWORD not set");
     return { ok: false, error: "GMAIL_USER / GMAIL_APP_PASSWORD not set" };
   }
   try {

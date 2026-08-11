@@ -177,7 +177,7 @@ export function BroadcastPanel({ password }: { password: string }) {
     <div style={{ maxWidth: "46rem" }}>
       <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "1rem", marginBottom: "0.75rem" }}>
         <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.85rem", color: "var(--c-ink-muted)", lineHeight: 1.6, maxWidth: "34rem" }}>
-          Upload a CSV of companies, write one email, and send a personalized copy to each — {"{{company}}"}, {"{{contact}}"} and {"{{email}}"} get swapped in automatically. Sent in small batches to stay within Gmail&apos;s limits.
+          Upload a CSV of companies, write one email, and send a personalized copy to each, {"{{company}}"}, {"{{contact}}"} and {"{{email}}"} get swapped in automatically. Sent in small batches to stay within Gmail&apos;s limits.
         </p>
         <button
           onClick={toggleHistory}

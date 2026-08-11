@@ -39,12 +39,12 @@ export async function submitInquiry(input: InquiryInput) {
     to: TO_EMAIL,
     replyTo: input.email,
     subject: `New inquiry via AI chat: ${input.name}`,
-    text: `${input.name} (${input.email}) — ${input.organization || "no organization given"}\n\n${input.summary}`,
+    text: `${input.name} (${input.email}), ${input.organization || "no organization given"}\n\n${input.summary}`,
   });
 
   await sendMail({
     to: input.email,
-    subject: `Got it, ${input.name} — thank you for reaching out`,
+    subject: `Got it, ${input.name}, thank you for reaching out`,
     html: `
       <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; padding: 40px; color: #222;">
         <h1 style="color: #0F4D3F; font-size: 26px;">Thank you for reaching out.</h1>
@@ -52,7 +52,7 @@ export async function submitInquiry(input: InquiryInput) {
         <p>This confirms your inquiry has been received.</p>
         <p style="background: #F5F4F1; padding: 16px 20px; border-radius: 8px; font-size: 14px; line-height: 1.6;"><strong>What you shared:</strong><br/>${input.summary}</p>
         <p>Decra reviews every inquiry personally and will be in touch within <strong>48 hours</strong>.</p>
-        <p style="margin-top: 40px;">— Decra Kerubo</p>
+        <p style="margin-top: 40px;">Decra Kerubo</p>
       </div>
     `,
   });

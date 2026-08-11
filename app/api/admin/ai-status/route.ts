@@ -42,7 +42,7 @@ export async function GET(req: NextRequest) {
 
   if (!configured) {
     report.verdict =
-      "No AI_BASE_URL/AI_API_KEY on this deployment, so the site is falling back to the keyless endpoint, which now refuses almost every request. Set both and redeploy — env changes only apply to a new deployment.";
+      "No AI_BASE_URL/AI_API_KEY on this deployment, so the site is falling back to the keyless endpoint, which now refuses almost every request. Set both and redeploy, env changes only apply to a new deployment.";
     return NextResponse.json(report);
   }
 
@@ -84,7 +84,7 @@ export async function GET(req: NextRequest) {
               ? "Rate limited by the provider. The key works; it is over quota right now."
               : "The provider answered, but not with a usable completion. See providerResponse.";
     } else {
-      report.verdict = "Working. If the site still shows the busy message, it is serving an older deployment — redeploy.";
+      report.verdict = "Working. If the site still shows the busy message, it is serving an older deployment, redeploy.";
     }
   } catch (err) {
     report.ok = false;

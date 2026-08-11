@@ -49,7 +49,7 @@ const inp: React.CSSProperties = {
 /* ── AI Intake Chat ───
    Same pattern as /app/start: a short, AI-led conversation that asks one
    question at a time, gathers only what's needed for THIS engagement type,
-   then summarises and posts to Decra — no long static form up front.
+   then summarises and posts to Decra, no long static form up front.
 */
 type ChatStage = "intro" | "chat" | "confirm" | "done";
 type Msg = { role: "user" | "assistant"; text: string; down?: boolean };
@@ -59,13 +59,13 @@ function buildSystemPrompt(engagement: string, focusFields: string, openingConte
 
 ${openingContext}
 
-Your sole purpose: ask a small number of well-targeted questions — never an overwhelming list — to gather exactly what Decra needs to follow up well, then hand it to her.
+Your sole purpose: ask a small number of well-targeted questions, never an overwhelming list, to gather exactly what Decra needs to follow up well, then hand it to her.
 
 Rules:
-1. Ask ONE question at a time — never list multiple at once.
+1. Ask ONE question at a time, never list multiple at once.
 2. Gather over 3-5 natural exchanges: ${focusFields}, plus their name and email at the end.
-3. Keep it tight — skip anything you can reasonably infer, and never ask more than necessary.
-4. Once you have enough, say exactly: "Got it — here's what I'll send Decra:" then on a new line write a short 2-4 sentence plain-language summary (no headers, no bullet points) of what you learned, ending with their name and email. Then on a new line add this block:
+3. Keep it tight, skip anything you can reasonably infer, and never ask more than necessary.
+4. Once you have enough, say exactly: "Got it, here's what I'll send Decra:" then on a new line write a short 2-4 sentence plain-language summary (no headers, no bullet points) of what you learned, ending with their name and email. Then on a new line add this block:
 <intake_complete>
 {
   "name": "...",
@@ -83,7 +83,7 @@ const ENGAGEMENT_CONFIG: Record<string, { greeting: string; system: string }> = 
     system: buildSystemPrompt(
       "speaking engagement",
       "what the event/format is (keynote, panel, workshop, lecture, podcast), the topic or theme they have in mind, the audience size and type, and the date or timeframe",
-      "Decra speaks on technology law in Africa — data privacy, AI regulation, startup compliance, and related topics — at keynotes, panels, workshops, corporate trainings, university lectures, and podcasts."
+      "Decra speaks on technology law in Africa, data privacy, AI regulation, startup compliance, and related topics, at keynotes, panels, workshops, corporate trainings, university lectures, and podcasts."
     ),
   },
   compliance: {
@@ -91,7 +91,7 @@ const ENGAGEMENT_CONFIG: Record<string, { greeting: string; system: string }> = 
     system: buildSystemPrompt(
       "compliance review",
       "what kind of product or platform it is, what specifically they're worried about (e.g. privacy, terms of service, third-party integrations, a pre-launch audit), and roughly how large/mature the company or product is",
-      "Decra performs systematic legal reviews of technology products and platforms — pre-launch audits, product liability, privacy-by-design, ToS/privacy policy drafting, API/third-party integration review, and regulatory gap analysis — delivered as a written report."
+      "Decra performs systematic legal reviews of technology products and platforms, pre-launch audits, product liability, privacy-by-design, ToS/privacy policy drafting, API/third-party integration review, and regulatory gap analysis, delivered as a written report."
     ),
   },
   startup: {
@@ -104,10 +104,10 @@ She helps with: company incorporation and structure, equity/vesting/co-founder a
 Your sole purpose: understand where a potential client is in their journey and what they need, then collect enough information to send Decra a clear briefing.
 
 Rules:
-1. Ask ONE question at a time — never list multiple at once.
+1. Ask ONE question at a time, never list multiple at once.
 2. Gather over 3-5 natural exchanges: what they're building, what country they're in, what stage (idea / pre-incorporation / incorporated / fundraising / expanding), their main need, their name, their email.
-3. If they mention NGO, nonprofit, foundation, or international branch — clarify whether they need a PBO (local Kenyan entity) or a foreign branch registration.
-4. Once you have enough, say exactly: "Got it — here's what I'll send Decra:" then a short 2-4 sentence plain-language summary, then on a new line:
+3. If they mention NGO, nonprofit, foundation, or international branch, clarify whether they need a PBO (local Kenyan entity) or a foreign branch registration.
+4. Once you have enough, say exactly: "Got it, here's what I'll send Decra:" then a short 2-4 sentence plain-language summary, then on a new line:
 <intake_complete>
 {"name": "...", "email": "...", "stage": "...", "summary": "2-4 sentence briefing for Decra"}
 </intake_complete>
@@ -119,7 +119,7 @@ Style: 1-2 sentences per reply. Warm, direct, professional. Never mention Anthro
     system: buildSystemPrompt(
       "tech development inquiry (Entrora Systems)",
       "what they want built or fixed (AI document systems, legal-tech product, compliant AI feature, AI governance advisory), what stage it's at (idea, in progress, needs an audit), and any compliance constraints they already know about",
-      "Entrora Systems is Decra's AI engineering practice — AI document systems, legal-tech development, compliant AI products, AI adoption advisory, regulatory sandbox navigation, and AI governance frameworks. The lawyer and the engineer are the same person, so legal compliance is built into the build itself."
+      "Entrora Systems is Decra's AI engineering practice, AI document systems, legal-tech development, compliant AI products, AI adoption advisory, regulatory sandbox navigation, and AI governance frameworks. The lawyer and the engineer are the same person, so legal compliance is built into the build itself."
     ),
   },
 };
@@ -164,11 +164,11 @@ function IntakeChat({ engagement, formSubject }: { engagement: string; formSubje
         body: JSON.stringify({ message: config.greeting, history: [], system: config.system }),
       });
       const d = await res.json();
-      const reply = d.reply || "Hi — tell me a bit more about what you need.";
+      const reply = d.reply || "Hi, tell me a bit more about what you need.";
       setMsgs([{ role: "assistant", text: cleanReply(reply), down: !!d.down }]);
       checkForCompletion(reply);
     } catch {
-      setMsgs([{ role: "assistant", text: "Connection issue — leave your details below instead.", down: true }]);
+      setMsgs([{ role: "assistant", text: "Connection issue, leave your details below instead.", down: true }]);
     } finally { setLoading(false); }
   };
 
@@ -190,7 +190,7 @@ function IntakeChat({ engagement, formSubject }: { engagement: string; formSubje
       setMsgs([...newMsgs, { role: "assistant", text: cleanReply(reply), down: !!d.down }]);
       checkForCompletion(reply);
     } catch {
-      setMsgs([...newMsgs, { role: "assistant", text: "Something went wrong — leave your details below instead.", down: true }]);
+      setMsgs([...newMsgs, { role: "assistant", text: "Something went wrong, leave your details below instead.", down: true }]);
     } finally { setLoading(false); }
   };
 
@@ -199,7 +199,7 @@ function IntakeChat({ engagement, formSubject }: { engagement: string; formSubje
       <div style={{ border: "1px solid var(--c-border)", padding: "2.5rem" }}>
         <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: "1rem", color: "var(--c-ink)", marginBottom: "0.5rem" }}>Ready?</p>
         <p style={{ ...BODY, fontSize: "0.85rem", marginBottom: "2rem" }}>
-          A couple of quick questions — Decra reviews every inquiry personally.
+          A couple of quick questions, Decra reviews every inquiry personally.
         </p>
         <button onClick={startChat} style={{
           display: "inline-flex", alignItems: "center", gap: "0.5rem",
@@ -409,7 +409,7 @@ function Talk() {
               Let&apos;s have a real conversation.
             </h2>
             <p style={{ ...BODY, fontSize: "0.875rem", maxWidth: "22rem", marginBottom: "3rem" }}>
-              Whether you&apos;re a founder, a firm, or an organisation — if you&apos;re serious about technology law, reach out.
+              Whether you&apos;re a founder, a firm, or an organisation, if you&apos;re serious about technology law, reach out.
             </p>
             <div style={{ display: "flex", flexDirection: "column" }}>
               {[
@@ -484,7 +484,7 @@ export default function PartnerTalkPage() {
       <EngagementSection
         id="speak" num="01"
         title="Book me to speak on technology law."
-        description="Keynotes, panels, workshops, and masterclasses on technology law in Africa — data privacy, AI regulation, startup compliance, and more."
+        description="Keynotes, panels, workshops, and masterclasses on technology law in Africa, data privacy, AI regulation, startup compliance, and more."
         items={["Keynote addresses", "Panel discussions", "Workshop facilitation", "Corporate training days", "University lectures", "Podcast appearances"]}
         formSubject="Speaking engagement"
         engagement="speak"
@@ -511,9 +511,9 @@ export default function PartnerTalkPage() {
       <EngagementSection
         id="entrora" num="04"
         title="Get quality compliant tech development."
-        description="Through Entrora Systems — AI engineering and software development with legal compliance built in. The lawyer and engineer are the same person."
+        description="Through Entrora Systems, AI engineering and software development with legal compliance built in. The lawyer and engineer are the same person."
         items={["AI document systems", "Legal tech development", "Compliant AI products", "AI adoption advisory", "Regulatory sandbox navigation", "AI governance frameworks"]}
-        formSubject="Tech development — Entrora"
+        formSubject="Tech development, Entrora"
         engagement="entrora"
         alt={true}
       />

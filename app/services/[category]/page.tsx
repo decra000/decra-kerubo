@@ -7,9 +7,9 @@ import { SERVICE_GROUPS, type ServiceDef, type ServiceGroup } from "@/lib/servic
 import { PAPERS } from "@/lib/papers";
 
 /* A page per category.
-   The four categories are not the same shape as each other — one is a
+   The four categories are not the same shape as each other, one is a
    catalogue of work, one is an arrangement, one is scoped by sector, and one
-   is published research rather than an offering — so this branches on `kind`
+   is published research rather than an offering, so this branches on `kind`
    rather than rendering four identical lists. */
 
 export function generateStaticParams() {

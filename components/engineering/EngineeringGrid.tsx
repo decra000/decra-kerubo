@@ -95,7 +95,7 @@ export function EngineeringGrid({ projects }: { projects: EngineeringProject[] }
         ))}
       </div>
 
-      {/* ── Featured project(s) — full width, stacked ── */}
+      {/* ── Featured project(s), full width, stacked ── */}
       {featuredCards.map((p) => {
         // Only render the 3-column research pairing when `p` is the tool
         // side (research items don't get a nested research column pointing

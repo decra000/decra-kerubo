@@ -48,9 +48,9 @@ export const engineeringProjects: EngineeringProject[] = [
     title: "AI Footprint Tracker",
     subtitle: "Chrome Extension · AI Decarbonization",
     description:
-      "Tracks your Claude, ChatGPT, and Gemini usage in the browser and estimates the energy, water, and carbon footprint of every inference — so you can use AI more responsibly.",
+      "Tracks your Claude, ChatGPT, and Gemini usage in the browser and estimates the energy, water, and carbon footprint of every inference, so you can use AI more responsibly.",
     detail:
-      "AI Footprint Tracker is a Manifest V3 Chrome extension that watches your Claude, ChatGPT, and Gemini conversations as you use them and estimates the energy (Wh), water (mL), and carbon (g CO2e) cost of each inference, scaled from the few public per-query figures vendors have disclosed. Every estimate carries an explicit confidence tag — measured, medium, or low — so the numbers are never presented as more precise than they are. Usage syncs to a Supabase project protected by row-level security, with a companion dashboard for tracking trends over time by product. It's the applied, shipped counterpart to my \"Democratization and Decarbonization of AI Solutions\" research below: that paper argues most people have no visibility into what a single AI prompt actually costs the grid, and this extension makes that cost visible in real time.",
+      "AI Footprint Tracker is a Manifest V3 Chrome extension that watches your Claude, ChatGPT, and Gemini conversations as you use them and estimates the energy (Wh), water (mL), and carbon (g CO2e) cost of each inference, scaled from the few public per-query figures vendors have disclosed. Every estimate carries an explicit confidence tag, measured, medium, or low, so the numbers are never presented as more precise than they are. Usage syncs to a Supabase project protected by row-level security, with a companion dashboard for tracking trends over time by product. It's the applied, shipped counterpart to my \"Democratization and Decarbonization of AI Solutions\" research below: that paper argues most people have no visibility into what a single AI prompt actually costs the grid, and this extension makes that cost visible in real time.",
     techStack: ["Chrome Extension (MV3)", "JavaScript", "Supabase", "Next.js", "Row-Level Security"],
     fellowship: "Bevisioneers × Mercedes-Benz Fellowship",
     relatedSlug: "ai-decarbonization-research",
@@ -173,7 +173,7 @@ export const engineeringProjects: EngineeringProject[] = [
     subtitle: "AI Chatbot · For Entrepreneurs",
     description: "Helps entrepreneurs make the right early stage business legal decisions.",
     detail:
-      "An AI chatbot that guides entrepreneurs through early-stage business legal decisions — the questions founders face before they can afford counsel: what structure to incorporate under, what agreements they need in place, and which regulatory obligations apply to what they're building. It turns those first legal calls from guesswork into a guided conversation.",
+      "An AI chatbot that guides entrepreneurs through early-stage business legal decisions, the questions founders face before they can afford counsel: what structure to incorporate under, what agreements they need in place, and which regulatory obligations apply to what they're building. It turns those first legal calls from guesswork into a guided conversation.",
     image: "/engineering/updatedteresya.png",
   },
 ];

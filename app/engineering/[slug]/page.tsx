@@ -197,7 +197,7 @@ export default async function EngineeringProjectPage({
                     <li>Click <strong>Load unpacked</strong> and select the unzipped folder.</li>
                   </ol>
                   <p className="t-body-sm" style={{ marginTop: "0.85rem", marginBottom: 0 }}>
-                    Not yet on the Chrome Web Store — this is a direct, if less polished, way to try it today.
+                    Not yet on the Chrome Web Store, this is a direct, if less polished, way to try it today.
                   </p>
                 </div>
               )}

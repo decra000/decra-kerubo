@@ -39,7 +39,7 @@ export default function ArtPage() {
         {/* The hero carries the image and nothing else. The page still needs
             a heading for the document outline and for anyone arriving by
             screen reader, so it is here but not drawn. */}
-        <h1 className="art-sr-only">Art — a poem by Decra Kerubo</h1>
+        <h1 className="art-sr-only">Art, a poem by Decra Kerubo</h1>
       </section>
 
       {/* ── The poem ── */}
@@ -90,7 +90,7 @@ export default function ArtPage() {
         }
 
         /* This page paints its own black whatever theme the visitor is in, so
-           the navbar's ink-coloured links disappear into it — in light mode
+           the navbar's ink-coloured links disappear into it, in light mode
            they were #2E2E2E on black. Lift them for this page only. :has()
            scopes it here without the navbar having to know about this page,
            and !important is required because those colours are inline styles
@@ -120,7 +120,7 @@ export default function ArtPage() {
            The portrait is held to a readable size and centred, rather than
            run to the full width: at 1278px across, a face is too big to take
            in as a face. The frame stays square so the square photograph fills
-           it with nothing cropped. Sized up again — the previous 62rem cap
+           it with nothing cropped. Sized up again, the previous 62rem cap
            read as small on wide screens, so the hard rem cap is dropped
            entirely in favour of a near-full-bleed width, held back only by a
            small side margin and a vh ceiling for square-aspect tall screens. */
@@ -169,10 +169,10 @@ export default function ArtPage() {
         /* Dissolves the frame's top and bottom edges into the page, so the
            square has no hard horizontal cut. Gentler than before: the frame
            is now small enough that a heavy fade would eat the portrait. Its
-           left and right edges need nothing — the photograph's own ground is
+           left and right edges need nothing, the photograph's own ground is
            already black. */
         /* Dissolves the frame's edges into the page. Originally this only
-           needed to handle the top/bottom edges — the frame sat inset with
+           needed to handle the top/bottom edges, the frame sat inset with
            side padding, so the page's own black background naturally
            letterboxed the left/right sides. Now that the frame runs full
            width edge-to-edge, that letterboxing is gone, so a horizontal
@@ -220,7 +220,7 @@ export default function ArtPage() {
           margin: 0 auto;
         }
         /* Font size stepped down from the original clamp(1.05rem, 1.6vw, 1.3rem)
-           — the poem is longer now, so a touch smaller keeps the block from
+          , the poem is longer now, so a touch smaller keeps the block from
            reading as oversized against the frame above it. */
         .art-stanza {
           font-family: var(--font-serif), Georgia, serif;
@@ -318,7 +318,7 @@ export default function ArtPage() {
 
            Both overlays (.art-stage-fade on the hero, .art-portrait-grade on
            the lower portrait) are unconditional in the base styles above, so
-           they were always rendering on mobile — but with the frame now
+           they were always rendering on mobile, but with the frame now
            edge-to-edge there's no side letterboxing to help them read as an
            overlay, and the portrait strip is shorter here, so both gradients
            are restated with stronger stops for this breakpoint rather than

@@ -15,7 +15,7 @@ const INTAKE_QUESTIONS: { key: keyof FormState; bot: string; placeholder: string
   { key: "organization", bot: "Are you reaching out for a company, NGO, or on your own behalf?", placeholder: "Company / NGO / Personal", required: false, skippable: true },
   { key: "website", bot: "Got a website I should take a look at beforehand?", placeholder: "https://...", required: false, skippable: true },
   { key: "industry", bot: "What industry or sector are you in?", placeholder: "e.g. Legal Tech, NGO, FinTech", required: false, skippable: true },
-  { key: "team_size", bot: "Roughly how big is the team?", placeholder: "e.g. 1–5, 10–50, 100+", required: false, skippable: true },
+  { key: "team_size", bot: "Roughly how big is the team?", placeholder: "e.g. 1-5, 10-50, 100+", required: false, skippable: true },
   { key: "primary_challenge", bot: "Let's get into it, what's the main challenge you're facing right now?", placeholder: "Type your answer...", type: "textarea", required: true },
   { key: "desired_outcome", bot: "And what would a successful outcome look like for you?", placeholder: "Type your answer...", type: "textarea", required: true },
 ];
@@ -39,7 +39,7 @@ function validateAnswer(question: (typeof INTAKE_QUESTIONS)[number], raw: string
       // to adjudicate the RFC. Anything stricter rejects real addresses.
       return /^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/.test(value)
         ? ""
-        : "That doesn't look like an email address — check for a typo.";
+        : "That doesn't look like an email address, check for a typo.";
     case "website":
       return /^(https?:\/\/)?[\w-]+(\.[\w-]+)+([/?#].*)?$/.test(value)
         ? ""

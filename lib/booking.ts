@@ -83,21 +83,21 @@ export async function createBooking(input: BookingInput): Promise<BookingResult>
 
   await sendMail({
     to: input.email,
-    subject: `Request received — we're processing it (${input.consultation_type})`,
+    subject: `Request received, we're processing it (${input.consultation_type})`,
     html: `
       <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; padding: 40px; color: #222;">
         <h1 style="color: #0F4D3F; font-size: 28px;">Your request is being processed.</h1>
         <p>Hi ${input.name},</p>
-        <p>Thank you — your request for a <strong>${input.consultation_type}</strong> consultation has been received and is now with Decra.</p>
+        <p>Thank you, your request for a <strong>${input.consultation_type}</strong> consultation has been received and is now with Decra.</p>
         <p style="background: #F5F4F1; padding: 16px 20px; border-radius: 8px; font-size: 15px; line-height: 1.6;">
           <strong>Time requested:</strong> ${requestedFor} (Nairobi time)
         </p>
-        <p><strong>This is not a confirmation yet.</strong> Decra reviews every request personally and will email you to confirm the slot — or propose the nearest alternative if that time isn't free.</p>
+        <p><strong>This is not a confirmation yet.</strong> Decra reviews every request personally and will email you to confirm the slot, or propose the nearest alternative if that time isn't free.</p>
         ${pendingPayment
           ? `<p>We've also noted your M-Pesa/bank reference (<strong>${input.payment_reference || "none provided"}</strong>) and will verify the payment alongside your request.</p>`
           : (amount > 0 ? `<p><strong>Amount paid:</strong> KES ${Number(amount).toLocaleString("en-KE")} (ref: ${input.payment_reference})</p>` : "")}
         <p>Once the time is confirmed you'll get a Google Meet link. In the meantime, feel free to reply directly to this email with anything you'd like Decra to see beforehand.</p>
-        <p style="margin-top: 40px;">— Decra Kerubo</p>
+        <p style="margin-top: 40px;">Decra Kerubo</p>
       </div>
     `,
   });
@@ -113,9 +113,9 @@ export async function createBooking(input: BookingInput): Promise<BookingResult>
   const gcalFmt = (d: Date) => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
   const gcalParams = new URLSearchParams({
     action: "TEMPLATE",
-    text: `${typeInfo?.label || input.consultation_type} — ${input.name}`,
+    text: `${typeInfo?.label || input.consultation_type}, ${input.name}`,
     dates: `${gcalFmt(start)}/${gcalFmt(end)}`,
-    details: `Booked via decrakerubo.com\nEmail: ${input.email}\nOrganization: ${input.organization || "—"}\nChallenge: ${input.primary_challenge}\nDesired outcome: ${input.desired_outcome}`,
+    details: `Booked via decrakerubo.com\nEmail: ${input.email}\nOrganization: ${input.organization || "-"}\nChallenge: ${input.primary_challenge}\nDesired outcome: ${input.desired_outcome}`,
   });
   const gcalUrl = `https://calendar.google.com/calendar/render?${gcalParams.toString()}`;
 
@@ -124,7 +124,7 @@ export async function createBooking(input: BookingInput): Promise<BookingResult>
   await sendMail({
     to: internalTo,
     replyTo: input.email,
-    subject: `Action needed — meeting request from ${input.name} (${input.consultation_type})`,
+    subject: `Action needed, meeting request from ${input.name} (${input.consultation_type})`,
     html: `
       <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; padding: 24px; color: #222;">
         <p style="background: #FDF6E3; border-left: 4px solid #8A6D2B; padding: 12px 16px; font-size: 14px; margin-bottom: 24px;">
@@ -132,15 +132,15 @@ export async function createBooking(input: BookingInput): Promise<BookingResult>
         </p>
         <p><strong>${input.name}</strong> (${input.email}) requested <strong>${typeInfo?.label || input.consultation_type}</strong> for <strong>${start.toLocaleString("en-KE", { dateStyle: "full", timeStyle: "short", timeZone: "Africa/Nairobi" })}</strong> (Nairobi time).</p>
         <p>Status: ${status}${input.payment_reference ? ` · ref: ${input.payment_reference}` : ""}</p>
-        <p>Challenge: ${input.primary_challenge || "—"}<br/>
-        Desired outcome: ${input.desired_outcome || "—"}<br/>
-        Organization: ${input.organization || "—"}</p>
+        <p>Challenge: ${input.primary_challenge || "-"}<br/>
+        Desired outcome: ${input.desired_outcome || "-"}<br/>
+        Organization: ${input.organization || "-"}</p>
         <p style="margin-top: 24px;">
           <a href="${siteUrl}/admin" style="background: #0F4D3F; color: #fff; padding: 12px 20px; text-decoration: none; border-radius: 6px;">Review &amp; confirm this request</a>
         </p>
         <p style="margin-top: 16px;">
           <a href="${gcalUrl}" style="color: #0F4D3F; font-size: 14px;">Add to Google Calendar</a>
-          <span style="color: #999; font-size: 13px;"> — once you've confirmed the time.</span>
+          <span style="color: #999; font-size: 13px;">, once you've confirmed the time.</span>
         </p>
       </div>
     `,
@@ -166,7 +166,7 @@ export async function sendBookingConfirmedEmail(booking: {
 
   return sendMail({
     to: booking.email,
-    subject: `Confirmed — ${typeInfo?.label || booking.consultation_type} with Decra Kerubo`,
+    subject: `Confirmed, ${typeInfo?.label || booking.consultation_type} with Decra Kerubo`,
     html: `
       <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; padding: 40px; color: #222;">
         <h1 style="color: #0F4D3F; font-size: 28px;">Your consultation is confirmed.</h1>
@@ -176,7 +176,7 @@ export async function sendBookingConfirmedEmail(booking: {
           <strong>${when}</strong> (Nairobi time)
         </p>
         <p>I'll send the Google Meet link ahead of our time. If anything changes on your end, just reply to this email.</p>
-        <p style="margin-top: 40px;">— Decra Kerubo</p>
+        <p style="margin-top: 40px;">Decra Kerubo</p>
       </div>
     `,
   });

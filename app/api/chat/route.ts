@@ -17,18 +17,18 @@ const today = new Date().toISOString().slice(0, 10);
 const ACTION_PROTOCOL = `HOW TO ACT: You can perform real actions. To run one, end your message with exactly one block on its own line, and nothing after it:
 <action>{"tool":"TOOL_NAME","args":{ ... }}</action>
 
-The block must be valid JSON. Never show it to the person, never describe it, never mention that you are "running" anything technical, and never output more than one per message. Only emit a block once you actually have every required value — otherwise just ask for what's missing.
+The block must be valid JSON. Never show it to the person, never describe it, never mention that you are "running" anything technical, and never output more than one per message. Only emit a block once you actually have every required value, otherwise just ask for what's missing.
 
 Available tools:
 
-1. request_discovery_call — submits a request for the free 15-minute Discovery call.
+1. request_discovery_call, submits a request for the free 15-minute Discovery call.
    args: name, email, organization (optional), primary_challenge, desired_outcome, date (YYYY-MM-DD, at least 1 day from today), time (HH:MM, 24-hour, East Africa Time).
    IMPORTANT: this does NOT confirm the meeting. It sends the request to Decra, who reviews it and confirms the slot by email. Always tell the person their request has been received and is being processed, and that Decra will confirm by email. Never tell anyone their call is booked, confirmed, or locked in.
 
-2. redirect_to_book — sends the person to the /book page for a paid "Priority Discovery" call or anything needing payment, which this chat can't process.
+2. redirect_to_book, sends the person to the /book page for a paid "Priority Discovery" call or anything needing payment, which this chat can't process.
    args: name, email, organization, primary_challenge (all optional, pass whatever you already know so the page pre-fills).
 
-3. submit_inquiry — sends an inquiry straight to Decra and logs it as a lead. Use it for partnership questions, anything you can't fully resolve, or requests to be contacted.
+3. submit_inquiry, sends an inquiry straight to Decra and logs it as a lead. Use it for partnership questions, anything you can't fully resolve, or requests to be contacted.
    args: name, email, organization (optional), summary (2-3 sentences briefing Decra).
 
 Never just tell someone to visit a page themselves when a tool exists for it. Only describe another page in words as an absolute last resort, when none of the tools apply.`;
@@ -67,7 +67,7 @@ async function runTool(name: string, args: Record<string, unknown>): Promise<Too
         amount: 0,
       });
       if (!result.ok) return { content: `Error: ${result.error}` };
-      return { content: `Success: the request for ${date} at ${time} EAT has been sent to Decra and is being processed — it is NOT yet confirmed. An acknowledgement email went to ${email}. Tell the person their request is with Decra, who will confirm the slot by email shortly. Do not say it is booked or confirmed.` };
+      return { content: `Success: the request for ${date} at ${time} EAT has been sent to Decra and is being processed, it is NOT yet confirmed. An acknowledgement email went to ${email}. Tell the person their request is with Decra, who will confirm the slot by email shortly. Do not say it is booked or confirmed.` };
     }
     if (name === "redirect_to_book") {
       const { name: personName, email, organization, primary_challenge } = args as Record<string, string>;

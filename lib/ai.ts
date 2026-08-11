@@ -143,8 +143,12 @@ export async function generateReply(
       continue;
     }
 
+    // 402 is a spent quota, not a throttle. Reporting it as retryable told
+    // people to "try again in a moment" for something that cannot succeed
+    // until a key is configured, so they retried instead of leaving their
+    // details. Non-retryable puts the fallback form in front of them.
     if (res.status === 402) {
-      return { ok: false, error: "The assistant's free quota is exhausted.", retryable: true };
+      return { ok: false, error: "The assistant's quota is exhausted.", retryable: false };
     }
 
     // 400/401/403 etc. are configuration problems — no amount of retrying helps.

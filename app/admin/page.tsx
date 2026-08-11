@@ -38,7 +38,7 @@ function googleCalendarUrl(b: Booking) {
   ].filter(Boolean).join("\n");
   const params = new URLSearchParams({
     action: "TEMPLATE",
-    text: `${type?.label || b.consultation_type} — ${b.name}`,
+    text: `${type?.label || b.consultation_type}, ${b.name}`,
     dates: `${fmt(start)}/${fmt(end)}`,
     details,
   });
@@ -177,7 +177,7 @@ export default function AdminPage() {
           {b.status === "pending" ? "Awaiting you" : b.status.replace("_", " ")}
         </span>
         {/* A pending request has been acknowledged to the client but not
-            confirmed — this button is what actually sends them the
+            confirmed, this button is what actually sends them the
             confirmation email. */}
         {b.status === "pending" && (
           <button
@@ -346,7 +346,7 @@ export default function AdminPage() {
                     <tr key={l.id} style={{ borderTop: "1px solid var(--c-border)" }}>
                       <td style={{ ...tdStyle, fontWeight: 600 }}>{l.name}</td>
                       <td style={tdStyle}>{l.email}</td>
-                      <td style={tdStyle}>{l.organization || "—"}</td>
+                      <td style={tdStyle}>{l.organization || "-"}</td>
                       <td style={tdStyle}>{l.source}</td>
                       <td style={{ ...tdStyle, color: "var(--c-ink-muted)", whiteSpace: "nowrap" }}>{new Date(l.created_at).toLocaleDateString()}</td>
                     </tr>
@@ -375,7 +375,7 @@ export default function AdminPage() {
                   {subscribers.map((s) => (
                     <tr key={s.id} style={{ borderTop: "1px solid var(--c-border)" }}>
                       <td style={tdStyle}>{s.email}</td>
-                      <td style={tdStyle}>{s.name || "—"}</td>
+                      <td style={tdStyle}>{s.name || "-"}</td>
                       <td style={{ ...tdStyle, color: "var(--c-ink-muted)", whiteSpace: "nowrap" }}>{new Date(s.created_at).toLocaleDateString()}</td>
                     </tr>
                   ))}

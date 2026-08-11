@@ -331,7 +331,7 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
           "Liability & disclaimers", "Consumer protection", "Third-party & API terms",
           "Integration risk", "Launch legal readiness", "Regulatory gap review",
         ],
-        opening: "Hi, I need a legal review of my product — terms of service, privacy policy, user agreements, liability, third-party or API terms, or launch readiness.",
+        opening: "Hi, I need a legal review of my product, terms of service, privacy policy, user agreements, liability, third-party or API terms, or launch readiness.",
       },
       {
         id: "technology-ip",
@@ -367,7 +367,7 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
     id: "industry-compliance",
     label: "Industry Compliance",
     description:
-      "Meeting the rules a product is actually judged against: governance and standards, data protection, responsible AI, product safety, and security — read against the sector the product operates in.",
+      "Meeting the rules a product is actually judged against: governance and standards, data protection, responsible AI, product safety, and security, read against the sector the product operates in.",
     kind: "catalogue",
     sectors: [
       "Fintech & payments", "Health & digital health", "Education technology",
@@ -457,7 +457,7 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
           "Retention & deletion", "Cross-border transfers", "Processor & vendor terms",
           "Data subject request handling", "Breach notification readiness", "ODPC registration review",
         ],
-        opening: "Hi, I'd like a data protection and privacy audit of my product — data mapping, lawful basis, consent, retention, cross-border transfers, or breach readiness.",
+        opening: "Hi, I'd like a data protection and privacy audit of my product, data mapping, lawful basis, consent, retention, cross-border transfers, or breach readiness.",
       },
       {
         id: "ai-compliance-audit",
@@ -468,7 +468,7 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
           "Human oversight & escalation", "Explainability & notice", "Bias & disparate impact review",
           "AI vendor & model terms", "Evaluation evidence",
         ],
-        opening: "Hi, I'd like an AI and automated decision audit — decision inventory, training data provenance, model documentation, human oversight, explainability, or bias review.",
+        opening: "Hi, I'd like an AI and automated decision audit, decision inventory, training data provenance, model documentation, human oversight, explainability, or bias review.",
       },
       {
         id: "consumer-terms-audit",
@@ -479,7 +479,7 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
           "Dark pattern review", "Marketing claim substantiation", "Accessibility obligations",
           "Age & eligibility gating",
         ],
-        opening: "Hi, I'd like a consumer, terms and disclosure audit of my product — terms accuracy, pricing and billing disclosure, cancellation flows, dark patterns, or marketing claims.",
+        opening: "Hi, I'd like a consumer, terms and disclosure audit of my product, terms accuracy, pricing and billing disclosure, cancellation flows, dark patterns, or marketing claims.",
       },
       {
         id: "licensing-compliance-audit",
@@ -490,7 +490,7 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
           "SaaS & distribution triggers", "Model & dataset licences", "Contributor & contractor IP chain",
           "Remediation plan",
         ],
-        opening: "Hi, I'd like a licensing and open-source compliance audit — dependency and licence inventory, copyleft exposure, attribution obligations, model or dataset licences, or IP chain.",
+        opening: "Hi, I'd like a licensing and open-source compliance audit, dependency and licence inventory, copyleft exposure, attribution obligations, model or dataset licences, or IP chain.",
       },
       {
         id: "regulatory-gap-analysis",
@@ -501,7 +501,7 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
           "Licensing & registration gaps", "Enforcement exposure ranking", "Remediation roadmap",
           "Board & investor reporting",
         ],
-        opening: "Hi, I'd like a regulatory gap analysis for my product — which regimes apply, sector obligations, market entry requirements, licensing gaps, and a remediation roadmap.",
+        opening: "Hi, I'd like a regulatory gap analysis for my product, which regimes apply, sector obligations, market entry requirements, licensing gaps, and a remediation roadmap.",
       },
     ],
   },
@@ -525,7 +525,7 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
       { title: "Retained, not per-matter", body: "A monthly retainer rather than a fee per question, so the thing you would hesitate to open a matter for is the thing you raise first." },
       { title: "Inside the build", body: "In the specs, the standups and the pull request discussions, where a decision is still cheap to change." },
       { title: "One person, both halves", body: "The same person reads the architecture and the agreement, so nothing is lost translating between your engineers and outside counsel." },
-      { title: "Scoped to a stage", body: "Engagements run for a defined stretch of the product — a build, a launch, a raise — and are reviewed at the end of it." },
+      { title: "Scoped to a stage", body: "Engagements run for a defined stretch of the product, a build, a launch, a raise, and are reviewed at the end of it." },
     ],
     services: [],
   },
@@ -537,7 +537,7 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
     id: "tech-policy",
     label: "Tech Policy Contribution",
     description:
-      "Written and published work on how technology should be governed in Africa — and an open door for an opinion on a question you are working through.",
+      "Written and published work on how technology should be governed in Africa, and an open door for an opinion on a question you are working through.",
     kind: "policy",
     opinionOpening:
       "Hi, I'd like Decra's opinion on a technology policy or regulatory question I'm working through.",

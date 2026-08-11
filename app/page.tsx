@@ -275,9 +275,22 @@ function Services() {
                 <div className="svc-acc-panel" data-open={isOpen}>
                   <div className="svc-acc-inner">
                     <p className="svc-acc-desc">{g.description}</p>
-                    <Link href={`/services/${g.id}`} className="svc-acc-link">
-                      View {g.label} <ArrowRight size={11} strokeWidth={1.5} />
-                    </Link>
+                    <div className="svc-acc-actions">
+                      <Link href={`/services/${g.id}`} className="svc-acc-link">
+                        View {g.label} <ArrowRight size={11} strokeWidth={1.5} />
+                      </Link>
+                      {/* Tech Policy isn't something to buy, so the way in is
+                          a question rather than a service. */}
+                      {g.opinionOpening && (
+                        <button
+                          type="button"
+                          className="svc-acc-link"
+                          onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: { key: g.id, label: g.label, opening: g.opinionOpening } }))}
+                        >
+                          Request policy opinion <ArrowRight size={11} strokeWidth={1.5} />
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -325,7 +338,7 @@ function Services() {
         .svc-acc-panel[data-open="true"]{ grid-template-rows: 1fr; opacity: 1; }
 
         /* Collapsing to 0fr hides the panel but leaves its link in the tab
-           order, so visibility takes it out — delayed so the collapse still
+           order, so visibility takes it out, delayed so the collapse still
            animates. */
         .svc-acc-panel > .svc-acc-inner{
           overflow: hidden; min-height: 0;
@@ -342,8 +355,13 @@ function Services() {
           color: var(--c-ink-muted); max-width: 40rem;
           margin: 0 0 1.15rem;
         }
+        .svc-acc-actions{
+          display: flex; flex-wrap: wrap; align-items: center;
+          gap: 0.5rem 1.75rem;
+        }
         .svc-acc-link{
           display: inline-flex; align-items: center; gap: 0.4rem;
+          background: none; cursor: pointer; border: none;
           border-bottom: 1px solid rgba(13,13,13,0.12); padding-bottom: 0.25rem;
           margin-bottom: 1.6rem; text-decoration: none;
           font-family: var(--font-manjari); font-weight: 700;
@@ -963,7 +981,7 @@ function WorkWithDecra() {
 
 /* ── Section 7: Research ── */
 /* Paper type, PAPERS array, and the PaperViewer modal now live in
-   lib/papers.ts and components/research/PaperViewer.tsx — shared with the
+   lib/papers.ts and components/research/PaperViewer.tsx, shared with the
    Engineering page's paired research cards, imported at the top of this file. */
 
 function ResearchSection() {
@@ -1047,7 +1065,7 @@ function ResearchSection() {
           {/* One card per research effort, paper + the tool it produced */}
           <ResearchSlides />
 
-          {/* The listed work is a selection — Engineering is no longer in the
+          {/* The listed work is a selection, Engineering is no longer in the
               nav, so this is how someone gets to the full set of builds. */}
           <div style={{ display: "flex", justifyContent: "center", marginTop: "2.75rem" }}>
             <Link
