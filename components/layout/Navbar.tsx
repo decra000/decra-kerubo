@@ -11,10 +11,9 @@ const links = [
   { href: "/#collaborate", label: "Collaborate" },
 ];
 
-// Engineering is deliberately not in the nav over the hero any more — the
-// page and its /engineering/<slug> detail pages are still live and still
-// linked from the Research section, it just isn't a top-level destination.
-const featureLink = { href: "/art", label: "Art" };
+// Engineering is the top-level destination over the hero again. /art stays
+// live and stays in the sitemap, it just isn't surfaced here.
+const featureLink = { href: "/engineering", label: "Engineering" };
 
 const lk: React.CSSProperties = {
   fontFamily: "var(--font-manjari)", fontWeight: 700,
