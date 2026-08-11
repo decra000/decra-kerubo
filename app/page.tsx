@@ -84,7 +84,10 @@ const EVENTS_GROUP = {
 };
 const TECH_DEV_GROUP = {
   key: "tech-development",
-  label: "Tech Development Services",
+  // Shown as the intake's heading, so it matches the button that opens it.
+  // The persona switch in the system prompt keys off the opening text, not
+  // this, so renaming it doesn't change how the assistant behaves.
+  label: "Product Build",
   opening: "Hi, I'd like to secure Decra's tech development services and go through a build discovery for my website or product.",
 };
 
@@ -145,18 +148,37 @@ function Hero() {
           }}>
             Technical Product Counsel &amp; AI Engineer
           </h1>
-          <button
-            onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: PRODUCT_COUNSEL_GROUP }))}
-            style={lineBtn({ light: true })}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "#5FA98F"; (e.currentTarget as HTMLElement).style.color = "#5FA98F"; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.3)"; (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"; }}
-          >
-            Retain as Technical Product Counsel
-          </button>
+          {/* Two ways in, and they are genuinely different engagements:
+              advising on a product someone else is building, and building
+              one. Each opens its own intake, so nobody has to explain which
+              of the two they meant. */}
+          <div className="hero-ctas">
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: PRODUCT_COUNSEL_GROUP }))}
+              style={lineBtn({ light: true })}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "#5FA98F"; (e.currentTarget as HTMLElement).style.color = "#5FA98F"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.3)"; (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"; }}
+            >
+              Retain as Technical Product Counsel
+            </button>
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: TECH_DEV_GROUP }))}
+              style={lineBtn({ light: true })}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "#5FA98F"; (e.currentTarget as HTMLElement).style.color = "#5FA98F"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.3)"; (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"; }}
+            >
+              Request a Product Build
+            </button>
+          </div>
         </div>
       </div>
 
       <style>{`
+        /* Stacked rather than side by side: at 26rem of hero copy the two
+           labels can't sit on one line without truncating, and the second is
+           a real alternative rather than a lesser option. */
+        .hero-ctas { display: flex; flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+
         .hero-sec { height: 100vh; }
         @supports (height: 100svh) { .hero-sec { height: 100svh; } }
 
