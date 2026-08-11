@@ -246,92 +246,80 @@ I codevelop with and guide technology developers towards safe and compliant tech
 function Services() {
   const { ref, vis } = useReveal();
 
-  // No selected stage and no selected service. Every category is on screen at
-  // once, in its own column, which is what removed the row of stage chips
-  // that used to sit above this: with all four visible there is nothing left
-  // to switch between. Each service opens its own intake conversation, and
-  // the depth that used to live in the detail panel now lives on the stage
-  // pages, linked from the column headings.
+  // Four categories, one row, each linking to its own page. They deliberately
+  // aren't the same shape as each other — one holds twenty services, one is
+  // an arrangement with two, one is scoped by sector, one is research with
+  // none — so this shows a card per category rather than a column of services
+  // per category, which would have run one column twenty deep beside a column
+  // of two.
   return (
     <section id="services" ref={ref as React.RefObject<HTMLElement>} style={{ ...SEC, borderTop: "none" }}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
         <p style={{ ...LBL, marginBottom: "1.75rem", ...fade(vis) }}>Services</p>
 
         <div
-          className="svc-columns"
+          className="svc-cards"
           style={{
             display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
-            gap: "clamp(1.25rem, 2.5vw, 2.25rem)",
+            gap: "clamp(1rem, 2vw, 1.5rem)",
             borderTop: "1px solid var(--c-border)", paddingTop: "3rem",
             ...reveal(vis, { delay: 0.05, dir: "up", distance: 22 }),
           }}
         >
-          {SERVICE_GROUPS.map((g) => (
-            <div key={g.id} className="svc-column">
-              <h3 style={{ marginBottom: "0.75rem" }}>
-                <Link
-                  href={`/services/${g.id}`}
-                  className="svc-col-head"
-                  style={{
-                    fontFamily: "var(--font-serif)", fontWeight: 400,
-                    fontSize: "clamp(1rem, 1.3vw, 1.15rem)", lineHeight: 1.25,
-                    color: "var(--c-ink)", textDecoration: "none",
-                  }}
-                >
-                  {g.label}
-                </Link>
-              </h3>
+          {SERVICE_GROUPS.map((g) => {
+            const count =
+              g.kind === "policy" ? "Research & opinion"
+              : g.kind === "engagement" ? "How Decra embeds"
+              : `${g.services.length} services`;
 
-              <p style={{ ...BODY, fontSize: "0.78rem", lineHeight: 1.6, marginBottom: "1.25rem" }}>
-                {g.description}
-              </p>
-
-              <ul className="svc-service-list" style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "0.55rem" }}>
-                {g.services.map((s) => (
-                  <li key={s.id}>
-                    <button
-                      type="button"
-                      className="svc-service-btn"
-                      onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: { key: s.id, label: s.label, opening: s.opening } }))}
-                    >
-                      <span aria-hidden style={{ width: "3px", height: "3px", borderRadius: "50%", background: "var(--c-accent)", flexShrink: 0, transform: "translateY(-0.25em)" }} />
-                      <span>{s.label}</span>
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+            return (
+              <Link key={g.id} href={`/services/${g.id}`} className="svc-card">
+                <h3 className="svc-card-title">{g.label}</h3>
+                <p className="svc-card-body">{g.description}</p>
+                <span className="svc-card-foot">
+                  {count} <ArrowRight size={10} strokeWidth={1.5} />
+                </span>
+              </Link>
+            );
+          })}
         </div>
       </div>
 
       <style>{`
-        .svc-col-head:hover{ color: var(--c-accent) !important; }
-
-        .svc-service-btn{
-          display: flex; align-items: baseline; gap: 0.6rem;
-          width: 100%; background: none; border: none; padding: 0;
-          text-align: left; cursor: pointer;
-          font-family: var(--font-sans); font-weight: 400;
-          font-size: 0.82rem; line-height: 1.45; color: var(--c-ink-mid);
-          transition: color 0.2s ease;
+        .svc-card{
+          display: flex; flex-direction: column;
+          border: 1px solid var(--c-border);
+          padding: 1.5rem 1.35rem;
+          text-decoration: none;
+          transition: border-color 0.25s ease;
         }
-        .svc-service-btn:hover{ color: var(--c-accent); }
+        .svc-card:hover{ border-color: var(--c-accent); }
 
-        /* Two columns before one, so the four categories don't collapse
-           straight into a single long strip on a tablet. */
+        .svc-card-title{
+          font-family: var(--font-serif); font-weight: 400;
+          font-size: clamp(1rem, 1.3vw, 1.15rem); line-height: 1.25;
+          color: var(--c-ink); margin-bottom: 0.75rem;
+        }
+        .svc-card-body{
+          font-family: var(--font-sans); font-size: 0.8rem; line-height: 1.6;
+          color: var(--c-ink-muted); margin-bottom: 1.5rem;
+        }
+        /* Pushed to the bottom so the four footers line up even though the
+           descriptions are different lengths. */
+        .svc-card-foot{
+          margin-top: auto;
+          display: inline-flex; align-items: center; gap: 0.4rem;
+          font-family: var(--font-manjari); font-weight: 700;
+          font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase;
+          color: var(--c-ink-muted);
+        }
+        .svc-card:hover .svc-card-foot{ color: var(--c-accent); }
+
         @media(max-width:900px){
-          .svc-columns{ grid-template-columns: repeat(2, minmax(0, 1fr)) !important; row-gap: 2.75rem !important; }
+          .svc-cards{ grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
         }
         @media(max-width:540px){
-          .svc-columns{ grid-template-columns: 1fr !important; row-gap: 2.5rem !important; }
-
-          /* On a phone these are the only way into a service, and as plain
-             text lines they were about 19px tall — well under a usable tap
-             target. The padding does the work and the list gap gives way to
-             it, so the column doesn't just get taller. */
-          .svc-service-list{ gap: 0 !important; }
-          .svc-service-btn{ padding: 0.6rem 0; min-height: 2.75rem; align-items: center; }
+          .svc-cards{ grid-template-columns: 1fr !important; }
         }
       `}</style>
     </section>
@@ -535,10 +523,18 @@ function WorkWithDecra() {
     // Falls back to the service catalogue, so every one of the twenty-five
     // services can be requested by name from its stage page and arrives here
     // with its own opening rather than a generic "how can I help".
+    // Three things can be asked for by name: an engagement group, any one of
+    // the services, or a category that offers an opinion rather than a
+    // service (Tech Policy, which has no service list of its own).
+    const category = SERVICE_GROUPS.find(g => g.id === engageKey && g.opinionOpening);
     const group =
       PARTNER_GROUPS.find(g => g.key === engageKey) ??
       SERVICE_GROUPS.flatMap(g => g.services).find(s => s.id === engageKey);
-    if (group) {
+
+    if (category) {
+      setModalOpen(true);
+      startGroup(category.id, category.opinionOpening!);
+    } else if (group) {
       const key = "key" in group ? group.key : group.id;
       setModalOpen(true);
       startGroup(key, group.opening);
@@ -713,7 +709,8 @@ function WorkWithDecra() {
                         header went blank for anything arriving from a stage
                         page until both were looked up here. */}
                     {[...PARTNER_GROUPS, PRODUCT_COUNSEL_GROUP, PACK_GROUP, POST_LAUNCH_REVIEW_GROUP, TECH_DEV_GROUP].find(g => g.key === active)?.label
-                      ?? SERVICE_GROUPS.flatMap(g => g.services).find(s => s.id === active)?.label}
+                      ?? SERVICE_GROUPS.flatMap(g => g.services).find(s => s.id === active)?.label
+                      ?? SERVICE_GROUPS.find(g => g.id === active)?.label}
                   </p>
                 )}
               </div>
@@ -1075,7 +1072,7 @@ const CREDENTIALS: Cred[] = [
     key: "cmu",
     src: "/logos/logo-cmu.png",
     name: "Carnegie Mellon University",
-    detail: "Advanced Tech, IoT &amp; Robotics",
+    detail: "IoT",
     tier: 2,
   },
   {

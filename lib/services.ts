@@ -1,9 +1,10 @@
-// The services taxonomy: four lifecycle stages, each holding its own list of
-// services. This used to live inside app/page.tsx, which is a client
-// component, so nothing rendered on the server could reach it. It sits here
-// now because the stage pages under /services/[stage] and the sitemap both
-// need it at build time, and there should be exactly one definition of what
-// Decra offers.
+// The services taxonomy: four categories, each presented differently because
+// they are doing different jobs. One is a catalogue of work, one is an
+// arrangement rather than a list, one is scoped by sector, and one is not a
+// commercial offering at all. `kind` is what the pages branch on.
+//
+// This lives outside app/page.tsx, which is a client component, because the
+// category pages and the sitemap both need it on the server.
 
 export type ServiceDef = {
   id: string;
@@ -17,19 +18,70 @@ export type ServiceGroup = {
   id: string;
   label: string;
   description: string;
+  kind: "catalogue" | "engagement" | "policy";
   services: ServiceDef[];
+  /** catalogue: sub-headings, so a twenty-item list stays readable */
+  sections?: { title: string; blurb: string; serviceIds: string[] }[];
+  /** catalogue: the sectors this work is scoped to */
+  sectors?: string[];
+  /** engagement: which other categories the retainer reaches into */
+  covers?: { categoryId: string; note: string }[];
+  /** engagement: how the arrangement actually works */
+  howItWorks?: { title: string; body: string }[];
+  /** policy: the opening line behind "Ask for an opinion" */
+  opinionOpening?: string;
 };
 
 export const SERVICE_GROUPS: ServiceGroup[] = [
   // ===================================================================
-  // 01 — ENGINEER
+  // 01 — TECHNICAL DEVELOPMENT, STRUCTURING & AUDIT
   // ===================================================================
   {
-    id: "engineer",
-    label: "Design & Engineer",
+    id: "technical-development",
+    label: "Technical Development, Structuring & Audit",
     description:
-      "Designing the software, data, AI, infrastructure, and connected systems that make technology products work.",
+      "Building the product, and proving it holds. Company and product structuring, the engineering itself, and the testing and audit work that shows what was built behaves the way it was specified to.",
+    kind: "catalogue",
+    sections: [
+      {
+        title: "Structure & Build",
+        blurb: "Standing up the company and the system, and deciding what gets built in what order.",
+        serviceIds: ["product-strategy-roadmap", "startup-structuring-incorporation", "system-design-architecture", "web-application-engineering", "data-architecture", "api-integration-engineering", "cloud-infrastructure", "ai-systems-engineering", "algorithms-decision-systems", "iot-robotics-connected-systems"],
+      },
+      {
+        title: "Test & Challenge",
+        blurb: "Establishing what the product actually does under load, under failure, and under attack.",
+        serviceIds: ["product-testing", "web-site-application-testing", "api-server-testing", "performance-scalability-testing", "failure-resilience-testing", "adversarial-product-testing", "ai-evaluation-testing", "security-assurance"],
+      },
+      {
+        title: "Audit & Assure",
+        blurb: "The formal view, for a board, an acquirer, or an investor.",
+        serviceIds: ["technology-risk-assurance", "technology-due-diligence"],
+      },
+    ],
     services: [
+      {
+        id: "product-strategy-roadmap",
+        label: "Product Strategy & Roadmap",
+        body: "Deciding what gets built and in what order, with the technical and legal consequences of each choice visible before it is made rather than after.",
+        items: [
+          "Product strategy", "Product architecture reviews", "Feature & roadmap advisory",
+          "Product lifecycle planning", "Go-to-market readiness", "Launch sequencing",
+          "Build vs buy decisions", "Technical trade-off analysis",
+        ],
+        opening: "Hi, I need help with product strategy, architecture reviews, feature and roadmap advisory, product lifecycle planning, or go-to-market readiness.",
+      },
+      {
+        id: "startup-structuring-incorporation",
+        label: "Startup Structuring & Incorporation",
+        body: "Standing the company up properly: incorporation, ownership, and the founding documents the product and its investors will later be read against.",
+        items: [
+          "Company incorporation", "Corporate structuring", "Founder & co-founder agreements",
+          "Equity, vesting & cap table setup", "Shareholder agreements",
+          "Foreign branch registration", "Regulatory registrations", "Investment readiness",
+        ],
+        opening: "Hi, I need help with company incorporation, corporate structuring, founder or co-founder agreements, equity and cap table setup, or investment readiness.",
+      },
       {
         id: "system-design-architecture",
         label: "System Design & Architecture",
@@ -133,18 +185,6 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
         ],
         opening: "Hi, I need help with IoT, connected systems, edge computing, robotics architecture, device-to-cloud systems, sensors, control systems, or cyber-physical systems.",
       },
-    ],
-  },
-
-  // ===================================================================
-  // 02 — TEST
-  // ===================================================================
-  {
-    id: "test",
-    label: "Test, Challenge & Assure",
-    description:
-      "Examining whether systems actually work, identifying failure conditions, and challenging products before those failures reach users.",
-    services: [
       {
         id: "product-testing",
         label: "Product & Functional Testing",
@@ -255,17 +295,83 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
         ],
         opening: "Hi, I need help with technology risk, product or architecture assessments, technology audits, privacy or AI impact assessments, resilience, production readiness, or launch readiness.",
       },
+      {
+        id: "technology-due-diligence",
+        label: "Technology Due Diligence",
+        body: "Examining technology products, systems, code, infrastructure, AI, intellectual property, and risks before investment, acquisition, or strategic decisions.",
+        items: [
+          "Technical due diligence", "Product due diligence", "Architecture due diligence",
+          "Codebase assessment", "Technology-stack assessment", "Infrastructure assessment",
+          "AI due diligence", "IP due diligence", "Cybersecurity assessment",
+          "Technical debt assessment", "Scalability assessment", "Technology audits",
+          "Investment readiness", "Acquisition readiness",
+        ],
+        opening: "Hi, I need help with technical or product due diligence, architecture or codebase assessment, AI or IP due diligence, infrastructure assessment, technology audits, or investment and acquisition readiness.",
+      },
     ],
   },
 
   // ===================================================================
-  // 03 — GOVERN
+  // 02 — EMBEDDED PRODUCT COUNSEL  (an arrangement, not a list)
   // ===================================================================
   {
-    id: "govern",
-    label: "Govern, Protect & Regulate",
+    id: "embedded-product-counsel",
+    label: "Embedded Product Counsel",
     description:
-      "Embedding privacy, safety, security, responsible AI, governance, and legal controls into technology throughout its lifecycle.",
+      "Ongoing counsel from inside the product team rather than from outside it. It reaches across everything under Technical Development and Industry Compliance, and adds the ownership and transaction work a product accumulates as it grows.",
+    kind: "engagement",
+    covers: [
+      { categoryId: "technical-development", note: "Architecture, engineering, testing and audit decisions reviewed as they are made, not after they ship." },
+      { categoryId: "industry-compliance", note: "Governance, data protection, responsible AI, safety and security obligations held continuously rather than revisited at audit time." },
+    ],
+    howItWorks: [
+      { title: "Retained, not per-matter", body: "A monthly retainer rather than a fee per question, so the thing you would hesitate to open a matter for is the thing you raise first." },
+      { title: "Inside the build", body: "In the specs, the standups and the pull request discussions, where a decision is still cheap to change." },
+      { title: "One person, both halves", body: "The same person reads the architecture and the agreement, so nothing is lost translating between your engineers and outside counsel." },
+      { title: "Scoped to a stage", body: "Engagements run for a defined stretch of the product — a build, a launch, a raise — and are reviewed at the end of it." },
+    ],
+    services: [
+      {
+        id: "technology-ip",
+        label: "Technology & Intellectual Property",
+        body: "Structuring ownership, licensing, protection, and commercialization of software, AI, data, and digital innovation.",
+        items: [
+          "Technology IP strategy", "Software ownership", "Software licensing",
+          "Open-source governance", "Open-source compliance", "AI & data ownership",
+          "Developer & contractor IP", "Technology commercialization", "IP portfolio strategy",
+          "IP risk assessment",
+        ],
+        opening: "Hi, I need help with technology IP, software ownership, licensing, open-source governance or compliance, AI or data ownership, developer IP, or technology commercialization.",
+      },
+      {
+        id: "technology-transactions",
+        label: "Technology Transactions",
+        body: "Structuring the agreements and commercial relationships that enable technology development, deployment, integration, and commercialization.",
+        items: [
+          "SaaS agreements", "Platform agreements", "Software licensing",
+          "Technology procurement", "Vendor agreements", "Technology services agreements",
+          "Data processing agreements", "API & integration agreements", "Cloud agreements",
+          "AI vendor agreements", "Commercial partnerships", "Technology commercialization",
+        ],
+        opening: "Hi, I need help with a technology transaction, SaaS or platform agreement, software licensing, technology procurement, vendor agreements, data processing agreements, API integrations, or commercial partnerships.",
+      },
+    ],
+  },
+
+  // ===================================================================
+  // 03 — INDUSTRY COMPLIANCE
+  // ===================================================================
+  {
+    id: "industry-compliance",
+    label: "Industry Compliance",
+    description:
+      "Meeting the rules a product is actually judged against: governance and standards, data protection, responsible AI, product safety, and security — read against the sector the product operates in.",
+    kind: "catalogue",
+    sectors: [
+      "Fintech & payments", "Health & digital health", "Education technology",
+      "E-commerce, logistics & mobility", "Agritech", "Public sector & govtech",
+      "AI products & platforms",
+    ],
     services: [
       {
         id: "technology-governance",
@@ -331,51 +437,16 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
   },
 
   // ===================================================================
-  // 04 — TRANSACT
+  // 04 — TECH POLICY CONTRIBUTION  (not a commercial offering)
   // ===================================================================
   {
-    id: "transact",
-    label: "Protect, Commercialize & Transact",
+    id: "tech-policy",
+    label: "Tech Policy Contribution",
     description:
-      "Protecting technology assets and structuring the legal, commercial, investment, and strategic relationships around them.",
-    services: [
-      {
-        id: "technology-ip",
-        label: "Technology & Intellectual Property",
-        body: "Structuring ownership, licensing, protection, and commercialization of software, AI, data, and digital innovation.",
-        items: [
-          "Technology IP strategy", "Software ownership", "Software licensing",
-          "Open-source governance", "Open-source compliance", "AI & data ownership",
-          "Developer & contractor IP", "Technology commercialization", "IP portfolio strategy",
-          "IP risk assessment",
-        ],
-        opening: "Hi, I need help with technology IP, software ownership, licensing, open-source governance or compliance, AI or data ownership, developer IP, or technology commercialization.",
-      },
-      {
-        id: "technology-transactions",
-        label: "Technology Transactions",
-        body: "Structuring the agreements and commercial relationships that enable technology development, deployment, integration, and commercialization.",
-        items: [
-          "SaaS agreements", "Platform agreements", "Software licensing",
-          "Technology procurement", "Vendor agreements", "Technology services agreements",
-          "Data processing agreements", "API & integration agreements", "Cloud agreements",
-          "AI vendor agreements", "Commercial partnerships", "Technology commercialization",
-        ],
-        opening: "Hi, I need help with a technology transaction, SaaS or platform agreement, software licensing, technology procurement, vendor agreements, data processing agreements, API integrations, or commercial partnerships.",
-      },
-      {
-        id: "technology-due-diligence",
-        label: "Technology Due Diligence",
-        body: "Examining technology products, systems, code, infrastructure, AI, intellectual property, and risks before investment, acquisition, or strategic decisions.",
-        items: [
-          "Technical due diligence", "Product due diligence", "Architecture due diligence",
-          "Codebase assessment", "Technology-stack assessment", "Infrastructure assessment",
-          "AI due diligence", "IP due diligence", "Cybersecurity assessment",
-          "Technical debt assessment", "Scalability assessment", "Technology audits",
-          "Investment readiness", "Acquisition readiness",
-        ],
-        opening: "Hi, I need help with technical or product due diligence, architecture or codebase assessment, AI or IP due diligence, infrastructure assessment, technology audits, or investment and acquisition readiness.",
-      },
-    ],
+      "Written and published work on how technology should be governed in Africa — and an open door for an opinion on a question you are working through.",
+    kind: "policy",
+    opinionOpening:
+      "Hi, I'd like Decra's opinion on a technology policy or regulatory question I'm working through.",
+    services: [],
   },
 ];

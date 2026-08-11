@@ -156,7 +156,7 @@ const personJsonLd = {
     { "@type": "EducationalOccupationalCredential", credentialCategory: "degree", name: "Bachelor of Laws (LLB)", recognizedBy: { "@type": "CollegeOrUniversity", name: "Africa Nazarene University" } },
     { "@type": "EducationalOccupationalCredential", credentialCategory: "certificate", name: "Attorney Licensing Program", recognizedBy: { "@type": "EducationalOrganization", name: "Kenya School of Law" } },
     { "@type": "EducationalOccupationalCredential", credentialCategory: "certificate", name: "AI, Justice, and the Rule of Law", recognizedBy: { "@type": "CollegeOrUniversity", name: "Saïd Business School, University of Oxford" } },
-    { "@type": "EducationalOccupationalCredential", credentialCategory: "certificate", name: "Advanced Technology, IoT & Robotics", recognizedBy: { "@type": "CollegeOrUniversity", name: "Carnegie Mellon University" } },
+    { "@type": "EducationalOccupationalCredential", credentialCategory: "certificate", name: "IoT", recognizedBy: { "@type": "CollegeOrUniversity", name: "Carnegie Mellon University" } },
     { "@type": "EducationalOccupationalCredential", credentialCategory: "certificate", name: "Information Systems Auditing, Controls & Assurance", recognizedBy: { "@type": "CollegeOrUniversity", name: "The Hong Kong University of Science and Technology" } },
     { "@type": "EducationalOccupationalCredential", credentialCategory: "certificate", name: "Ethical Hacker", recognizedBy: { "@type": "Organization", name: "Cisco" } },
   ],

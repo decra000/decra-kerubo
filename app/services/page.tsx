@@ -6,7 +6,7 @@ import { SERVICE_GROUPS } from "@/lib/services";
 export const metadata: Metadata = {
   title: "Services",
   description:
-    "Product Counsel, providing integrated technical and legal support throughout the technology product lifecycle, from Decra Kerubo.",
+    "Technical development, structuring and audit; embedded product counsel; industry compliance; and tech policy contribution. Integrated technical and legal support from Decra Kerubo, technology lawyer and product counsel in Nairobi, Kenya.",
   // Without its own entry this inherited the root layout's canonical of "/",
   // so the page told Google it was a duplicate of the homepage and asked not
   // to be indexed — on the one page most likely to be searched for.
@@ -55,32 +55,32 @@ export default async function ServicesPage() {
               <span style={{ display: "inline-block", width: "1.5rem", height: "1px", background: "var(--c-gold)" }} />
               <span className="t-label">Advisory Services</span>
             </div>
-            <h1 className="t-display t-display-xl">Four stages. One integrated practice.</h1>
+            <h1 className="t-display t-display-xl">One practice, four ways in.</h1>
           </div>
           <div>
             <p className="t-body" style={{ marginBottom: "1.5rem" }}>
-              Product Counsel, providing integrated technical and legal support across the whole technology product lifecycle: designing and engineering it, testing and assuring it, governing and protecting it, then commercializing and transacting on it.
+              The technical work of building a product and proving it holds; ongoing counsel from inside the team rather than outside it; the compliance a sector actually judges you against; and published contribution to how technology gets governed in Africa.
             </p>
           </div>
         </div>
       </section>
 
-      {/* ── The lifecycle stages ──
-          Every stage page is reachable from here. A page nothing links to is
-          a page search engines treat as unimportant, however good it is. */}
+      {/* ── The four categories ──
+          Every category page is reachable from here. A page nothing links to
+          is a page search engines treat as unimportant, however good it is. */}
       <section className="section page-x" style={{ borderTop: "1px solid var(--c-border)" }}>
         <div className="inner">
           <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "1.5rem" }}>
             <span style={{ display: "inline-block", width: "1.5rem", height: "1px", background: "var(--c-gold)" }} />
-            <span className="t-label">By lifecycle stage</span>
+            <span className="t-label">How to engage</span>
           </div>
-          <h2 className="t-display t-display-md" style={{ marginBottom: "2.5rem" }}>Where your product is right now.</h2>
+          <h2 className="t-display t-display-md" style={{ marginBottom: "2.5rem" }}>Start where you actually are.</h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(15rem, 1fr))", gap: "1.5rem" }}>
             {SERVICE_GROUPS.map((g) => (
               <Link key={g.id} href={`/services/${g.id}`} style={{ textDecoration: "none", border: "1px solid var(--c-border)", padding: "1.5rem", display: "block" }}>
                 <h3 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "1.05rem", color: "var(--c-ink)", marginBottom: "0.6rem" }}>{g.label}</h3>
                 <p className="t-body-sm" style={{ marginBottom: "0.75rem" }}>{g.description}</p>
-                <span className="t-label" style={{ color: "var(--c-ink-muted)" }}>{g.services.length} services</span>
+                <span className="t-label" style={{ color: "var(--c-ink-muted)" }}>{g.kind === "policy" ? "Research & opinion" : g.kind === "engagement" ? "How Decra embeds" : `${g.services.length} services`}</span>
               </Link>
             ))}
           </div>
