@@ -311,26 +311,28 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
     ],
   },
 
+
   // ===================================================================
-  // 02 — EMBEDDED PRODUCT COUNSEL  (an arrangement, not a list)
+  // 02 — PRODUCT LEGAL REVIEW & COMMERCIALIZATION
   // ===================================================================
   {
-    id: "embedded-product-counsel",
-    label: "Embedded Product Counsel",
+    id: "product-legal-commercialization",
+    label: "Product Legal Review & Commercialization",
     description:
-      "Ongoing counsel from inside the product team rather than from outside it. It reaches across everything under Technical Development and Industry Compliance, and adds the ownership and transaction work a product accumulates as it grows.",
-    kind: "engagement",
-    covers: [
-      { categoryId: "technical-development", note: "Architecture, engineering, testing and audit decisions reviewed as they are made, not after they ship." },
-      { categoryId: "industry-compliance", note: "Governance, data protection, responsible AI, safety and security obligations held continuously rather than revisited at audit time." },
-    ],
-    howItWorks: [
-      { title: "Retained, not per-matter", body: "A monthly retainer rather than a fee per question, so the thing you would hesitate to open a matter for is the thing you raise first." },
-      { title: "Inside the build", body: "In the specs, the standups and the pull request discussions, where a decision is still cheap to change." },
-      { title: "One person, both halves", body: "The same person reads the architecture and the agreement, so nothing is lost translating between your engineers and outside counsel." },
-      { title: "Scoped to a stage", body: "Engagements run for a defined stretch of the product — a build, a launch, a raise — and are reviewed at the end of it." },
-    ],
+      "The product read as a legal object: what it promises the people using it, who owns what inside it, and the agreements it is taken to market on.",
+    kind: "catalogue",
     services: [
+      {
+        id: "product-legal-review",
+        label: "Product Legal Review",
+        body: "Reading a product that is already built, or about to ship, for the exposure it carries: what it promises users, what it collects, and what it is answerable for.",
+        items: [
+          "Terms of service", "Privacy policies", "User agreements",
+          "Liability & disclaimers", "Consumer protection", "Third-party & API terms",
+          "Integration risk", "Launch legal readiness", "Regulatory gap review",
+        ],
+        opening: "Hi, I need a legal review of my product — terms of service, privacy policy, user agreements, liability, third-party or API terms, or launch readiness.",
+      },
       {
         id: "technology-ip",
         label: "Technology & Intellectual Property",
@@ -437,7 +439,30 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
   },
 
   // ===================================================================
-  // 04 — TECH POLICY CONTRIBUTION  (not a commercial offering)
+  // 04 — EMBEDDED PRODUCT COUNSEL  (an arrangement, not a list)
+  // ===================================================================
+  {
+    id: "embedded-product-counsel",
+    label: "Embedded Product Counsel",
+    description:
+      "Ongoing counsel from inside the product team rather than from outside it, reaching across the technical work, the legal work, and the compliance obligations at once, for as long as the engagement runs.",
+    kind: "engagement",
+    covers: [
+      { categoryId: "technical-development", note: "Architecture, engineering, testing and audit decisions reviewed as they are made, not after they ship." },
+      { categoryId: "product-legal-commercialization", note: "Ownership, licensing, user-facing terms and commercial agreements handled as the product changes, rather than redrafted at the end." },
+      { categoryId: "industry-compliance", note: "Governance, data protection, responsible AI, safety and security obligations held continuously rather than revisited at audit time." },
+    ],
+    howItWorks: [
+      { title: "Retained, not per-matter", body: "A monthly retainer rather than a fee per question, so the thing you would hesitate to open a matter for is the thing you raise first." },
+      { title: "Inside the build", body: "In the specs, the standups and the pull request discussions, where a decision is still cheap to change." },
+      { title: "One person, both halves", body: "The same person reads the architecture and the agreement, so nothing is lost translating between your engineers and outside counsel." },
+      { title: "Scoped to a stage", body: "Engagements run for a defined stretch of the product — a build, a launch, a raise — and are reviewed at the end of it." },
+    ],
+    services: [],
+  },
+
+  // ===================================================================
+  // 05 — TECH POLICY CONTRIBUTION  (not a commercial offering)
   // ===================================================================
   {
     id: "tech-policy",

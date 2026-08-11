@@ -246,28 +246,20 @@ I codevelop with and guide technology developers towards safe and compliant tech
 function Services() {
   const { ref, vis } = useReveal();
 
-  // One row per category, in the same accordion shape as the FAQ blocks
-  // elsewhere on the site: a rule between each, the label left, a chevron
-  // right, and the detail unfolding underneath. Single-open, so the section
-  // never becomes a wall.
+  // One row per category. The panel holds a sentence and a way through to the
+  // category page and nothing else — the services themselves live on those
+  // pages, and listing twenty of them here only made the section something to
+  // scroll past on the way to the same link.
   const [openId, setOpenId] = useState("");
 
   return (
     <section id="services" ref={ref as React.RefObject<HTMLElement>} style={{ ...SEC, borderTop: "none" }}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-        <p style={{ ...LBL, marginBottom: "1.75rem", ...fade(vis) }}>Services</p>
+        <p style={{ ...LBL, marginBottom: "1.5rem", ...fade(vis) }}>Services</p>
 
-        <div
-          className="svc-acc"
-          style={{ borderTop: "1px solid var(--c-border)", ...reveal(vis, { delay: 0.05, dir: "up", distance: 22 }) }}
-        >
+        <div className="svc-acc" style={{ ...reveal(vis, { delay: 0.05, dir: "up", distance: 22 }) }}>
           {SERVICE_GROUPS.map((g) => {
             const isOpen = g.id === openId;
-            const meta =
-              g.kind === "policy" ? "Research & opinion"
-              : g.kind === "engagement" ? "How Decra embeds"
-              : `${g.services.length} services`;
-
             return (
               <div key={g.id} className="svc-acc-item">
                 <button
@@ -277,56 +269,12 @@ function Services() {
                   onClick={() => setOpenId(isOpen ? "" : g.id)}
                 >
                   <span className="svc-acc-title">{g.label}</span>
-                  <span className="svc-acc-meta">{meta}</span>
-                  <ChevronDown size={18} className="svc-acc-chev" aria-hidden />
+                  <ChevronDown size={15} className="svc-acc-chev" aria-hidden />
                 </button>
 
-                {/* 0fr to 1fr resolves to the content's own height, so a
-                    twenty-service category can't be clipped by a fixed cap. */}
                 <div className="svc-acc-panel" data-open={isOpen}>
                   <div className="svc-acc-inner">
                     <p className="svc-acc-desc">{g.description}</p>
-
-                    {g.sections
-                      ? g.sections.map((sec) => (
-                          <div key={sec.title} className="svc-acc-section">
-                            <h4 className="svc-acc-sec-title">{sec.title}</h4>
-                            <ul className="svc-acc-list">
-                              {sec.serviceIds
-                                .map((id) => g.services.find((s) => s.id === id))
-                                .filter((s): s is (typeof g.services)[number] => Boolean(s))
-                                .map((s) => (
-                                  <li key={s.id}>
-                                    <button
-                                      type="button"
-                                      className="svc-acc-service"
-                                      onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: { key: s.id, label: s.label, opening: s.opening } }))}
-                                    >
-                                      <span aria-hidden className="svc-acc-dot" />
-                                      <span>{s.label}</span>
-                                    </button>
-                                  </li>
-                                ))}
-                            </ul>
-                          </div>
-                        ))
-                      : g.services.length > 0 && (
-                          <ul className="svc-acc-list">
-                            {g.services.map((s) => (
-                              <li key={s.id}>
-                                <button
-                                  type="button"
-                                  className="svc-acc-service"
-                                  onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: { key: s.id, label: s.label, opening: s.opening } }))}
-                                >
-                                  <span aria-hidden className="svc-acc-dot" />
-                                  <span>{s.label}</span>
-                                </button>
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-
                     <Link href={`/services/${g.id}`} className="svc-acc-link">
                       View {g.label} <ArrowRight size={11} strokeWidth={1.5} />
                     </Link>
@@ -339,29 +287,29 @@ function Services() {
       </div>
 
       <style>{`
-        .svc-acc-item{ border-bottom: 1px solid var(--c-border); }
+        /* Deliberately fainter than --c-border. These rules are rhythm, not
+           structure, and at the section's full width the default weight read
+           as a table. */
+        .svc-acc{ border-top: 1px solid rgba(13,13,13,0.045); }
+        .svc-acc-item{ border-bottom: 1px solid rgba(13,13,13,0.045); }
+        [data-theme="dark"] .svc-acc{ border-top-color: rgba(240,237,232,0.04); }
+        [data-theme="dark"] .svc-acc-item{ border-bottom-color: rgba(240,237,232,0.04); }
 
         .svc-acc-header{
-          display: flex; align-items: center; gap: 1.25rem;
+          display: flex; align-items: center; gap: 1rem;
           width: 100%; background: none; border: none; cursor: pointer;
-          padding: 1.6rem 0; text-align: left;
+          padding: 1.05rem 0; text-align: left;
         }
         .svc-acc-title{
           flex: 1;
           font-family: var(--font-serif); font-weight: 400;
-          font-size: clamp(1.1rem, 1.9vw, 1.55rem); line-height: 1.25;
+          font-size: clamp(0.95rem, 1.35vw, 1.15rem); line-height: 1.3;
           color: var(--c-ink-muted);
           transition: color 0.25s ease;
         }
         .svc-acc-header:hover .svc-acc-title,
         .svc-acc-header[aria-expanded="true"] .svc-acc-title{ color: var(--c-ink); }
 
-        .svc-acc-meta{
-          flex: none;
-          font-family: var(--font-manjari); font-weight: 700;
-          font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase;
-          color: var(--c-ink-muted);
-        }
         .svc-acc-chev{
           flex: none; color: var(--c-ink-muted);
           transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), color 0.25s ease;
@@ -372,19 +320,17 @@ function Services() {
 
         .svc-acc-panel{
           display: grid; grid-template-rows: 0fr; opacity: 0;
-          transition: grid-template-rows 0.45s cubic-bezier(0.16,1,0.3,1), opacity 0.35s ease;
+          transition: grid-template-rows 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.3s ease;
         }
         .svc-acc-panel[data-open="true"]{ grid-template-rows: 1fr; opacity: 1; }
 
-        /* Collapsing to 0fr hides the panel visually but leaves everything
-           inside it focusable — thirty-one buttons a keyboard user would tab
-           through while seeing nothing. visibility takes them out of the tab
-           order, delayed so it only applies once the collapse has finished
-           and doesn't cut the animation short. */
+        /* Collapsing to 0fr hides the panel but leaves its link in the tab
+           order, so visibility takes it out — delayed so the collapse still
+           animates. */
         .svc-acc-panel > .svc-acc-inner{
           overflow: hidden; min-height: 0;
           visibility: hidden;
-          transition: visibility 0s linear 0.45s;
+          transition: visibility 0s linear 0.4s;
         }
         .svc-acc-panel[data-open="true"] > .svc-acc-inner{
           visibility: visible;
@@ -392,55 +338,24 @@ function Services() {
         }
 
         .svc-acc-desc{
-          font-family: var(--font-sans); font-size: 0.9rem; line-height: 1.7;
-          color: var(--c-ink-muted); max-width: 44rem; margin-bottom: 2rem;
+          font-family: var(--font-sans); font-size: 0.82rem; line-height: 1.65;
+          color: var(--c-ink-muted); max-width: 40rem;
+          margin: 0 0 1.15rem;
         }
-        .svc-acc-sec-title{
-          font-family: var(--font-manjari); font-weight: 700;
-          font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase;
-          color: var(--c-ink-muted); margin-bottom: 1rem;
-        }
-        .svc-acc-section{ margin-bottom: 2rem; }
-
-        .svc-acc-list{
-          list-style: none;
-          display: grid; grid-template-columns: repeat(3, minmax(0,1fr));
-          gap: 0.7rem 2.5rem; margin-bottom: 2rem;
-        }
-        .svc-acc-service{
-          display: flex; align-items: baseline; gap: 0.65rem;
-          width: 100%; background: none; border: none; padding: 0;
-          text-align: left; cursor: pointer;
-          font-family: var(--font-sans); font-size: 0.85rem; line-height: 1.45;
-          color: var(--c-ink-mid); transition: color 0.2s ease;
-        }
-        .svc-acc-service:hover{ color: var(--c-accent); }
-        .svc-acc-dot{
-          width: 3px; height: 3px; border-radius: 50%;
-          background: var(--c-accent); flex-shrink: 0; transform: translateY(-0.25em);
-        }
-
         .svc-acc-link{
           display: inline-flex; align-items: center; gap: 0.4rem;
-          border-bottom: 1px solid var(--c-border); padding-bottom: 0.3rem;
-          margin-bottom: 2.25rem; text-decoration: none;
+          border-bottom: 1px solid rgba(13,13,13,0.12); padding-bottom: 0.25rem;
+          margin-bottom: 1.6rem; text-decoration: none;
           font-family: var(--font-manjari); font-weight: 700;
-          font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase;
+          font-size: 0.58rem; letter-spacing: 0.16em; text-transform: uppercase;
           color: var(--c-ink-muted);
           transition: color 0.2s ease, border-color 0.2s ease;
         }
+        [data-theme="dark"] .svc-acc-link{ border-bottom-color: rgba(240,237,232,0.14); }
         .svc-acc-link:hover{ color: var(--c-accent); border-color: var(--c-accent); }
 
-        @media(max-width:900px){
-          .svc-acc-list{ grid-template-columns: repeat(2, minmax(0,1fr)); }
-        }
         @media(max-width:600px){
-          .svc-acc-list{ grid-template-columns: 1fr; gap: 0; }
-          /* Same reason as everywhere else on a phone: these are the only way
-             into a service, so they need a real tap target. */
-          .svc-acc-service{ padding: 0.6rem 0; min-height: 2.75rem; align-items: center; }
-          /* The count would crowd the title on a narrow row. */
-          .svc-acc-meta{ display: none; }
+          .svc-acc-header{ padding: 1.15rem 0; }
         }
       `}</style>
     </section>
