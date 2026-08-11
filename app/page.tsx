@@ -298,12 +298,12 @@ function Services() {
         .svc-acc-header{
           display: flex; align-items: center; gap: 1rem;
           width: 100%; background: none; border: none; cursor: pointer;
-          padding: 1.05rem 0; text-align: left;
+          padding: 0.95rem 0; text-align: left;
         }
         .svc-acc-title{
           flex: 1;
           font-family: var(--font-serif); font-weight: 400;
-          font-size: clamp(0.95rem, 1.35vw, 1.15rem); line-height: 1.3;
+          font-size: clamp(0.85rem, 1.05vw, 0.98rem); line-height: 1.35;
           color: var(--c-ink-muted);
           transition: color 0.25s ease;
         }
