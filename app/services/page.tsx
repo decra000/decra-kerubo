@@ -4,7 +4,7 @@ import Link from "next/link";
 import { SERVICE_GROUPS } from "@/lib/services";
 
 export const metadata: Metadata = {
-  title: "Services",
+  title: "Capabilities",
   description:
     "Technical development, structuring and audit; embedded product counsel; industry compliance; and tech policy contribution. Integrated technical and legal support from Decra Kerubo, technology lawyer and product counsel in Nairobi, Kenya.",
   // Without its own entry this inherited the root layout's canonical of "/",
