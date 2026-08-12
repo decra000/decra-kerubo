@@ -317,10 +317,22 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
   // ===================================================================
   {
     id: "product-legal-commercialization",
-    label: "Product Legal Review & Commercialization",
+    label: "Legal Review, Audit & Commercialization",
     description:
-      "The product read as a legal object: what it promises the people using it, who owns what inside it, and the agreements it is taken to market on.",
+      "The product read as a legal object: what it promises the people using it, whether that holds up against the law it is actually subject to, who owns what inside it, and the agreements it reaches the market on.",
     kind: "catalogue",
+    sections: [
+      {
+        title: "Review & Audit",
+        blurb: "Examining a product already built, or about to ship, against what it claims and what the law requires, written up as findings to act on.",
+        serviceIds: ["product-legal-review", "data-protection-audit", "ai-compliance-audit", "consumer-terms-audit", "licensing-compliance-audit", "regulatory-gap-analysis"],
+      },
+      {
+        title: "Ownership & Commercialization",
+        blurb: "Who owns what inside the product, and the agreements it is taken to market on.",
+        serviceIds: ["technology-ip", "technology-transactions"],
+      },
+    ],
     services: [
       {
         id: "product-legal-review",
@@ -356,6 +368,61 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
           "AI vendor agreements", "Commercial partnerships", "Technology commercialization",
         ],
         opening: "Hi, I need help with a technology transaction, SaaS or platform agreement, software licensing, technology procurement, vendor agreements, data processing agreements, API integrations, or commercial partnerships.",
+      },
+      {
+        id: "data-protection-audit",
+        label: "Data Protection & Privacy Audit",
+        body: "Examining what a product collects, why, where it goes, and whether any of that matches what users were told and what the law allows.",
+        items: [
+          "Data mapping & inventory", "Lawful basis review", "Consent mechanics",
+          "Retention & deletion", "Cross-border transfers", "Processor & vendor terms",
+          "Data subject request handling", "Breach notification readiness", "ODPC registration review",
+        ],
+        opening: "Hi, I'd like a data protection and privacy audit of my product, data mapping, lawful basis, consent, retention, cross-border transfers, or breach readiness.",
+      },
+      {
+        id: "ai-compliance-audit",
+        label: "AI & Automated Decision Audit",
+        body: "Examining where a product decides something about a person automatically, what that decision rests on, and what can be shown to a regulator asking about it.",
+        items: [
+          "Automated decision inventory", "Training data provenance", "Model documentation",
+          "Human oversight & escalation", "Explainability & notice", "Bias & disparate impact review",
+          "AI vendor & model terms", "Evaluation evidence",
+        ],
+        opening: "Hi, I'd like an AI and automated decision audit, decision inventory, training data provenance, model documentation, human oversight, explainability, or bias review.",
+      },
+      {
+        id: "consumer-terms-audit",
+        label: "Consumer, Terms & Disclosure Audit",
+        body: "Checking that what the interface promises, what the terms say, and what the product actually does are the same three things.",
+        items: [
+          "Terms & policy accuracy", "Pricing & billing disclosure", "Cancellation & refund flows",
+          "Dark pattern review", "Marketing claim substantiation", "Accessibility obligations",
+          "Age & eligibility gating",
+        ],
+        opening: "Hi, I'd like a consumer, terms and disclosure audit of my product, terms accuracy, pricing and billing disclosure, cancellation flows, dark patterns, or marketing claims.",
+      },
+      {
+        id: "licensing-compliance-audit",
+        label: "Licensing & Open-Source Compliance Audit",
+        body: "Establishing what third-party code and data a product depends on, and whether the terms it was taken under permit what is being done with it.",
+        items: [
+          "Dependency & licence inventory", "Copyleft exposure", "Attribution & notice obligations",
+          "SaaS & distribution triggers", "Model & dataset licences", "Contributor & contractor IP chain",
+          "Remediation plan",
+        ],
+        opening: "Hi, I'd like a licensing and open-source compliance audit, dependency and licence inventory, copyleft exposure, attribution obligations, model or dataset licences, or IP chain.",
+      },
+      {
+        id: "regulatory-gap-analysis",
+        label: "Regulatory Gap Analysis",
+        body: "Setting the product against the regimes that actually reach it, sector by sector and market by market, and ranking what is missing by what it would cost to be caught.",
+        items: [
+          "Applicable regime mapping", "Sector-specific obligations", "Market entry requirements",
+          "Licensing & registration gaps", "Enforcement exposure ranking", "Remediation roadmap",
+          "Board & investor reporting",
+        ],
+        opening: "Hi, I'd like a regulatory gap analysis for my product, which regimes apply, sector obligations, market entry requirements, licensing gaps, and a remediation roadmap.",
       },
     ],
   },
@@ -439,75 +506,7 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
   },
 
   // ===================================================================
-  // 04 — LEGAL COMPLIANCE AUDIT
-  // ===================================================================
-  {
-    id: "legal-compliance-audit",
-    label: "Legal Compliance Audit",
-    description:
-      "A point-in-time examination of a technology product that is already live, read against the law it is actually subject to, and written up as findings someone can act on rather than a memo that restates the statute.",
-    kind: "catalogue",
-    services: [
-      {
-        id: "data-protection-audit",
-        label: "Data Protection & Privacy Audit",
-        body: "Examining what a product collects, why, where it goes, and whether any of that matches what users were told and what the law allows.",
-        items: [
-          "Data mapping & inventory", "Lawful basis review", "Consent mechanics",
-          "Retention & deletion", "Cross-border transfers", "Processor & vendor terms",
-          "Data subject request handling", "Breach notification readiness", "ODPC registration review",
-        ],
-        opening: "Hi, I'd like a data protection and privacy audit of my product, data mapping, lawful basis, consent, retention, cross-border transfers, or breach readiness.",
-      },
-      {
-        id: "ai-compliance-audit",
-        label: "AI & Automated Decision Audit",
-        body: "Examining where a product decides something about a person automatically, what that decision rests on, and what can be shown to a regulator asking about it.",
-        items: [
-          "Automated decision inventory", "Training data provenance", "Model documentation",
-          "Human oversight & escalation", "Explainability & notice", "Bias & disparate impact review",
-          "AI vendor & model terms", "Evaluation evidence",
-        ],
-        opening: "Hi, I'd like an AI and automated decision audit, decision inventory, training data provenance, model documentation, human oversight, explainability, or bias review.",
-      },
-      {
-        id: "consumer-terms-audit",
-        label: "Consumer, Terms & Disclosure Audit",
-        body: "Checking that what the interface promises, what the terms say, and what the product actually does are the same three things.",
-        items: [
-          "Terms & policy accuracy", "Pricing & billing disclosure", "Cancellation & refund flows",
-          "Dark pattern review", "Marketing claim substantiation", "Accessibility obligations",
-          "Age & eligibility gating",
-        ],
-        opening: "Hi, I'd like a consumer, terms and disclosure audit of my product, terms accuracy, pricing and billing disclosure, cancellation flows, dark patterns, or marketing claims.",
-      },
-      {
-        id: "licensing-compliance-audit",
-        label: "Licensing & Open-Source Compliance Audit",
-        body: "Establishing what third-party code and data a product depends on, and whether the terms it was taken under permit what is being done with it.",
-        items: [
-          "Dependency & licence inventory", "Copyleft exposure", "Attribution & notice obligations",
-          "SaaS & distribution triggers", "Model & dataset licences", "Contributor & contractor IP chain",
-          "Remediation plan",
-        ],
-        opening: "Hi, I'd like a licensing and open-source compliance audit, dependency and licence inventory, copyleft exposure, attribution obligations, model or dataset licences, or IP chain.",
-      },
-      {
-        id: "regulatory-gap-analysis",
-        label: "Regulatory Gap Analysis",
-        body: "Setting the product against the regimes that actually reach it, sector by sector and market by market, and ranking what is missing by what it would cost to be caught.",
-        items: [
-          "Applicable regime mapping", "Sector-specific obligations", "Market entry requirements",
-          "Licensing & registration gaps", "Enforcement exposure ranking", "Remediation roadmap",
-          "Board & investor reporting",
-        ],
-        opening: "Hi, I'd like a regulatory gap analysis for my product, which regimes apply, sector obligations, market entry requirements, licensing gaps, and a remediation roadmap.",
-      },
-    ],
-  },
-
-  // ===================================================================
-  // 05 — EMBEDDED PRODUCT COUNSEL  (an arrangement, not a list)
+  // 04 — EMBEDDED PRODUCT COUNSEL  (an arrangement, not a list)
   // ===================================================================
   {
     id: "embedded-product-counsel",
@@ -517,9 +516,8 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
     kind: "engagement",
     covers: [
       { categoryId: "technical-development", note: "Architecture, engineering, testing and audit decisions reviewed as they are made, not after they ship." },
-      { categoryId: "product-legal-commercialization", note: "Ownership, licensing, user-facing terms and commercial agreements handled as the product changes, rather than redrafted at the end." },
+      { categoryId: "product-legal-commercialization", note: "Review, audit, ownership and commercial agreements handled as the product changes, rather than redrafted or discovered at the end." },
       { categoryId: "industry-compliance", note: "Governance, data protection, responsible AI, safety and security obligations held continuously rather than revisited at audit time." },
-      { categoryId: "legal-compliance-audit", note: "The findings an audit produces worked through as they arise, instead of landing as a report nobody has time to action." },
     ],
     howItWorks: [
       { title: "Retained, not per-matter", body: "A monthly retainer rather than a fee per question, so the thing you would hesitate to open a matter for is the thing you raise first." },
@@ -531,7 +529,7 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
   },
 
   // ===================================================================
-  // 06 — TECH POLICY CONTRIBUTION  (not a commercial offering)
+  // 05 — TECH POLICY CONTRIBUTION  (not a commercial offering)
   // ===================================================================
   {
     id: "tech-policy",

@@ -25,6 +25,19 @@ const nextConfig: NextConfig = {
   async headers() {
     return [{ source: "/(.*)", headers: securityHeaders }];
   },
+  async redirects() {
+    return [
+      // Legal Compliance Audit was folded into Legal Review, Audit &
+      // Commercialization, since reviewing a product legally and auditing it
+      // for compliance were the same work under two headings. The URL shipped
+      // to production, so it redirects rather than 404s.
+      {
+        source: "/services/legal-compliance-audit",
+        destination: "/services/product-legal-commercialization",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
