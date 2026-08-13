@@ -30,6 +30,56 @@ const categories = [
   { id: "research", label: "Research & Writing" },
 ];
 
+/** One card in the regular (non-featured) grid, extracted so it can be
+ *  rendered into either the 2-column or 3-column grid below without
+ *  duplicating the link/article branching. */
+function ProjectCard({ p }: { p: EngineeringProject }) {
+  const cardBody = (
+    <>
+      <div style={{ aspectRatio: "16 / 10", overflow: "hidden", background: "var(--c-surface)" }}>
+        <img
+          src={p.image}
+          alt={p.title}
+          loading="lazy"
+          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+        />
+      </div>
+      <div style={{ padding: "1.4rem" }}>
+        <span style={{ display: "inline-block", fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--c-forest)", marginBottom: "0.6rem" }}>
+          {p.subtitle}
+        </span>
+        <h3 style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.95rem", color: "var(--c-ink)", marginBottom: "0.55rem", lineHeight: 1.4 }}>
+          {p.title}
+        </h3>
+        <p style={{ fontSize: "0.775rem", color: "var(--c-ink-muted)", lineHeight: 1.7, marginBottom: p.relatedSlug && p.pairLabel ? "0.8rem" : 0 }}>
+          {p.description}
+        </p>
+        {p.relatedSlug && p.pairLabel && <PairBadge label={p.pairLabel} />}
+      </div>
+    </>
+  );
+
+  const cardStyle: React.CSSProperties = { padding: 0, overflow: "hidden", display: "flex", flexDirection: "column", textDecoration: "none", width: "100%" };
+
+  if (p.paperSlug) {
+    return (
+      <PaperLink slug={p.paperSlug} className="card" style={cardStyle}>
+        {cardBody}
+      </PaperLink>
+    );
+  }
+
+  return p.slug ? (
+    <Link href={`/engineering/${p.slug}`} className="card" style={cardStyle}>
+      {cardBody}
+    </Link>
+  ) : (
+    <article className="card" style={{ padding: 0, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+      {cardBody}
+    </article>
+  );
+}
+
 export function EngineeringGrid({ projects }: { projects: EngineeringProject[] }) {
   const [active, setActive] = useState<string>("all");
 
@@ -55,6 +105,13 @@ export function EngineeringGrid({ projects }: { projects: EngineeringProject[] }
     featuredCards.map((p) => p.relatedSlug).filter((s): s is string => !!s)
   );
   const rest = visible.filter((p) => !p.featured && !(p.slug && pairedResearchSlugs.has(p.slug)));
+
+  // Same rule the featured row uses for 2 vs 3 columns: a paperSlug means
+  // there's real research behind the entry, so it keeps the wider 3-column
+  // treatment; everything else (a plain build with no paper backing it)
+  // reads better at 2-up.
+  const restNoResearch = rest.filter((p) => !p.paperSlug);
+  const restResearch = rest.filter((p) => p.paperSlug);
 
   return (
     <div>
@@ -233,59 +290,34 @@ export function EngineeringGrid({ projects }: { projects: EngineeringProject[] }
         );
       })}
 
-      {/* ── Project grid ── */}
-      <div className="eng-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.25rem" }}>
-        {rest.map((p) => {
-          const cardBody = (
-            <>
-              <div style={{ aspectRatio: "16 / 10", overflow: "hidden", background: "var(--c-surface)" }}>
-                <img
-                  src={p.image}
-                  alt={p.title}
-                  loading="lazy"
-                  style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                />
-              </div>
-              <div style={{ padding: "1.4rem" }}>
-                <span style={{ display: "inline-block", fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--c-forest)", marginBottom: "0.6rem" }}>
-                  {p.subtitle}
-                </span>
-                <h3 style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.95rem", color: "var(--c-ink)", marginBottom: "0.55rem", lineHeight: 1.4 }}>
-                  {p.title}
-                </h3>
-                <p style={{ fontSize: "0.775rem", color: "var(--c-ink-muted)", lineHeight: 1.7, marginBottom: p.relatedSlug && p.pairLabel ? "0.8rem" : 0 }}>
-                  {p.description}
-                </p>
-                {p.relatedSlug && p.pairLabel && <PairBadge label={p.pairLabel} />}
-              </div>
-            </>
-          );
+      {/* ── Project grid ──
+          Split by whether the entry carries research (a paperSlug), the same
+          rule the featured row above already uses to choose 2 vs 3 columns.
+          A plain build (no paper backing it) reads better at 2-up; a
+          research write-up carries more title and stays at 3, matching how
+          it looked before this was split out. */}
+      {restNoResearch.length > 0 && (
+        <div
+          className="eng-grid"
+          style={{
+            display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "1.25rem",
+            marginBottom: restResearch.length > 0 ? "1.25rem" : 0,
+          }}
+        >
+          {restNoResearch.map((p) => <ProjectCard key={p.title} p={p} />)}
+        </div>
+      )}
 
-          const cardStyle: React.CSSProperties = { padding: 0, overflow: "hidden", display: "flex", flexDirection: "column", textDecoration: "none", width: "100%" };
-
-          if (p.paperSlug) {
-            return (
-              <PaperLink key={p.title} slug={p.paperSlug} className="card" style={cardStyle}>
-                {cardBody}
-              </PaperLink>
-            );
-          }
-
-          return p.slug ? (
-            <Link key={p.title} href={`/engineering/${p.slug}`} className="card" style={cardStyle}>
-              {cardBody}
-            </Link>
-          ) : (
-            <article
-              key={p.title}
-              className="card"
-              style={{ padding: 0, overflow: "hidden", display: "flex", flexDirection: "column" }}
-            >
-              {cardBody}
-            </article>
-          );
-        })}
-      </div>
+      {restResearch.length > 0 && (
+        <>
+          {restNoResearch.length > 0 && (
+            <p className="t-label" style={{ margin: "2rem 0 1.25rem" }}>Research & Writing</p>
+          )}
+          <div className="eng-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.25rem" }}>
+            {restResearch.map((p) => <ProjectCard key={p.title} p={p} />)}
+          </div>
+        </>
+      )}
 
       {visible.length === 0 && (
         <p className="t-body" style={{ padding: "3rem 0", textAlign: "center" }}>No projects in this category yet.</p>
