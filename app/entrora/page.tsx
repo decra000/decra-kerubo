@@ -32,6 +32,7 @@ const DEMO_URL = "https://calendly.com/decrakerubo/";
 const NAV = [
   { href: "#initiative", label: "About" },
   { href: "#lpms", label: "Products" },
+  { href: "#platform", label: "Platform" },
   { href: "#solutions", label: "Solutions" },
   { href: "#newsletter", label: "Insights" },
 ];
@@ -55,6 +56,33 @@ const LPMS_FEATURES = [
   { t: "Time & Billing", b: "Track time, create invoices and get paid faster." },
   { t: "Task & Deadline Tracking", b: "Stay on top of tasks and critical deadlines." },
   { t: "Insights & Reports", b: "Make data-driven decisions with ease." },
+];
+
+/* What the platform does, stated as outcomes.
+   Four items from the internal list are deliberately not published here:
+
+   - the system, domain and automation-engine counts, and the fact that they
+     share one database. That is an architecture map: the counts size the
+     attack surface and "one shared database" states the blast radius of a
+     single compromise.
+   - "every integration has a fallback, no single point of failure". An
+     absolute resilience claim is an invitation to test it, and it only has
+     to be wrong in one place to be a misrepresentation.
+   - automatic publication of won matters to a website. That is a client
+     confidentiality question before it is a feature, and it is the last
+     thing to advertise on a product sold to advocates.
+
+   What is left is what a buyer needs to know and a competitor already
+   assumes: category-level capability, plus the pupillage pipeline, which is
+   the genuinely hard part to copy because it takes regulatory knowledge
+   rather than engineering time. */
+const LPMS_CAPABILITIES = [
+  { t: "Enquiry triage, assisted", b: "Incoming enquiries are scored and routed as they arrive, so nothing sits in an inbox waiting to be noticed." },
+  { t: "Matters that advance themselves", b: "Work recorded against a matter moves it forward on its own, instead of someone remembering to update a status." },
+  { t: "Case files, set up instantly", b: "A won enquiry becomes a matter with its documents folder already in place, rather than a checklist someone works through by hand." },
+  { t: "A pupillage pipeline that satisfies the regulator", b: "Built around the Kenya School of Law guidelines and the Advocates Act (Cap. 16), so supervision and progression are recorded the way they are meant to be." },
+  { t: "A client portal scoped to the client", b: "Clients sign in to their own matters and see their own documents, with no view of anyone else's." },
+  { t: "A chatbot that stays in scope", b: "Answers within the boundaries of the practice, and hands over to a person when a question needs one." },
 ];
 
 const SERVICES = [
@@ -116,6 +144,7 @@ export default function EntroraPage() {
   useEffect(() => { const t = setTimeout(() => setHeroVis(true), 80); return () => clearTimeout(t); }, []);
   const { ref: initRef, vis: initVis } = useReveal();
   const { ref: lpmsRef, vis: lpmsVis } = useReveal();
+  const { ref: platRef, vis: platVis } = useReveal();
   const { ref: solRef, vis: solVis } = useReveal();
   const { ref: newsRef, vis: newsVis } = useReveal();
 
@@ -129,24 +158,34 @@ export default function EntroraPage() {
         <span aria-hidden className="ent-blob ent-blob-pink" />
 
         <div className="ent-wrap" style={fade(heroVis)}>
-          <h1 className="ent-h1">
-            <span>Tech for Law.</span>
-            <span className="ent-pink">Law for Tech.</span>
-          </h1>
+          <div className="ent-hero-grid">
+            <div>
+              <h1 className="ent-h1">
+                <span>Tech for Law.</span>
+                <span className="ent-pink">Law for Tech.</span>
+              </h1>
 
-          <div className="ent-dashes" aria-hidden>
-            <span className="ent-dash-pink" />
-            <span className="ent-dash-green" />
-          </div>
+              <div className="ent-dashes" aria-hidden>
+                <span className="ent-dash-pink" />
+                <span className="ent-dash-green" />
+              </div>
 
-          <p className="ent-lead">
-            We build the bridge between law and technology to create ethical, compliant and impactful
-            solutions for <span className="ent-pink">African realities</span>.
-          </p>
+              <p className="ent-lead">
+                We build the bridge between law and technology to create ethical, compliant and impactful
+                solutions for <span className="ent-pink">African realities</span>.
+              </p>
 
-          <div className="ent-cta-row">
-            <a href="#solutions" className="ent-pill ent-pill-solid">Our Solutions <ArrowRight size={13} strokeWidth={2} /></a>
-            <a href="#initiative" className="ent-pill ent-pill-ghost">About Entrora</a>
+              <div className="ent-cta-row">
+                <a href="#solutions" className="ent-pill ent-pill-solid">Our Solutions <ArrowRight size={13} strokeWidth={2} /></a>
+                <a href="#initiative" className="ent-pill ent-pill-ghost">About Entrora</a>
+              </div>
+            </div>
+
+            {/* Decorative: the headline already carries the meaning, so this
+                is hidden from assistive tech rather than described twice. */}
+            <div className="ent-hero-art" aria-hidden>
+              <Image src="/africinspired.png" alt="" width={1536} height={1024} priority className="ent-hero-img" />
+            </div>
           </div>
 
           <div className="ent-pillars">
@@ -237,6 +276,36 @@ export default function EntroraPage() {
           <p className="ent-closer" style={fade(lpmsVis, 0.16)}>
             Same intelligence. Bigger impact. <span className="ent-pink">Introducing Entrora LPMS.</span>
           </p>
+        </div>
+      </section>
+
+      {/* ── Inside the LPMS ── */}
+      <section className="ent-section" id="platform">
+        <div ref={platRef as React.RefObject<HTMLDivElement>} className="ent-wrap">
+          <div style={fade(platVis)}>
+            <Eyebrow text="Inside Entrora LPMS" />
+            <h2 className="ent-h2">One system, end to end.</h2>
+            <p className="ent-body ent-measure">
+              An enquiry arrives, gets triaged, becomes a matter, gathers its documents and its time, bills,
+              and reports on itself. The point is not that each of those exists. It is that they are the
+              same system, so nothing has to be copied from one place to another to stay true.
+            </p>
+          </div>
+
+          <div className="ent-caps" style={fade(platVis, 0.08)}>
+            {LPMS_CAPABILITIES.map((c) => (
+              <div key={c.t} className="ent-cap">
+                <h3>{c.t}</h3>
+                <p>{c.b}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="ent-cta-row ent-caps-cta" style={fade(platVis, 0.12)}>
+            <a href={DEMO_URL} target="_blank" rel="noopener noreferrer" className="ent-pill ent-pill-solid">
+              Book a demo <ArrowRight size={13} strokeWidth={2} />
+            </a>
+          </div>
         </div>
       </section>
 
@@ -362,6 +431,15 @@ export default function EntroraPage() {
         .ent-blob-green{ width: 34rem; height: 34rem; left: -18rem; top: -8rem; background: radial-gradient(circle, rgba(62,143,115,0.28), transparent 68%); }
         .ent-blob-pink{ width: 40rem; height: 40rem; right: -20rem; bottom: -16rem; background: radial-gradient(circle, rgba(225,86,138,0.22), transparent 68%); }
 
+        .ent-hero-grid{
+          position: relative; z-index: 1;
+          display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0.85fr);
+          gap: clamp(1.5rem, 4vw, 3.5rem); align-items: center;
+          margin-bottom: clamp(3rem, 7vw, 5rem);
+        }
+        .ent-hero-art{ display: flex; justify-content: flex-end; }
+        .ent-hero-img{ width: 100%; height: auto; max-width: 34rem; display: block; }
+
         .ent-h1{
           position: relative; z-index: 1;
           font-family: var(--font-sans); font-weight: 700;
@@ -379,7 +457,7 @@ export default function EntroraPage() {
           font-family: var(--font-sans); font-size: clamp(0.95rem, 1.3vw, 1.1rem);
           line-height: 1.65; color: var(--c-ink-mid); max-width: 34rem; margin-bottom: 2.25rem;
         }
-        .ent-cta-row{ position: relative; z-index: 1; display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: clamp(3rem, 7vw, 5rem); }
+        .ent-cta-row{ position: relative; z-index: 1; display: flex; gap: 1rem; flex-wrap: wrap; }
 
         .ent-pillars{
           position: relative; z-index: 1;
@@ -449,6 +527,12 @@ export default function EntroraPage() {
 
         .ent-closer{ text-align: center; margin-top: 2.5rem; font-family: var(--font-sans); font-weight: 600; font-size: 0.95rem; color: var(--c-ink); }
 
+        .ent-caps{ display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1px; background: var(--c-border); border: 1px solid var(--c-border); border-radius: 14px; overflow: hidden; margin-top: 2.5rem; }
+        .ent-cap{ background: var(--c-bg); padding: 1.6rem; }
+        .ent-cap h3{ font-family: var(--font-sans); font-weight: 600; font-size: 0.92rem; color: var(--c-ink); margin-bottom: 0.55rem; line-height: 1.35; }
+        .ent-cap p{ font-family: var(--font-sans); font-size: 0.8rem; line-height: 1.6; color: var(--c-ink-muted); }
+        .ent-caps-cta{ margin-top: 2.5rem; }
+
         /* ── Solutions ── */
         .ent-solutions{ display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1px; background: var(--c-border); border: 1px solid var(--c-border); border-radius: 14px; overflow: hidden; margin-top: 2rem; }
         .ent-solution{ background: var(--c-bg); padding: 1.85rem; }
@@ -471,6 +555,11 @@ export default function EntroraPage() {
         .ent-footer-links a:hover{ color: var(--ent-pink); }
 
         @media(max-width:900px){
+          /* Side by side, the headline was being squeezed into 164px on a
+             phone. The art drops below the copy instead. */
+          .ent-hero-grid{ grid-template-columns: 1fr; margin-bottom: 3rem; }
+          .ent-hero-art{ justify-content: flex-start; }
+          .ent-hero-img{ max-width: 22rem; }
           .ent-evolution{ grid-template-columns: 1fr; }
           .ent-arrow{ transform: rotate(90deg); }
           .ent-pillars{ grid-template-columns: 1fr; gap: 1.5rem; }
