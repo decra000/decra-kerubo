@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { ArrowRight, ExternalLink, Menu, X } from "lucide-react";
 
 /* Entrora reads as its own property. The shared navbar, footer and assistant
@@ -27,6 +26,8 @@ const fade = (vis: boolean, delay = 0): React.CSSProperties => ({
 const ENTRORA_SITE = "https://entrorasystems.com";
 const ENTRORA_LINKEDIN = "https://www.linkedin.com/company/entrora/";
 const NEWSLETTER_URL = "https://www.linkedin.com/build-relation/newsletter-follow?entityUrn=7241946044966592512";
+/** Demo bookings are taken on Calendly rather than through the host site. */
+const DEMO_URL = "https://calendly.com/decrakerubo/";
 
 const NAV = [
   { href: "#initiative", label: "About" },
@@ -201,8 +202,8 @@ export default function EntroraPage() {
 
           <div className="ent-evolution" style={fade(lpmsVis, 0.08)}>
             <div className="ent-prod">
-              <div className="ent-prod-art">
-                <Image src="/updatedteresya.png" alt="Teresya, the legal chatbot" width={1200} height={675} className="ent-prod-img" />
+              <div className="ent-prod-mark">
+                <Image src="/teresya_logo.jpeg" alt="Teresya" width={200} height={200} className="ent-prod-img" />
               </div>
               <h3>Teresya</h3>
               <span className="ent-prod-kicker">Legal Chatbot</span>
@@ -212,10 +213,15 @@ export default function EntroraPage() {
             <div aria-hidden className="ent-arrow"><ArrowRight size={26} strokeWidth={1.5} /></div>
 
             <div className="ent-prod ent-prod-wide">
+              <div className="ent-prod-mark">
+                <Image src="/entrora_logo.jpg" alt="Entrora" width={200} height={200} className="ent-prod-img" />
+              </div>
               <h3>Entrora LPMS</h3>
               <span className="ent-prod-kicker">Legal Practice Management System</span>
               <p>The all-in-one platform to manage matters, clients, documents, time, billing and more, seamlessly.</p>
-              <Link href="/book" className="ent-pill ent-pill-solid ent-demo">Book a demo <ArrowRight size={13} strokeWidth={2} /></Link>
+              <a href={DEMO_URL} target="_blank" rel="noopener noreferrer" className="ent-pill ent-pill-solid ent-demo">
+                Book a demo <ArrowRight size={13} strokeWidth={2} />
+              </a>
             </div>
           </div>
 
@@ -419,8 +425,16 @@ export default function EntroraPage() {
 
         .ent-evolution{ display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1.3fr); gap: clamp(1.25rem, 3vw, 2.5rem); align-items: center; margin-bottom: 3rem; }
         .ent-prod{ border: 1px solid var(--c-border); border-radius: 14px; background: var(--c-bg); padding: 1.5rem; }
-        .ent-prod-art{ border-radius: 10px; overflow: hidden; aspect-ratio: 16 / 9; background: var(--c-surface); margin-bottom: 1.25rem; }
-        .ent-prod-img{ width: 100%; height: 100%; object-fit: cover; display: block; }
+        /* Both marks are 200px squares, so they sit in a small square frame
+           at their own scale rather than being cropped to a 16:9 banner or
+           blown up to panel width. */
+        .ent-prod-mark{
+          width: 4.75rem; height: 4.75rem; margin-bottom: 1.1rem;
+          border: 1px solid var(--c-border); border-radius: 12px;
+          background: var(--c-surface); overflow: hidden;
+          display: flex; align-items: center; justify-content: center;
+        }
+        .ent-prod-img{ width: 100%; height: 100%; object-fit: contain; display: block; }
         .ent-prod h3{ font-family: var(--font-sans); font-weight: 700; font-size: 1.3rem; color: var(--c-ink); letter-spacing: -0.01em; }
         .ent-prod-kicker{ display: block; font-family: var(--font-manjari); font-weight: 700; font-size: 0.5rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--c-ink-muted); margin: 0.3rem 0 0.9rem; }
         .ent-prod p{ font-family: var(--font-sans); font-size: 0.85rem; line-height: 1.6; color: var(--c-ink-mid); }
