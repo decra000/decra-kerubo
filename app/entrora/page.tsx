@@ -79,16 +79,8 @@ const LPMS_STATS = [
   { n: "21", l: "Integrated systems" },
   { n: "22", l: "Automation engines" },
   { n: "4", l: "Practice domains" },
+  { n: "5+", l: "Core pipelines" },
   { n: "1", l: "Legally scoped chatbot" },
-];
-
-const LPMS_CAPABILITIES = [
-  { t: "Enquiry triage, assisted", b: "Incoming enquiries are scored and routed as they arrive, so nothing sits in an inbox waiting to be noticed." },
-  { t: "Matters that advance themselves", b: "Work recorded against a matter moves it forward on its own, instead of someone remembering to update a status." },
-  { t: "Case files, set up instantly", b: "A won enquiry becomes a matter with its documents folder already in place, rather than a checklist someone works through by hand." },
-  { t: "A pupillage pipeline that satisfies the regulator", b: "Built around the Kenya School of Law guidelines and the Advocates Act (Cap. 16), so supervision and progression are recorded the way they are meant to be." },
-  { t: "A client portal scoped to the client", b: "Clients sign in to their own matters and see their own documents, with no view of anyone else's." },
-  { t: "A chatbot that stays in scope", b: "Answers within the boundaries of the practice, and hands over to a person when a question needs one." },
 ];
 
 function Eyebrow({ text }: { text: string }) {
@@ -278,11 +270,16 @@ export default function EntroraPage() {
       </section>
 
       {/* ── Inside the LPMS ── */}
-      <section className="ent-section" id="platform">
+      <section className="ent-section ent-zone-flagship" id="platform">
         <div ref={platRef as React.RefObject<HTMLDivElement>} className="ent-wrap">
           <div style={fade(platVis)}>
             <Eyebrow text="Flagship product" />
-            <h2 className="ent-h2">Entrora LPMS. One system, end to end.</h2>
+            <div className="ent-strip-head">
+              <h2 className="ent-h2">Entrora LPMS. One system, end to end.</h2>
+              <a href={DEMO_URL} target="_blank" rel="noopener noreferrer" className="ent-pill ent-pill-solid">
+                Book a demo <ArrowRight size={13} strokeWidth={2} />
+              </a>
+            </div>
             <p className="ent-body ent-measure">
               An enquiry arrives, gets triaged, becomes a matter, gathers its documents and its time, bills,
               and reports on itself. The point is not that each of those exists. It is that they are the
@@ -306,20 +303,7 @@ export default function EntroraPage() {
             </div>
           </div>
 
-          <div className="ent-caps" style={fade(platVis, 0.1)}>
-            {LPMS_CAPABILITIES.map((c) => (
-              <div key={c.t} className="ent-cap">
-                <h3>{c.t}</h3>
-                <p>{c.b}</p>
-              </div>
-            ))}
-          </div>
 
-          <div className="ent-cta-row ent-caps-cta" style={fade(platVis, 0.12)}>
-            <a href={DEMO_URL} target="_blank" rel="noopener noreferrer" className="ent-pill ent-pill-solid">
-              Book a demo <ArrowRight size={13} strokeWidth={2} />
-            </a>
-          </div>
         </div>
       </section>
 
@@ -340,7 +324,7 @@ export default function EntroraPage() {
       </section>
 
       {/* ── Partnership ── */}
-      <section className="ent-section ent-tint" id="partners">
+      <section className="ent-section ent-zone-ynai" id="partners">
         <div ref={partRef as React.RefObject<HTMLDivElement>} className="ent-wrap" style={fade(partVis)}>
           <Eyebrow text="In partnership" />
           <div className="ent-partner">
@@ -367,7 +351,7 @@ export default function EntroraPage() {
       </section>
 
       {/* ── Newsletter ── */}
-      <section className="ent-section ent-tint" id="newsletter">
+      <section className="ent-section ent-zone-lex" id="newsletter">
         <div ref={newsRef as React.RefObject<HTMLDivElement>} className="ent-wrap" style={fade(newsVis)}>
           <Eyebrow text="The newsletter" />
           <div className="ent-news">
@@ -590,6 +574,65 @@ export default function EntroraPage() {
         }
         .ent-stat span{ font-family: var(--font-sans); font-size: 0.78rem; line-height: 1.4; color: var(--c-ink-muted); }
 
+        /* ── Colour zoning ──
+           Each strip takes a background sampled from the artwork it carries,
+           so the section reads as that product's territory. The backgrounds
+           are fixed rather than themed, so the text colours inside them are
+           pinned too: a zone that is always near-black cannot inherit ink
+           that flips to near-black in light mode. */
+
+        /* Predominantly white, with the theme colours kept at a distance. */
+        .ent-zone-flagship{
+          background:
+            radial-gradient(120% 90% at 88% 8%, rgba(225,86,138,0.07), transparent 60%),
+            radial-gradient(110% 80% at 4% 96%, rgba(62,143,115,0.09), transparent 62%),
+            linear-gradient(180deg, #FFFFFF 0%, #FCFDFC 100%);
+          color: #14181B;
+        }
+        .ent-zone-flagship .ent-h2,
+        .ent-zone-flagship .ent-stat strong{ color: #14181B; }
+        .ent-zone-flagship .ent-body,
+        .ent-zone-flagship .ent-stat span,
+        .ent-zone-flagship .ent-eyebrow,
+        .ent-zone-flagship .ent-stats-label{ color: #55606A; }
+        .ent-zone-flagship .ent-shot{ border-color: rgba(20,24,27,0.10); background: #FFFFFF; }
+
+        /* Sampled from the Ynai screen: black with a green cast. */
+        .ent-zone-ynai{
+          background: linear-gradient(135deg, #000000 0%, #04120D 52%, #082016 100%);
+          color: #EDF3EF;
+        }
+        .ent-zone-ynai .ent-h2{ color: #FFFFFF; }
+        .ent-zone-ynai .ent-body{ color: #C3D2CA; }
+        .ent-zone-ynai .ent-body-sm{ color: #93A79C; }
+        .ent-zone-ynai .ent-eyebrow{ color: #7FCBA6; }
+        .ent-zone-ynai .ent-rule{ background: #3DDC84; }
+        .ent-zone-ynai .ent-partner-art{ border-color: rgba(255,255,255,0.12); }
+        .ent-zone-ynai .ent-pill-solid{ background: #1B7F52; color: #FFFFFF; }
+        .ent-zone-ynai .ent-pill-solid:hover{ background: #3DDC84; color: #04120D; }
+
+        /* Sampled from the Lex & Latte mark: warm parchment. */
+        .ent-zone-lex{
+          background: linear-gradient(135deg, #F5EFE2 0%, #EADFC8 55%, #DCCBA9 100%);
+          color: #2A2318;
+        }
+        .ent-zone-lex .ent-h2{ color: #241D13; }
+        .ent-zone-lex .ent-body{ color: #574A38; }
+        .ent-zone-lex .ent-body-sm{ color: #7A6B54; }
+        .ent-zone-lex .ent-eyebrow{ color: #7A6B54; }
+        .ent-zone-lex .ent-rule{ background: #8A6D2B; }
+        .ent-zone-lex .ent-news-art{ border-color: rgba(42,35,24,0.14); background: #FBF7EE; }
+        .ent-zone-lex .ent-pill-solid{ background: #2F4A38; color: #FFFFFF; }
+        .ent-zone-lex .ent-pill-solid:hover{ background: #8A6D2B; }
+
+        /* Title and its call to action share a row, dropping apart only when
+           there is no longer width for both. */
+        .ent-strip-head{
+          display: flex; align-items: center; justify-content: space-between;
+          gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1.1rem;
+        }
+        .ent-strip-head .ent-h2{ margin-bottom: 0; flex: 1 1 22rem; }
+
         .ent-statement{
           font-family: var(--font-sans); font-size: clamp(1.05rem, 2vw, 1.4rem);
           line-height: 1.55; color: var(--c-ink); max-width: 42rem;
@@ -600,11 +643,6 @@ export default function EntroraPage() {
         .ent-partner-art{ border: 1px solid var(--c-border); border-radius: 18px; overflow: hidden; background: #0A0A0A; }
         .ent-partner-img{ width: 100%; height: auto; display: block; }
 
-        .ent-caps{ display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1px; background: var(--c-border); border: 1px solid var(--c-border); border-radius: 14px; overflow: hidden; margin-top: 2.5rem; }
-        .ent-cap{ background: var(--c-bg); padding: 1.6rem; }
-        .ent-cap h3{ font-family: var(--font-sans); font-weight: 600; font-size: 0.92rem; color: var(--c-ink); margin-bottom: 0.55rem; line-height: 1.35; }
-        .ent-cap p{ font-family: var(--font-sans); font-size: 0.8rem; line-height: 1.6; color: var(--c-ink-muted); }
-        .ent-caps-cta{ margin-top: 2.5rem; }
 
         /* ── Solutions ── */
         .ent-solutions{ display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1px; background: var(--c-border); border: 1px solid var(--c-border); border-radius: 14px; overflow: hidden; margin-top: 2rem; }
