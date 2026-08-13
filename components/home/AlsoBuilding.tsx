@@ -39,14 +39,14 @@ export function AlsoBuilding() {
           }}>
             AI engineering and software development for organisations that need real technical depth, not just advice.
           </p>
-          <a href="https://entrorasystems.com" target="_blank" rel="noopener noreferrer" style={{
+          <a href="/entrora" style={{
             display: "inline-flex", alignItems: "center", gap: "0.3rem",
             fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "0.78rem",
             color: "var(--c-ink-muted)", textDecoration: "none", transition: "color 0.2s",
           }}
             onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.color = "var(--c-ink)"}
             onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.color = "var(--c-ink-muted)"}>
-            entrorasystems.com <ArrowUpRight size={11} strokeWidth={1.5} />
+            Explore Entrora <ArrowUpRight size={11} strokeWidth={1.5} />
           </a>
         </div>
 

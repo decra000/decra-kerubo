@@ -23,7 +23,6 @@ const fade = (vis: boolean, delay = 0): React.CSSProperties => ({
   transition: `opacity 0.8s cubic-bezier(0.16,1,0.3,1) ${delay}s, transform 0.8s cubic-bezier(0.16,1,0.3,1) ${delay}s`,
 });
 
-const ENTRORA_SITE = "https://entrorasystems.com";
 const ENTRORA_LINKEDIN = "https://www.linkedin.com/company/entrora/";
 const NEWSLETTER_URL = "https://www.linkedin.com/build-relation/newsletter-follow?entityUrn=7241946044966592512";
 /** Demo bookings are taken on Calendly rather than through the host site. */
@@ -32,11 +31,11 @@ const YNAI_URL = "https://www.ynai.co.ke/";
 
 const NAV = [
   { href: "#initiative", label: "About" },
-  { href: "#lpms", label: "Products" },
-  { href: "#platform", label: "Flagship" },
   { href: "#solutions", label: "Solutions" },
+  { href: "#platform", label: "Flagship" },
   { href: "#partners", label: "Partners" },
   { href: "#newsletter", label: "Insights" },
+  { href: "#contact", label: "Contact" },
 ];
 
 const PILLARS = [
@@ -83,6 +82,76 @@ const LPMS_STATS = [
   { n: "1", l: "Legally scoped chatbot" },
 ];
 
+/* Enquiries are taken here rather than sent to a separate site. Posts to the
+   existing /api/contact route, which mails the enquiry through and sends the
+   sender an acknowledgement, so this needs no new backend. */
+function ContactForm() {
+  const [form, setForm] = useState({ name: "", email: "", org: "", message: "" });
+  const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
+
+  const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    setForm((f) => ({ ...f, [k]: e.target.value }));
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) return;
+    setState("sending");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, subject: "Entrora enquiry" }),
+      });
+      setState(res.ok ? "sent" : "error");
+    } catch {
+      setState("error");
+    }
+  };
+
+  if (state === "sent") {
+    return (
+      <div className="ent-form-done">
+        <h3>Thank you, that is with us.</h3>
+        <p>You will get a reply at {form.email}. If it is urgent, the LinkedIn page is the faster route.</p>
+      </div>
+    );
+  }
+
+  return (
+    <form className="ent-form" onSubmit={submit} noValidate>
+      <div className="ent-field-row">
+        <label className="ent-field">
+          <span>Name</span>
+          <input type="text" value={form.name} onChange={set("name")} required autoComplete="name" />
+        </label>
+        <label className="ent-field">
+          <span>Email</span>
+          <input type="email" value={form.email} onChange={set("email")} required autoComplete="email" />
+        </label>
+      </div>
+      <label className="ent-field">
+        <span>Organisation <em>optional</em></span>
+        <input type="text" value={form.org} onChange={set("org")} autoComplete="organization" />
+      </label>
+      <label className="ent-field">
+        <span>What are you building, or what needs solving?</span>
+        <textarea rows={5} value={form.message} onChange={set("message")} required />
+      </label>
+
+      <div className="ent-form-foot">
+        <button type="submit" className="ent-pill ent-pill-solid" disabled={state === "sending"}>
+          {state === "sending" ? "Sending..." : "Send enquiry"} <ArrowRight size={13} strokeWidth={2} />
+        </button>
+        {state === "error" && (
+          <p className="ent-form-error" role="alert">
+            That did not send. Try again, or reach us through LinkedIn.
+          </p>
+        )}
+      </div>
+    </form>
+  );
+}
+
 function Eyebrow({ text }: { text: string }) {
   return (
     <div className="ent-eyebrow">
@@ -109,7 +178,7 @@ function Header() {
           {NAV.map((n) => <a key={n.href} href={n.href}>{n.label}</a>)}
         </nav>
 
-        <a href={ENTRORA_SITE} target="_blank" rel="noopener noreferrer" className="ent-pill ent-pill-solid ent-header-cta">
+        <a href="#contact" className="ent-pill ent-pill-solid ent-header-cta">
           Get in touch <ArrowRight size={13} strokeWidth={2} />
         </a>
 
@@ -121,7 +190,7 @@ function Header() {
       {open && (
         <nav className="ent-nav-mobile">
           {NAV.map((n) => <a key={n.href} href={n.href} onClick={() => setOpen(false)}>{n.label}</a>)}
-          <a href={ENTRORA_SITE} target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>Get in touch</a>
+          <a href="#contact" onClick={() => setOpen(false)}>Get in touch</a>
         </nav>
       )}
     </header>
@@ -134,9 +203,9 @@ export default function EntroraPage() {
   const { ref: initRef, vis: initVis } = useReveal();
   const { ref: lpmsRef, vis: lpmsVis } = useReveal();
   const { ref: platRef, vis: platVis } = useReveal();
-  const { ref: solRef, vis: solVis } = useReveal();
   const { ref: partRef, vis: partVis } = useReveal();
   const { ref: newsRef, vis: newsVis } = useReveal();
+  const { ref: contactRef, vis: contactVis } = useReveal();
 
   return (
     <div className="ent-page" id="top">
@@ -216,9 +285,10 @@ export default function EntroraPage() {
           No dashboard screenshot exists in the repo, so the platform side is
           drawn as a panel of what it manages rather than a mocked-up image
           pretending to be the product. */}
-      <section className="ent-section ent-tint" id="lpms">
+      <section className="ent-section ent-tint" id="solutions">
         <div ref={lpmsRef as React.RefObject<HTMLDivElement>} className="ent-wrap">
           <div className="ent-center" style={fade(lpmsVis)}>
+            <Eyebrow text="Solutions" />
             <span className="ent-chip">Evolved. Expanded. Empowering legal teams.</span>
             <h2 className="ent-h2 ent-h2-center">
               From Legal Chatbot to<br />
@@ -265,6 +335,7 @@ export default function EntroraPage() {
 
           <p className="ent-closer" style={fade(lpmsVis, 0.16)}>
             Same intelligence. Bigger impact. <span className="ent-pink">Introducing Entrora LPMS.</span>
+            <em>Offering customizable options, shaped to the practice they serve.</em>
           </p>
         </div>
       </section>
@@ -304,22 +375,6 @@ export default function EntroraPage() {
           </div>
 
 
-        </div>
-      </section>
-
-      {/* ── Solutions ──
-          Reduced to a line. The flagship section above now carries the
-          detail, and six cards restating it only competed with it. */}
-      <section className="ent-section" id="solutions">
-        <div ref={solRef as React.RefObject<HTMLDivElement>} className="ent-wrap" style={fade(solVis)}>
-          <Eyebrow text="Solutions" />
-          <p className="ent-statement">
-            Beyond the platform, Entrora builds AI document systems, legal-tech software, compliant AI
-            products and the governance frameworks that keep them defensible.
-          </p>
-          <a href={ENTRORA_SITE} target="_blank" rel="noopener noreferrer" className="ent-pill ent-pill-ghost">
-            See the full range <ExternalLink size={12} strokeWidth={2} />
-          </a>
         </div>
       </section>
 
@@ -374,6 +429,26 @@ export default function EntroraPage() {
         </div>
       </section>
 
+      {/* ── Contact ── */}
+      <section className="ent-section" id="contact">
+        <div ref={contactRef as React.RefObject<HTMLDivElement>} className="ent-wrap" style={fade(contactVis)}>
+          <Eyebrow text="Get in touch" />
+          <div className="ent-contact">
+            <div>
+              <h2 className="ent-h2">Tell us what you are building.</h2>
+              <p className="ent-body ent-measure">
+                Whether it is a product that needs the legal layer designed in, a practice that needs the
+                platform, or a question about whether any of this applies to you, start here.
+              </p>
+              <a href={ENTRORA_LINKEDIN} target="_blank" rel="noopener noreferrer" className="ent-cta">
+                Entrora on LinkedIn <ExternalLink size={10} strokeWidth={1.5} />
+              </a>
+            </div>
+            <ContactForm />
+          </div>
+        </div>
+      </section>
+
       {/* ── Footer ── */}
       <footer className="ent-footer">
         <div className="ent-wrap ent-footer-inner">
@@ -382,7 +457,6 @@ export default function EntroraPage() {
             <span>Legal Engineering, Nairobi</span>
           </div>
           <div className="ent-footer-links">
-            <a href={ENTRORA_SITE} target="_blank" rel="noopener noreferrer">entrorasystems.com</a>
             <a href={ENTRORA_LINKEDIN} target="_blank" rel="noopener noreferrer">LinkedIn</a>
             <a href={NEWSLETTER_URL} target="_blank" rel="noopener noreferrer">Lex &amp; Latte</a>
           </div>
@@ -551,6 +625,10 @@ export default function EntroraPage() {
         .ent-feature p{ font-family: var(--font-sans); font-size: 0.76rem; line-height: 1.55; color: var(--c-ink-muted); }
 
         .ent-closer{ text-align: center; margin-top: 2.5rem; font-family: var(--font-sans); font-weight: 600; font-size: 0.95rem; color: var(--c-ink); }
+        .ent-closer em{
+          display: block; margin-top: 0.5rem; font-style: normal; font-weight: 400;
+          font-size: 0.85rem; color: var(--c-ink-muted);
+        }
 
         /* Product shot framed like the rest of the artwork on the page. */
         .ent-shot{
@@ -633,11 +711,30 @@ export default function EntroraPage() {
         }
         .ent-strip-head .ent-h2{ margin-bottom: 0; flex: 1 1 22rem; }
 
-        .ent-statement{
-          font-family: var(--font-sans); font-size: clamp(1.05rem, 2vw, 1.4rem);
-          line-height: 1.55; color: var(--c-ink); max-width: 42rem;
-          margin-bottom: 2rem; letter-spacing: -0.01em;
+        .ent-contact{ display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 4rem); align-items: start; }
+
+        .ent-form{ display: flex; flex-direction: column; gap: 1.1rem; }
+        .ent-field-row{ display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
+        .ent-field{ display: flex; flex-direction: column; gap: 0.45rem; }
+        .ent-field > span{
+          font-family: var(--font-manjari); font-weight: 700; font-size: 0.55rem;
+          letter-spacing: 0.2em; text-transform: uppercase; color: var(--c-ink-muted);
         }
+        .ent-field > span em{ font-style: normal; opacity: 0.6; }
+        .ent-field input, .ent-field textarea{
+          font-family: var(--font-sans); font-size: 0.9rem; color: var(--c-ink);
+          background: var(--c-bg); border: 1px solid var(--c-border-strong);
+          border-radius: 10px; padding: 0.8rem 0.9rem; width: 100%;
+          transition: border-color 0.2s ease;
+        }
+        .ent-field textarea{ resize: vertical; min-height: 7rem; }
+        .ent-field input:focus, .ent-field textarea:focus{ outline: none; border-color: var(--ent-pink); }
+        .ent-form-foot{ display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+        .ent-form button[disabled]{ opacity: 0.6; cursor: default; }
+        .ent-form-error{ font-family: var(--font-sans); font-size: 0.8rem; color: var(--ent-pink); }
+        .ent-form-done{ border: 1px solid var(--c-border); border-radius: 14px; padding: 2rem; background: var(--c-surface); }
+        .ent-form-done h3{ font-family: var(--font-sans); font-weight: 600; font-size: 1.05rem; color: var(--c-ink); margin-bottom: 0.6rem; }
+        .ent-form-done p{ font-family: var(--font-sans); font-size: 0.85rem; line-height: 1.6; color: var(--c-ink-muted); }
 
         .ent-partner{ display: grid; grid-template-columns: minmax(0, 0.55fr) minmax(0, 1fr); gap: clamp(1.5rem, 5vw, 4rem); align-items: center; }
         .ent-partner-art{ border: 1px solid var(--c-border); border-radius: 18px; overflow: hidden; background: #0A0A0A; }
@@ -684,6 +781,8 @@ export default function EntroraPage() {
         }
         @media(max-width:640px){
           .ent-news{ grid-template-columns: 1fr; }
+          .ent-contact{ grid-template-columns: 1fr; }
+          .ent-field-row{ grid-template-columns: 1fr; }
           .ent-partner{ grid-template-columns: 1fr; }
           .ent-partner-art{ max-width: 17rem; }
           .ent-news-art{ max-width: 11rem; }
