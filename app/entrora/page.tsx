@@ -71,9 +71,11 @@ const SERVICES = [
 export default function EntroraPage() {
   const [heroVis, setHeroVis] = useState(false);
   useEffect(() => { const t = setTimeout(() => setHeroVis(true), 80); return () => clearTimeout(t); }, []);
-  const principles = useReveal();
-  const services = useReveal();
-  const news = useReveal();
+  // Destructured at the hook call: reading `.ref` off the returned object
+  // inside JSX counts as touching a ref during render.
+  const { ref: principlesRef, vis: principlesVis } = useReveal();
+  const { ref: servicesRef, vis: servicesVis } = useReveal();
+  const { ref: newsRef, vis: newsVis } = useReveal();
 
   return (
     <div style={{ background: "var(--c-bg)", paddingTop: "6rem" }}>
@@ -115,8 +117,8 @@ export default function EntroraPage() {
 
       {/* ── The initiative ── */}
       <section className="section page-x" style={{ borderTop: "1px solid var(--c-border)" }}>
-        <div ref={principles.ref as React.RefObject<HTMLDivElement>} className="inner" style={{ maxWidth: MEASURE }}>
-          <div style={fade(principles.vis)}>
+        <div ref={principlesRef as React.RefObject<HTMLDivElement>} className="inner" style={{ maxWidth: MEASURE }}>
+          <div style={fade(principlesVis)}>
             <Eyebrow text="The initiative" />
             <h2 className="t-display t-display-lg" style={{ marginBottom: "1.5rem" }}>Legal engineering.</h2>
             <p className="t-body" style={{ maxWidth: "38rem", marginBottom: "4rem" }}>
@@ -127,7 +129,7 @@ export default function EntroraPage() {
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(17rem, 1fr))", gap: "2.5rem" }}>
             {PRINCIPLES.map((p, i) => (
-              <div key={p.t} style={{ borderTop: "1px solid var(--c-border)", paddingTop: "1.25rem", ...fade(principles.vis, 0.06 + i * 0.05) }}>
+              <div key={p.t} style={{ borderTop: "1px solid var(--c-border)", paddingTop: "1.25rem", ...fade(principlesVis, 0.06 + i * 0.05) }}>
                 <h3 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "1.05rem", color: "var(--c-ink)", marginBottom: "0.75rem" }}>{p.t}</h3>
                 <p className="t-body-sm">{p.b}</p>
               </div>
@@ -138,13 +140,13 @@ export default function EntroraPage() {
 
       {/* ── Services ── */}
       <section className="section page-x" style={{ borderTop: "1px solid var(--c-border)" }}>
-        <div ref={services.ref as React.RefObject<HTMLDivElement>} className="inner" style={{ maxWidth: MEASURE }}>
-          <div style={fade(services.vis)}>
+        <div ref={servicesRef as React.RefObject<HTMLDivElement>} className="inner" style={{ maxWidth: MEASURE }}>
+          <div style={fade(servicesVis)}>
             <Eyebrow text="What Entrora builds" />
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "var(--c-border)", border: "1px solid var(--c-border)", borderRadius: "10px", overflow: "hidden" }} className="ent-g">
             {SERVICES.map((s, i) => (
-              <div key={s.n} style={{ padding: "2rem", background: "var(--c-bg)", opacity: services.vis ? 1 : 0, transition: `opacity 0.5s ease ${0.06 * i}s` }}>
+              <div key={s.n} style={{ padding: "2rem", background: "var(--c-bg)", opacity: servicesVis ? 1 : 0, transition: `opacity 0.5s ease ${0.06 * i}s` }}>
                 <span style={{ fontFamily: "var(--font-serif)", fontSize: "0.75rem", color: "var(--c-accent)", display: "block", marginBottom: "1rem" }}>{s.n}</span>
                 <h3 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "1.05rem", color: "var(--c-ink)", marginBottom: "0.6rem" }}>{s.t}</h3>
                 <p className="t-body-sm">{s.b}</p>
@@ -161,7 +163,7 @@ export default function EntroraPage() {
           subscribers across two places. Subscriber counts are deliberately
           not printed, since a hardcoded number goes stale the same week. */}
       <section className="section page-x" style={{ borderTop: "1px solid var(--c-border)" }}>
-        <div ref={news.ref as React.RefObject<HTMLDivElement>} className="inner" style={{ maxWidth: MEASURE, ...fade(news.vis) }}>
+        <div ref={newsRef as React.RefObject<HTMLDivElement>} className="inner" style={{ maxWidth: MEASURE, ...fade(newsVis) }}>
           <Eyebrow text="The newsletter" />
 
           <div className="ent-news">
