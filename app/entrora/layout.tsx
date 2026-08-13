@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Entrora Systems, Legal Engineering",
   description:
-    "Entrora Systems is the legal engineering initiative of Decra Kerubo: regulated AI and software built with the legal reasoning and the technical reasoning in the same pass. AI document systems, legal-tech development, compliant AI products, and AI governance frameworks in Nairobi, Kenya.",
+    "Entrora Systems is a legal engineering practice: regulated AI and software built with the legal reasoning and the technical reasoning in the same pass. AI document systems, legal-tech development, compliant AI products, and AI governance frameworks in Nairobi, Kenya. Publisher of the Lex & Latte newsletter.",
   keywords: [
     "legal engineering",
     "Entrora Systems",

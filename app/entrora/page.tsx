@@ -1,7 +1,11 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, ExternalLink } from "lucide-react";
+
+/* Styled to match the engineering project pages: a narrow measure, an
+   eyebrow struck through with a gold rule, display headings, and artwork
+   framed in a rounded panel rather than bleeding to the edge. */
 
 function useReveal() {
   const ref = useRef<HTMLElement>(null);
@@ -18,208 +22,226 @@ const fade = (vis: boolean, delay = 0): React.CSSProperties => ({
   opacity: vis ? 1 : 0, transform: vis ? "none" : "translateY(18px)",
   transition: `opacity 0.85s cubic-bezier(0.16,1,0.3,1) ${delay}s, transform 0.85s cubic-bezier(0.16,1,0.3,1) ${delay}s`,
 });
-const LBL: React.CSSProperties = { fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.55rem", letterSpacing: "0.24em", textTransform: "uppercase", color: "var(--c-ink-muted)" };
-const SERIF = (sz = "clamp(2rem,3.5vw,3rem)"): React.CSSProperties => ({ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: sz, color: "var(--c-ink)", lineHeight: 1.05 });
-const BODY: React.CSSProperties = { fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.875rem", color: "var(--c-ink-mid)", lineHeight: 1.85 };
-const SEC: React.CSSProperties = { borderTop: "1px solid var(--c-border)", padding: "var(--space-section) var(--space-x)" };
 
 const ENTRORA_SITE = "https://entrorasystems.com";
 const ENTRORA_LINKEDIN = "https://www.linkedin.com/company/entrora/";
 /** The newsletter is published from the Entrora LinkedIn page, so subscribing
  *  happens there rather than through a form here. */
-const ENTRORA_NEWSLETTER = "https://www.linkedin.com/build-relation/newsletter-follow?entityUrn=7241946044966592512";
+const NEWSLETTER_URL = "https://www.linkedin.com/build-relation/newsletter-follow?entityUrn=7241946044966592512";
 
-/** Shared outbound-link styling, matching the underlined CTAs on this page. */
-const extLink = (muted = false): React.CSSProperties => ({
-  display: "inline-flex", alignItems: "center", gap: "0.4rem",
-  fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.55rem",
-  letterSpacing: "0.2em", textTransform: "uppercase",
-  color: muted ? "var(--c-ink-muted)" : "var(--c-ink)", textDecoration: "none",
-  borderBottom: `1px solid ${muted ? "var(--c-border)" : "var(--c-ink)"}`,
-  paddingBottom: "2px", transition: "color 0.2s, border-color 0.2s",
-});
-const extIn = (e: React.MouseEvent) => { const t = e.currentTarget as HTMLElement; t.style.color = "var(--c-accent)"; t.style.borderColor = "var(--c-accent)"; };
-const extOut = (muted = false) => (e: React.MouseEvent) => {
-  const t = e.currentTarget as HTMLElement;
-  t.style.color = muted ? "var(--c-ink-muted)" : "var(--c-ink)";
-  t.style.borderColor = muted ? "var(--c-border)" : "var(--c-ink)";
-};
+const MEASURE = "52rem";
 
-function Hero() {
-  const [vis, setVis] = useState(false);
-  useEffect(() => { const t = setTimeout(() => setVis(true), 80); return () => clearTimeout(t); }, []);
+function Eyebrow({ text }: { text: string }) {
   return (
-    <section style={{ minHeight: "70svh", background: "var(--c-bg)", display: "flex", alignItems: "flex-end", padding: "0 var(--space-x) 5rem", paddingTop: "10rem" }}>
-      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto", width: "100%" }}>
-        <div style={fade(vis)}>
-          <p style={{ ...LBL, marginBottom: "1.25rem" }}>Legal Engineering, in partnership with Decra Kerubo</p>
-          <h1 style={{ ...SERIF("clamp(2.5rem,5vw,4.5rem)"), marginBottom: "1.5rem" }}>Entrora Systems.</h1>
-          <p style={{ ...BODY, maxWidth: "30rem", marginBottom: "2.5rem" }}>
-            Legal engineering: building regulated software where the legal reasoning and the technical
-            reasoning happen at the same desk, at the same time, rather than one reviewing the other after the fact.
+    <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "1.5rem" }}>
+      <span style={{ display: "inline-block", width: "1.5rem", height: "1px", background: "var(--c-gold)" }} />
+      <span className="t-label">{text}</span>
+    </div>
+  );
+}
+
+const PRINCIPLES = [
+  {
+    t: "One person reads both",
+    b: "The lawyer and the engineer are the same person. Nothing is lost translating an architecture decision into a legal question, or a regulatory obligation into a technical constraint, because there is no handover between them.",
+  },
+  {
+    t: "Compliance as a build constraint",
+    b: "Data protection, auditability and accountability are treated the way latency or uptime are treated: something the system is designed around from the first commit, not a review stage bolted on before launch.",
+  },
+  {
+    t: "Regulated by design",
+    b: "Governance, explainability and risk documentation are produced as the product is built, so the evidence a regulator asks for already exists rather than being reconstructed afterwards.",
+  },
+  {
+    t: "Built for the rules that actually apply",
+    b: "Scoped to Kenyan and East African regulation as it stands, including sandbox frameworks, rather than to a compliance regime borrowed from another market.",
+  },
+];
+
+const SERVICES = [
+  { n: "01", t: "AI Document Systems", b: "Classification, extraction, and review pipelines, built for legal and compliance workflows." },
+  { n: "02", t: "Legal Tech Development", b: "Software built for legal workflows, by someone who understands both sides of the table." },
+  { n: "03", t: "Compliant AI Products", b: "AI products with data governance and regulatory alignment built in from day one." },
+  { n: "04", t: "AI Adoption Advisory", b: "Scoping and implementation for organisations at any stage, no enterprise budget required." },
+  { n: "05", t: "Regulatory Sandbox Navigation", b: "Navigating regulatory sandbox frameworks across Kenya and East Africa." },
+  { n: "06", t: "AI Governance Frameworks", b: "Governance documents for AI deployment, accountability, explainability, risk." },
+];
+
+export default function EntroraPage() {
+  const [heroVis, setHeroVis] = useState(false);
+  useEffect(() => { const t = setTimeout(() => setHeroVis(true), 80); return () => clearTimeout(t); }, []);
+  const principles = useReveal();
+  const services = useReveal();
+  const news = useReveal();
+
+  return (
+    <div style={{ background: "var(--c-bg)", paddingTop: "6rem" }}>
+
+      {/* ── Hero ── */}
+      <section className="section page-x">
+        <div className="inner" style={{ maxWidth: MEASURE, ...fade(heroVis) }}>
+          {/* Framed rather than floating: the file is a JPG, so it carries a
+              white background that would sit as a bare white square on the
+              dark theme. The panel makes that read as a deliberate mark. */}
+          <div className="ent-logo-frame" style={{ marginBottom: "2.5rem" }}>
+            <Image
+              src="/entrora_logo.jpg"
+              alt="Entrora, legal engineering"
+              width={200}
+              height={200}
+              priority
+              className="ent-logo"
+            />
+          </div>
+
+          <Eyebrow text="Legal Engineering" />
+          <h1 className="t-display t-display-xl" style={{ marginBottom: "1.5rem" }}>Entrora Systems.</h1>
+          <p className="t-body" style={{ maxWidth: "38rem", marginBottom: "2.5rem" }}>
+            Regulated software built where the legal reasoning and the technical reasoning happen at the
+            same desk, at the same time, rather than one reviewing the other after the fact.
           </p>
-          <div style={{ display: "flex", gap: "2rem", flexWrap: "wrap" }}>
-            <a href={ENTRORA_SITE} target="_blank" rel="noopener noreferrer" className="ent-cta" style={extLink()} onMouseEnter={extIn} onMouseLeave={extOut()}>
+
+          <div style={{ display: "flex", gap: "1.75rem", flexWrap: "wrap" }}>
+            <a href={ENTRORA_SITE} target="_blank" rel="noopener noreferrer" className="ent-cta">
               Visit entrorasystems.com <ExternalLink size={10} strokeWidth={1.5} />
             </a>
-            <a href={ENTRORA_LINKEDIN} target="_blank" rel="noopener noreferrer" className="ent-cta" style={extLink(true)} onMouseEnter={extIn} onMouseLeave={extOut(true)}>
+            <a href={ENTRORA_LINKEDIN} target="_blank" rel="noopener noreferrer" className="ent-cta ent-cta-muted">
               Entrora on LinkedIn <ExternalLink size={9} strokeWidth={1.5} />
             </a>
           </div>
         </div>
-      </div>
-    </section>
-  );
-}
+      </section>
 
-/* What the initiative actually claims.
-   Written from the positioning already used across this site rather than
-   copied from the LinkedIn page, which is behind a login. */
-function LegalEngineering() {
-  const { ref, vis } = useReveal();
-  const principles = [
-    {
-      t: "One person reads both",
-      b: "The lawyer and the engineer are the same person. Nothing is lost translating an architecture decision into a legal question, or a regulatory obligation into a technical constraint, because there is no handover between them.",
-    },
-    {
-      t: "Compliance as a build constraint",
-      b: "Data protection, auditability and accountability are treated the way latency or uptime are treated: something the system is designed around from the first commit, not a review stage bolted on before launch.",
-    },
-    {
-      t: "Regulated by design",
-      b: "Governance, explainability and risk documentation are produced as the product is built, so the evidence a regulator asks for already exists rather than being reconstructed afterwards.",
-    },
-    {
-      t: "Built for the rules that actually apply",
-      b: "Scoped to Kenyan and East African regulation as it stands, including sandbox frameworks, rather than to a compliance regime borrowed from another market.",
-    },
-  ];
+      {/* ── The initiative ── */}
+      <section className="section page-x" style={{ borderTop: "1px solid var(--c-border)" }}>
+        <div ref={principles.ref as React.RefObject<HTMLDivElement>} className="inner" style={{ maxWidth: MEASURE }}>
+          <div style={fade(principles.vis)}>
+            <Eyebrow text="The initiative" />
+            <h2 className="t-display t-display-lg" style={{ marginBottom: "1.5rem" }}>Legal engineering.</h2>
+            <p className="t-body" style={{ maxWidth: "38rem", marginBottom: "4rem" }}>
+              Most regulated software is built twice: once by engineers, then again by lawyers telling them
+              what they should have done. Entrora exists to collapse that into a single pass.
+            </p>
+          </div>
 
-  return (
-    <section ref={ref as React.RefObject<HTMLElement>} style={SEC}>
-      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-        <p style={{ ...LBL, marginBottom: "2rem", ...fade(vis) }}>The initiative</p>
-        <h2 style={{ ...SERIF("clamp(1.6rem,3vw,2.4rem)"), maxWidth: "34rem", marginBottom: "1.5rem", ...fade(vis, 0.04) }}>
-          Legal engineering.
-        </h2>
-        <p style={{ ...BODY, maxWidth: "38rem", marginBottom: "4rem", ...fade(vis, 0.06) }}>
-          Most regulated software is built twice: once by engineers, then again by lawyers telling them what
-          they should have done. Entrora exists to collapse that into a single pass.
-        </p>
-
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(17rem, 1fr))", gap: "2.5rem" }}>
-          {principles.map((p, i) => (
-            <div key={p.t} style={{ borderTop: "1px solid var(--c-border)", paddingTop: "1.25rem", ...fade(vis, 0.08 + i * 0.05) }}>
-              <h3 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "1.05rem", color: "var(--c-ink)", marginBottom: "0.75rem" }}>{p.t}</h3>
-              <p style={{ ...BODY, fontSize: "0.8rem" }}>{p.b}</p>
-            </div>
-          ))}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(17rem, 1fr))", gap: "2.5rem" }}>
+            {PRINCIPLES.map((p, i) => (
+              <div key={p.t} style={{ borderTop: "1px solid var(--c-border)", paddingTop: "1.25rem", ...fade(principles.vis, 0.06 + i * 0.05) }}>
+                <h3 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "1.05rem", color: "var(--c-ink)", marginBottom: "0.75rem" }}>{p.t}</h3>
+                <p className="t-body-sm">{p.b}</p>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
-  );
-}
+      </section>
 
-/* The newsletter is published from the Entrora LinkedIn page, so this points
-   there rather than collecting an address here: an email form would need a
-   list, a consent record and a privacy notice to do honestly, and it would
-   split the subscriber base across two places. */
-function Newsletter() {
-  const { ref, vis } = useReveal();
-  return (
-    <section ref={ref as React.RefObject<HTMLElement>} style={SEC}>
-      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-        <div style={{ maxWidth: "34rem", ...fade(vis) }}>
-          <p style={{ ...LBL, marginBottom: "1.25rem" }}>Newsletter</p>
-          <h2 style={{ ...SERIF("clamp(1.5rem,2.6vw,2.1rem)"), marginBottom: "1.25rem" }}>
-            Written from inside the build.
-          </h2>
-          <p style={{ ...BODY, marginBottom: "2.25rem" }}>
-            Entrora Systems publishes on where technology regulation meets the work of actually shipping
-            software in this region. It is free, it arrives through LinkedIn, and you can leave whenever
-            you like.
-          </p>
-          <a href={ENTRORA_NEWSLETTER} target="_blank" rel="noopener noreferrer" className="ent-cta" style={extLink()} onMouseEnter={extIn} onMouseLeave={extOut()}>
-            Subscribe on LinkedIn <ExternalLink size={10} strokeWidth={1.5} />
+      {/* ── Services ── */}
+      <section className="section page-x" style={{ borderTop: "1px solid var(--c-border)" }}>
+        <div ref={services.ref as React.RefObject<HTMLDivElement>} className="inner" style={{ maxWidth: MEASURE }}>
+          <div style={fade(services.vis)}>
+            <Eyebrow text="What Entrora builds" />
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "var(--c-border)", border: "1px solid var(--c-border)", borderRadius: "10px", overflow: "hidden" }} className="ent-g">
+            {SERVICES.map((s, i) => (
+              <div key={s.n} style={{ padding: "2rem", background: "var(--c-bg)", opacity: services.vis ? 1 : 0, transition: `opacity 0.5s ease ${0.06 * i}s` }}>
+                <span style={{ fontFamily: "var(--font-serif)", fontSize: "0.75rem", color: "var(--c-accent)", display: "block", marginBottom: "1rem" }}>{s.n}</span>
+                <h3 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "1.05rem", color: "var(--c-ink)", marginBottom: "0.6rem" }}>{s.t}</h3>
+                <p className="t-body-sm">{s.b}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── The newsletter ──
+          Published from the Entrora LinkedIn page, so this points there
+          rather than collecting addresses: a form here would need its own
+          list, consent record and privacy notice, and would split
+          subscribers across two places. Subscriber counts are deliberately
+          not printed, since a hardcoded number goes stale the same week. */}
+      <section className="section page-x" style={{ borderTop: "1px solid var(--c-border)" }}>
+        <div ref={news.ref as React.RefObject<HTMLDivElement>} className="inner" style={{ maxWidth: MEASURE, ...fade(news.vis) }}>
+          <Eyebrow text="The newsletter" />
+
+          <div className="ent-news">
+            <div className="ent-news-art">
+              <Image src="/lex.png" alt="Lex &amp; Latte, law and coffee" width={320} height={320} className="ent-news-img" />
+            </div>
+
+            <div>
+              <h2 className="t-display t-display-md" style={{ marginBottom: "1rem" }}>Lex &amp; Latte.</h2>
+              <p className="t-body" style={{ marginBottom: "1.25rem" }}>
+                Essential legal insights, tips and updates for entrepreneurs and startups, published
+                biweekly by Entrora.
+              </p>
+              <p className="t-body-sm" style={{ marginBottom: "2rem" }}>
+                It arrives through LinkedIn, it is free, and you can leave whenever you like.
+              </p>
+              <a href={NEWSLETTER_URL} target="_blank" rel="noopener noreferrer" className="ent-cta">
+                Subscribe on LinkedIn <ExternalLink size={10} strokeWidth={1.5} />
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── CTA ── */}
+      <section className="section page-x" style={{ borderTop: "1px solid var(--c-border)", background: "var(--c-surface)" }}>
+        <div className="inner" style={{ maxWidth: MEASURE }}>
+          <Eyebrow text="Ready to build" />
+          <h2 className="t-display t-display-lg" style={{ marginBottom: "2rem" }}>Start with a conversation.</h2>
+          <a href={ENTRORA_SITE} target="_blank" rel="noopener noreferrer" className="ent-cta">
+            Get in touch with Entrora <ArrowRight size={11} strokeWidth={1.5} />
           </a>
         </div>
-      </div>
-    </section>
-  );
-}
+      </section>
 
-function Services() {
-  const { ref, vis } = useReveal();
-  return (
-    <section ref={ref as React.RefObject<HTMLElement>} style={SEC}>
-      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-        <p style={{ ...LBL, marginBottom: "4rem", ...fade(vis) }}>Services</p>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1px", background: "var(--c-border)" }} className="ent-g">
-          {[
-            { n: "01", t: "AI Document Systems", b: "Classification, extraction, and review pipelines, built for legal and compliance workflows." },
-            { n: "02", t: "Legal Tech Development", b: "Software built for legal workflows, by someone who understands both sides of the table." },
-            { n: "03", t: "Compliant AI Products", b: "AI products with data governance and regulatory alignment built in from day one." },
-            { n: "04", t: "AI Adoption Advisory", b: "Scoping and implementation for organisations at any stage, no enterprise budget required." },
-            { n: "05", t: "Regulatory Sandbox Navigation", b: "Navigating regulatory sandbox frameworks across Kenya and East Africa." },
-            { n: "06", t: "AI Governance Frameworks", b: "Governance documents for AI deployment, accountability, explainability, risk." },
-          ].map((s, i) => (
-            <div key={s.n} style={{ padding: "2.5rem", background: "var(--c-bg)", opacity: vis ? 1 : 0, transition: `opacity 0.5s ease ${0.06 * i}s` }}>
-              <span style={{ fontFamily: "var(--font-serif)", fontSize: "0.75rem", color: "var(--c-accent)", display: "block", marginBottom: "1.25rem" }}>{s.n}</span>
-              <p style={{ fontFamily: "var(--font-serif)", fontSize: "1.05rem", color: "var(--c-ink)", marginBottom: "0.75rem" }}>{s.t}</p>
-              <p style={{ ...BODY, fontSize: "0.8rem" }}>{s.b}</p>
-            </div>
-          ))}
-        </div>
-      </div>
       <style>{`
-        @media(max-width:700px){ .ent-g{ grid-template-columns:1fr!important } }
-        /* On a phone these underlined links are the only way off this page,
+        /* Both source files are 200px square, so nothing is displayed larger
+           than that: upscaling a 200px mark just makes it soft. */
+        .ent-logo-frame{
+          width: clamp(6.5rem, 13vw, 8.75rem); aspect-ratio: 1 / 1;
+          border: 1px solid var(--c-border); border-radius: 10px;
+          background: var(--c-surface); overflow: hidden;
+          display: flex; align-items: center; justify-content: center;
+        }
+        .ent-logo{ width: 100%; height: 100%; object-fit: contain; display: block; }
+
+        .ent-cta{
+          display: inline-flex; align-items: center; gap: 0.45rem;
+          font-family: var(--font-manjari); font-weight: 700;
+          font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+          color: var(--c-ink); text-decoration: none;
+          border-bottom: 1px solid var(--c-ink); padding-bottom: 2px;
+          transition: color 0.2s ease, border-color 0.2s ease;
+        }
+        .ent-cta-muted{ color: var(--c-ink-muted); border-bottom-color: var(--c-border); }
+        .ent-cta:hover{ color: var(--c-accent); border-bottom-color: var(--c-accent); }
+
+        /* Artwork framed the way the engineering pages frame a project shot. */
+        .ent-news{
+          display: grid; grid-template-columns: minmax(0, 12.5rem) minmax(0, 1fr);
+          gap: clamp(1.5rem, 4vw, 3rem); align-items: start;
+        }
+        .ent-news-art{
+          border: 1px solid var(--c-border); border-radius: 10px;
+          background: var(--c-surface); overflow: hidden;
+          aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center;
+        }
+        .ent-news-img{ width: 100%; height: 100%; object-fit: contain; display: block; }
+
+        @media(max-width:700px){
+          .ent-g{ grid-template-columns: 1fr !important; }
+          .ent-news{ grid-template-columns: 1fr; }
+          .ent-news-art{ max-width: 12.5rem; }
+        }
+        /* On a phone these underlined links are the only way off the page,
            and as bare text they were about 17px tall. */
-        /* !important because extLink sets padding-bottom inline, and an
-           inline style beats a stylesheet rule. */
         @media(max-width:600px){
-          .ent-cta{ padding-top:0.7rem !important; padding-bottom:0.8rem !important; }
+          .ent-cta{ padding-top: 0.7rem; padding-bottom: 0.8rem; }
         }
       `}</style>
-    </section>
+    </div>
   );
-}
-
-function CTA() {
-  const { ref, vis } = useReveal();
-  return (
-    <section ref={ref as React.RefObject<HTMLElement>} style={{ ...SEC, background: "var(--c-surface)" }}>
-      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "3rem", flexWrap: "wrap" }}>
-        <div style={fade(vis)}>
-          <p style={{ ...LBL, marginBottom: "0.75rem" }}>Ready to build</p>
-          <h2 style={{ ...SERIF() }}>Start with a conversation.</h2>
-        </div>
-        <div style={{ display: "flex", gap: "2rem", flexWrap: "wrap", ...fade(vis, 0.1) }}>
-          <Link href="/talk" className="ent-cta" style={{
-            display: "inline-flex", alignItems: "center", gap: "0.4rem",
-            fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.55rem", letterSpacing: "0.2em", textTransform: "uppercase",
-            color: "var(--c-ink)", textDecoration: "none", borderBottom: "1px solid var(--c-ink)", paddingBottom: "2px", transition: "color 0.2s, border-color 0.2s",
-          }}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-accent)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-ink)"; }}>
-            Talk to Decra <ArrowRight size={10} strokeWidth={1.5} />
-          </Link>
-          <a href={ENTRORA_SITE} target="_blank" rel="noopener noreferrer" className="ent-cta" style={{
-            display: "inline-flex", alignItems: "center", gap: "0.4rem",
-            fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.55rem", letterSpacing: "0.2em", textTransform: "uppercase",
-            color: "var(--c-ink-muted)", textDecoration: "none", borderBottom: "1px solid var(--c-border)", paddingBottom: "2px", transition: "color 0.2s, border-color 0.2s",
-          }}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-ink)"; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "var(--c-ink-muted)"; (e.currentTarget as HTMLElement).style.borderColor = "var(--c-border)"; }}>
-            Visit Entrora Systems <ExternalLink size={9} strokeWidth={1.5} />
-          </a>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-export default function EntroraPage() {
-  return (<><Hero /><LegalEngineering /><Services /><Newsletter /><CTA /></>);
 }
