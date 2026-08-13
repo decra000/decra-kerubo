@@ -28,12 +28,14 @@ const ENTRORA_LINKEDIN = "https://www.linkedin.com/company/entrora/";
 const NEWSLETTER_URL = "https://www.linkedin.com/build-relation/newsletter-follow?entityUrn=7241946044966592512";
 /** Demo bookings are taken on Calendly rather than through the host site. */
 const DEMO_URL = "https://calendly.com/decrakerubo/";
+const YNAI_URL = "https://www.ynai.co.ke/";
 
 const NAV = [
   { href: "#initiative", label: "About" },
   { href: "#lpms", label: "Products" },
-  { href: "#platform", label: "Platform" },
+  { href: "#platform", label: "Flagship" },
   { href: "#solutions", label: "Solutions" },
+  { href: "#partners", label: "Partners" },
   { href: "#newsletter", label: "Insights" },
 ];
 
@@ -58,24 +60,28 @@ const LPMS_FEATURES = [
   { t: "Insights & Reports", b: "Make data-driven decisions with ease." },
 ];
 
-/* What the platform does, stated as outcomes.
-   Four items from the internal list are deliberately not published here:
+/* The counts are published deliberately, as scale rather than as a map.
+   Three things from the internal list stay off the page:
 
-   - the system, domain and automation-engine counts, and the fact that they
-     share one database. That is an architecture map: the counts size the
-     attack surface and "one shared database" states the blast radius of a
-     single compromise.
+   - "one shared database". The counts say how much there is; that says what
+     a single compromise would reach, which is the attacker's question rather
+     than the buyer's.
    - "every integration has a fallback, no single point of failure". An
-     absolute resilience claim is an invitation to test it, and it only has
-     to be wrong in one place to be a misrepresentation.
+     absolute resilience claim invites someone to test it, and only has to be
+     wrong in one place to be a misrepresentation.
    - automatic publication of won matters to a website. That is a client
-     confidentiality question before it is a feature, and it is the last
-     thing to advertise on a product sold to advocates.
+     confidentiality question before it is a feature, and the last thing to
+     advertise on a product sold to advocates.
 
-   What is left is what a buyer needs to know and a competitor already
-   assumes: category-level capability, plus the pupillage pipeline, which is
-   the genuinely hard part to copy because it takes regulatory knowledge
-   rather than engineering time. */
+   The pupillage pipeline stays in: it is the hard part to copy, because it
+   takes regulatory knowledge rather than engineering time. */
+const LPMS_STATS = [
+  { n: "21", l: "Integrated systems" },
+  { n: "22", l: "Automation engines" },
+  { n: "4", l: "Practice domains" },
+  { n: "1", l: "Legally scoped chatbot" },
+];
+
 const LPMS_CAPABILITIES = [
   { t: "Enquiry triage, assisted", b: "Incoming enquiries are scored and routed as they arrive, so nothing sits in an inbox waiting to be noticed." },
   { t: "Matters that advance themselves", b: "Work recorded against a matter moves it forward on its own, instead of someone remembering to update a status." },
@@ -83,15 +89,6 @@ const LPMS_CAPABILITIES = [
   { t: "A pupillage pipeline that satisfies the regulator", b: "Built around the Kenya School of Law guidelines and the Advocates Act (Cap. 16), so supervision and progression are recorded the way they are meant to be." },
   { t: "A client portal scoped to the client", b: "Clients sign in to their own matters and see their own documents, with no view of anyone else's." },
   { t: "A chatbot that stays in scope", b: "Answers within the boundaries of the practice, and hands over to a person when a question needs one." },
-];
-
-const SERVICES = [
-  { n: "01", t: "AI Document Systems", b: "Classification, extraction, and review pipelines, built for legal and compliance workflows." },
-  { n: "02", t: "Legal Tech Development", b: "Software built for legal workflows, by someone who understands both sides of the table." },
-  { n: "03", t: "Compliant AI Products", b: "AI products with data governance and regulatory alignment built in from day one." },
-  { n: "04", t: "AI Adoption Advisory", b: "Scoping and implementation for organisations at any stage, no enterprise budget required." },
-  { n: "05", t: "Regulatory Sandbox Navigation", b: "Navigating regulatory sandbox frameworks across Kenya and East Africa." },
-  { n: "06", t: "AI Governance Frameworks", b: "Governance documents for AI deployment, accountability, explainability, risk." },
 ];
 
 function Eyebrow({ text }: { text: string }) {
@@ -146,6 +143,7 @@ export default function EntroraPage() {
   const { ref: lpmsRef, vis: lpmsVis } = useReveal();
   const { ref: platRef, vis: platVis } = useReveal();
   const { ref: solRef, vis: solVis } = useReveal();
+  const { ref: partRef, vis: partVis } = useReveal();
   const { ref: newsRef, vis: newsVis } = useReveal();
 
   return (
@@ -283,8 +281,8 @@ export default function EntroraPage() {
       <section className="ent-section" id="platform">
         <div ref={platRef as React.RefObject<HTMLDivElement>} className="ent-wrap">
           <div style={fade(platVis)}>
-            <Eyebrow text="Inside Entrora LPMS" />
-            <h2 className="ent-h2">One system, end to end.</h2>
+            <Eyebrow text="Flagship product" />
+            <h2 className="ent-h2">Entrora LPMS. One system, end to end.</h2>
             <p className="ent-body ent-measure">
               An enquiry arrives, gets triaged, becomes a matter, gathers its documents and its time, bills,
               and reports on itself. The point is not that each of those exists. It is that they are the
@@ -292,7 +290,23 @@ export default function EntroraPage() {
             </p>
           </div>
 
-          <div className="ent-caps" style={fade(platVis, 0.08)}>
+          <div className="ent-shot" style={fade(platVis, 0.06)}>
+            <Image src="/entrora-lpms-dashboard.png" alt="The Entrora LPMS dashboard, showing matters, clients, documents and billable hours" width={1536} height={1024} className="ent-shot-img" />
+          </div>
+
+          <div className="ent-stats" style={fade(platVis, 0.08)}>
+            <span className="ent-stats-label">Powered by</span>
+            <div className="ent-stats-row">
+              {LPMS_STATS.map((s) => (
+                <div key={s.l} className="ent-stat">
+                  <strong>{s.n}</strong>
+                  <span>{s.l}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="ent-caps" style={fade(platVis, 0.1)}>
             {LPMS_CAPABILITIES.map((c) => (
               <div key={c.t} className="ent-cap">
                 <h3>{c.t}</h3>
@@ -309,18 +323,45 @@ export default function EntroraPage() {
         </div>
       </section>
 
-      {/* ── Solutions ── */}
+      {/* ── Solutions ──
+          Reduced to a line. The flagship section above now carries the
+          detail, and six cards restating it only competed with it. */}
       <section className="ent-section" id="solutions">
-        <div ref={solRef as React.RefObject<HTMLDivElement>} className="ent-wrap">
-          <div style={fade(solVis)}><Eyebrow text="What Entrora builds" /></div>
-          <div className="ent-solutions">
-            {SERVICES.map((s, i) => (
-              <div key={s.n} className="ent-solution" style={{ opacity: solVis ? 1 : 0, transition: `opacity 0.5s ease ${0.06 * i}s` }}>
-                <span className="ent-num">{s.n}</span>
-                <h3>{s.t}</h3>
-                <p>{s.b}</p>
-              </div>
-            ))}
+        <div ref={solRef as React.RefObject<HTMLDivElement>} className="ent-wrap" style={fade(solVis)}>
+          <Eyebrow text="Solutions" />
+          <p className="ent-statement">
+            Beyond the platform, Entrora builds AI document systems, legal-tech software, compliant AI
+            products and the governance frameworks that keep them defensible.
+          </p>
+          <a href={ENTRORA_SITE} target="_blank" rel="noopener noreferrer" className="ent-pill ent-pill-ghost">
+            See the full range <ExternalLink size={12} strokeWidth={2} />
+          </a>
+        </div>
+      </section>
+
+      {/* ── Partnership ── */}
+      <section className="ent-section ent-tint" id="partners">
+        <div ref={partRef as React.RefObject<HTMLDivElement>} className="ent-wrap" style={fade(partVis)}>
+          <Eyebrow text="In partnership" />
+          <div className="ent-partner">
+            <div className="ent-partner-art">
+              <Image src="/ynai-app.png" alt="The Ynai app, a Kenya Bar Exam study companion" width={1024} height={1536} className="ent-partner-img" />
+            </div>
+            <div>
+              <h2 className="ent-h2">Simplifying the Kenyan bar, with Ynai.</h2>
+              <p className="ent-body">
+                Ynai is a study companion for the Kenya Bar Exam: units, practice questions, mock exams and
+                progress tracking in one place. Entrora partners with Ynai on the same problem the LPMS
+                addresses from the other end, which is that the route into practice in this country is
+                harder to navigate than it needs to be.
+              </p>
+              <p className="ent-body ent-body-sm">
+                One side prepares people to qualify. The other gives them a practice worth walking into.
+              </p>
+              <a href={YNAI_URL} target="_blank" rel="noopener noreferrer" className="ent-pill ent-pill-solid">
+                Visit Ynai <ExternalLink size={12} strokeWidth={2} />
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -527,6 +568,38 @@ export default function EntroraPage() {
 
         .ent-closer{ text-align: center; margin-top: 2.5rem; font-family: var(--font-sans); font-weight: 600; font-size: 0.95rem; color: var(--c-ink); }
 
+        /* Product shot framed like the rest of the artwork on the page. */
+        .ent-shot{
+          border: 1px solid var(--c-border); border-radius: 14px;
+          overflow: hidden; background: var(--c-surface); margin-top: 2.5rem;
+        }
+        .ent-shot-img{ width: 100%; height: auto; display: block; }
+
+        .ent-stats{ margin-top: 2.5rem; }
+        .ent-stats-label{
+          display: block; margin-bottom: 1rem;
+          font-family: var(--font-manjari); font-weight: 700; font-size: 0.55rem;
+          letter-spacing: 0.24em; text-transform: uppercase; color: var(--c-ink-muted);
+        }
+        .ent-stats-row{ display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: 1.5rem; }
+        .ent-stat{ border-top: 2px solid var(--ent-pink); padding-top: 0.9rem; }
+        .ent-stat strong{
+          display: block; font-family: var(--font-sans); font-weight: 700;
+          font-size: clamp(1.9rem, 4.5vw, 2.9rem); line-height: 1;
+          letter-spacing: -0.03em; color: var(--c-ink); margin-bottom: 0.4rem;
+        }
+        .ent-stat span{ font-family: var(--font-sans); font-size: 0.78rem; line-height: 1.4; color: var(--c-ink-muted); }
+
+        .ent-statement{
+          font-family: var(--font-sans); font-size: clamp(1.05rem, 2vw, 1.4rem);
+          line-height: 1.55; color: var(--c-ink); max-width: 42rem;
+          margin-bottom: 2rem; letter-spacing: -0.01em;
+        }
+
+        .ent-partner{ display: grid; grid-template-columns: minmax(0, 0.55fr) minmax(0, 1fr); gap: clamp(1.5rem, 5vw, 4rem); align-items: center; }
+        .ent-partner-art{ border: 1px solid var(--c-border); border-radius: 18px; overflow: hidden; background: #0A0A0A; }
+        .ent-partner-img{ width: 100%; height: auto; display: block; }
+
         .ent-caps{ display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1px; background: var(--c-border); border: 1px solid var(--c-border); border-radius: 14px; overflow: hidden; margin-top: 2.5rem; }
         .ent-cap{ background: var(--c-bg); padding: 1.6rem; }
         .ent-cap h3{ font-family: var(--font-sans); font-weight: 600; font-size: 0.92rem; color: var(--c-ink); margin-bottom: 0.55rem; line-height: 1.35; }
@@ -573,6 +646,8 @@ export default function EntroraPage() {
         }
         @media(max-width:640px){
           .ent-news{ grid-template-columns: 1fr; }
+          .ent-partner{ grid-template-columns: 1fr; }
+          .ent-partner-art{ max-width: 17rem; }
           .ent-news-art{ max-width: 11rem; }
           .ent-pill{ padding: 0.8rem 1.4rem; }
         }
