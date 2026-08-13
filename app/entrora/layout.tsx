@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Entrora",
+  title: "Entrora Systems, Legal Engineering",
   description:
-    "Entrora, a venture by Decra Kerubo, technology lawyer and product counsel based in Nairobi, Kenya.",
+    "Entrora Systems is the legal engineering initiative of Decra Kerubo: regulated AI and software built with the legal reasoning and the technical reasoning in the same pass. AI document systems, legal-tech development, compliant AI products, and AI governance frameworks in Nairobi, Kenya.",
   keywords: [
-    "Entrora Decra Kerubo",
-    "technology lawyer Kenya venture",
-    "product counsel Africa",
+    "legal engineering",
+    "Entrora Systems",
+    "regulated AI engineering Kenya",
+    "legal tech development Africa",
+    "AI governance frameworks Kenya",
+    "compliant AI products",
   ],
   alternates: { canonical: "/entrora" },
 };
