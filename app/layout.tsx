@@ -2,11 +2,8 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import Script from "next/script";
 import "./globals.css";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
-import { ContactBubble } from "@/components/layout/ContactBubble";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
-import { ScrollProgress } from "@/components/layout/ScrollProgress";
+import { SiteChrome } from "@/components/layout/SiteChrome";
 import { SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -226,11 +223,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body>
         <ThemeProvider>
-          <ScrollProgress />
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
-          <ContactBubble />
+          <SiteChrome>{children}</SiteChrome>
         </ThemeProvider>
       </body>
     </html>
