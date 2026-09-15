@@ -103,11 +103,11 @@ export function EngineeringGrid({ projects }: { projects: EngineeringProject[] }
   const pairedResearchSlugs = new Set(
     featuredCards.map((p) => p.relatedSlug).filter((s): s is string => !!s)
   );
-  // Research write-ups don't appear as plain grid cards at all any more —
-  // a tool-paired one already surfaces as its tool's "Paired research"
-  // column above, and a standalone one now lives in the Research section
-  // further down this same page instead of a second, thinner listing here.
-  const rest = visible.filter((p) => !p.featured && !p.paperSlug && !(p.slug && pairedResearchSlugs.has(p.slug)));
+  // A research write-up paired to a tool already surfaces as that tool's
+  // "Paired research" column above, so it's dropped from the plain grid.
+  // A standalone paper (no tool pairing) has nowhere else on the page to
+  // be read from, so it still gets its own plain grid card.
+  const rest = visible.filter((p) => !p.featured && !(p.slug && pairedResearchSlugs.has(p.slug)) && !(p.paperSlug && p.relatedSlug));
 
   return (
     <div>
