@@ -1,6 +1,3 @@
-"use client";
-
-import { useState } from "react";
 import Link from "next/link";
 import { ArrowUpRight, Puzzle, Download, Award, Link2, FileText } from "lucide-react";
 import type { EngineeringProject } from "@/lib/engineering-projects";
@@ -22,12 +19,6 @@ function PairBadge({ label }: { label: string }) {
     </span>
   );
 }
-
-const categories = [
-  { id: "ai", label: "AI Projects" },
-  { id: "apps", label: "Apps" },
-  { id: "websites", label: "Websites" },
-];
 
 /** One card in the regular (non-featured) grid, extracted so it can be
  *  rendered into either the 2-column or 3-column grid below without
@@ -80,21 +71,12 @@ function ProjectCard({ p }: { p: EngineeringProject }) {
 }
 
 export function EngineeringGrid({ projects }: { projects: EngineeringProject[] }) {
-  const [active, setActive] = useState<string>("all");
-
-  const visible = active === "all" ? projects : projects.filter((p) => p.categories.includes(active));
-  const featured = visible.filter((p) => p.featured);
+  const featured = projects.filter((p) => p.featured);
 
   // A research entry that's itself paired to a tool (paperSlug + relatedSlug
   // both set) is folded into its paired tool's card as the research column
-  // instead of getting its own featured card — but only when that tool is
-  // actually present in the current filter. Under a filter where the tool
-  // isn't visible (e.g. "Research & Writing" alone), keep the research
-  // item's own featured card so it doesn't disappear entirely.
-  const featuredCards = featured.filter((p) => {
-    if (!(p.paperSlug && p.relatedSlug)) return true;
-    return !visible.some((x) => x.slug === p.relatedSlug);
-  });
+  // instead of getting its own featured card.
+  const featuredCards = featured.filter((p) => !(p.paperSlug && p.relatedSlug));
 
   // Anything already shown as a paired-research column inside a featured
   // card (even if it isn't itself featured, e.g. the Cyberbullying Detection
@@ -107,47 +89,10 @@ export function EngineeringGrid({ projects }: { projects: EngineeringProject[] }
   // "Paired research" column above, so it's dropped from the plain grid.
   // A standalone paper (no tool pairing) has nowhere else on the page to
   // be read from, so it still gets its own plain grid card.
-  const rest = visible.filter((p) => !p.featured && !(p.slug && pairedResearchSlugs.has(p.slug)) && !(p.paperSlug && p.relatedSlug));
+  const rest = projects.filter((p) => !p.featured && !(p.slug && pairedResearchSlugs.has(p.slug)) && !(p.paperSlug && p.relatedSlug));
 
   return (
     <div>
-      {/* ── Filter pills ── */}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginBottom: "2.5rem" }}>
-        <button
-          type="button"
-          onClick={() => setActive("all")}
-          className="eng-filter-btn"
-          style={{
-            fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
-            padding: "0.4rem 0.9rem", borderRadius: "100px", cursor: "pointer",
-            border: `1px solid ${active === "all" ? "var(--c-forest)" : "var(--c-border-strong)"}`,
-            color: active === "all" ? "var(--c-forest)" : "var(--c-ink-muted)",
-            background: active === "all" ? "rgba(14,61,50,0.06)" : "transparent",
-            transition: "all 0.2s ease",
-          }}
-        >
-          All
-        </button>
-        {categories.map((c) => (
-          <button
-            key={c.id}
-            type="button"
-            onClick={() => setActive(c.id)}
-            className="eng-filter-btn"
-            style={{
-              fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
-              padding: "0.4rem 0.9rem", borderRadius: "100px", cursor: "pointer",
-              border: `1px solid ${active === c.id ? "var(--c-forest)" : "var(--c-border-strong)"}`,
-              color: active === c.id ? "var(--c-forest)" : "var(--c-ink-muted)",
-              background: active === c.id ? "rgba(14,61,50,0.06)" : "transparent",
-              transition: "all 0.2s ease",
-            }}
-          >
-            {c.label}
-          </button>
-        ))}
-      </div>
-
       {/* ── Featured project(s), full width, stacked ── */}
       {featuredCards.map((p) => {
         // Only render the 3-column research pairing when `p` is the tool
@@ -291,15 +236,10 @@ export function EngineeringGrid({ projects }: { projects: EngineeringProject[] }
         {rest.map((p) => <ProjectCard key={p.title} p={p} />)}
       </div>
 
-      {visible.length === 0 && (
-        <p className="t-body" style={{ padding: "3rem 0", textAlign: "center" }}>No projects in this category yet.</p>
-      )}
-
       <style>{`
         @media(max-width: 900px){ .eng-grid{ grid-template-columns: repeat(2,1fr) !important; } }
         @media(max-width: 620px){ .eng-grid{ grid-template-columns: 1fr !important; } }
         @media(max-width: 760px){ .eng-featured{ grid-template-columns: 1fr !important; } }
-        .eng-filter-btn:hover{ border-color: var(--c-forest) !important; color: var(--c-forest) !important; }
       `}</style>
     </div>
   );
