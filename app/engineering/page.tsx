@@ -20,16 +20,26 @@ export default function EngineeringPage() {
           work itself. */}
       <section className="section page-x" style={{ borderBottom: "1px solid var(--c-border)" }}>
         <div className="inner eng-statement-row" style={{ display: "flex", alignItems: "flex-start", gap: "clamp(2rem, 5vw, 4rem)", flexWrap: "wrap" }}>
-          <img
-            src="/decra-about-portrait.jpg"
-            alt="Decra Kerubo"
+          <div
             style={{
-              flex: "0 0 clamp(200px, 24vw, 300px)", width: "clamp(200px, 24vw, 300px)", height: "auto",
-              border: "1px solid var(--c-border-strong)", borderRadius: 0, display: "block",
-              WebkitMaskImage: "linear-gradient(to bottom, black 50%, transparent 100%)",
-              maskImage: "linear-gradient(to bottom, black 50%, transparent 100%)",
+              position: "relative", overflow: "hidden",
+              flex: "0 0 clamp(200px, 24vw, 300px)", width: "clamp(200px, 24vw, 300px)",
+              border: "1px solid var(--c-border-strong)", borderRadius: 0,
             }}
-          />
+          >
+            <img
+              src="/decra-about-portrait.jpg"
+              alt="Decra Kerubo"
+              style={{ width: "100%", height: "auto", display: "block" }}
+            />
+            <div
+              aria-hidden
+              style={{
+                position: "absolute", inset: 0, pointerEvents: "none",
+                background: "linear-gradient(to bottom, transparent 70%, var(--c-bg) 96%)",
+              }}
+            />
+          </div>
           <div style={{ flex: "1 1 320px", minWidth: 0 }}>
             <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "1.5rem" }}>
               <span style={{ display: "inline-block", width: "1.5rem", height: "1px", background: "var(--c-gold)" }} />
@@ -52,7 +62,7 @@ export default function EngineeringPage() {
         </div>
         <style>{`
           @media (max-width: 640px) {
-            .eng-statement-row img { flex-basis: 160px !important; width: 160px !important; }
+            .eng-statement-row > div:first-child { flex-basis: 160px !important; width: 160px !important; }
           }
         `}</style>
       </section>
