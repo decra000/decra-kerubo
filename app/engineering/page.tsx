@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { EngineeringGrid } from "@/components/engineering/EngineeringGrid";
+import { PaperSlider } from "@/components/research/PaperSlider";
 import { engineeringProjects } from "@/lib/engineering-projects";
 
 export const metadata: Metadata = {
@@ -32,7 +33,7 @@ export default function EngineeringPage() {
           <div style={{ flex: "1 1 320px", minWidth: 0 }}>
             <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "1.5rem" }}>
               <span style={{ display: "inline-block", width: "1.5rem", height: "1px", background: "var(--c-gold)" }} />
-              <span className="t-label">Engineering &middot; Technology Lawyer | Advocate Trainee</span>
+              <span className="t-label">AI &amp; Systems Engineer &middot; Technology Lawyer | Advocate Trainee</span>
             </div>
             <h1
               className="t-display"
@@ -54,6 +55,17 @@ export default function EngineeringPage() {
             .eng-statement-row img { flex-basis: 160px !important; width: 160px !important; }
           }
         `}</style>
+      </section>
+
+      {/* ── Research ── */}
+      <section className="section page-x" style={{ borderBottom: "1px solid var(--c-border)" }}>
+        <div className="inner">
+          <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "1.5rem" }}>
+            <span style={{ display: "inline-block", width: "1.5rem", height: "1px", background: "var(--c-gold)" }} />
+            <span className="t-label">Research</span>
+          </div>
+          <PaperSlider />
+        </div>
       </section>
 
       {/* ── Grid ── */}

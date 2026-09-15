@@ -41,10 +41,9 @@ function Card({ p }: { p: EngineeringProject }) {
 }
 
 export function EngineeringGrid({ projects }: { projects: EngineeringProject[] }) {
-  // A research write-up paired to a tool (paperSlug + relatedSlug both set)
-  // is folded into that tool's own detail page instead of getting a card
-  // of its own here.
-  const visible = projects.filter((p) => !(p.paperSlug && p.relatedSlug));
+  // Research write-ups live in the paper slider above instead of this list,
+  // whether or not they're paired to a tool.
+  const visible = projects.filter((p) => !p.paperSlug);
 
   return (
     <div style={{ maxWidth: "42rem", display: "flex", flexDirection: "column", gap: "3.5rem" }}>
