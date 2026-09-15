@@ -29,7 +29,7 @@ export const PAPERS: Paper[] = [
   },
   {
     slug: "ai-enabled-regulation",
-    title: "AI-Enabled Regulation as a Means to Digital Safety",
+    title: "Cyberbullying Detection: An Integrated Natural Language Processing and Machine Learning Approach for Cybersafety",
     partner: "In association with the African Leadership University",
     dates: "Aug 2023 to Apr 2024",
     status: "complete",

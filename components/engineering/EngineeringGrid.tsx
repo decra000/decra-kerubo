@@ -97,9 +97,9 @@ export function EngineeringGrid({ projects }: { projects: EngineeringProject[] }
   });
 
   // Anything already shown as a paired-research column inside a featured
-  // card (even if it isn't itself featured, e.g. "Harnessing Online Users'
-  // Safety Using AI") is dropped from the regular grid too, so it isn't
-  // listed twice on the same page.
+  // card (even if it isn't itself featured, e.g. the Cyberbullying Detection
+  // paper) is dropped from the regular grid too, so it isn't listed twice
+  // on the same page.
   const pairedResearchSlugs = new Set(
     featuredCards.map((p) => p.relatedSlug).filter((s): s is string => !!s)
   );

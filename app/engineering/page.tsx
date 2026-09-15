@@ -9,23 +9,23 @@ import { PaperLink } from "@/components/research/PaperLink";
 export const metadata: Metadata = {
   title: "Research & Engineering",
   description:
-    "Published research and selected engineering builds from Decra Kerubo: applied research on AI, data protection, and algorithmic accountability, and the AI tools, apps, and websites built from what it found, in partnership with academic and industry programs across Africa.",
+    "Research and engineering from Decra Kerubo, technology lawyer and product counsel in Nairobi, Kenya: applied research on AI, data protection, and where technology outpaces the law, and the tools built from what it found.",
   alternates: { canonical: "/engineering" },
 };
 
-/* Each paper's one-line gloss, written fresh rather than clipped from its
+/* Each paper's one-line gloss, written plainly rather than clipped from its
    abstract. Kept as a lookup by slug so a missing entry fails loudly (a
    blank line) instead of silently falling back to abstract text this
    section deliberately doesn't show. */
 const GLOSS: Record<string, string> = {
   "democratization-decarbonization-ai":
-    "Makes the case for AI that reaches more people while costing the planet less, and for edge computing as the way there.",
+    "AI often doesn't reach the people who need it, and running it costs real energy and water. This looks at edge computing as a way to close both gaps.",
   "ai-enabled-regulation":
-    "Tests how well current social media regulation actually works, and builds toward real-time detection where it doesn't.",
+    "Tests how well social media platforms actually catch cyberbullying, then builds a real-time NLP and machine learning system that catches more of it.",
   "cross-border-data-transfer":
-    "Reads cross-border data transfer law against regulations like the GDPR, and where the framework needs to catch up.",
+    "Checks whether cross-border data transfer law, including the GDPR, still holds up against how data actually moves and gets reused today.",
   "unbiased-hiring-algorithms":
-    "Builds toward a hiring tool that stays efficient without inheriting the bias baked into automated screening.",
+    "Looks at where hiring algorithms introduce bias, and what it would take to fix that without losing the efficiency they're built for.",
 };
 
 export default function EngineeringPage() {
@@ -33,9 +33,9 @@ export default function EngineeringPage() {
     <div style={{ background: "var(--c-bg)", paddingTop: "6rem" }}>
 
       {/* ── Header ──
-          No CTA here. The published research and the built work are the
-          argument; the ask comes at the end, once someone has actually seen
-          both, not as the first thing on the page. */}
+          No CTA here. The research and the built work are the argument; the
+          ask comes at the end, once someone has actually seen both, not as
+          the first thing on the page. */}
       <section className="section page-x" style={{ borderBottom: "1px solid var(--c-border)" }}>
         <div className="inner">
           <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "1.5rem" }}>
@@ -43,11 +43,11 @@ export default function EngineeringPage() {
             <span className="t-label">Research &amp; Engineering</span>
           </div>
           <h1 className="t-display t-display-xl" style={{ marginBottom: "1.25rem" }}>
-            The thinking, and the work it produced.
+            Research, and what got built from it.
           </h1>
           <p className="t-body" style={{ maxWidth: "34rem" }}>
-            Published research on AI, data protection, and algorithmic accountability, and the tools built
-            from what it found.
+            Four research papers on AI, data protection, and algorithmic accountability, and the tools I built
+            off the back of them.
           </p>
         </div>
       </section>
@@ -65,20 +65,14 @@ export default function EngineeringPage() {
             <span style={{ display: "inline-block", width: "1.5rem", height: "1px", background: "var(--c-gold)" }} />
             <span className="t-label">Research</span>
           </div>
-          <h2 className="t-display t-display-lg" style={{ marginBottom: "1.25rem" }}>Published work.</h2>
+          <h2 className="t-display t-display-lg" style={{ marginBottom: "1.25rem" }}>Research.</h2>
 
-          {/* One real throughline across the four papers, not a fabricated
-              origin story, an honest synthesis of what they're each
-              actually about (read in full in lib/papers.ts): a model nobody
-              can see the cost of, a platform regulation hasn't caught up
-              with, data outrunning the law, a hiring algorithm nobody
-              audited. */}
           <p className="t-body" style={{ maxWidth: "36rem", marginBottom: "3rem" }}>
-            Four papers, one question underneath all of them: what happens when a technology moves faster
-            than the rules, and the people, meant to hold it accountable. An AI model nobody can see the
-            true cost of. A platform regulation hasn&apos;t caught up with. Data crossing borders faster than
-            the law does. A hiring algorithm nobody audited for bias. Different technologies, the same gap
-            between what something can do and what anyone can be held to account for.
+            Four papers written between 2021 and now, across a UN fellowship, two universities, and a
+            Mercedes-Benz program. One of them, the cyberbullying detection paper, is formally published;
+            the rest were completed for their respective programs and are listed here on that basis. Together
+            they cover AI accessibility and its environmental cost, harmful content on social media, cross-border
+            data transfer law, and bias in hiring algorithms.
           </p>
 
           <div style={{ borderTop: "1px solid var(--c-border)" }}>

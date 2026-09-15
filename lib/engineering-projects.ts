@@ -66,7 +66,7 @@ export const engineeringProjects: EngineeringProject[] = [
     subtitle: "Chrome Extension · For Entrepreneurs",
     description: "A Chrome extension that detects cyberbullying and flags harmful content in real time as you browse.",
     detail:
-      "A Chrome extension that detects cyberbullying and flags harmful content in real time as people browse social media, inspecting page text and highlighting offensive or unsafe material as it's found. It's the applied counterpart to my \"Harnessing Online Users' Safety Using AI\" research below, which establishes the effectiveness of current social media regulation measures and proposes the real-time detection strategy this extension implements.",
+      "A Chrome extension that detects cyberbullying and flags harmful content in real time as people browse social media, inspecting page text and highlighting offensive or unsafe material as it's found. It's the applied counterpart to my published paper, \"Cyberbullying Detection: An Integrated Natural Language Processing and Machine Learning Approach for Cybersafety,\" below.",
     relatedSlug: "online-safety-research",
     pairLabel: "Backed by research",
     image: "/engineering/pure.png",
@@ -140,7 +140,7 @@ export const engineeringProjects: EngineeringProject[] = [
     categories: ["research", "ai"],
     slug: "online-safety-research",
     paperSlug: "ai-enabled-regulation",
-    title: "Harnessing Online Users' Safety Using AI",
+    title: "Cyberbullying Detection: An Integrated Natural Language Processing and Machine Learning Approach for Cybersafety",
     subtitle: "AI, NLP, Real-time Detection",
     description: "Leverages AI to establish the effectiveness of current social media regulation measures and proposes real-time detection strategies, culminating in a Chrome extension for controlling information flow on social media.",
     relatedSlug: "cyberbullying-detection-tool",
