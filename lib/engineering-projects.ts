@@ -6,8 +6,6 @@ export type EngineeringProject = {
   image: string;
   /** A project can live under more than one tab (e.g. both "research" and "ai"). */
   categories: string[];
-  /** Full-width hero treatment at the top of the Engineering grid. */
-  featured?: boolean;
   /** Longer copy shown only on the project's own detail page. */
   detail?: string;
   techStack?: string[];
@@ -36,15 +34,19 @@ export type EngineeringProject = {
   paperSlug?: string;
 };
 
+/**
+ * Selected work only: the AI Footprint Tracker, the Cyberbullying Detection
+ * Tool, the Legal Chatbot, the cross-border data transfer paper, and the
+ * unbiased hiring algorithms paper. The two paired-research entries
+ * (ai-decarbonization-research, online-safety-research) stay in the array
+ * because /engineering/[slug] still needs them to build each tool's combined
+ * research+product page, they just don't get a row of their own in the
+ * /engineering list.
+ */
 export const engineeringProjects: EngineeringProject[] = [
-  // AI Projects
-  // Note: featured entries render as slides in the carousel at the top of
-  // /engineering, in array order — tool+research pairs first, then the
-  // standalone research and tools.
   {
     categories: ["ai"],
     slug: "ai-footprint-tracker",
-    featured: true,
     title: "AI Footprint Tracker",
     subtitle: "Chrome Extension · AI Decarbonization",
     description:
@@ -59,32 +61,9 @@ export const engineeringProjects: EngineeringProject[] = [
     image: "/engineering/ai-footprint-dashboard.png",
   },
   {
-    categories: ["ai"],
-    slug: "cyberbullying-detection-tool",
-    featured: true,
-    title: "Cyberbullying Detection Tool",
-    subtitle: "Chrome Extension · For Entrepreneurs",
-    description: "A Chrome extension that detects cyberbullying and flags harmful content in real time as you browse.",
-    detail:
-      "A Chrome extension that detects cyberbullying and flags harmful content in real time as people browse social media, inspecting page text and highlighting offensive or unsafe material as it's found. It's the applied counterpart to my published paper, \"Cyberbullying Detection: An Integrated Natural Language Processing and Machine Learning Approach for Cybersafety,\" below.",
-    relatedSlug: "online-safety-research",
-    pairLabel: "Backed by research",
-    image: "/engineering/pure.png",
-  },
-  {
-    categories: ["research"],
-    slug: "cross-border-data-transfer",
-    paperSlug: "cross-border-data-transfer",
-    title: "Analyzing Inefficiencies in Current Cross-Border Data Transfer Laws",
-    subtitle: "Legal Frameworks, Data Protection",
-    description: "Examines the legal framework governing cross-border data transfers, focusing on key regulations like the GDPR, and proposes recommendations for improving legal efficiencies.",
-    image: "/engineering/data.png",
-  },
-  {
     categories: ["research", "ai"],
     slug: "ai-decarbonization-research",
     paperSlug: "democratization-decarbonization-ai",
-    featured: true,
     title: "Democratization and Decarbonization of AI Solutions",
     subtitle: "AI, Green-tech, Decarbonization",
     description: "Addresses two crucial challenges: the failure of many AI solutions to reach their intended users due to poor accessibility, and the environmental toll of AI development. Advocates for greener AI and explores edge computing as a key solution.",
@@ -95,56 +74,16 @@ export const engineeringProjects: EngineeringProject[] = [
   },
   {
     categories: ["ai"],
-    title: "Metal Detection Tool",
-    subtitle: "For Entrepreneurs",
-    description: "A web app that helps identify defect types on metals.",
-    image: "/engineering/DEFECTS.png",
+    slug: "cyberbullying-detection-tool",
+    title: "Cyberbullying Detection Tool",
+    subtitle: "Chrome Extension · For Entrepreneurs",
+    description: "A Chrome extension that detects cyberbullying and flags harmful content in real time as you browse.",
+    detail:
+      "A Chrome extension that detects cyberbullying and flags harmful content in real time as people browse social media, inspecting page text and highlighting offensive or unsafe material as it's found. It's the applied counterpart to my published paper, \"Cyberbullying Detection: An Integrated Natural Language Processing and Machine Learning Approach for Cybersafety,\" below.",
+    relatedSlug: "online-safety-research",
+    pairLabel: "Backed by research",
+    image: "/engineering/pure.png",
   },
-  {
-    categories: ["ai"],
-    title: "Business Structuring AI Tool",
-    subtitle: "For Entrepreneurs",
-    description: "Helps entrepreneurs find the right corporate structure for their business.",
-    image: "/engineering/business.png",
-  },
-
-  // Apps
-  {
-    categories: ["apps"],
-    title: "FinTech App",
-    subtitle: "Mobile App",
-    description: "Financial transactions app for customized cross-country transfers.",
-    image: "/engineering/finmate.png",
-  },
-  {
-    categories: ["apps"],
-    title: "Dietary App",
-    subtitle: "Web App",
-    description: "A dietary tracking app.",
-    image: "/engineering/Ba.png",
-  },
-  {
-    categories: ["apps"],
-    title: "Process Optimization with TSP",
-    subtitle: "Web App",
-    description: "A process optimization decision app built with the Traveling Salesman Problem technique.",
-    image: "/engineering/tsp.png",
-  },
-
-  // Websites
-  {
-    categories: ["websites"],
-    title: "Fashion E-commerce Site",
-    subtitle: "Online Store",
-    description: "A modern e-commerce website for selling fashion items.",
-    image: "/engineering/fashion.png",
-  },
-
-  // Research & Writing
-  // Note: "Democratization and Decarbonization of AI Solutions" is cross-listed
-  // here under Research & Writing too (see categories above) — it's featured
-  // and lives in the AI Projects block since it pairs directly with the AI
-  // Footprint Tracker extension.
   {
     categories: ["research", "ai"],
     slug: "online-safety-research",
@@ -157,6 +96,25 @@ export const engineeringProjects: EngineeringProject[] = [
     image: "/engineering/pure.png",
   },
   {
+    categories: ["ai"],
+    slug: "legal-chatbot",
+    title: "Legal Chatbot",
+    subtitle: "AI Chatbot · For Entrepreneurs",
+    description: "Helps entrepreneurs make the right early stage business legal decisions.",
+    detail:
+      "An AI chatbot that guides entrepreneurs through early-stage business legal decisions, the questions founders face before they can afford counsel: what structure to incorporate under, what agreements they need in place, and which regulatory obligations apply to what they're building. It turns those first legal calls from guesswork into a guided conversation.",
+    image: "/engineering/updatedteresya.png",
+  },
+  {
+    categories: ["research"],
+    slug: "cross-border-data-transfer",
+    paperSlug: "cross-border-data-transfer",
+    title: "Analyzing Inefficiencies in Current Cross-Border Data Transfer Laws",
+    subtitle: "Legal Frameworks, Data Protection",
+    description: "Examines the legal framework governing cross-border data transfers, focusing on key regulations like the GDPR, and proposes recommendations for improving legal efficiencies.",
+    image: "/engineering/data.png",
+  },
+  {
     categories: ["research"],
     slug: "unbiased-hiring-algorithms",
     paperSlug: "unbiased-hiring-algorithms",
@@ -164,16 +122,5 @@ export const engineeringProjects: EngineeringProject[] = [
     subtitle: "AI, Advanced Algorithms",
     description: "Develops a tool that addresses discriminatory elements in AI hiring processes while maintaining efficiency, for a more equitable and compliant hiring process.",
     image: "/engineering/hiring.png",
-  },
-  {
-    categories: ["ai"],
-    slug: "legal-chatbot",
-    featured: true,
-    title: "Legal Chatbot",
-    subtitle: "AI Chatbot · For Entrepreneurs",
-    description: "Helps entrepreneurs make the right early stage business legal decisions.",
-    detail:
-      "An AI chatbot that guides entrepreneurs through early-stage business legal decisions, the questions founders face before they can afford counsel: what structure to incorporate under, what agreements they need in place, and which regulatory obligations apply to what they're building. It turns those first legal calls from guesswork into a guided conversation.",
-    image: "/engineering/updatedteresya.png",
   },
 ];
