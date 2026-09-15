@@ -61,19 +61,10 @@ export default function EngineeringPage() {
           duplicated, just reused. */}
       <section className="section page-x" style={{ borderBottom: "1px solid var(--c-border)" }}>
         <div className="inner" style={{ maxWidth: "42rem" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "1.5rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "3rem" }}>
             <span style={{ display: "inline-block", width: "1.5rem", height: "1px", background: "var(--c-gold)" }} />
             <span className="t-label">Research</span>
           </div>
-          <h2 className="t-display t-display-lg" style={{ marginBottom: "1.25rem" }}>Research.</h2>
-
-          <p className="t-body" style={{ maxWidth: "36rem", marginBottom: "3rem" }}>
-            Four papers written between 2021 and now, across a UN fellowship, two universities, and a
-            Mercedes-Benz program. One of them, the cyberbullying detection paper, is formally published;
-            the rest were completed for their respective programs and are listed here on that basis. Together
-            they cover AI accessibility and its environmental cost, harmful content on social media, cross-border
-            data transfer law, and bias in hiring algorithms.
-          </p>
 
           <div style={{ borderTop: "1px solid var(--c-border)" }}>
             {PAPERS.map((paper) => {
