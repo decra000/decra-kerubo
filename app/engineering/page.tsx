@@ -14,6 +14,31 @@ export const metadata: Metadata = {
 export default function EngineeringPage() {
   return (
     <div style={{ background: "var(--c-bg)", paddingTop: "6rem" }}>
+      {/* ── Statement ──
+          Why this page exists, in Decra's own words, before any of the
+          work itself. */}
+      <section className="section page-x" style={{ borderBottom: "1px solid var(--c-border)" }}>
+        <div className="inner">
+          <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "1.5rem" }}>
+            <span style={{ display: "inline-block", width: "1.5rem", height: "1px", background: "var(--c-gold)" }} />
+            <span className="t-label">Engineering</span>
+          </div>
+          <h1
+            className="t-display"
+            style={{
+              fontFamily: "var(--font-serif)", fontWeight: 400,
+              fontSize: "clamp(1.3rem, 2.4vw, 1.9rem)", lineHeight: 1.5,
+              color: "var(--c-ink)", maxWidth: "42rem",
+            }}
+          >
+            Building tech is the easy part. What&apos;s hard is what it&apos;s built on, and how it&apos;s built.
+            I&apos;ve spent years reviewing tech products across industries for investment decisions, and that
+            work is what brought me here, into the infrastructure tech actually runs on, and the algorithms
+            sitting inside it.
+          </h1>
+        </div>
+      </section>
+
       {/* ── Grid ── */}
       <section className="section page-x">
         <div className="inner">

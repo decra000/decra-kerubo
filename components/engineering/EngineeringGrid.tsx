@@ -5,11 +5,10 @@ import { PaperLink } from "@/components/research/PaperLink";
 export type { EngineeringProject };
 
 /**
- * Single-column, image-led list: one big image, one plain title below it,
- * a hairline rule between entries, nothing else. Modeled directly on
- * https://oreoluwaayofisher.framer.website/portfolio.
+ * Image-led card: one big image, one plain title below it, nothing else.
+ * Laid out two per row.
  */
-function Row({ p, last }: { p: EngineeringProject; last: boolean }) {
+function Card({ p }: { p: EngineeringProject }) {
   const body = (
     <>
       <div style={{ aspectRatio: "2 / 1", overflow: "hidden", background: "var(--c-surface)" }}>
@@ -29,34 +28,31 @@ function Row({ p, last }: { p: EngineeringProject; last: boolean }) {
     </>
   );
 
-  const rowStyle: React.CSSProperties = {
-    display: "block", textDecoration: "none", width: "100%",
-    paddingBottom: "3.5rem", marginBottom: "3.5rem",
-    borderBottom: last ? "none" : "1px solid var(--c-border)",
-  };
+  const cardStyle: React.CSSProperties = { display: "block", textDecoration: "none", width: "100%" };
 
   if (p.paperSlug) {
-    return <PaperLink slug={p.paperSlug} style={rowStyle}>{body}</PaperLink>;
+    return <PaperLink slug={p.paperSlug} style={cardStyle}>{body}</PaperLink>;
   }
 
   return p.slug ? (
-    <Link href={`/engineering/${p.slug}`} style={rowStyle}>{body}</Link>
+    <Link href={`/engineering/${p.slug}`} style={cardStyle}>{body}</Link>
   ) : (
-    <div style={rowStyle}>{body}</div>
+    <div style={cardStyle}>{body}</div>
   );
 }
 
 export function EngineeringGrid({ projects }: { projects: EngineeringProject[] }) {
   // A research write-up paired to a tool (paperSlug + relatedSlug both set)
-  // is folded into that tool's own detail page instead of getting a row
+  // is folded into that tool's own detail page instead of getting a card
   // of its own here.
   const visible = projects.filter((p) => !(p.paperSlug && p.relatedSlug));
 
   return (
-    <div style={{ maxWidth: "42rem" }}>
-      {visible.map((p, i) => (
-        <Row key={p.title} p={p} last={i === visible.length - 1} />
-      ))}
+    <div className="eng-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", columnGap: "2.5rem", rowGap: "3.5rem" }}>
+      {visible.map((p) => <Card key={p.title} p={p} />)}
+      <style>{`
+        @media(max-width: 700px){ .eng-grid{ grid-template-columns: 1fr !important; } }
+      `}</style>
     </div>
   );
 }
