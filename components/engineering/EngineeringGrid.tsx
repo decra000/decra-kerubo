@@ -6,7 +6,6 @@ export type { EngineeringProject };
 
 /**
  * Image-led card: one big image, one plain title below it, nothing else.
- * Laid out two per row.
  */
 function Card({ p }: { p: EngineeringProject }) {
   const body = (
@@ -48,11 +47,8 @@ export function EngineeringGrid({ projects }: { projects: EngineeringProject[] }
   const visible = projects.filter((p) => !(p.paperSlug && p.relatedSlug));
 
   return (
-    <div className="eng-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", columnGap: "2.5rem", rowGap: "3.5rem" }}>
+    <div style={{ maxWidth: "42rem", display: "flex", flexDirection: "column", gap: "3.5rem" }}>
       {visible.map((p) => <Card key={p.title} p={p} />)}
-      <style>{`
-        @media(max-width: 700px){ .eng-grid{ grid-template-columns: 1fr !important; } }
-      `}</style>
     </div>
   );
 }
