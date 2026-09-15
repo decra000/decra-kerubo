@@ -448,7 +448,7 @@ function BookPageInner() {
             <div className="consult-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem", marginBottom: "2rem" }}>
               {CONSULTATION_TYPES.map((type) => (
                 <button key={type.id} onClick={() => setSelectedType(type.id)}
-                  style={{ textAlign: "left", padding: "1.25rem", borderRadius: "12px", border: `1.5px solid ${selectedType === type.id ? "var(--c-forest)" : "var(--c-border)"}`, background: selectedType === type.id ? "rgba(14,61,50,0.04)" : "transparent", cursor: "pointer", transition: "border-color 0.2s" }}
+                  style={{ textAlign: "left", padding: "1.25rem", borderRadius: 0, border: `1.5px solid ${selectedType === type.id ? "var(--c-forest)" : "var(--c-border)"}`, background: selectedType === type.id ? "rgba(14,61,50,0.04)" : "transparent", cursor: "pointer", transition: "border-color 0.2s" }}
                 >
                   <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", marginBottom: "0.4rem" }}>
                     <Clock size={11} style={{ color: "var(--c-gold)" }} />
@@ -485,7 +485,7 @@ function BookPageInner() {
                 <div className="time-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "0.6rem" }}>
                   {TIME_SLOTS.map(slot => (
                     <button key={slot.value} onClick={() => setSelectedTime(slot.value)}
-                      style={{ padding: "0.65rem", borderRadius: "8px", border: `1px solid ${selectedTime === slot.value ? "var(--c-forest)" : "var(--c-border)"}`, background: selectedTime === slot.value ? "var(--c-forest)" : "transparent", color: selectedTime === slot.value ? "white" : "var(--c-ink-mid)", fontSize: "0.775rem", cursor: "pointer", fontFamily: "var(--font-manjari)", transition: "all 0.2s" }}
+                      style={{ padding: "0.65rem", borderRadius: 0, border: `1px solid ${selectedTime === slot.value ? "var(--c-forest)" : "var(--c-border)"}`, background: selectedTime === slot.value ? "var(--c-forest)" : "transparent", color: selectedTime === slot.value ? "white" : "var(--c-ink-mid)", fontSize: "0.775rem", cursor: "pointer", fontFamily: "var(--font-manjari)", transition: "all 0.2s" }}
                     >{slot.label}</button>
                   ))}
                 </div>
@@ -512,11 +512,11 @@ function BookPageInner() {
                 <p className="t-label" style={{ marginBottom: "0.75rem" }}>How would you like to pay?</p>
                 <div style={{ display: "flex", gap: "0.6rem", marginBottom: "1.25rem" }}>
                   <button onClick={() => { setManualChannel("mpesa"); setManualRef(""); setPayError(""); }}
-                    style={{ flex: 1, padding: "0.6rem", borderRadius: "8px", border: `1.5px solid ${manualChannel === "mpesa" ? "var(--c-forest)" : "var(--c-border)"}`, background: manualChannel === "mpesa" ? "rgba(14,61,50,0.04)" : "transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.4rem", fontFamily: "var(--font-manjari)", fontSize: "0.75rem", fontWeight: 700, color: "var(--c-forest)" }}>
+                    style={{ flex: 1, padding: "0.6rem", borderRadius: 0, border: `1.5px solid ${manualChannel === "mpesa" ? "var(--c-forest)" : "var(--c-border)"}`, background: manualChannel === "mpesa" ? "rgba(14,61,50,0.04)" : "transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.4rem", fontFamily: "var(--font-manjari)", fontSize: "0.75rem", fontWeight: 700, color: "var(--c-forest)" }}>
                     <Smartphone size={12} /> M-Pesa
                   </button>
                   <button onClick={() => { setManualChannel("bank"); setManualRef(""); setPayError(""); }}
-                    style={{ flex: 1, padding: "0.6rem", borderRadius: "8px", border: `1.5px solid ${manualChannel === "bank" ? "var(--c-forest)" : "var(--c-border)"}`, background: manualChannel === "bank" ? "rgba(14,61,50,0.04)" : "transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.4rem", fontFamily: "var(--font-manjari)", fontSize: "0.75rem", fontWeight: 700, color: "var(--c-forest)" }}>
+                    style={{ flex: 1, padding: "0.6rem", borderRadius: 0, border: `1.5px solid ${manualChannel === "bank" ? "var(--c-forest)" : "var(--c-border)"}`, background: manualChannel === "bank" ? "rgba(14,61,50,0.04)" : "transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.4rem", fontFamily: "var(--font-manjari)", fontSize: "0.75rem", fontWeight: 700, color: "var(--c-forest)" }}>
                     <Landmark size={12} /> Bank Transfer
                   </button>
                 </div>

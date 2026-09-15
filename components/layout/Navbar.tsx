@@ -80,7 +80,7 @@ export function Navbar() {
             ))}
             <Link href="/book" className="nav-cta" style={{
               ...lk, color: "var(--c-bg)", background: "var(--c-ink)",
-              padding: "0.55rem 1rem", borderRadius: "2px",
+              padding: "0.55rem 1rem", borderRadius: 0,
             }}
               onMouseEnter={e => (e.currentTarget as HTMLElement).style.opacity = "0.82"}
               onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = "1"}>
@@ -134,7 +134,7 @@ export function Navbar() {
             ))}
             <Link href="/book" onClick={() => setMob(false)} className="nav-cta" style={{
               ...lk, fontSize: "0.75rem", color: "var(--c-bg)", background: "var(--c-ink)",
-              padding: "0.7rem 1rem", borderRadius: "2px", textAlign: "center",
+              padding: "0.7rem 1rem", borderRadius: 0, textAlign: "center",
             }}>
               Talk
             </Link>

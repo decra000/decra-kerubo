@@ -91,7 +91,7 @@ export default function EngineeringPage() {
               background: "var(--c-forest)", color: "rgba(248,246,241,0.95)",
               fontFamily: "var(--font-manjari)", fontWeight: 700,
               fontSize: "0.68rem", letterSpacing: "0.1em", textTransform: "uppercase",
-              padding: "0.9rem 1.6rem", borderRadius: "100px",
+              padding: "0.9rem 1.6rem", borderRadius: 0,
               textDecoration: "none", whiteSpace: "nowrap", flexShrink: 0,
             }}
           >

@@ -865,7 +865,7 @@ function WorkWithDecra() {
                                     background: selected ? "var(--c-accent)" : "var(--c-surface)",
                                     color: selected ? "#0A0A0A" : "var(--c-ink)",
                                     border: `1px solid ${selected ? "var(--c-accent)" : "var(--c-border-strong)"}`,
-                                    borderRadius: "999px", padding: "0.45rem 0.9rem", cursor: "pointer",
+                                    borderRadius: 0, padding: "0.45rem 0.9rem", cursor: "pointer",
                                     fontFamily: "var(--font-sans)", fontSize: "0.76rem", fontWeight: 500,
                                     transition: "all 0.15s ease",
                                   }}
@@ -880,7 +880,7 @@ function WorkWithDecra() {
                                 style={{
                                   display: "inline-flex", alignItems: "center", gap: "0.35rem",
                                   background: "var(--c-ink)", color: "var(--c-bg)",
-                                  border: "none", borderRadius: "999px", padding: "0.45rem 1rem", cursor: "pointer",
+                                  border: "none", borderRadius: 0, padding: "0.45rem 1rem", cursor: "pointer",
                                   fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.62rem",
                                   letterSpacing: "0.08em", textTransform: "uppercase",
                                 }}
@@ -896,7 +896,7 @@ function WorkWithDecra() {
                             style={{
                               display: "inline-flex", alignItems: "center", gap: "0.4rem",
                               background: "none", color: "var(--c-accent)",
-                              border: "1px solid var(--c-accent)", borderRadius: "999px",
+                              border: "1px solid var(--c-accent)", borderRadius: 0,
                               padding: "0.4rem 0.9rem", cursor: "pointer",
                               fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.62rem",
                               letterSpacing: "0.08em", textTransform: "uppercase",
@@ -915,7 +915,7 @@ function WorkWithDecra() {
                                 <a href="/book" style={{
                                   display: "inline-flex", alignItems: "center", gap: "0.4rem",
                                   background: "var(--c-accent)", color: "var(--c-bg)", textDecoration: "none",
-                                  border: "none", borderRadius: "999px", padding: "0.5rem 1rem",
+                                  border: "none", borderRadius: 0, padding: "0.5rem 1rem",
                                   fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.68rem",
                                   letterSpacing: "0.06em",
                                 }}>
@@ -924,7 +924,7 @@ function WorkWithDecra() {
                                 <button onClick={() => setFallbackFormOpen(true)} style={{
                                   display: "inline-flex", alignItems: "center", gap: "0.4rem",
                                   background: "none", color: "var(--c-ink)",
-                                  border: "1px solid var(--c-border-strong)", borderRadius: "999px", padding: "0.5rem 1rem",
+                                  border: "1px solid var(--c-border-strong)", borderRadius: 0, padding: "0.5rem 1rem",
                                   cursor: "pointer", fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.68rem",
                                   letterSpacing: "0.06em",
                                 }}>
@@ -943,7 +943,7 @@ function WorkWithDecra() {
                                   style={{
                                     display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "0.4rem",
                                     background: "var(--c-accent)", color: "var(--c-bg)",
-                                    border: "none", borderRadius: "999px", padding: "0.55rem 1rem",
+                                    border: "none", borderRadius: 0, padding: "0.55rem 1rem",
                                     cursor: "pointer", opacity: (!fallbackForm.name.trim() || !fallbackForm.email.trim() || fallbackSending) ? 0.5 : 1,
                                     fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.68rem", letterSpacing: "0.06em",
                                   }}
@@ -1180,7 +1180,7 @@ function TechDevSection() {
             display: "flex", alignItems: "center", justifyContent: "center", gap: "0.6rem",
             width: "100%", padding: "1.15rem 2.25rem",
             background: "var(--c-accent)", color: "var(--c-bg)",
-            border: "none", borderRadius: "3px", cursor: "pointer",
+            border: "none", borderRadius: 0, cursor: "pointer",
             fontFamily: "var(--font-manjari)", fontWeight: 700,
             fontSize: "0.68rem", letterSpacing: "0.2em", textTransform: "uppercase",
             transition: "opacity 0.2s",

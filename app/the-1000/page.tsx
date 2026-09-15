@@ -124,7 +124,7 @@ export default function The1000Page() {
             href="https://open.spotify.com/show/nove"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "1.5rem", background: "#0E3D32", borderRadius: "14px", padding: "1.4rem 1.75rem", textDecoration: "none", border: "1px solid rgba(30,215,96,0.15)" }}
+            style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "1.5rem", background: "#0E3D32", borderRadius: 0, padding: "1.4rem 1.75rem", textDecoration: "none", border: "1px solid rgba(30,215,96,0.15)" }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "1.25rem" }}>
               {/* Spotify icon SVG */}
@@ -192,7 +192,7 @@ export default function The1000Page() {
               </p>
             </div>
             <a href="mailto:the1000@decrakero.com?subject=Case%20Submission"
-              style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem", background: "var(--c-gold)", color: "var(--c-forest)", fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.75rem", letterSpacing: "0.08em", padding: "0.75rem 1.6rem", borderRadius: "100px", textDecoration: "none", whiteSpace: "nowrap" }}>
+              style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem", background: "var(--c-gold)", color: "var(--c-forest)", fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.75rem", letterSpacing: "0.08em", padding: "0.75rem 1.6rem", borderRadius: 0, textDecoration: "none", whiteSpace: "nowrap" }}>
               Submit a Case <ArrowUpRight size={13} />
             </a>
           </div>

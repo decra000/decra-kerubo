@@ -185,7 +185,7 @@ export default function AdminPage() {
             disabled={marking === b.id}
             style={{
               fontSize: "0.66rem", fontWeight: 700, letterSpacing: "0.05em", textTransform: "uppercase",
-              background: "var(--c-forest)", color: "#fff", border: "none", borderRadius: "999px",
+              background: "var(--c-forest)", color: "#fff", border: "none", borderRadius: 0,
               padding: "0.35rem 0.8rem", cursor: "pointer", opacity: marking === b.id ? 0.6 : 1, whiteSpace: "nowrap",
             }}
           >
@@ -202,7 +202,7 @@ export default function AdminPage() {
               disabled={marking === b.id}
               style={{
                 fontSize: "0.66rem", fontWeight: 700, letterSpacing: "0.05em", textTransform: "uppercase",
-                background: "var(--c-ink)", color: "var(--c-bg)", border: "none", borderRadius: "999px",
+                background: "var(--c-ink)", color: "var(--c-bg)", border: "none", borderRadius: 0,
                 padding: "0.35rem 0.8rem", cursor: "pointer", opacity: marking === b.id ? 0.6 : 1,
               }}
             >
@@ -224,7 +224,7 @@ export default function AdminPage() {
           style={{
             display: "inline-flex", alignItems: "center", gap: "0.35rem", whiteSpace: "nowrap",
             fontSize: "0.66rem", fontWeight: 700, letterSpacing: "0.05em", textTransform: "uppercase",
-            color: "var(--c-accent)", border: "1px solid var(--c-border-strong)", borderRadius: "999px",
+            color: "var(--c-accent)", border: "1px solid var(--c-border-strong)", borderRadius: 0,
             padding: "0.35rem 0.8rem", textDecoration: "none",
           }}
         >
@@ -265,7 +265,7 @@ export default function AdminPage() {
             disabled={loading}
             style={{
               display: "flex", alignItems: "center", gap: "0.4rem",
-              background: "none", border: "1px solid var(--c-border-strong)", borderRadius: "999px",
+              background: "none", border: "1px solid var(--c-border-strong)", borderRadius: 0,
               padding: "0.4rem 0.85rem", fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.08em",
               textTransform: "uppercase", color: "var(--c-ink-muted)", cursor: "pointer",
             }}

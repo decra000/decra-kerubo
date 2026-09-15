@@ -151,7 +151,7 @@ export function PaperViewer({ paper, onClose }: { paper: Paper; onClose: () => v
             onClick={() => setShowAbstract(a => !a)}
             style={{
               display: "inline-flex", alignItems: "center", gap: "0.35rem",
-              background: "none", border: "1px solid rgba(240,237,232,0.2)", borderRadius: "999px",
+              background: "none", border: "1px solid rgba(240,237,232,0.2)", borderRadius: 0,
               cursor: "pointer", color: showAbstract ? "#5FA98F" : "rgba(240,237,232,0.55)",
               fontFamily: "var(--font-manjari)", fontWeight: 700,
               fontSize: "0.55rem", letterSpacing: "0.14em", textTransform: "uppercase",

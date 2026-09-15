@@ -71,7 +71,7 @@ export function AiFallbackForm({
         disabled={!form.name.trim() || !form.email.trim() || sending}
         style={{
           display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "0.4rem",
-          background: "var(--c-accent)", color: "var(--c-bg)", border: "none", borderRadius: "999px",
+          background: "var(--c-accent)", color: "var(--c-bg)", border: "none", borderRadius: 0,
           padding: "0.6rem 1rem", cursor: "pointer",
           opacity: (!form.name.trim() || !form.email.trim() || sending) ? 0.5 : 1,
           fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.68rem", letterSpacing: "0.06em",

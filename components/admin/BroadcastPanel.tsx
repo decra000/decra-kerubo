@@ -183,7 +183,7 @@ export function BroadcastPanel({ password }: { password: string }) {
           onClick={toggleHistory}
           style={{
             display: "flex", alignItems: "center", gap: "0.4rem", flexShrink: 0,
-            background: "none", border: "1px solid var(--c-border-strong)", borderRadius: "999px",
+            background: "none", border: "1px solid var(--c-border-strong)", borderRadius: 0,
             padding: "0.4rem 0.85rem", fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.08em",
             textTransform: "uppercase", color: "var(--c-ink-muted)", cursor: "pointer",
           }}
