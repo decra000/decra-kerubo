@@ -44,9 +44,9 @@ export default function EngineeringPage() {
               }}
             >
               Building tech is the easy part. What&apos;s hard is what it&apos;s built on, and how it&apos;s built.
-              I have reviewed over 300 tech startups in Africa for investment decisions, and that work is what
-              brought me here, into the infrastructure tech actually runs on, and the algorithms sitting inside
-              it.
+              I have reviewed 500+ tech products during my work at FELS, Eleva8or, and ELP (defunct), and that
+              work is what brought me here, into the infrastructure tech actually runs on, and the algorithms
+              sitting inside it.
             </h1>
           </div>
         </div>
