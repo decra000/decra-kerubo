@@ -18,25 +18,40 @@ export default function EngineeringPage() {
           Why this page exists, in Decra's own words, before any of the
           work itself. */}
       <section className="section page-x" style={{ borderBottom: "1px solid var(--c-border)" }}>
-        <div className="inner">
-          <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "1.5rem" }}>
-            <span style={{ display: "inline-block", width: "1.5rem", height: "1px", background: "var(--c-gold)" }} />
-            <span className="t-label">Engineering</span>
-          </div>
-          <h1
-            className="t-display"
+        <div className="inner eng-statement-row" style={{ display: "flex", alignItems: "flex-start", gap: "clamp(2rem, 5vw, 4rem)", flexWrap: "wrap" }}>
+          <img
+            src="/decra-about-portrait.jpg"
+            alt="Decra Kerubo"
             style={{
-              fontFamily: "var(--font-serif)", fontWeight: 400,
-              fontSize: "clamp(1.3rem, 2.4vw, 1.9rem)", lineHeight: 1.5,
-              color: "var(--c-ink)", maxWidth: "42rem",
+              flex: "0 0 clamp(200px, 24vw, 300px)", width: "clamp(200px, 24vw, 300px)", height: "auto",
+              border: "1px solid var(--c-border-strong)", borderRadius: 0, display: "block",
             }}
-          >
-            Building tech is the easy part. What&apos;s hard is what it&apos;s built on, and how it&apos;s built.
-            I&apos;ve spent years reviewing tech products across industries for investment decisions, and that
-            work is what brought me here, into the infrastructure tech actually runs on, and the algorithms
-            sitting inside it.
-          </h1>
+          />
+          <div style={{ flex: "1 1 320px", minWidth: 0 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "1.5rem" }}>
+              <span style={{ display: "inline-block", width: "1.5rem", height: "1px", background: "var(--c-gold)" }} />
+              <span className="t-label">Engineering</span>
+            </div>
+            <h1
+              className="t-display"
+              style={{
+                fontFamily: "var(--font-serif)", fontWeight: 400,
+                fontSize: "clamp(1.3rem, 2.4vw, 1.9rem)", lineHeight: 1.5,
+                color: "var(--c-ink)", maxWidth: "42rem",
+              }}
+            >
+              Building tech is the easy part. What&apos;s hard is what it&apos;s built on, and how it&apos;s built.
+              I&apos;ve spent years reviewing tech products across industries for investment decisions, and that
+              work is what brought me here, into the infrastructure tech actually runs on, and the algorithms
+              sitting inside it.
+            </h1>
+          </div>
         </div>
+        <style>{`
+          @media (max-width: 640px) {
+            .eng-statement-row img { flex-basis: 160px !important; width: 160px !important; }
+          }
+        `}</style>
       </section>
 
       {/* ── Grid ── */}

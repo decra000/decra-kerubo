@@ -242,41 +242,17 @@ function About() {
   const { ref, vis } = useReveal();
   return (
     <section id="about" ref={ref as React.RefObject<HTMLElement>} style={SEC}>
-      <div style={{
-        maxWidth: "var(--max-w)", margin: "0 auto",
-        display: "flex", alignItems: "center", gap: "clamp(2rem, 5vw, 4rem)", flexWrap: "wrap",
-      }} className="about-row">
-        <div
-          className="about-photo"
-          style={{
-            flex: "0 0 clamp(180px, 22vw, 260px)", aspectRatio: "3 / 2", overflow: "hidden",
-            ...reveal(vis, { dir: "left", distance: 16, delay: 0.05 }),
-          }}
-        >
-          <img
-            src="/decra-about-portrait.jpg"
-            alt="Decra Kerubo"
-            style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 3%", display: "block" }}
-          />
-        </div>
-        <div style={{ flex: "1 1 320px", minWidth: 0 }}>
-          <p style={{ ...LBL, marginBottom: "1.25rem", ...fade(vis) }}>Parallel Technical & Legal Direction</p>
-          <p style={{
-            ...SERIF("clamp(1.2rem,1.7vw,1.45rem)"),
-            maxWidth: "820px",
-            lineHeight: 1.6,
-            ...reveal(vis, { dir: "scale", distance: 10, delay: 0.1 }),
-          }}>
+      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
+        <p style={{ ...LBL, marginBottom: "1.25rem", ...fade(vis) }}>Parallel Technical & Legal Direction</p>
+        <p style={{
+          ...SERIF("clamp(1.2rem,1.7vw,1.45rem)"),
+          maxWidth: "820px",
+          lineHeight: 1.6,
+          ...reveal(vis, { dir: "scale", distance: 10, delay: 0.05 }),
+        }}>
 I codevelop with and guide technology developers towards safe and compliant tech. I help investors and procurers buy compliant, safe and scalable tech, through immersive technical audits and legal health assurance.
-          </p>
-        </div>
+        </p>
       </div>
-      <style>{`
-        @media (max-width: 640px) {
-          .about-row { flex-direction: column; align-items: flex-start !important; }
-          .about-photo { flex-basis: 180px !important; }
-        }
-      `}</style>
     </section>
   );
 }
