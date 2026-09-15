@@ -25,12 +25,14 @@ export default function EngineeringPage() {
             style={{
               flex: "0 0 clamp(200px, 24vw, 300px)", width: "clamp(200px, 24vw, 300px)", height: "auto",
               border: "1px solid var(--c-border-strong)", borderRadius: 0, display: "block",
+              WebkitMaskImage: "linear-gradient(to bottom, black 50%, transparent 100%)",
+              maskImage: "linear-gradient(to bottom, black 50%, transparent 100%)",
             }}
           />
           <div style={{ flex: "1 1 320px", minWidth: 0 }}>
             <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "1.5rem" }}>
               <span style={{ display: "inline-block", width: "1.5rem", height: "1px", background: "var(--c-gold)" }} />
-              <span className="t-label">Engineering</span>
+              <span className="t-label">Engineering &middot; Technology Lawyer | Advocate Trainee</span>
             </div>
             <h1
               className="t-display"
@@ -41,9 +43,9 @@ export default function EngineeringPage() {
               }}
             >
               Building tech is the easy part. What&apos;s hard is what it&apos;s built on, and how it&apos;s built.
-              I&apos;ve spent years reviewing tech products across industries for investment decisions, and that
-              work is what brought me here, into the infrastructure tech actually runs on, and the algorithms
-              sitting inside it.
+              I have reviewed over 300 tech startups in Africa for investment decisions, and that work is what
+              brought me here, into the infrastructure tech actually runs on, and the algorithms sitting inside
+              it.
             </h1>
           </div>
         </div>

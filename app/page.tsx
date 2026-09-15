@@ -423,7 +423,7 @@ function extractOptions(raw: string): { text: string; options?: { items: string[
 }
 
 const ENGAGE_GROUPS = [
-  { key: "startup-founders", label: "Startup Founders", opening: "Hi, I'm a founder or builder looking for help with incorporation, equity, fundraising, or startup advisory." },
+  { key: "startup-founders", label: "Techpreneurs", opening: "Hi, I'm a founder or builder looking for help with incorporation, equity, fundraising, or startup advisory." },
   { key: "technology-companies", label: "Technology Companies", opening: "Hi, I work at a tech company and need support with regulatory compliance, data protection, or product legal review." },
   { key: "law-firms", label: "Law Firms", opening: "Hi, I represent a law firm interested in working with Decra on technology law advisory or compliance." },
   { key: "innovation-ecosystems", label: "Innovation Ecosystems", opening: "Hi, I'm with an investor, incubator, accelerator, or ecosystem body and would like to discuss legal support or partnership opportunities." },
