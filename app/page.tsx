@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { ArrowRight, ChevronDown, X, Mic, Volume2, VolumeX, RefreshCw } from "lucide-react";
 import { useSpeech } from "@/hooks/useSpeech";
-import { ResearchSlides } from "@/components/research/ResearchSlides";
 import { SERVICE_GROUPS } from "@/lib/services";
 
 /* ── helpers ── */
@@ -1001,117 +1000,6 @@ function WorkWithDecra() {
   );
 }
 
-/* ── Section 7: Research ── */
-/* Paper type, PAPERS array, and the PaperViewer modal now live in
-   lib/papers.ts and components/research/PaperViewer.tsx, shared with the
-   Engineering page's paired research cards, imported at the top of this file. */
-
-function ResearchSection() {
-  const { ref, vis } = useReveal();
-  const [open, setOpen] = useState(false);
-
-  // The panel is collapsed by default, which makes it easy to walk straight
-  // past. Anyone who actually asks for Research — the nav link, the footer,
-  // a shared /#research URL — gets it opened and scrolled to for them.
-  useEffect(() => {
-    // The delay matters: Next runs its own scroll handling as part of the
-    // navigation, so scrolling immediately on click just gets overridden.
-    // Waiting lets that settle, and gives the panel time to start expanding
-    // so we aren't scrolling to a still-collapsed section.
-    const openAndReveal = (delay: number) => {
-      setOpen(true);
-      window.setTimeout(() => {
-        ref.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, delay);
-    };
-
-    // Landing directly on /#research, or arriving via back/forward.
-    const onHash = () => { if (window.location.hash === "#research") openAndReveal(80); };
-
-    // Next's <Link> navigates with history.pushState, which fires neither
-    // hashchange nor popstate — so an in-app click on "Research" has to be
-    // caught as a click. Covers the navbar, the footer, and anything else
-    // pointing at the section.
-    const onClick = (e: MouseEvent) => {
-      const anchor = (e.target as HTMLElement | null)?.closest?.("a");
-      if (!anchor) return;
-      const href = anchor.getAttribute("href") || "";
-      if (href === "#research" || href.endsWith("/#research")) openAndReveal(260);
-    };
-
-    onHash();
-    window.addEventListener("hashchange", onHash);
-    document.addEventListener("click", onClick);
-    return () => {
-      window.removeEventListener("hashchange", onHash);
-      document.removeEventListener("click", onClick);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // scrollMarginTop keeps the heading clear of the fixed navbar when the
-  // section is scrolled into view.
-  return (
-    <section id="research" ref={ref as React.RefObject<HTMLElement>} style={{ ...SEC, textAlign: "center", scrollMarginTop: "5rem" }}>
-      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto", ...fade(vis) }}>
-        <button
-          onClick={() => setOpen(o => !o)}
-          className="research-toggle-btn"
-          style={{
-            display: "flex", alignItems: "center", justifyContent: "center", gap: "0.6rem",
-            width: "100%", padding: "1.15rem 2.25rem",
-            background: "var(--c-research-btn-bg)", color: "var(--c-research-btn-text)",
-            border: "none", borderRadius: "3px", cursor: "pointer",
-            fontFamily: "var(--font-manjari)", fontWeight: 700,
-            fontSize: "0.68rem", letterSpacing: "0.2em", textTransform: "uppercase",
-            transition: "opacity 0.2s",
-          }}
-          onMouseEnter={e => (e.currentTarget as HTMLElement).style.opacity = "0.85"}
-          onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = "1"}
-        >
-          Technology Law Research <ArrowRight size={12} strokeWidth={1.5} style={{ transform: open ? "rotate(90deg)" : "none", transition: "transform 0.25s ease" }} />
-        </button>
-        <style>{`
-          .research-explore-btn:hover { border-color: var(--c-accent) !important; color: var(--c-accent) !important; }
-        `}</style>
-
-        <div style={{
-          maxHeight: open ? "108rem" : "0px",
-          opacity: open ? 1 : 0,
-          overflow: "hidden",
-          transition: "max-height 0.6s cubic-bezier(0.16,1,0.3,1), opacity 0.45s ease",
-          marginTop: open ? "2.5rem" : "0px",
-        }}>
-          <p style={{ ...LBL, textAlign: "left", marginBottom: "1.5rem" }}>Research &amp; the products it powers</p>
-
-          {/* One card per research effort, paper + the tool it produced */}
-          <ResearchSlides />
-
-          {/* The listed work is a selection, Engineering is no longer in the
-              nav, so this is how someone gets to the full set of builds. */}
-          <div style={{ display: "flex", justifyContent: "center", marginTop: "2.75rem" }}>
-            <Link
-              href="/engineering"
-              className="research-explore-btn"
-              style={{
-                display: "inline-flex", alignItems: "center", gap: "0.6rem",
-                fontFamily: "var(--font-manjari)", fontWeight: 700,
-                fontSize: "0.65rem", letterSpacing: "0.2em", textTransform: "uppercase",
-                color: "var(--c-ink)", textDecoration: "none",
-                background: "transparent", border: "1px solid var(--c-border-strong)",
-                padding: "0.9rem 1.75rem",
-                transition: "border-color 0.25s ease, color 0.25s ease",
-              }}
-            >
-              Explore more <ArrowRight size={12} strokeWidth={1.5} />
-            </Link>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 /* ── Section 8: Education & Training ── */
 type Cred = { key: string; src: string; name: string; detail: string; tier: 1 | 2 | 3 };
 
@@ -1314,7 +1202,6 @@ export default function Home() {
       <Hero />
       <About />
       <Services />
-      <ResearchSection />
       {/* Tech Development section temporarily hidden, TechDevSection component preserved below, just not rendered.
       <TechDevSection /> */}
       <Accreditations />
