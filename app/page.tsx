@@ -249,17 +249,17 @@ function About() {
         <div
           className="about-photo"
           style={{
-            flex: "0 0 clamp(180px, 22vw, 260px)", aspectRatio: "4 / 5", overflow: "hidden",
+            flex: "0 0 clamp(180px, 22vw, 260px)", aspectRatio: "3 / 2", overflow: "hidden",
             ...reveal(vis, { dir: "left", distance: 16, delay: 0.05 }),
           }}
         >
           <img
             src="/decra-about-portrait.jpg"
             alt="Decra Kerubo"
-            style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 20%", display: "block" }}
+            style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 3%", display: "block" }}
           />
         </div>
-        <div style={{ flex: "1 1 320px" }}>
+        <div style={{ flex: "1 1 320px", minWidth: 0 }}>
           <p style={{ ...LBL, marginBottom: "1.25rem", ...fade(vis) }}>Parallel Technical & Legal Direction</p>
           <p style={{
             ...SERIF("clamp(1.2rem,1.7vw,1.45rem)"),
