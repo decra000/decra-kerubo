@@ -72,6 +72,15 @@ export const engineeringProjects: EngineeringProject[] = [
     image: "/engineering/pure.png",
   },
   {
+    categories: ["research"],
+    slug: "cross-border-data-transfer",
+    paperSlug: "cross-border-data-transfer",
+    title: "Analyzing Inefficiencies in Current Cross-Border Data Transfer Laws",
+    subtitle: "Legal Frameworks, Data Protection",
+    description: "Examines the legal framework governing cross-border data transfers, focusing on key regulations like the GDPR, and proposes recommendations for improving legal efficiencies.",
+    image: "/engineering/data.png",
+  },
+  {
     categories: ["research", "ai"],
     slug: "ai-decarbonization-research",
     paperSlug: "democratization-decarbonization-ai",
@@ -146,15 +155,6 @@ export const engineeringProjects: EngineeringProject[] = [
     relatedSlug: "cyberbullying-detection-tool",
     pairLabel: "Powers a shipped tool",
     image: "/engineering/pure.png",
-  },
-  {
-    categories: ["research"],
-    slug: "cross-border-data-transfer",
-    paperSlug: "cross-border-data-transfer",
-    title: "Analyzing Inefficiencies in Current Cross-Border Data Transfer Laws",
-    subtitle: "Legal Frameworks, Data Protection",
-    description: "Examines the legal framework governing cross-border data transfers, focusing on key regulations like the GDPR, and proposes recommendations for improving legal efficiencies.",
-    image: "/engineering/data.png",
   },
   {
     categories: ["research"],
