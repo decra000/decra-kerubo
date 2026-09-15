@@ -11,7 +11,7 @@ export type { EngineeringProject };
 function Card({ p }: { p: EngineeringProject }) {
   const body = (
     <>
-      <div style={{ aspectRatio: "2 / 1", overflow: "hidden", background: "var(--c-surface)" }}>
+      <div style={{ aspectRatio: "2 / 1", overflow: "hidden", background: "var(--c-surface)", border: "1px solid var(--c-border-strong)", borderRadius: 0 }}>
         <img
           src={p.image}
           alt={p.title}
