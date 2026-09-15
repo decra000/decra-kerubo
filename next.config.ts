@@ -36,6 +36,14 @@ const nextConfig: NextConfig = {
         destination: "/services/product-legal-commercialization",
         permanent: true,
       },
+      // Research folded into Engineering, one page for both rather than two.
+      // /research shipped and was in the sitemap for one push, so it
+      // redirects rather than 404s.
+      {
+        source: "/research",
+        destination: "/engineering",
+        permanent: true,
+      },
     ];
   },
 };

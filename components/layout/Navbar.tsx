@@ -4,16 +4,14 @@ import Link from "next/link";
 import { Sun, Moon, Menu, X } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
 
+// About and Capabilities dropped: both are still on the homepage, just no
+// longer linked from here. Engineering and Research now share one page and
+// one nav entry, so there's no separate slot for either any more, /art
+// stays live and stays in the sitemap, it just isn't surfaced here either.
 const links = [
-  { href: "/#about",       label: "About" },
-  { href: "/#services",   label: "Capabilities" },
-  { href: "/research",    label: "Research" },
+  { href: "/engineering",  label: "Innovation-Research" },
   { href: "/#collaborate", label: "Collaborate" },
 ];
-
-// Engineering is the top-level destination over the hero again. /art stays
-// live and stays in the sitemap, it just isn't surfaced here.
-const featureLink = { href: "/engineering", label: "Engineering" };
 
 const lk: React.CSSProperties = {
   fontFamily: "var(--font-manjari)", fontWeight: 700,
@@ -104,11 +102,6 @@ export function Navbar() {
               onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.color = "var(--c-ink)"; el.style.borderColor = "var(--c-border-strong)"; el.style.transform = "rotate(0deg)"; }}>
               {theme === "dark" ? <Sun size={14} strokeWidth={1.7} /> : <Moon size={14} strokeWidth={1.7} />}
             </button>
-            <Link href={featureLink.href} className="nav-link" style={lk}
-              onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"}
-              onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink-mid)"}>
-              {featureLink.label}
-            </Link>
           </nav>
 
           <div className="nav-mob-btn" style={{ display: "none", alignItems: "center", gap: "1rem" }}>
@@ -139,11 +132,6 @@ export function Navbar() {
                 {l.label}
               </Link>
             ))}
-            <Link href={featureLink.href} onClick={() => setMob(false)} className="nav-link" style={{ ...lk, fontSize: "0.75rem" }}
-              onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"}
-              onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink-mid)"}>
-              {featureLink.label}
-            </Link>
             <Link href="/book" onClick={() => setMob(false)} className="nav-cta" style={{
               ...lk, fontSize: "0.75rem", color: "var(--c-bg)", background: "var(--c-ink)",
               padding: "0.7rem 1rem", borderRadius: "2px", textAlign: "center",

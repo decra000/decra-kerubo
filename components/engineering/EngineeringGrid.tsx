@@ -27,7 +27,6 @@ const categories = [
   { id: "ai", label: "AI Projects" },
   { id: "apps", label: "Apps" },
   { id: "websites", label: "Websites" },
-  { id: "research", label: "Research & Writing" },
 ];
 
 /** One card in the regular (non-featured) grid, extracted so it can be
@@ -104,14 +103,11 @@ export function EngineeringGrid({ projects }: { projects: EngineeringProject[] }
   const pairedResearchSlugs = new Set(
     featuredCards.map((p) => p.relatedSlug).filter((s): s is string => !!s)
   );
-  const rest = visible.filter((p) => !p.featured && !(p.slug && pairedResearchSlugs.has(p.slug)));
-
-  // Same rule the featured row uses for 2 vs 3 columns: a paperSlug means
-  // there's real research behind the entry, so it keeps the wider 3-column
-  // treatment; everything else (a plain build with no paper backing it)
-  // reads better at 2-up.
-  const restNoResearch = rest.filter((p) => !p.paperSlug);
-  const restResearch = rest.filter((p) => p.paperSlug);
+  // Research write-ups don't appear as plain grid cards at all any more —
+  // a tool-paired one already surfaces as its tool's "Paired research"
+  // column above, and a standalone one now lives in the Research section
+  // further down this same page instead of a second, thinner listing here.
+  const rest = visible.filter((p) => !p.featured && !p.paperSlug && !(p.slug && pairedResearchSlugs.has(p.slug)));
 
   return (
     <div>
@@ -290,34 +286,10 @@ export function EngineeringGrid({ projects }: { projects: EngineeringProject[] }
         );
       })}
 
-      {/* ── Project grid ──
-          Split by whether the entry carries research (a paperSlug), the same
-          rule the featured row above already uses to choose 2 vs 3 columns.
-          A plain build (no paper backing it) reads better at 2-up; a
-          research write-up carries more title and stays at 3, matching how
-          it looked before this was split out. */}
-      {restNoResearch.length > 0 && (
-        <div
-          className="eng-grid"
-          style={{
-            display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "1.25rem",
-            marginBottom: restResearch.length > 0 ? "1.25rem" : 0,
-          }}
-        >
-          {restNoResearch.map((p) => <ProjectCard key={p.title} p={p} />)}
-        </div>
-      )}
-
-      {restResearch.length > 0 && (
-        <>
-          {restNoResearch.length > 0 && (
-            <p className="t-label" style={{ margin: "2rem 0 1.25rem" }}>Research & Writing</p>
-          )}
-          <div className="eng-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.25rem" }}>
-            {restResearch.map((p) => <ProjectCard key={p.title} p={p} />)}
-          </div>
-        </>
-      )}
+      {/* ── Project grid ── */}
+      <div className="eng-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.25rem" }}>
+        {rest.map((p) => <ProjectCard key={p.title} p={p} />)}
+      </div>
 
       {visible.length === 0 && (
         <p className="t-body" style={{ padding: "3rem 0", textAlign: "center" }}>No projects in this category yet.</p>
