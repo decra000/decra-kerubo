@@ -15,7 +15,7 @@ const inputStyle: React.CSSProperties = {
  */
 export function AiFallbackForm({
   engagement,
-  note = "The assistant isn't responding right now. Leave your details and Decra will follow up directly.",
+  note = "The assistant is off right now. Leave your details and Decra will follow up directly.",
   onSent,
 }: {
   engagement?: string;

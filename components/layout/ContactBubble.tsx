@@ -76,8 +76,8 @@ export function ContactBubble() {
           <div>
             <p style={{ fontFamily: "var(--font-serif)", fontSize: "0.85rem", color: "var(--c-ink)" }}>Decra AI</p>
             <div style={{ display: "flex", alignItems: "center", gap: "0.3rem", marginTop: "2px" }}>
-              <div style={{ width: "4px", height: "4px", borderRadius: "50%", background: "#4ade80" }} />
-              <span style={{ fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "0.58rem", color: "var(--c-ink-muted)" }}>Online</span>
+              <div style={{ width: "4px", height: "4px", borderRadius: "50%", background: "#9ca3af" }} />
+              <span style={{ fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "0.58rem", color: "var(--c-ink-muted)" }}>Offline</span>
             </div>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>

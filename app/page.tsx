@@ -908,7 +908,7 @@ function WorkWithDecra() {
                         {m.rateLimited && isLatest && !loading && !done && trailingFailures >= 1 && (
                           <div style={{ width: "100%", maxWidth: "92%", background: "var(--c-surface)", border: "1px solid var(--c-border-strong)", borderRadius: "10px", padding: "1rem", marginTop: "0.25rem" }}>
                             <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.76rem", color: "var(--c-ink-muted)", lineHeight: 1.6, marginBottom: "0.85rem" }}>
-                              The assistant isn&apos;t cooperating right now, here are two ways to reach Decra directly instead:
+                              The assistant is off right now, here are two ways to reach Decra directly instead:
                             </p>
                             {!fallbackFormOpen && !fallbackSent && (
                               <div style={{ display: "flex", flexWrap: "wrap", gap: "0.6rem" }}>
