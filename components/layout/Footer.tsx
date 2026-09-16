@@ -52,8 +52,6 @@ export function Footer() {
             </a>
           ))}
         </div>
-
-        <p style={{ fontFamily: "var(--font-sans)", fontWeight: 300, fontSize: "0.68rem", color: "var(--c-ink-muted)" }}>{new Date().getFullYear()} · Nairobi</p>
       </div>
     </footer>
   );
