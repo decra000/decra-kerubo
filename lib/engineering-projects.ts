@@ -32,6 +32,14 @@ export type EngineeringProject = {
    * page — the paper is the single source of truth, not a synthesized copy.
    */
   paperSlug?: string;
+  /** Short status label shown on the card itself, e.g. "Demo", "Licenced Product". */
+  badge?: string;
+  /**
+   * A short feature list. When set, the card opens an in-page popup showing
+   * this list (and the badge) instead of navigating anywhere, for work that
+   * doesn't have its own /engineering/[slug] page.
+   */
+  popupFeatures?: string[];
 };
 
 /**
@@ -59,6 +67,7 @@ export const engineeringProjects: EngineeringProject[] = [
     pairLabel: "Backed by research",
     downloadUrl: "/downloads/ai-footprint-tracker.zip",
     image: "/engineering/ai-footprint-dashboard.png",
+    badge: "Free Public Benefit",
   },
   {
     categories: ["research", "ai"],
@@ -83,6 +92,7 @@ export const engineeringProjects: EngineeringProject[] = [
     relatedSlug: "online-safety-research",
     pairLabel: "Backed by research",
     image: "/engineering/pure.png",
+    badge: "Demo",
   },
   {
     categories: ["research", "ai"],
@@ -104,6 +114,21 @@ export const engineeringProjects: EngineeringProject[] = [
     detail:
       "An AI chatbot that guides entrepreneurs through early-stage business legal decisions, the questions founders face before they can afford counsel: what structure to incorporate under, what agreements they need in place, and which regulatory obligations apply to what they're building. It turns those first legal calls from guesswork into a guided conversation.",
     image: "/engineering/updatedteresya.png",
+    badge: "Demo",
+  },
+  {
+    categories: ["legal"],
+    title: "Entrora LPMS",
+    subtitle: "Legal Practice Management System",
+    description: "The all-in-one platform to manage matters, clients, documents, time, and billing.",
+    image: "/entrora-lpms-dashboard.png",
+    badge: "Licenced Product",
+    popupFeatures: [
+      "8 Standard and 30 custom workflows",
+      "Registry and institution aware",
+      "15 Hub-Powered Engines",
+      "Compliance driven",
+    ],
   },
   {
     categories: ["research"],
