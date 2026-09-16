@@ -245,6 +245,26 @@ I codevelop with and guide technology developers towards safe and compliant tech
   );
 }
 
+/* ── Section 1.6: Personal Goal ── */
+function PersonalGoal() {
+  const { ref, vis } = useReveal();
+  return (
+    <section ref={ref as React.RefObject<HTMLElement>} style={{ ...SEC, borderTop: "1px solid var(--c-border)" }}>
+      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
+        <p style={{ ...LBL, marginBottom: "1.25rem", ...fade(vis) }}>Personal Goal</p>
+        <p style={{
+          ...SERIF("clamp(1.2rem,1.7vw,1.45rem)"),
+          maxWidth: "820px",
+          lineHeight: 1.6,
+          ...reveal(vis, { dir: "scale", distance: 10, delay: 0.05 }),
+        }}>
+I seek each day to be a good woman, a good mother, and a good daughter.
+        </p>
+      </div>
+    </section>
+  );
+}
+
 /* ── Section 2: Services ──
    Four lifecycle stages, all four on screen at once as columns. The stage
    chips, the shared nav/detail panel and the mobile accordion are gone:
@@ -1189,6 +1209,7 @@ export default function Home() {
     <>
       <Hero />
       <About />
+      <PersonalGoal />
       <Services />
       {/* Tech Development section temporarily hidden, TechDevSection component preserved below, just not rendered.
       <TechDevSection /> */}
