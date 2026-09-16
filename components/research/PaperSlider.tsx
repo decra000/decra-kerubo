@@ -1,9 +1,17 @@
 "use client";
 
 import { useRef } from "react";
-import { ArrowLeft, ArrowRight, Award, FileText } from "lucide-react";
+import Link from "next/link";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Award, FileText } from "lucide-react";
 import { PAPERS } from "@/lib/papers";
+import { engineeringProjects } from "@/lib/engineering-projects";
 import { PaperLink } from "./PaperLink";
+
+/** Slug of the shipped product each paper is paired to, when one exists. */
+function productSlugFor(paperSlug: string): string | undefined {
+  const researchEntry = engineeringProjects.find((p) => p.paperSlug === paperSlug);
+  return researchEntry?.relatedSlug;
+}
 
 /** Each paper's one-line gloss, written plainly rather than clipped from its abstract. */
 const GLOSS: Record<string, string> = {
@@ -38,7 +46,9 @@ export function PaperSlider() {
           scrollSnapType: "x mandatory", paddingBottom: "0.5rem",
         }}
       >
-        {PAPERS.map((paper) => (
+        {PAPERS.map((paper) => {
+          const productSlug = productSlugFor(paper.slug);
+          return (
           <article
             key={paper.slug}
             className="paper-slide"
@@ -75,19 +85,36 @@ export function PaperSlider() {
               {GLOSS[paper.slug]}
             </p>
 
-            <PaperLink
-              slug={paper.slug}
-              style={{
-                display: "inline-flex", alignItems: "center", gap: "0.4rem", width: "fit-content",
-                fontFamily: "var(--font-manjari)", fontWeight: 700,
-                fontSize: "0.62rem", letterSpacing: "0.08em", textTransform: "uppercase",
-                color: "var(--c-ink-muted)", borderBottom: "1px solid var(--c-border-strong)", paddingBottom: "0.2rem",
-              }}
-            >
-              Read the paper <FileText size={12} />
-            </PaperLink>
+            <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "1.25rem" }}>
+              <PaperLink
+                slug={paper.slug}
+                style={{
+                  display: "inline-flex", alignItems: "center", gap: "0.4rem", width: "fit-content",
+                  fontFamily: "var(--font-manjari)", fontWeight: 700,
+                  fontSize: "0.62rem", letterSpacing: "0.08em", textTransform: "uppercase",
+                  color: "var(--c-ink-muted)", borderBottom: "1px solid var(--c-border-strong)", paddingBottom: "0.2rem",
+                }}
+              >
+                Read the paper <FileText size={12} />
+              </PaperLink>
+              {productSlug && (
+                <Link
+                  href={`/engineering/${productSlug}`}
+                  style={{
+                    display: "inline-flex", alignItems: "center", gap: "0.4rem", width: "fit-content",
+                    fontFamily: "var(--font-manjari)", fontWeight: 700,
+                    fontSize: "0.62rem", letterSpacing: "0.08em", textTransform: "uppercase",
+                    color: "var(--c-forest)", borderBottom: "1px solid var(--c-border-strong)", paddingBottom: "0.2rem",
+                    textDecoration: "none",
+                  }}
+                >
+                  Explore product <ArrowUpRight size={12} />
+                </Link>
+              )}
+            </div>
           </article>
-        ))}
+          );
+        })}
       </div>
 
       <div style={{ display: "flex", gap: "0.5rem", marginTop: "1.25rem" }}>

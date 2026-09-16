@@ -527,18 +527,4 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
     ],
     services: [],
   },
-
-  // ===================================================================
-  // 05 — TECH POLICY CONTRIBUTION  (not a commercial offering)
-  // ===================================================================
-  {
-    id: "tech-policy",
-    label: "Tech Policy Contribution",
-    description:
-      "Written and published work on how technology should be governed in Africa, and an open door for an opinion on a question you are working through.",
-    kind: "policy",
-    opinionOpening:
-      "Hi, I'd like Decra's opinion on a technology policy or regulatory question I'm working through.",
-    services: [],
-  },
 ];

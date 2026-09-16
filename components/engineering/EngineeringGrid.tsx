@@ -19,8 +19,8 @@ function Card({ p }: { p: EngineeringProject }) {
         />
       </div>
       <p style={{
-        fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "1rem",
-        color: "var(--c-ink)", marginTop: "1.5rem", marginBottom: 0,
+        fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.85rem",
+        color: "var(--c-ink)", marginTop: "1.1rem", marginBottom: 0, lineHeight: 1.4,
       }}>
         {p.title}
       </p>
@@ -46,8 +46,12 @@ export function EngineeringGrid({ projects }: { projects: EngineeringProject[] }
   const visible = projects.filter((p) => !p.paperSlug);
 
   return (
-    <div style={{ maxWidth: "42rem", display: "flex", flexDirection: "column", gap: "3.5rem" }}>
+    <div className="eng-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", columnGap: "1.75rem", rowGap: "2.5rem" }}>
       {visible.map((p) => <Card key={p.title} p={p} />)}
+      <style>{`
+        @media(max-width: 900px){ .eng-grid{ grid-template-columns: repeat(2, 1fr) !important; } }
+        @media(max-width: 560px){ .eng-grid{ grid-template-columns: 1fr !important; } }
+      `}</style>
     </div>
   );
 }
