@@ -9,7 +9,7 @@ import { ProductPopup } from "./ProductPopup";
 
 export type { EngineeringProject };
 
-/** Small status pill shown on the card itself, e.g. "Demo", "Licenced Product". */
+/** Small status pill shown on the card itself, e.g. "Demo", "Licensed Product". */
 function Badge({ label }: { label: string }) {
   return (
     <div style={{

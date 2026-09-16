@@ -68,7 +68,7 @@ export async function createBooking(input: BookingInput): Promise<BookingResult>
 
   if (error) {
     console.error("Supabase insert error (bookings):", error);
-    return { ok: false, error: `Booking failed: ${error.message}`, httpStatus: 500 };
+    return { ok: false, error: "We couldn't complete your booking just now, this is usually temporary. Please try again in a minute, or email hello@decrakerubo.com and we'll get you sorted.", httpStatus: 500 };
   }
 
   const { error: leadError } = await db.from("leads").insert({

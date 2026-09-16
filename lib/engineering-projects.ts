@@ -32,10 +32,10 @@ export type EngineeringProject = {
    * page — the paper is the single source of truth, not a synthesized copy.
    */
   paperSlug?: string;
-  /** Short status label shown on the card itself, e.g. "Demo", "Licenced Product". */
+  /** Short status label shown on the card itself, e.g. "Demo", "Licensed Product". */
   badge?: string;
-  /** External demo-booking link, shown as a CTA in the popup when set. */
-  demoUrl?: string;
+  /** lib/types.ts CONSULTATION_TYPES id. When set, the popup shows an inline booking form (name, email, date, time) instead of linking out. */
+  demoConsultationType?: string;
   /**
    * A short feature list. When set, the card opens an in-page popup showing
    * this list (and the badge) instead of navigating anywhere, for work that
@@ -120,12 +120,12 @@ export const engineeringProjects: EngineeringProject[] = [
   },
   {
     categories: ["legal"],
-    title: "Entrora LPMS",
-    subtitle: "Legal Practice Management System",
+    title: "Legal Practice Management System",
+    subtitle: "Entrora",
     description: "The all-in-one platform to manage matters, clients, documents, time, and billing.",
     image: "/entrora-lpms-dashboard.png",
-    badge: "Licenced Product",
-    demoUrl: "https://calendly.com/decrakerubo/",
+    badge: "Licensed Product",
+    demoConsultationType: "lpms-demo",
     popupFeatures: [
       "8 Standard and 30 custom workflows",
       "Registry and institution aware",

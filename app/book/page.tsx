@@ -2,7 +2,7 @@
 import React, { Suspense, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { ArrowRight, ArrowLeft, Clock, CheckCircle2, ShieldCheck, Smartphone, Landmark, SkipForward } from "lucide-react";
-import { CONSULTATION_TYPES } from "@/lib/types";
+import { CONSULTATION_TYPES, TIME_SLOTS, timeSlotLabel } from "@/lib/types";
 
 type Step = 1 | 2 | 3;
 type FormState = { name: string; email: string; organization: string; website: string; industry: string; team_size: string; primary_challenge: string; desired_outcome: string };
@@ -54,15 +54,6 @@ function validateAnswer(question: (typeof INTAKE_QUESTIONS)[number], raw: string
   }
 }
 
-const TIME_SLOTS: { label: string; value: string }[] = [
-  { label: "09:00 AM", value: "09:00" },
-  { label: "10:00 AM", value: "10:00" },
-  { label: "11:00 AM", value: "11:00" },
-  { label: "02:00 PM", value: "14:00" },
-  { label: "03:00 PM", value: "15:00" },
-  { label: "04:00 PM", value: "16:00" },
-];
-const timeLabel = (value: string) => TIME_SLOTS.find(s => s.value === value)?.label || value;
 
 // If Paystack isn't configured (no NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY), paid
 // bookings fall back to a manual flow, no account signup needed to get the
@@ -314,7 +305,7 @@ function BookPageInner() {
             </a>
           )}
           <div className="card" style={{ textAlign: "left" }}>
-            {[["Type", selectedConsultation?.label], ["Date requested", selectedDate], ["Time requested", `${timeLabel(selectedTime)} EAT`], ...(isPaid ? [[awaitingPayment ? "Amount due" : "Amount paid", formatKES(selectedConsultation?.price ?? 0)], ["Reference", paidRef || "N/A"]] : [])].map(([k, v]) => (
+            {[["Type", selectedConsultation?.label], ["Date requested", selectedDate], ["Time requested", `${timeSlotLabel(selectedTime)} EAT`], ...(isPaid ? [[awaitingPayment ? "Amount due" : "Amount paid", formatKES(selectedConsultation?.price ?? 0)], ["Reference", paidRef || "N/A"]] : [])].map(([k, v]) => (
               <div key={k as string} style={{ display: "flex", justifyContent: "space-between", gap: "1rem", fontSize: "0.8rem", padding: "0.65rem 0", borderBottom: "1px solid var(--c-border)" }}>
                 <span style={{ color: "var(--c-ink-muted)", flexShrink: 0 }}>{k as string}</span>
                 <span style={{ color: "var(--c-forest)", fontWeight: 700, textAlign: "right", wordBreak: "break-all" }}>{v as string}</span>
@@ -494,7 +485,7 @@ function BookPageInner() {
             {selectedDate && selectedTime && (
               <div style={{ background: "var(--c-forest)", borderRadius: "12px", padding: "1.5rem", marginBottom: "2rem" }}>
                 <p className="t-label" style={{ marginBottom: "1rem" }}>Booking Summary</p>
-                {[["Type", selectedConsultation?.label], ["Duration", `${selectedConsultation?.duration} minutes`], ["Date", selectedDate], ["Time", `${timeLabel(selectedTime)} EAT`], ["Amount", isPaid ? formatKES(selectedConsultation?.price ?? 0) : "Free"]].map(([k, v]) => (
+                {[["Type", selectedConsultation?.label], ["Duration", `${selectedConsultation?.duration} minutes`], ["Date", selectedDate], ["Time", `${timeSlotLabel(selectedTime)} EAT`], ["Amount", isPaid ? formatKES(selectedConsultation?.price ?? 0) : "Free"]].map(([k, v]) => (
                   <div key={k as string} style={{ display: "flex", justifyContent: "space-between", fontSize: "0.775rem", color: "rgba(248,246,241,0.7)", padding: "0.4rem 0" }}>
                     <span style={{ color: "rgba(248,246,241,0.4)" }}>{k as string}</span>
                     <span>{v as string}</span>
