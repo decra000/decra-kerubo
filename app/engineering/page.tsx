@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowUpRight, GraduationCap, Scale, MessageSquare } from "lucide-react";
+import { ArrowUpRight, GraduationCap } from "lucide-react";
 import { EngineeringGrid } from "@/components/engineering/EngineeringGrid";
 import { PaperSlider } from "@/components/research/PaperSlider";
 import { engineeringProjects } from "@/lib/engineering-projects";
@@ -96,82 +96,6 @@ export default function EngineeringPage() {
         <div className="inner">
           <EngineeringGrid projects={engineeringProjects} />
         </div>
-      </section>
-
-      {/* ── Building for Legal ──
-          Its own banner, on-brand forest green instead of the page's black
-          and white, so it reads as a distinct category rather than another
-          grid entry. Two rows, no images, the LPMS lives on its own site
-          so this just points there. */}
-      <section className="section page-x" style={{ background: "var(--c-forest)" }}>
-        <div className="inner">
-          <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "1.5rem" }}>
-            <span style={{ display: "inline-block", width: "1.5rem", height: "1px", background: "var(--c-gold)" }} />
-            <span className="t-label" style={{ color: "rgba(248,246,241,0.55)" }}>Building for Legal</span>
-          </div>
-          <h2 style={{
-            fontFamily: "var(--font-serif)", fontWeight: 400,
-            fontSize: "clamp(1.4rem, 2.4vw, 1.9rem)", color: "rgba(248,246,241,0.95)",
-            marginBottom: "2.5rem",
-          }}>
-            Explore.
-          </h2>
-
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "1.5rem" }} className="legal-row">
-            <Link
-              href="/entrora"
-              style={{
-                display: "flex", flexDirection: "column", gap: "0.9rem",
-                border: "1px solid rgba(248,246,241,0.18)", borderRadius: 0, padding: "1.75rem",
-                textDecoration: "none",
-              }}
-            >
-              <Scale size={18} color="var(--c-gold)" strokeWidth={1.5} />
-              <span style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "1rem", color: "rgba(248,246,241,0.95)" }}>
-                Entrora LPMS
-              </span>
-              <p style={{ fontSize: "0.8rem", color: "rgba(248,246,241,0.55)", lineHeight: 1.65, flex: 1 }}>
-                The all-in-one platform to manage matters, clients, documents, time, and billing.
-              </p>
-              <span style={{
-                display: "inline-flex", alignItems: "center", gap: "0.4rem",
-                fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.62rem",
-                letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--c-gold)",
-              }}>
-                Explore <ArrowUpRight size={12} />
-              </span>
-            </Link>
-
-            <Link
-              href="/engineering/legal-chatbot"
-              style={{
-                display: "flex", flexDirection: "column", gap: "0.9rem",
-                border: "1px solid rgba(248,246,241,0.18)", borderRadius: 0, padding: "1.75rem",
-                textDecoration: "none",
-              }}
-            >
-              <MessageSquare size={18} color="var(--c-gold)" strokeWidth={1.5} />
-              <span style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "1rem", color: "rgba(248,246,241,0.95)" }}>
-                Legal Chatbot
-              </span>
-              <p style={{ fontSize: "0.8rem", color: "rgba(248,246,241,0.55)", lineHeight: 1.65, flex: 1 }}>
-                Helps entrepreneurs make the right early stage business legal decisions.
-              </p>
-              <span style={{
-                display: "inline-flex", alignItems: "center", gap: "0.4rem",
-                fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.62rem",
-                letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--c-gold)",
-              }}>
-                Explore <ArrowUpRight size={12} />
-              </span>
-            </Link>
-          </div>
-        </div>
-        <style>{`
-          @media (max-width: 640px) {
-            .legal-row { grid-template-columns: 1fr !important; }
-          }
-        `}</style>
       </section>
 
       {/* ── Closing CTA ──

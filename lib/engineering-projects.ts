@@ -34,6 +34,8 @@ export type EngineeringProject = {
   paperSlug?: string;
   /** Short status label shown on the card itself, e.g. "Demo", "Licenced Product". */
   badge?: string;
+  /** External demo-booking link, shown as a CTA in the popup when set. */
+  demoUrl?: string;
   /**
    * A short feature list. When set, the card opens an in-page popup showing
    * this list (and the badge) instead of navigating anywhere, for work that
@@ -123,6 +125,7 @@ export const engineeringProjects: EngineeringProject[] = [
     description: "The all-in-one platform to manage matters, clients, documents, time, and billing.",
     image: "/entrora-lpms-dashboard.png",
     badge: "Licenced Product",
+    demoUrl: "https://calendly.com/decrakerubo/",
     popupFeatures: [
       "8 Standard and 30 custom workflows",
       "Registry and institution aware",

@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
-import { X, Check, Award } from "lucide-react";
+import { X, Check, Award, ArrowUpRight } from "lucide-react";
 import type { EngineeringProject } from "@/lib/engineering-projects";
 
 /**
@@ -70,7 +70,7 @@ export function ProductPopup({ project, onClose }: { project: EngineeringProject
           </p>
 
           {project.popupFeatures && project.popupFeatures.length > 0 && (
-            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+            <ul style={{ listStyle: "none", padding: 0, margin: 0, marginBottom: project.demoUrl ? "1.75rem" : 0, display: "flex", flexDirection: "column", gap: "0.75rem" }}>
               {project.popupFeatures.map((f) => (
                 <li key={f} style={{ display: "flex", alignItems: "flex-start", gap: "0.6rem" }}>
                   <Check size={14} strokeWidth={2} color="var(--c-forest)" style={{ marginTop: "0.15rem", flexShrink: 0 }} />
@@ -78,6 +78,23 @@ export function ProductPopup({ project, onClose }: { project: EngineeringProject
                 </li>
               ))}
             </ul>
+          )}
+
+          {project.demoUrl && (
+            <a
+              href={project.demoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "0.5rem",
+                width: "100%", background: "var(--c-forest)", color: "rgba(248,246,241,0.95)",
+                fontFamily: "var(--font-manjari)", fontWeight: 700,
+                fontSize: "0.68rem", letterSpacing: "0.1em", textTransform: "uppercase",
+                padding: "0.85rem 1.5rem", borderRadius: 0, textDecoration: "none",
+              }}
+            >
+              Book a demo <ArrowUpRight size={13} />
+            </a>
           )}
         </div>
       </div>
