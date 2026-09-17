@@ -1,6 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sendMail } from "@/lib/mail";
 
+// Entrora now lives on its own static-export deployment (no server of its
+// own), so its contact form posts here cross-origin. This endpoint takes no
+// auth and already accepts anonymous submissions from this site's own forms,
+// opening it cross-origin doesn't add risk beyond what it already carries.
+const CORS_HEADERS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+};
+
+export async function OPTIONS() {
+  return new NextResponse(null, { status: 204, headers: CORS_HEADERS });
+}
+
 export async function POST(req: NextRequest) {
   try {
     const data = await req.json();
@@ -46,9 +60,9 @@ ${message || "No message"}
       });
     }
 
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({ ok: true }, { headers: CORS_HEADERS });
   } catch (error) {
     console.error("Contact route error:", error);
-    return NextResponse.json({ ok: false }, { status: 500 });
+    return NextResponse.json({ ok: false }, { status: 500, headers: CORS_HEADERS });
   }
 }
