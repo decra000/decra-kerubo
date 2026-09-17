@@ -330,7 +330,7 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
       {
         title: "Ownership & Commercialization",
         blurb: "Who owns what inside the product, and the agreements it is taken to market on.",
-        serviceIds: ["technology-ip", "technology-transactions"],
+        serviceIds: ["technology-ip", "technology-transactions", "cyber-insurance-pi"],
       },
     ],
     services: [
@@ -368,6 +368,17 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
           "AI vendor agreements", "Commercial partnerships", "Technology commercialization",
         ],
         opening: "Hi, I need help with a technology transaction, SaaS or platform agreement, software licensing, technology procurement, vendor agreements, data processing agreements, API integrations, or commercial partnerships.",
+      },
+      {
+        id: "cyber-insurance-pi",
+        label: "Cyber Insurance & Professional Indemnity",
+        body: "Reading and placing the cover that sits behind the product: what a breach, an outage, or a bad line of code actually exposes a developer or a procurer to, and what a policy would need to answer for it to be worth the premium.",
+        items: [
+          "Cyber liability cover", "Professional indemnity cover", "Policy wording review",
+          "Coverage gap analysis", "Vendor & procurer risk allocation", "Breach & incident response cover",
+          "Claims support",
+        ],
+        opening: "Hi, I need help with cyber insurance or professional indemnity cover, as a developer or as a procurer, policy wording review, coverage gaps, or risk allocation.",
       },
       {
         id: "data-protection-audit",
