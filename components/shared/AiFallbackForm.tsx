@@ -81,7 +81,7 @@ export function AiFallbackForm({
       </button>
       {error && (
         <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.72rem", color: "#c0392b" }}>
-          Couldn&apos;t send that, email hello@decrakerubo.com directly instead.
+          Couldn&apos;t send that, email decrakerry@gmail.com directly instead.
         </p>
       )}
     </div>

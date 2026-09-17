@@ -546,7 +546,7 @@ function WorkWithDecra() {
       const res = await fetch("/api/chat", { method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: opening, history: [], system: ENGAGE_SYSTEM }) });
       const data = await res.json();
-      const rawReply = data.reply || "Something went wrong. Email hello@decrakerubo.com.";
+      const rawReply = data.reply || "Something went wrong. Email decrakerry@gmail.com.";
       const { text: reply, options } = extractOptions(rawReply);
       const failed = !!data.rateLimited || !!data.down;
       setMsgs([{ role: "assistant", text: reply, options, rateLimited: failed }]);

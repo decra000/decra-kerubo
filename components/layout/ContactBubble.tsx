@@ -36,7 +36,7 @@ export function ContactBubble() {
     try {
       const res = await fetch("/api/chat", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: text, history: msgs }) });
       const d = await res.json();
-      const reply = d.reply || "Email hello@decrakerubo.com";
+      const reply = d.reply || "Email decrakerry@gmail.com";
       setMsgs(prev => [...prev, { role: "assistant", text: reply, down: !!d.down }]);
       if (voiceOn && !d.down) speak(reply);
       if (d.redirect?.url) {

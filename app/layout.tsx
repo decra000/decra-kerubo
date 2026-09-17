@@ -117,7 +117,7 @@ const personJsonLd = {
   jobTitle: "Technology Lawyer & Product Counsel",
   description:
     "Technology lawyer and product counsel with a dual degree in Computer Science (AI) and Law, providing integrated technical and legal support throughout the technology product lifecycle, from product strategy through governance, safety & privacy, risk & assurance, IP, technology transactions, and technical due diligence.",
-  email: "hello@decrakerubo.com",
+  email: "decrakerry@gmail.com",
   address: { "@type": "PostalAddress", addressLocality: "Nairobi", addressCountry: "KE" },
   homeLocation: { "@type": "Place", name: "Nairobi, Kenya" },
   workLocation: { "@type": "Place", name: "Nairobi, Kenya" },
@@ -169,7 +169,7 @@ const professionalServiceJsonLd = {
   name: "Decra Kerubo, Technology Lawyer & Product Counsel",
   image: `${SITE_URL}/decra-hero-wide.jpg`,
   url: SITE_URL,
-  email: "hello@decrakerubo.com",
+  email: "decrakerry@gmail.com",
   priceRange: "$$",
   areaServed: [
     { "@type": "Country", name: "Kenya" },

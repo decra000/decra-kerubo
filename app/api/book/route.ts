@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
         await verifyPaystackPayment(payment_reference, amount);
       } catch (verifyErr) {
         console.error("Payment verification failed:", verifyErr);
-        return NextResponse.json({ error: "We couldn't verify your payment. If you were charged, email hello@decrakerubo.com with your reference number." }, { status: 402 });
+        return NextResponse.json({ error: "We couldn't verify your payment. If you were charged, email decrakerry@gmail.com with your reference number." }, { status: 402 });
       }
     }
 
@@ -77,6 +77,6 @@ export async function POST(req: NextRequest) {
     console.error("Booking error:", err);
     // Don't leak raw exception text (e.g. "TypeError: fetch failed") to the person booking,
     // that's a signal to check server logs, not something a client should see verbatim.
-    return NextResponse.json({ error: "We couldn't complete your booking just now, this is usually temporary. Please try again in a minute, or email hello@decrakerubo.com and we'll get you sorted." }, { status: 500 });
+    return NextResponse.json({ error: "We couldn't complete your booking just now, this is usually temporary. Please try again in a minute, or email decrakerry@gmail.com and we'll get you sorted." }, { status: 500 });
   }
 }

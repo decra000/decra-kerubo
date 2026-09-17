@@ -32,7 +32,7 @@ Message:
 ${message || "No message"}
     `.trim();
 
-    const TO_EMAIL = process.env.CONTACT_EMAIL || "hello@decrakerubo.com";
+    const TO_EMAIL = process.env.CONTACT_EMAIL || "decrakerry@gmail.com";
 
     // Internal notification, to Decra
     await sendMail({

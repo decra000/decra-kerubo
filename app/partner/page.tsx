@@ -413,7 +413,7 @@ function Talk() {
             </p>
             <div style={{ display: "flex", flexDirection: "column" }}>
               {[
-                ["Email", "hello@decrakerubo.com"],
+                ["Email", "decrakerry@gmail.com"],
                 ["Location", "Nairobi, Kenya"],
                 ["Response", "Within 48 hours"],
               ].map(([k, v]) => (

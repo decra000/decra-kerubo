@@ -92,7 +92,7 @@ async function runTool(name: string, args: Record<string, unknown>): Promise<Too
     return { content: `Error: unknown tool ${name}` };
   } catch (err) {
     console.error(`Tool execution error (${name}):`, err);
-    return { content: "Error: something went wrong running that action. Apologize and suggest emailing hello@decrakerubo.com." };
+    return { content: "Error: something went wrong running that action. Apologize and suggest emailing decrakerry@gmail.com." };
   }
 }
 
@@ -193,6 +193,6 @@ export async function POST(req: NextRequest) {
 
   } catch (error) {
     console.error("Chat route error:", error);
-    return NextResponse.json({ reply: "Email hello@decrakerubo.com or use the Talk page to reach Decra.", down: true });
+    return NextResponse.json({ reply: "Email decrakerry@gmail.com or use the Talk page to reach Decra.", down: true });
   }
 }

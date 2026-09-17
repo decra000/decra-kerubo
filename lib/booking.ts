@@ -68,7 +68,7 @@ export async function createBooking(input: BookingInput): Promise<BookingResult>
 
   if (error) {
     console.error("Supabase insert error (bookings):", error);
-    return { ok: false, error: "We couldn't complete your booking just now, this is usually temporary. Please try again in a minute, or email hello@decrakerubo.com and we'll get you sorted.", httpStatus: 500 };
+    return { ok: false, error: "We couldn't complete your booking just now, this is usually temporary. Please try again in a minute, or email decrakerry@gmail.com and we'll get you sorted.", httpStatus: 500 };
   }
 
   const { error: leadError } = await db.from("leads").insert({
@@ -106,7 +106,7 @@ export async function createBooking(input: BookingInput): Promise<BookingResult>
   // waiting to be noticed in /admin. Nothing is confirmed until she acts on
   // this, so it's written as an action-required alert, with a one-click
   // "add to Google Calendar" link for once she does confirm.
-  const internalTo = process.env.CONTACT_EMAIL || "hello@decrakerubo.com";
+  const internalTo = process.env.CONTACT_EMAIL || "decrakerry@gmail.com";
   const typeInfo = CONSULTATION_TYPES.find(t => t.id === input.consultation_type);
   const start = new Date(input.scheduled_at);
   const end = new Date(start.getTime() + (typeInfo?.duration || 30) * 60_000);

@@ -33,7 +33,7 @@ export async function submitInquiry(input: InquiryInput) {
     console.error("submitInquiry Supabase error:", err);
   }
 
-  const TO_EMAIL = process.env.CONTACT_EMAIL || "hello@decrakerubo.com";
+  const TO_EMAIL = process.env.CONTACT_EMAIL || "decrakerry@gmail.com";
 
   await sendMail({
     to: TO_EMAIL,

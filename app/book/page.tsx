@@ -241,7 +241,7 @@ function BookPageInner() {
       if (reference) setPaidRef(reference);
       if (data.status) setBookingStatus(data.status);
       setConfirmed(true);
-    } catch { setPayError("Booking failed. Please try again or email hello@decrakerubo.com."); }
+    } catch { setPayError("Booking failed. Please try again or email decrakerry@gmail.com."); }
     finally { setLoading(false); setPaying(false); }
   };
 
