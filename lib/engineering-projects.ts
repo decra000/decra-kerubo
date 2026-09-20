@@ -95,7 +95,7 @@ export const engineeringProjects: EngineeringProject[] = [
     pairLabel: "Backed by research",
     downloadUrl: "https://drive.google.com/file/d/1cHUtX64mRS-C_W0WognfxAu1VfLxSRq6/view?usp=sharing",
     image: "/engineering/pure.png",
-    badge: "Demo",
+    badge: "Request Only",
   },
   {
     categories: ["research", "ai"],
