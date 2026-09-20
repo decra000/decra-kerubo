@@ -93,6 +93,7 @@ export const engineeringProjects: EngineeringProject[] = [
       "A Chrome extension that detects cyberbullying and flags harmful content in real time as people browse social media, inspecting page text and highlighting offensive or unsafe material as it's found. It's the applied counterpart to my published paper, \"Cyberbullying Detection: An Integrated Natural Language Processing and Machine Learning Approach for Cybersafety,\" below.",
     relatedSlug: "online-safety-research",
     pairLabel: "Backed by research",
+    downloadUrl: "https://drive.google.com/file/d/1cHUtX64mRS-C_W0WognfxAu1VfLxSRq6/view?usp=sharing",
     image: "/engineering/pure.png",
     badge: "Demo",
   },

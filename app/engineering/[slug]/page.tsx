@@ -171,7 +171,13 @@ export default async function EngineeringProjectPage({
                     <Puzzle size={13} /> Add to Chrome
                   </a>
                 ) : productSide.downloadUrl ? (
-                  <a href={productSide.downloadUrl} download className="btn-primary">
+                  <a
+                    href={productSide.downloadUrl}
+                    {...(productSide.downloadUrl.startsWith("http")
+                      ? { target: "_blank", rel: "noopener noreferrer" }
+                      : { download: true })}
+                    className="btn-primary"
+                  >
                     <Download size={13} /> Download Extension
                   </a>
                 ) : (
