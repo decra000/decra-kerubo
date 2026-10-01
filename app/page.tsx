@@ -112,6 +112,12 @@ function Hero() {
       <div aria-hidden className="hero-bg hero-kenburns" style={{
         position: "absolute", inset: 0, backgroundRepeat: "no-repeat", zIndex: 0,
       }} />
+      {/* Suggests a surface at her side rather than drawing one: a soft
+          vertical wash of the brand green, grounded to the bottom of the
+          frame, so she reads as leaning against something off-camera
+          instead of floating in open black. Desktop only, the photo is
+          full-bleed on mobile with nothing beside it to lean on. */}
+      <div aria-hidden className="hero-lean" style={{ position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none" }} />
       {/* Dark overlay so text stays legible, deeper on mobile where the portrait shot needs more contrast */}
       <div aria-hidden className="hero-overlay" style={{ position: "absolute", inset: 0, zIndex: 1 }} />
 
@@ -183,9 +189,17 @@ function Hero() {
         /* Same portrait photo as mobile now, not the old wide studio shot.
            It's a tight headshot, so it's shown at near-full height rather
            than covering the banner (which crops hard into the face), and
-           sits 3/4 of the way across rather than centred, so the copy and
-           the top-left glow both have the dark field to breathe in. */
-        .hero-bg { background-image: url('/decra-hero-mobile.jpg'); background-size: auto 94%; background-position: 75% 4%; }
+           sits right of centre rather than dead-centre, so the copy and
+           the top-left glow both have the dark field to breathe in. Pulled
+           in from the edge (76%, not 82%+) so the far shoulder/arm stays
+           in frame instead of cropping off the right edge, and run to full
+           height with no vertical offset so she's grounded at the bottom
+           of the frame rather than floating with a gap under her. */
+        .hero-bg { background-image: url('/decra-hero-mobile.jpg'); background-size: auto 100%; background-position: 76% 0%; }
+        .hero-lean {
+          background: linear-gradient(100deg, transparent 0%, transparent 38%, rgba(95,169,143,0.30) 56%, rgba(95,169,143,0.12) 78%, transparent 92%);
+          filter: blur(22px);
+        }
         /* No darkening over the face, the wash only picks up a little below it, on the right/lower two-thirds */
         .hero-overlay {
           background:
@@ -211,6 +225,7 @@ function Hero() {
             padding-bottom: clamp(3rem, 9vh, 5rem) !important;
           }
           .hero-copy { text-align: center !important; }
+          .hero-lean { display: none; }
           .hero-bg {
             background-image: url('/decra-hero-mobile.jpg') !important;
             background-size: cover !important;
