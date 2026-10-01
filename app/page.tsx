@@ -107,7 +107,7 @@ function Hero() {
   const [vis, setVis] = useState(false);
   useEffect(() => { const t = setTimeout(() => setVis(true), 60); return () => clearTimeout(t); }, []);
   return (
-    <section id="hero" className="hero-sec" style={{ position: "relative", overflow: "hidden", background: "#0A0A0A", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <section id="hero" className="hero-sec" style={{ position: "relative", overflow: "hidden", background: "#000000", display: "flex", alignItems: "center", justifyContent: "center" }}>
       {/* Background photo, wide studio shot on larger screens, portrait selfie on small screens */}
       <div aria-hidden className="hero-bg hero-kenburns" style={{
         position: "absolute", inset: 0, backgroundRepeat: "no-repeat", zIndex: 0,
@@ -189,8 +189,8 @@ function Hero() {
         /* No darkening over the face, the wash only picks up a little below it, on the right/lower two-thirds */
         .hero-overlay {
           background:
-            linear-gradient(180deg, rgba(10,10,10,0) 0%, rgba(10,10,10,0) 42%, rgba(10,10,10,0.5) 62%, rgba(10,10,10,0.75) 100%),
-            linear-gradient(90deg, rgba(10,10,10,0.7) 0%, rgba(10,10,10,0.25) 38%, rgba(10,10,10,0) 55%);
+            linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 42%, rgba(0,0,0,0.5) 62%, rgba(0,0,0,0.75) 100%),
+            linear-gradient(90deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.25) 38%, rgba(0,0,0,0) 55%);
         }
 
         /* Small screens get the portrait-orientation shot instead of the wide
@@ -220,7 +220,7 @@ function Hero() {
              the midpoint so the heading and button below always have contrast. */
           .hero-overlay {
             background:
-              linear-gradient(180deg, rgba(10,10,10,0.60) 0%, rgba(10,10,10,0.12) 22%, rgba(10,10,10,0.18) 45%, rgba(10,10,10,0.62) 64%, rgba(10,10,10,0.88) 80%, rgba(10,10,10,0.96) 100%) !important;
+              linear-gradient(180deg, rgba(0,0,0,0.60) 0%, rgba(0,0,0,0.12) 22%, rgba(0,0,0,0.18) 45%, rgba(0,0,0,0.62) 64%, rgba(0,0,0,0.88) 80%, rgba(0,0,0,0.96) 100%) !important;
           }
           #hero-content h1 { font-size: clamp(1.65rem, 7vw, 2.1rem) !important; margin-bottom: 1.5rem !important; }
           #hero-content button { width: auto; max-width: 82%; white-space: normal; line-height: 1.5; }
