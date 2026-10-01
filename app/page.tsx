@@ -110,7 +110,7 @@ function Hero() {
     <section id="hero" className="hero-sec" style={{ position: "relative", overflow: "hidden", background: "#0A0A0A", display: "flex", alignItems: "center", justifyContent: "center" }}>
       {/* Background photo, wide studio shot on larger screens, portrait selfie on small screens */}
       <div aria-hidden className="hero-bg hero-kenburns" style={{
-        position: "absolute", inset: 0, backgroundRepeat: "no-repeat", zIndex: 0,
+        position: "absolute", inset: 0, backgroundSize: "cover", backgroundRepeat: "no-repeat", zIndex: 0,
       }} />
       {/* Dark overlay so text stays legible, deeper on mobile where the portrait shot needs more contrast */}
       <div aria-hidden className="hero-overlay" style={{ position: "absolute", inset: 0, zIndex: 1 }} />
@@ -180,11 +180,8 @@ function Hero() {
         @keyframes heroGlowB { from { transform: translate(0,0) scale(1); } to { transform: translate(-3%,-4%) scale(1.1); } }
         @media (prefers-reduced-motion: reduce) { .hero-kenburns, .hero-glow-a, .hero-glow-b { animation: none; } }
 
-        /* This photo is a tight portrait headshot, not a wide studio shot, so
-           covering the full-width banner with it crops in on the face. Shown
-           at near-full height instead and centred, letterboxed against the
-           dark background on either side, same spotlight feel as the glows. */
-        .hero-bg { background-image: url('/decra-hero-wide.jpg'); background-size: auto 94%; background-position: 50% 4%; }
+        /* Wide studio shot for larger screens, subject sits right-of-centre, copy hugs the left edge */
+        .hero-bg { background-image: url('/decra-hero-wide.jpg'); background-position: 68% 22%; }
         /* No darkening over the face, the wash only picks up a little below it, on the right/lower two-thirds */
         .hero-overlay {
           background:
