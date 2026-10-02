@@ -118,27 +118,28 @@ function Hero() {
       <div id="hero-content" style={{
         position: "relative", zIndex: 2, width: "100%",
         display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "center",
-        padding: "0 var(--space-x)",
+        padding: "0 clamp(1.5rem, 8vw, 9rem)",
         paddingTop: "21vh",
-        maxWidth: "calc(var(--max-w) + (var(--space-x) * 2))", margin: "0 auto",
+        maxWidth: "none", margin: "0 auto",
         opacity: vis ? 1 : 0,
         transform: vis ? "none" : "translateY(14px)",
         transition: "opacity 1.1s cubic-bezier(0.16,1,0.3,1) 0.3s, transform 1.1s cubic-bezier(0.16,1,0.3,1) 0.3s",
       }}>
-        <div style={{ maxWidth: "26rem", textAlign: "left" }} className="hero-copy">
+        <div style={{ maxWidth: "68rem", textAlign: "left" }} className="hero-copy">
+          <p className="hero-kicker">Law <span>·</span> Technology <span>·</span> AI</p>
           <h1 style={{
             fontFamily: "var(--font-serif)", fontWeight: 400,
-            fontSize: "clamp(1.75rem,4vw,2.75rem)", color: "#F0EEE9",
-            lineHeight: 1.15, letterSpacing: "-0.01em", marginBottom: "1.75rem",
+            fontSize: "clamp(2.8rem,4.2vw,5rem)", color: "#F0EEE9",
+            lineHeight: 1.02, letterSpacing: "-0.025em", marginBottom: "2rem",
           }}>
-            Technical Product Counsel &amp; AI Engineer
+            Technical Product Counsel<br className="hero-title-break" /> &amp; AI Engineer
           </h1>
           <div className="hero-ctas">
             <button
               onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: PRODUCT_COUNSEL_GROUP }))}
-              style={lineBtn({ light: true })}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "#5FA98F"; (e.currentTarget as HTMLElement).style.color = "#5FA98F"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.3)"; (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.85)"; }}
+              style={{ ...lineBtn({ light: true }), background: "#F0EEE9", color: "#11120F", borderColor: "#F0EEE9" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#5FA98F"; (e.currentTarget as HTMLElement).style.borderColor = "#5FA98F"; (e.currentTarget as HTMLElement).style.color = "#08100D"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "#F0EEE9"; (e.currentTarget as HTMLElement).style.borderColor = "#F0EEE9"; (e.currentTarget as HTMLElement).style.color = "#11120F"; }}
             >
               Retain as Technical Product Counsel
             </button>
@@ -158,17 +159,33 @@ function Hero() {
         /* The selected portrait stays sharp; its black backdrop merges into the hero without a visible photo edge. */
         .hero-bg { background-image: url('/decra-hero-mobile.jpg'); background-size: auto 100%; background-position: right center; }
         .hero-overlay {
-          background: linear-gradient(90deg, #000 0%, rgba(0,0,0,0.96) 22%, rgba(0,0,0,0.76) 38%, rgba(0,0,0,0.24) 56%, transparent 72%);
+          background:
+            linear-gradient(90deg, #050705 0%, rgba(5,7,5,0.96) 41%, rgba(5,7,5,0.82) 57%, rgba(5,7,5,0.34) 70%, transparent 82%),
+            linear-gradient(270deg, #050705 0%, transparent 9%);
         }
+        #hero-content { padding: 0 clamp(1.5rem, 8vw, 9rem) !important; }
+        .hero-kicker {
+          display: flex; align-items: center; gap: 0.7rem;
+          color: #A9B4A8; font: 700 0.66rem/1.2 var(--font-manjari);
+          letter-spacing: 0.24em; text-transform: uppercase; margin-bottom: 1.5rem;
+        }
+        .hero-kicker span { color: #5FA98F; font-size: 0.9rem; }
+        .hero-copy h1 { max-width: 68rem; text-wrap: balance; }
 
         /* On tablet the portrait is slightly inset, with a dark text zone on the left. */
         @media (min-width: 641px) and (max-width: 900px) {
           .hero-bg { background-size: auto 90%; background-position: right bottom; }
           .hero-overlay {
-            background: linear-gradient(90deg, #000 0%, rgba(0,0,0,0.96) 34%, rgba(0,0,0,0.78) 52%, rgba(0,0,0,0.18) 78%, transparent 100%);
+            background:
+              linear-gradient(90deg, #050705 0%, rgba(5,7,5,0.97) 34%, rgba(5,7,5,0.76) 46%, rgba(5,7,5,0.24) 58%, transparent 70%),
+              linear-gradient(270deg, #050705 0%, transparent 8%);
           }
           #hero-content { padding-top: 16vh !important; }
-          .hero-copy { max-width: 23rem !important; }
+          .hero-copy { max-width: 20rem !important; }
+          .hero-copy h1 { font-size: clamp(2.4rem, 5.4vw, 3.4rem) !important; }
+          .hero-title-break { display: none; }
+          .hero-kicker { font-size: 0.6rem; margin-bottom: 1.1rem; }
+          .hero-bg { background-size: auto 86%; background-position: 110% bottom; }
         }
 
         /* Phone framing uses the portrait shot, with the copy kept in the dark lower third. */
@@ -185,6 +202,9 @@ function Hero() {
             padding-bottom: clamp(3rem, 9vh, 5rem) !important;
           }
           .hero-copy { text-align: center !important; }
+          .hero-kicker { justify-content: center; }
+          .hero-copy h1 { font-size: clamp(2.15rem, 8vw, 3rem) !important; }
+          .hero-title-break { display: none; }
           .hero-bg {
             background-image: url('/decra-hero-mobile.jpg') !important;
             background-size: cover !important;
