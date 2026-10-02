@@ -108,32 +108,12 @@ function Hero() {
   useEffect(() => { const t = setTimeout(() => setVis(true), 60); return () => clearTimeout(t); }, []);
   return (
     <section id="hero" className="hero-sec" style={{ position: "relative", overflow: "hidden", background: "#000000", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      {/* Background photo, wide studio shot on larger screens, portrait selfie on small screens */}
-      <div aria-hidden className="hero-bg hero-kenburns" style={{
+      {/* Full-bleed studio portrait: its open left side gives the copy room. */}
+      <div aria-hidden className="hero-bg" style={{
         position: "absolute", inset: 0, backgroundRepeat: "no-repeat", zIndex: 0,
       }} />
-      {/* Suggests a surface at her side rather than drawing one: a soft
-          vertical wash of the brand green, grounded to the bottom of the
-          frame, so she reads as leaning against something off-camera
-          instead of floating in open black. Desktop only, the photo is
-          full-bleed on mobile with nothing beside it to lean on. */}
-      <div aria-hidden className="hero-lean" style={{ position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none" }} />
-      {/* Dark overlay so text stays legible, deeper on mobile where the portrait shot needs more contrast */}
+      {/* A tonal wash keeps the copy readable and softly blends the photo at the right edge. */}
       <div aria-hidden className="hero-overlay" style={{ position: "absolute", inset: 0, zIndex: 1 }} />
-
-      {/* Corner glows in brand teal + cream, echoing the reference mood boards but on-palette, slow ambient drift so the hero doesn't feel static */}
-      <div aria-hidden className="hero-glow-a" style={{
-        position: "absolute", top: "-18%", left: "-14%", width: "min(60vw,620px)", height: "min(60vw,620px)",
-        borderRadius: "50%", pointerEvents: "none", zIndex: 1,
-        background: "radial-gradient(circle, #5FA98F 0%, transparent 70%)",
-        opacity: 0.35, filter: "blur(40px)",
-      }} />
-      <div aria-hidden className="hero-glow-b" style={{
-        position: "absolute", bottom: "-22%", right: "-16%", width: "min(65vw,680px)", height: "min(65vw,680px)",
-        borderRadius: "50%", pointerEvents: "none", zIndex: 1,
-        background: "radial-gradient(circle, #F0EEE9 0%, transparent 68%)",
-        opacity: 0.12, filter: "blur(50px)",
-      }} />
 
       <div id="hero-content" style={{
         position: "relative", zIndex: 2, width: "100%",
@@ -175,43 +155,25 @@ function Hero() {
         .hero-sec { height: 100vh; }
         @supports (height: 100svh) { .hero-sec { height: 100svh; } }
 
-        /* Slow, continuous zoom on the hero photo, keeps the hero feeling alive rather than a static poster */
-        .hero-kenburns { animation: heroKenBurns 22s ease-in-out infinite alternate; }
-        @keyframes heroKenBurns { from { transform: scale(1); } to { transform: scale(1.08); } }
-
-        /* Gentle ambient drift on the corner glows */
-        .hero-glow-a { animation: heroGlowA 16s ease-in-out infinite alternate; }
-        .hero-glow-b { animation: heroGlowB 19s ease-in-out infinite alternate; }
-        @keyframes heroGlowA { from { transform: translate(0,0) scale(1); } to { transform: translate(3%,4%) scale(1.08); } }
-        @keyframes heroGlowB { from { transform: translate(0,0) scale(1); } to { transform: translate(-3%,-4%) scale(1.1); } }
-        @media (prefers-reduced-motion: reduce) { .hero-kenburns, .hero-glow-a, .hero-glow-b { animation: none; } }
-
-        /* Same portrait photo as mobile now, not the old wide studio shot.
-           It's a tight headshot, so it's shown at near-full height rather
-           than covering the banner (which crops hard into the face), and
-           sits right of centre rather than dead-centre, so the copy and
-           the top-left glow both have the dark field to breathe in. Pulled
-           in from the edge (76%, not 82%+) so the far shoulder/arm stays
-           in frame instead of cropping off the right edge, and run to full
-           height with no vertical offset so she's grounded at the bottom
-           of the frame rather than floating with a gap under her. */
-        .hero-bg { background-image: url('/decra-hero-mobile.jpg'); background-size: auto 100%; background-position: 76% 0%; }
-        .hero-lean {
-          background: linear-gradient(100deg, transparent 0%, transparent 38%, rgba(95,169,143,0.30) 56%, rgba(95,169,143,0.12) 78%, transparent 92%);
-          filter: blur(22px);
-        }
-        /* No darkening over the face, the wash only picks up a little below it, on the right/lower two-thirds */
+        /* The original wide portrait stays crisp and fills the viewport edge to edge. */
+        .hero-bg { background-image: url('/decra-hero-wide.jpg'); background-size: cover; background-position: center 48%; }
         .hero-overlay {
           background:
-            linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 42%, rgba(0,0,0,0.5) 62%, rgba(0,0,0,0.75) 100%),
-            linear-gradient(90deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.25) 38%, rgba(0,0,0,0) 55%);
+            linear-gradient(90deg, #080807 0%, rgba(8,8,7,0.93) 22%, rgba(8,8,7,0.63) 39%, rgba(8,8,7,0.12) 63%, rgba(8,8,7,0.08) 88%, rgba(8,8,7,0.42) 100%),
+            linear-gradient(180deg, rgba(0,0,0,0.12) 0%, transparent 28%, transparent 68%, rgba(0,0,0,0.25) 100%);
         }
 
-        /* Small screens get the portrait-orientation shot instead of the wide
-           studio one, which crops badly at phone aspect. Same warm palette as
-           the desktop hero. The copy sits at the bottom, so the overlay stays
-           clear over her face and deepens underneath it, where the heading and
-           button actually land. */
+        /* Tablet keeps the wide framing, shifting the crop right to retain her face and shoulder. */
+        @media (min-width: 641px) and (max-width: 900px) {
+          .hero-bg { background-position: 64% center; }
+          .hero-overlay {
+            background: linear-gradient(90deg, rgba(8,8,7,0.97) 0%, rgba(8,8,7,0.88) 32%, rgba(8,8,7,0.58) 52%, rgba(8,8,7,0.12) 78%, rgba(8,8,7,0.38) 100%);
+          }
+          #hero-content { padding-top: 16vh !important; }
+          .hero-copy { max-width: 23rem !important; }
+        }
+
+        /* Phone framing uses the portrait shot, with the copy kept in the dark lower third. */
         @media (max-width: 640px) {
           /* height:100% is what actually makes the flex-end below bite — without
              it the content box is only as tall as its text, so it sat centred,
@@ -225,7 +187,6 @@ function Hero() {
             padding-bottom: clamp(3rem, 9vh, 5rem) !important;
           }
           .hero-copy { text-align: center !important; }
-          .hero-lean { display: none; }
           .hero-bg {
             background-image: url('/decra-hero-mobile.jpg') !important;
             background-size: cover !important;
