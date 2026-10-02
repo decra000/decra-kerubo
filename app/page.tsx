@@ -107,16 +107,19 @@ function Hero() {
   const [vis, setVis] = useState(false);
   useEffect(() => { const t = setTimeout(() => setVis(true), 60); return () => clearTimeout(t); }, []);
   return (
-    <section id="hero" className="hero-sec" style={{ position: "relative", overflow: "hidden", background: "#000000", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      {/* Full-bleed studio portrait: its open left side gives the copy room. */}
+    <section id="hero" className="hero-sec" style={{ position: "relative", overflow: "hidden", background: "#080908", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div aria-hidden className="hero-set" style={{ position: "absolute", inset: 0, zIndex: 2, pointerEvents: "none" }} />
+      {/* The source portrait stays intact; desktop styling blends its black field into the set. */}
       <div aria-hidden className="hero-bg" style={{
-        position: "absolute", inset: 0, backgroundRepeat: "no-repeat", zIndex: 0,
+        position: "absolute", inset: 0, backgroundRepeat: "no-repeat", zIndex: 1,
       }} />
-      {/* A tonal wash keeps the copy readable and softly blends the photo at the right edge. */}
-      <div aria-hidden className="hero-overlay" style={{ position: "absolute", inset: 0, zIndex: 1 }} />
+      <div aria-hidden className="hero-light" style={{ position: "absolute", zIndex: 2, pointerEvents: "none" }} />
+      <div aria-hidden className="hero-ledge" style={{ position: "absolute", zIndex: 2, pointerEvents: "none" }} />
+      {/* Dark left fade protects copy contrast and softens the frame edges. */}
+      <div aria-hidden className="hero-overlay" style={{ position: "absolute", inset: 0, zIndex: 3 }} />
 
       <div id="hero-content" style={{
-        position: "relative", zIndex: 2, width: "100%",
+        position: "relative", zIndex: 4, width: "100%",
         display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "center",
         padding: "0 clamp(1.5rem, 8vw, 9rem)",
         paddingTop: "21vh",
@@ -132,7 +135,8 @@ function Hero() {
             fontSize: "clamp(2.8rem,4.2vw,5rem)", color: "#F0EEE9",
             lineHeight: 1.02, letterSpacing: "-0.025em", marginBottom: "2rem",
           }}>
-            Technical Product Counsel<br className="hero-title-break" /> &amp; AI Engineer
+            <span className="hero-title-line">Technical Product Counsel</span>
+            <span className="hero-title-line">&amp; AI Engineer</span>
           </h1>
           <div className="hero-ctas">
             <button
@@ -156,12 +160,43 @@ function Hero() {
         .hero-sec { height: 100vh; }
         @supports (height: 100svh) { .hero-sec { height: 100svh; } }
 
-        /* The selected portrait stays sharp; its black backdrop merges into the hero without a visible photo edge. */
-        .hero-bg { background-image: url('/decra-hero-mobile.jpg'); background-size: auto 100%; background-position: right center; }
+        /* A CSS-built charcoal room: soft beam, quiet wall plane, and a low ledge. */
+        .hero-set {
+          background: linear-gradient(90deg, #090a09 0%, #141615 44%, #292b28 74%, #1a1b19 100%);
+          -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 53%, transparent 69%);
+          mask-image: linear-gradient(90deg, #000 0%, #000 53%, transparent 69%);
+        }
+        .hero-set::before {
+          content: ''; position: absolute; inset: -12%;
+          background:
+            linear-gradient(112deg, transparent 52%, rgba(232,229,215,0.22) 59%, rgba(232,229,215,0.075) 64%, transparent 71%),
+            radial-gradient(ellipse 18% 72% at 63% 30%, rgba(206,207,192,0.22), transparent 76%);
+        }
+        .hero-set::after {
+          content: ''; position: absolute; top: 0; right: 5%; width: 37%; height: 100%;
+          clip-path: polygon(16% 0,100% 0,100% 100%,0 100%);
+          background: linear-gradient(90deg, rgba(232,230,215,0.16) 0%, rgba(131,134,123,0.21) 9%, rgba(37,40,37,0.22) 100%);
+          border-left: 1px solid rgba(235,232,218,0.18);
+        }
+        .hero-light {
+          left: 50%; top: -8%; width: 18%; height: 90%;
+          clip-path: polygon(45% 0,100% 0,95% 100%,0 100%);
+          background: linear-gradient(180deg, rgba(239,236,220,0.22) 0%, rgba(219,217,204,0.10) 45%, rgba(219,217,204,0.025) 78%, transparent 100%);
+          filter: blur(38px); opacity: 0.78; mix-blend-mode: screen;
+        }
+        .hero-ledge {
+          right: 3%; bottom: 0; width: 43%; height: 19%;
+          clip-path: polygon(0 9%,100% 0,100% 100%,0 100%);
+          background: linear-gradient(180deg, #73756d 0%, #424540 5%, #242724 25%, #111311 100%);
+          border-top: 1px solid rgba(235,232,218,0.26);
+          box-shadow: 0 -16px 42px rgba(0,0,0,0.28);
+        }
+        /* Keep the original portrait crisp and shift its visual center to roughly three-quarters across the hero. */
+        .hero-bg { background-image: url('/decra-hero-mobile.jpg'); background-size: auto 96%; background-position: 86% bottom; }
         .hero-overlay {
           background:
-            linear-gradient(90deg, #050705 0%, rgba(5,7,5,0.96) 41%, rgba(5,7,5,0.82) 57%, rgba(5,7,5,0.34) 70%, transparent 82%),
-            linear-gradient(270deg, #050705 0%, transparent 9%);
+            linear-gradient(90deg, rgba(7,8,7,0.98) 0%, rgba(7,8,7,0.90) 39%, rgba(7,8,7,0.62) 49%, rgba(7,8,7,0.18) 58%, transparent 69%),
+            linear-gradient(270deg, #080908 0%, transparent 8%);
         }
         #hero-content { padding: 0 clamp(1.5rem, 8vw, 9rem) !important; }
         .hero-kicker {
@@ -171,25 +206,29 @@ function Hero() {
         }
         .hero-kicker span { color: #5FA98F; font-size: 0.9rem; }
         .hero-copy h1 { max-width: 68rem; text-wrap: balance; }
+        .hero-title-line { display: block; }
 
         /* On tablet the portrait is slightly inset, with a dark text zone on the left. */
         @media (min-width: 641px) and (max-width: 900px) {
-          .hero-bg { background-size: auto 90%; background-position: right bottom; }
+          .hero-bg { background-size: auto 66%; background-position: 98% bottom; }
+          .hero-set::after { right: 0; width: 45%; }
           .hero-overlay {
             background:
-              linear-gradient(90deg, #050705 0%, rgba(5,7,5,0.97) 34%, rgba(5,7,5,0.76) 46%, rgba(5,7,5,0.24) 58%, transparent 70%),
-              linear-gradient(270deg, #050705 0%, transparent 8%);
+              linear-gradient(90deg, rgba(7,8,7,0.98) 0%, rgba(7,8,7,0.95) 36%, rgba(7,8,7,0.68) 49%, rgba(7,8,7,0.12) 64%, transparent 76%),
+              linear-gradient(270deg, #080908 0%, transparent 8%);
           }
           #hero-content { padding-top: 16vh !important; }
           .hero-copy { max-width: 20rem !important; }
           .hero-copy h1 { font-size: clamp(2.4rem, 5.4vw, 3.4rem) !important; }
-          .hero-title-break { display: none; }
           .hero-kicker { font-size: 0.6rem; margin-bottom: 1.1rem; }
           .hero-bg { background-size: auto 86%; background-position: 110% bottom; }
         }
 
         /* Phone framing uses the portrait shot, with the copy kept in the dark lower third. */
         @media (max-width: 640px) {
+          .hero-set, .hero-light, .hero-ledge { display: none; }
+          .hero-sec { background: #000 !important; }
+          .hero-bg { mix-blend-mode: normal !important; }
           /* height:100% is what actually makes the flex-end below bite — without
              it the content box is only as tall as its text, so it sat centred,
              directly over her face. Dropping the copy to the lower third keeps
@@ -204,7 +243,6 @@ function Hero() {
           .hero-copy { text-align: center !important; }
           .hero-kicker { justify-content: center; }
           .hero-copy h1 { font-size: clamp(2.15rem, 8vw, 3rem) !important; }
-          .hero-title-break { display: none; }
           .hero-bg {
             background-image: url('/decra-hero-mobile.jpg') !important;
             background-size: cover !important;
