@@ -155,19 +155,17 @@ function Hero() {
         .hero-sec { height: 100vh; }
         @supports (height: 100svh) { .hero-sec { height: 100svh; } }
 
-        /* The original wide portrait stays crisp and fills the viewport edge to edge. */
-        .hero-bg { background-image: url('/decra-hero-wide.jpg'); background-size: cover; background-position: center 48%; }
+        /* The selected portrait stays sharp; its black backdrop merges into the hero without a visible photo edge. */
+        .hero-bg { background-image: url('/decra-hero-mobile.jpg'); background-size: auto 100%; background-position: right center; }
         .hero-overlay {
-          background:
-            linear-gradient(90deg, #080807 0%, rgba(8,8,7,0.93) 22%, rgba(8,8,7,0.63) 39%, rgba(8,8,7,0.12) 63%, rgba(8,8,7,0.08) 88%, rgba(8,8,7,0.42) 100%),
-            linear-gradient(180deg, rgba(0,0,0,0.12) 0%, transparent 28%, transparent 68%, rgba(0,0,0,0.25) 100%);
+          background: linear-gradient(90deg, #000 0%, rgba(0,0,0,0.96) 22%, rgba(0,0,0,0.76) 38%, rgba(0,0,0,0.24) 56%, transparent 72%);
         }
 
-        /* Tablet keeps the wide framing, shifting the crop right to retain her face and shoulder. */
+        /* On tablet the portrait is slightly inset, with a dark text zone on the left. */
         @media (min-width: 641px) and (max-width: 900px) {
-          .hero-bg { background-position: 64% center; }
+          .hero-bg { background-size: auto 90%; background-position: right bottom; }
           .hero-overlay {
-            background: linear-gradient(90deg, rgba(8,8,7,0.97) 0%, rgba(8,8,7,0.88) 32%, rgba(8,8,7,0.58) 52%, rgba(8,8,7,0.12) 78%, rgba(8,8,7,0.38) 100%);
+            background: linear-gradient(90deg, #000 0%, rgba(0,0,0,0.96) 34%, rgba(0,0,0,0.78) 52%, rgba(0,0,0,0.18) 78%, transparent 100%);
           }
           #hero-content { padding-top: 16vh !important; }
           .hero-copy { max-width: 23rem !important; }
