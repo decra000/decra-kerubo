@@ -132,8 +132,8 @@ function Hero() {
           <p className="hero-kicker">Law <span>·</span> Technology <span>·</span> AI</p>
           <h1 style={{
             fontFamily: "var(--font-serif)", fontWeight: 400,
-            fontSize: "clamp(2.8rem,4.2vw,5rem)", color: "#F0EEE9",
-            lineHeight: 1.02, letterSpacing: "-0.025em", marginBottom: "2rem",
+            fontSize: "clamp(2.8rem,3.8vw,4.5rem)", color: "#F0EEE9",
+            lineHeight: 1.04, letterSpacing: "-0.025em", marginBottom: "1.65rem",
           }}>
             <span className="hero-title-line">Technical Product Counsel</span>
             <span className="hero-title-line">&amp; AI Engineer</span>
@@ -141,9 +141,9 @@ function Hero() {
           <div className="hero-ctas">
             <button
               onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: PRODUCT_COUNSEL_GROUP }))}
-              style={{ ...lineBtn({ light: true }), background: "transparent", color: "#F0EEE9", borderColor: "rgba(240,238,233,0.72)" }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#5FA98F"; (e.currentTarget as HTMLElement).style.borderColor = "#5FA98F"; (e.currentTarget as HTMLElement).style.color = "#08100D"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "transparent"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(240,238,233,0.72)"; (e.currentTarget as HTMLElement).style.color = "#F0EEE9"; }}
+              style={{ ...lineBtn({ light: true }), background: "#F0EEE9", color: "#191918", borderColor: "#F0EEE9" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#D8D4CC"; (e.currentTarget as HTMLElement).style.borderColor = "#D8D4CC"; (e.currentTarget as HTMLElement).style.color = "#191918"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "#F0EEE9"; (e.currentTarget as HTMLElement).style.borderColor = "#F0EEE9"; (e.currentTarget as HTMLElement).style.color = "#191918"; }}
             >
               Retain as Technical Product Counsel
             </button>
@@ -160,25 +160,24 @@ function Hero() {
         .hero-sec { height: 100vh; }
         @supports (height: 100svh) { .hero-sec { height: 100svh; } }
 
-        /* Warm editorial set: muted olive, bronze and a soft directional light. */
+        /* Restrained graphite and warm stone, with a soft diagonal wash of light. */
         .hero-set {
           background:
-            radial-gradient(ellipse 42% 82% at 5% 7%, rgba(120,132,116,0.78), transparent 88%),
-            radial-gradient(ellipse 24% 82% at 28% 1%, rgba(178,131,84,0.62), transparent 92%),
-            linear-gradient(90deg, #73796c 0%, #92704f 31%, #4b3524 39%, #140d08 47%, #000 55%);
+            radial-gradient(ellipse 54% 100% at 0% 0%, rgba(133,132,124,0.46), transparent 88%),
+            linear-gradient(90deg, #666660 0%, #5b5954 28%, #393733 43%, #171615 56%, #000 68%);
         }
         .hero-set::before {
-          content: ''; position: absolute; inset: 0; opacity: 0.11; pointer-events: none;
+          content: ''; position: absolute; inset: 0; opacity: 0.035; pointer-events: none;
           background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.68' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
         }
         .hero-set::after {
           content: none;
         }
         .hero-light {
-          left: -12%; top: -38%; width: 73%; height: 132%;
-          clip-path: polygon(0 0,43% 0,100% 100%,48% 100%);
-          background: linear-gradient(145deg, rgba(255,226,183,0.22) 0%, rgba(245,201,151,0.10) 48%, rgba(237,192,143,0.012) 82%, transparent 100%);
-          filter: blur(70px); opacity: 0.38; mix-blend-mode: screen;
+          left: -15%; top: -42%; width: 76%; height: 138%;
+          clip-path: polygon(0 0,38% 0,100% 100%,46% 100%);
+          background: linear-gradient(145deg, rgba(242,239,229,0.17) 0%, rgba(222,219,210,0.08) 48%, rgba(203,199,189,0.008) 82%, transparent 100%);
+          filter: blur(78px); opacity: 0.3; mix-blend-mode: screen;
         }
         .hero-return {
           display: none;

@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Sun, Moon, Menu, X } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
 
@@ -21,6 +22,8 @@ const lk: React.CSSProperties = {
 
 export function Navbar() {
   const { theme, toggle } = useTheme();
+  const pathname = usePathname();
+  const onHome = pathname === "/";
   const [scrolled, setScrolled] = useState(false);
   const [mob, setMob] = useState(false);
   const [hidden, setHidden] = useState(false);
@@ -67,20 +70,20 @@ export function Navbar() {
       }}>
         <div style={{ maxWidth: "var(--max-w)", margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <Link href="/" style={{ textDecoration: "none" }}>
-            <span className="nav-logo" style={{ fontFamily: "var(--font-serif)", fontSize: "1.1rem", color: "var(--c-ink)" }}>Decra Kerubo</span>
+            <span className="nav-logo" style={{ fontFamily: "var(--font-serif)", fontSize: "1.1rem", color: onHome && !scrolled ? "#F2F0EB" : "var(--c-ink)" }}>Decra Kerubo</span>
           </Link>
 
           <nav className="nav-links">
             {links.map(l => (
-              <Link key={l.href} href={l.href} className="nav-link" style={lk}
-                onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink)"}
-                onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--c-ink-mid)"}>
+              <Link key={l.href} href={l.href} className="nav-link" style={{ ...lk, color: onHome && !scrolled ? "rgba(242,240,235,0.78)" : lk.color }}
+                onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = onHome && !scrolled ? "#FFFFFF" : "var(--c-ink)"}
+                onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = onHome && !scrolled ? "rgba(242,240,235,0.78)" : "var(--c-ink-mid)"}>
                 {l.label}
               </Link>
             ))}
             <Link href="/book" className="nav-cta" style={{
-              ...lk, color: "var(--c-bg)", background: "var(--c-ink)",
-              padding: "0.55rem 1rem", borderRadius: 0,
+              ...lk, color: onHome && !scrolled ? "#171715" : "var(--c-bg)", background: onHome && !scrolled ? "#F2F0EB" : "var(--c-ink)",
+              padding: "0.65rem 1.15rem", borderRadius: 0,
             }}
               onMouseEnter={e => (e.currentTarget as HTMLElement).style.opacity = "0.82"}
               onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = "1"}>
@@ -95,7 +98,7 @@ export function Navbar() {
                 display: "flex", alignItems: "center", justifyContent: "center",
                 width: "1.9rem", height: "1.9rem", borderRadius: "50%",
                 background: "none", border: "1px solid var(--c-border-strong)",
-                cursor: "pointer", color: "var(--c-ink)", lineHeight: 0,
+                cursor: "pointer", color: onHome && !scrolled ? "#F2F0EB" : "var(--c-ink)", lineHeight: 0,
                 transition: "color 0.25s, border-color 0.25s, transform 0.35s cubic-bezier(0.16,1,0.3,1)",
               }}
               onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.color = "var(--c-accent)"; el.style.borderColor = "var(--c-accent)"; el.style.transform = "rotate(35deg)"; }}
