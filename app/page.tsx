@@ -169,6 +169,8 @@ function Hero() {
         .hero-set::before {
           content: ''; position: absolute; inset: -12%;
           background:
+            repeating-linear-gradient(118deg, rgba(236,232,220,0.025) 0, rgba(236,232,220,0.025) 1px, transparent 1px, transparent 3px),
+            radial-gradient(ellipse 55% 72% at 22% 52%, rgba(151,146,133,0.28), transparent 76%),
             radial-gradient(ellipse 25% 65% at 61% 28%, rgba(206,207,192,0.12), transparent 78%),
             radial-gradient(ellipse 42% 65% at 47% 50%, rgba(30,38,33,0.28), transparent 78%);
         }
@@ -192,10 +194,12 @@ function Hero() {
           box-shadow: -20px 0 54px rgba(0,0,0,0.38);
         }
         /* Keep the original portrait crisp and shift its visual center to roughly three-quarters across the hero. */
-        .hero-bg { background-image: url('/decra-hero-mobile.jpg'); background-size: auto 96%; background-position: 86% bottom; }
+        .hero-bg { background-image: url('/decra-hero-mobile.jpg'); background-size: auto 96%; background-position: 82% bottom; }
         .hero-overlay {
           background:
-            linear-gradient(90deg, rgba(54,57,55,0.97) 0%, rgba(42,45,43,0.96) 28%, rgba(23,25,24,0.94) 43%, rgba(7,8,7,0.68) 52%, rgba(7,8,7,0.18) 61%, transparent 72%),
+            repeating-linear-gradient(118deg, rgba(242,238,225,0.025) 0, rgba(242,238,225,0.025) 1px, transparent 1px, transparent 3px),
+            radial-gradient(ellipse 46% 100% at 18% 48%, rgba(125,120,109,0.40), transparent 85%),
+            linear-gradient(90deg, rgba(66,64,59,0.98) 0%, rgba(48,47,44,0.97) 28%, rgba(24,25,24,0.95) 43%, rgba(7,8,7,0.68) 52%, rgba(7,8,7,0.18) 61%, transparent 72%),
             linear-gradient(270deg, #080908 0%, transparent 8%);
         }
         #hero-content { padding: 0 clamp(1.5rem, 8vw, 9rem) !important; }
@@ -221,7 +225,7 @@ function Hero() {
           .hero-copy { max-width: 20rem !important; }
           .hero-copy h1 { font-size: clamp(2.4rem, 5.4vw, 3.4rem) !important; }
           .hero-kicker { font-size: 0.6rem; margin-bottom: 1.1rem; }
-          .hero-bg { background-size: auto 86%; background-position: 110% bottom; }
+          .hero-bg { background-size: auto 86%; background-position: 104% bottom; }
         }
 
         /* Phone framing uses the portrait shot, with the copy kept in the dark lower third. */
