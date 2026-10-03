@@ -107,11 +107,11 @@ function Hero() {
   const [vis, setVis] = useState(false);
   useEffect(() => { const t = setTimeout(() => setVis(true), 60); return () => clearTimeout(t); }, []);
   return (
-    <section id="hero" className="hero-sec" style={{ position: "relative", overflow: "hidden", background: "#080908", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <div aria-hidden className="hero-set" style={{ position: "absolute", inset: 0, zIndex: 2, pointerEvents: "none" }} />
+    <section id="hero" className="hero-sec" style={{ position: "relative", overflow: "hidden", background: "#241a12", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div aria-hidden className="hero-set" style={{ position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none" }} />
       {/* The source portrait stays intact; desktop styling blends its black field into the set. */}
       <div aria-hidden className="hero-bg" style={{
-        position: "absolute", inset: 0, backgroundRepeat: "no-repeat", zIndex: 1,
+        position: "absolute", inset: 0, backgroundRepeat: "no-repeat", zIndex: 2,
       }} />
       <div aria-hidden className="hero-light" style={{ position: "absolute", zIndex: 3.5, pointerEvents: "none" }} />
       <div aria-hidden className="hero-return" style={{ position: "absolute", zIndex: 2, pointerEvents: "none" }} />
@@ -141,9 +141,9 @@ function Hero() {
           <div className="hero-ctas">
             <button
               onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: PRODUCT_COUNSEL_GROUP }))}
-              style={{ ...lineBtn({ light: true }), background: "#F0EEE9", color: "#11120F", borderColor: "#F0EEE9" }}
+              style={{ ...lineBtn({ light: true }), background: "transparent", color: "#F0EEE9", borderColor: "rgba(240,238,233,0.72)" }}
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#5FA98F"; (e.currentTarget as HTMLElement).style.borderColor = "#5FA98F"; (e.currentTarget as HTMLElement).style.color = "#08100D"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "#F0EEE9"; (e.currentTarget as HTMLElement).style.borderColor = "#F0EEE9"; (e.currentTarget as HTMLElement).style.color = "#11120F"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "transparent"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(240,238,233,0.72)"; (e.currentTarget as HTMLElement).style.color = "#F0EEE9"; }}
             >
               Retain as Technical Product Counsel
             </button>
@@ -160,46 +160,35 @@ function Hero() {
         .hero-sec { height: 100vh; }
         @supports (height: 100svh) { .hero-sec { height: 100svh; } }
 
-        /* A CSS-built charcoal room: soft beam, quiet wall plane, and a vertical return beside the portrait. */
+        /* Warm editorial set: muted olive, bronze and a soft directional light. */
         .hero-set {
-          background: linear-gradient(90deg, #090a09 0%, #111311 44%, #181a18 74%, #080908 100%);
-          -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 53%, transparent 69%);
-          mask-image: linear-gradient(90deg, #000 0%, #000 53%, transparent 69%);
+          background:
+            radial-gradient(ellipse 42% 82% at 5% 7%, rgba(120,132,116,0.78), transparent 88%),
+            radial-gradient(ellipse 24% 82% at 28% 1%, rgba(178,131,84,0.62), transparent 92%),
+            linear-gradient(90deg, #73796c 0%, #92704f 31%, #4b3524 39%, #140d08 47%, #000 55%);
         }
         .hero-set::before {
-          content: ''; position: absolute; inset: -12%;
-          background:
-            radial-gradient(ellipse 55% 72% at 22% 52%, rgba(151,146,133,0.28), transparent 76%),
-            radial-gradient(ellipse 25% 65% at 61% 28%, rgba(206,207,192,0.12), transparent 78%),
-            radial-gradient(ellipse 42% 65% at 47% 50%, rgba(30,38,33,0.28), transparent 78%);
+          content: ''; position: absolute; inset: 0; opacity: 0.11; pointer-events: none;
+          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.68' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
         }
         .hero-set::after {
-          content: ''; position: absolute; top: 0; right: 5%; width: 37%; height: 100%;
-          clip-path: polygon(16% 0,100% 0,100% 100%,0 100%);
-          background: linear-gradient(90deg, rgba(232,230,215,0.055), transparent 35%);
-          border-left: 1px solid rgba(235,232,218,0.08);
+          content: none;
         }
         .hero-light {
-          left: 47%; top: -14%; width: 36%; height: 118%;
-          clip-path: polygon(0 0,13% 0,100% 100%,55% 100%);
-          background: linear-gradient(155deg, rgba(239,236,220,0.13) 0%, rgba(219,217,204,0.075) 42%, rgba(219,217,204,0.018) 76%, transparent 100%);
-          filter: blur(52px); opacity: 0.48; mix-blend-mode: screen;
+          left: -12%; top: -38%; width: 73%; height: 132%;
+          clip-path: polygon(0 0,43% 0,100% 100%,48% 100%);
+          background: linear-gradient(145deg, rgba(255,226,183,0.22) 0%, rgba(245,201,151,0.10) 48%, rgba(237,192,143,0.012) 82%, transparent 100%);
+          filter: blur(70px); opacity: 0.38; mix-blend-mode: screen;
         }
         .hero-return {
-          right: 0; top: 0; width: 10%; height: 100%;
-          background-color: #030303;
-          background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.018) 0, rgba(255,255,255,0.018) 1px, transparent 1px, transparent 4px), linear-gradient(90deg, #080808, #020202 42%);
-          border-left: 1px solid rgba(235,232,218,0.10);
-          box-shadow: -20px 0 54px rgba(0,0,0,0.38);
+          display: none;
         }
         /* Keep the original portrait crisp and shift its visual center to roughly three-quarters across the hero. */
-        .hero-bg { background-image: url('/decra-hero-mobile.jpg'); background-size: auto 96%; background-position: 82% bottom; }
+        .hero-bg { background-image: url('/decra-hero-mobile.jpg'); background-size: auto 92%; background-position: 87% bottom; mix-blend-mode: lighten; }
         .hero-overlay {
           background:
-            url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.10'/%3E%3C/svg%3E"),
-            radial-gradient(ellipse 46% 100% at 18% 48%, rgba(125,120,109,0.30), transparent 85%),
-            linear-gradient(90deg, rgba(66,64,59,0.98) 0%, rgba(48,47,44,0.97) 28%, rgba(24,25,24,0.95) 43%, rgba(7,8,7,0.68) 52%, rgba(7,8,7,0.18) 61%, transparent 72%),
-            linear-gradient(270deg, #080908 0%, transparent 8%);
+            linear-gradient(90deg, rgba(24,20,15,0.54) 0%, rgba(28,20,14,0.38) 34%, rgba(27,18,12,0.16) 52%, transparent 72%),
+            linear-gradient(180deg, rgba(35,25,17,0.22) 0%, transparent 32%, rgba(24,15,10,0.20) 100%);
         }
         #hero-content { padding: 0 clamp(1.5rem, 8vw, 9rem) !important; }
         .hero-kicker {
@@ -214,11 +203,10 @@ function Hero() {
         /* On tablet the portrait is slightly inset, with a dark text zone on the left. */
         @media (min-width: 641px) and (max-width: 900px) {
           .hero-bg { background-size: auto 66%; background-position: 98% bottom; }
-          .hero-set::after { right: 0; width: 45%; }
           .hero-overlay {
             background:
-              linear-gradient(90deg, rgba(48,51,49,0.98) 0%, rgba(36,39,37,0.96) 30%, rgba(18,20,19,0.94) 44%, rgba(7,8,7,0.68) 54%, rgba(7,8,7,0.12) 67%, transparent 78%),
-              linear-gradient(270deg, #080908 0%, transparent 8%);
+              linear-gradient(90deg, rgba(24,20,15,0.78) 0%, rgba(28,20,14,0.60) 38%, rgba(27,18,12,0.24) 55%, transparent 76%),
+              linear-gradient(180deg, rgba(35,25,17,0.22) 0%, transparent 32%, rgba(24,15,10,0.20) 100%);
           }
           #hero-content { padding-top: 16vh !important; }
           .hero-copy { max-width: 20rem !important; }
