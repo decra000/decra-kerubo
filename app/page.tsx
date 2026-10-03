@@ -107,7 +107,7 @@ function Hero() {
   const [vis, setVis] = useState(false);
   useEffect(() => { const t = setTimeout(() => setVis(true), 60); return () => clearTimeout(t); }, []);
   return (
-    <section id="hero" className="hero-sec" style={{ position: "relative", overflow: "hidden", background: "#241a12", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <section id="hero" className="hero-sec" style={{ position: "relative", overflow: "hidden", background: "#101311", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <div aria-hidden className="hero-set" style={{ position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none" }} />
       {/* The source portrait stays intact; desktop styling blends its black field into the set. */}
       <div aria-hidden className="hero-bg" style={{
@@ -121,19 +121,19 @@ function Hero() {
       <div id="hero-content" style={{
         position: "relative", zIndex: 4, width: "100%",
         display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "center",
-        padding: "0 clamp(1.5rem, 8vw, 9rem)",
-        paddingTop: "21vh",
+        padding: "0 clamp(1.5rem, 8vw, 8.5rem)",
+        paddingTop: "2vh",
         maxWidth: "none", margin: "0 auto",
         opacity: vis ? 1 : 0,
         transform: vis ? "none" : "translateY(14px)",
         transition: "opacity 1.1s cubic-bezier(0.16,1,0.3,1) 0.3s, transform 1.1s cubic-bezier(0.16,1,0.3,1) 0.3s",
       }}>
-        <div style={{ maxWidth: "68rem", textAlign: "left" }} className="hero-copy">
+        <div style={{ maxWidth: "57rem", textAlign: "left" }} className="hero-copy">
           <p className="hero-kicker">Law <span>·</span> Technology <span>·</span> AI</p>
           <h1 style={{
             fontFamily: "var(--font-serif)", fontWeight: 400,
-            fontSize: "clamp(2.8rem,3.8vw,4.5rem)", color: "#F0EEE9",
-            lineHeight: 1.04, letterSpacing: "-0.025em", marginBottom: "1.65rem",
+            fontSize: "clamp(2.65rem,3.5vw,4.2rem)", color: "#F1F0EB",
+            lineHeight: 1.04, letterSpacing: "-0.035em", marginBottom: "1.8rem",
           }}>
             <span className="hero-title-line">Technical Product Counsel</span>
             <span className="hero-title-line">&amp; AI Engineer</span>
@@ -160,58 +160,58 @@ function Hero() {
         .hero-sec { height: 100vh; }
         @supports (height: 100svh) { .hero-sec { height: 100svh; } }
 
-        /* Restrained graphite and warm stone, with a soft diagonal wash of light. */
+        /* An ink-dark editorial set: the portrait's black field disappears into
+           a full-height right panel while a quiet stone light opens the copy side. */
         .hero-set {
           background:
-            radial-gradient(ellipse 54% 100% at 0% 0%, rgba(133,132,124,0.46), transparent 88%),
-            linear-gradient(90deg, #666660 0%, #5b5954 28%, #393733 43%, #171615 56%, #000 68%);
+            radial-gradient(ellipse 48% 80% at 3% 0%, rgba(103,113,103,0.23), transparent 88%),
+            linear-gradient(90deg, #242925 0%, #1d221f 34%, #141816 52%, #080a09 67%, #000 79%);
         }
         .hero-set::before {
-          content: ''; position: absolute; inset: 0; opacity: 0.035; pointer-events: none;
+          content: ''; position: absolute; inset: 0; opacity: 0.018; pointer-events: none;
           background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.68' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
         }
         .hero-set::after {
           content: none;
         }
         .hero-light {
-          left: -15%; top: -42%; width: 76%; height: 138%;
-          clip-path: polygon(0 0,38% 0,100% 100%,46% 100%);
-          background: linear-gradient(145deg, rgba(242,239,229,0.17) 0%, rgba(222,219,210,0.08) 48%, rgba(203,199,189,0.008) 82%, transparent 100%);
-          filter: blur(78px); opacity: 0.3; mix-blend-mode: screen;
+          left: -18%; top: -48%; width: 78%; height: 145%;
+          clip-path: polygon(0 0,36% 0,100% 100%,44% 100%);
+          background: linear-gradient(145deg, rgba(221,222,208,0.12) 0%, rgba(202,208,198,0.055) 48%, rgba(190,198,190,0.004) 82%, transparent 100%);
+          filter: blur(86px); opacity: 0.32; mix-blend-mode: screen;
         }
         .hero-return {
           display: none;
         }
-        /* Keep the original portrait crisp and shift its visual center to roughly three-quarters across the hero. */
-        .hero-bg { background-image: url('/decra-hero-mobile.jpg'); background-size: auto 92%; background-position: 87% bottom; mix-blend-mode: lighten; }
+        /* Preserve the selected portrait as-is; its black background joins the right-side ink panel. */
+        .hero-bg { background-image: url('/decra-hero-mobile.jpg'); background-size: auto 94%; background-position: 83% bottom; mix-blend-mode: lighten; }
         .hero-overlay {
           background:
-            linear-gradient(90deg, rgba(24,20,15,0.54) 0%, rgba(28,20,14,0.38) 34%, rgba(27,18,12,0.16) 52%, transparent 72%),
-            linear-gradient(180deg, rgba(35,25,17,0.22) 0%, transparent 32%, rgba(24,15,10,0.20) 100%);
+            linear-gradient(90deg, rgba(10,13,11,0.12) 0%, rgba(10,13,11,0.06) 38%, transparent 61%),
+            linear-gradient(180deg, rgba(4,6,5,0.12) 0%, transparent 24%, transparent 74%, rgba(4,6,5,0.2) 100%);
         }
-        #hero-content { padding: 0 clamp(1.5rem, 8vw, 9rem) !important; }
+        #hero-content { padding: 0 clamp(1.5rem, 8vw, 8.5rem) !important; }
         .hero-kicker {
           display: flex; align-items: center; gap: 0.7rem;
           color: #A9B4A8; font: 700 0.66rem/1.2 var(--font-manjari);
           letter-spacing: 0.24em; text-transform: uppercase; margin-bottom: 1.5rem;
         }
         .hero-kicker span { color: #5FA98F; font-size: 0.9rem; }
-        .hero-copy h1 { max-width: 68rem; text-wrap: balance; }
+        .hero-copy h1 { max-width: 57rem; text-wrap: balance; }
         .hero-title-line { display: block; }
 
-        /* On tablet the portrait is slightly inset, with a dark text zone on the left. */
+        /* Tablet keeps the same split-stage composition with a narrower copy measure. */
         @media (min-width: 641px) and (max-width: 900px) {
-          .hero-bg { background-size: auto 66%; background-position: 98% bottom; }
+          .hero-bg { background-size: auto 76%; background-position: 100% bottom; }
           .hero-overlay {
             background:
-              linear-gradient(90deg, rgba(24,20,15,0.78) 0%, rgba(28,20,14,0.60) 38%, rgba(27,18,12,0.24) 55%, transparent 76%),
-              linear-gradient(180deg, rgba(35,25,17,0.22) 0%, transparent 32%, rgba(24,15,10,0.20) 100%);
+              linear-gradient(90deg, rgba(13,16,14,0.42) 0%, rgba(13,16,14,0.24) 47%, rgba(13,16,14,0.04) 72%, transparent 90%),
+              linear-gradient(180deg, rgba(4,6,5,0.14) 0%, transparent 26%, transparent 75%, rgba(4,6,5,0.22) 100%);
           }
-          #hero-content { padding-top: 16vh !important; }
-          .hero-copy { max-width: 20rem !important; }
-          .hero-copy h1 { font-size: clamp(2.4rem, 5.4vw, 3.4rem) !important; }
-          .hero-kicker { font-size: 0.6rem; margin-bottom: 1.1rem; }
-          .hero-bg { background-size: auto 86%; background-position: 104% bottom; }
+          #hero-content { padding-top: 3vh !important; }
+          .hero-copy { max-width: 27rem !important; }
+          .hero-copy h1 { font-size: clamp(2.35rem, 5vw, 3.1rem) !important; }
+          .hero-kicker { font-size: 0.6rem; margin-bottom: 1.25rem; }
         }
 
         /* Phone framing uses the portrait shot, with the copy kept in the dark lower third. */
