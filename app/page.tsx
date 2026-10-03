@@ -195,7 +195,7 @@ function Hero() {
         .hero-bg { background-image: url('/decra-hero-mobile.jpg'); background-size: auto 96%; background-position: 86% bottom; }
         .hero-overlay {
           background:
-            linear-gradient(90deg, rgba(7,8,7,0.98) 0%, rgba(7,8,7,0.90) 39%, rgba(7,8,7,0.62) 49%, rgba(7,8,7,0.18) 58%, transparent 69%),
+            linear-gradient(90deg, rgba(54,57,55,0.97) 0%, rgba(42,45,43,0.96) 28%, rgba(23,25,24,0.94) 43%, rgba(7,8,7,0.68) 52%, rgba(7,8,7,0.18) 61%, transparent 72%),
             linear-gradient(270deg, #080908 0%, transparent 8%);
         }
         #hero-content { padding: 0 clamp(1.5rem, 8vw, 9rem) !important; }
@@ -214,7 +214,7 @@ function Hero() {
           .hero-set::after { right: 0; width: 45%; }
           .hero-overlay {
             background:
-              linear-gradient(90deg, rgba(7,8,7,0.98) 0%, rgba(7,8,7,0.95) 36%, rgba(7,8,7,0.68) 49%, rgba(7,8,7,0.12) 64%, transparent 76%),
+              linear-gradient(90deg, rgba(48,51,49,0.98) 0%, rgba(36,39,37,0.96) 30%, rgba(18,20,19,0.94) 44%, rgba(7,8,7,0.68) 54%, rgba(7,8,7,0.12) 67%, transparent 78%),
               linear-gradient(270deg, #080908 0%, transparent 8%);
           }
           #hero-content { padding-top: 16vh !important; }
