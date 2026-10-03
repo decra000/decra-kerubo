@@ -113,7 +113,7 @@ function Hero() {
       <div aria-hidden className="hero-bg" style={{
         position: "absolute", inset: 0, backgroundRepeat: "no-repeat", zIndex: 1,
       }} />
-      <div aria-hidden className="hero-light" style={{ position: "absolute", zIndex: 2, pointerEvents: "none" }} />
+      <div aria-hidden className="hero-light" style={{ position: "absolute", zIndex: 3.5, pointerEvents: "none" }} />
       <div aria-hidden className="hero-return" style={{ position: "absolute", zIndex: 2, pointerEvents: "none" }} />
       {/* Dark left fade protects copy contrast and softens the frame edges. */}
       <div aria-hidden className="hero-overlay" style={{ position: "absolute", inset: 0, zIndex: 3 }} />
@@ -169,7 +169,6 @@ function Hero() {
         .hero-set::before {
           content: ''; position: absolute; inset: -12%;
           background:
-            repeating-linear-gradient(118deg, rgba(236,232,220,0.025) 0, rgba(236,232,220,0.025) 1px, transparent 1px, transparent 3px),
             radial-gradient(ellipse 55% 72% at 22% 52%, rgba(151,146,133,0.28), transparent 76%),
             radial-gradient(ellipse 25% 65% at 61% 28%, rgba(206,207,192,0.12), transparent 78%),
             radial-gradient(ellipse 42% 65% at 47% 50%, rgba(30,38,33,0.28), transparent 78%);
@@ -181,10 +180,10 @@ function Hero() {
           border-left: 1px solid rgba(235,232,218,0.08);
         }
         .hero-light {
-          left: 34%; top: -14%; width: 49%; height: 118%;
+          left: 47%; top: -14%; width: 36%; height: 118%;
           clip-path: polygon(0 0,13% 0,100% 100%,55% 100%);
-          background: linear-gradient(155deg, rgba(239,236,220,0.20) 0%, rgba(219,217,204,0.10) 42%, rgba(219,217,204,0.025) 76%, transparent 100%);
-          filter: blur(42px); opacity: 0.72; mix-blend-mode: screen;
+          background: linear-gradient(155deg, rgba(239,236,220,0.13) 0%, rgba(219,217,204,0.075) 42%, rgba(219,217,204,0.018) 76%, transparent 100%);
+          filter: blur(52px); opacity: 0.48; mix-blend-mode: screen;
         }
         .hero-return {
           right: 0; top: 0; width: 10%; height: 100%;
@@ -197,8 +196,8 @@ function Hero() {
         .hero-bg { background-image: url('/decra-hero-mobile.jpg'); background-size: auto 96%; background-position: 82% bottom; }
         .hero-overlay {
           background:
-            repeating-linear-gradient(118deg, rgba(242,238,225,0.025) 0, rgba(242,238,225,0.025) 1px, transparent 1px, transparent 3px),
-            radial-gradient(ellipse 46% 100% at 18% 48%, rgba(125,120,109,0.40), transparent 85%),
+            url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.10'/%3E%3C/svg%3E"),
+            radial-gradient(ellipse 46% 100% at 18% 48%, rgba(125,120,109,0.30), transparent 85%),
             linear-gradient(90deg, rgba(66,64,59,0.98) 0%, rgba(48,47,44,0.97) 28%, rgba(24,25,24,0.95) 43%, rgba(7,8,7,0.68) 52%, rgba(7,8,7,0.18) 61%, transparent 72%),
             linear-gradient(270deg, #080908 0%, transparent 8%);
         }
