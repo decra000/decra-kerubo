@@ -185,8 +185,9 @@ function Hero() {
           top: 0; right: 0; bottom: 0;
           width: clamp(5rem, 9.1vw, 11rem);
           background:
-            repeating-linear-gradient(90deg, rgba(0,0,0,0.82) 0 7px, rgba(211,205,188,0.24) 7px 8px, rgba(34,41,35,0.76) 8px 25px),
-            linear-gradient(180deg, #111713 0%, #161d18 48%, #101512 100%);
+            linear-gradient(145deg, rgba(236,231,216,0.12) 0%, transparent 38%, rgba(0,0,0,0.16) 100%),
+            linear-gradient(90deg, #242c25 0 18%, #030504 18% 20%, rgba(225,219,199,0.52) 20% 20.8%, #242c25 20.8% 48%, #030504 48% 50%, rgba(225,219,199,0.52) 50% 50.8%, #242c25 50.8% 78%, #030504 78% 80%, rgba(225,219,199,0.52) 80% 80.8%, #242c25 80.8% 100%),
+            linear-gradient(180deg, #202820 0%, #29332b 48%, #1d251f 100%);
           border-left: 1px solid rgba(198, 195, 178, 0.28);
           box-shadow: inset 14px 0 28px -26px rgba(228, 221, 201, 0.55);
         }
