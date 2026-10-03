@@ -114,7 +114,7 @@ function Hero() {
         position: "absolute", inset: 0, backgroundRepeat: "no-repeat", zIndex: 1,
       }} />
       <div aria-hidden className="hero-light" style={{ position: "absolute", zIndex: 2, pointerEvents: "none" }} />
-      <div aria-hidden className="hero-ledge" style={{ position: "absolute", zIndex: 2, pointerEvents: "none" }} />
+      <div aria-hidden className="hero-return" style={{ position: "absolute", zIndex: 2, pointerEvents: "none" }} />
       {/* Dark left fade protects copy contrast and softens the frame edges. */}
       <div aria-hidden className="hero-overlay" style={{ position: "absolute", inset: 0, zIndex: 3 }} />
 
@@ -160,7 +160,7 @@ function Hero() {
         .hero-sec { height: 100vh; }
         @supports (height: 100svh) { .hero-sec { height: 100svh; } }
 
-        /* A CSS-built charcoal room: soft beam, quiet wall plane, and a low ledge. */
+        /* A CSS-built charcoal room: soft beam, quiet wall plane, and a vertical return beside the portrait. */
         .hero-set {
           background: linear-gradient(90deg, #090a09 0%, #141615 44%, #292b28 74%, #1a1b19 100%);
           -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 53%, transparent 69%);
@@ -184,12 +184,11 @@ function Hero() {
           background: linear-gradient(180deg, rgba(239,236,220,0.22) 0%, rgba(219,217,204,0.10) 45%, rgba(219,217,204,0.025) 78%, transparent 100%);
           filter: blur(38px); opacity: 0.78; mix-blend-mode: screen;
         }
-        .hero-ledge {
-          right: 3%; bottom: 0; width: 43%; height: 19%;
-          clip-path: polygon(0 9%,100% 0,100% 100%,0 100%);
-          background: linear-gradient(180deg, #73756d 0%, #424540 5%, #242724 25%, #111311 100%);
-          border-top: 1px solid rgba(235,232,218,0.26);
-          box-shadow: 0 -16px 42px rgba(0,0,0,0.28);
+        .hero-return {
+          right: 0; top: 0; width: 10%; height: 100%;
+          background: linear-gradient(90deg, #62655d 0%, #363934 5%, #20231f 26%, #111311 100%);
+          border-left: 1px solid rgba(235,232,218,0.22);
+          box-shadow: -20px 0 54px rgba(0,0,0,0.28);
         }
         /* Keep the original portrait crisp and shift its visual center to roughly three-quarters across the hero. */
         .hero-bg { background-image: url('/decra-hero-mobile.jpg'); background-size: auto 96%; background-position: 86% bottom; }
@@ -226,7 +225,7 @@ function Hero() {
 
         /* Phone framing uses the portrait shot, with the copy kept in the dark lower third. */
         @media (max-width: 640px) {
-          .hero-set, .hero-light, .hero-ledge { display: none; }
+          .hero-set, .hero-light, .hero-return { display: none; }
           .hero-sec { background: #000 !important; }
           .hero-bg { mix-blend-mode: normal !important; }
           /* height:100% is what actually makes the flex-end below bite — without
