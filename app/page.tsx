@@ -184,7 +184,9 @@ function Hero() {
           display: block;
           top: 0; right: 0; bottom: 0;
           width: clamp(5rem, 9.1vw, 11rem);
-          background: linear-gradient(180deg, #111713 0%, #161d18 48%, #101512 100%);
+          background:
+            repeating-linear-gradient(90deg, rgba(0,0,0,0.82) 0 7px, rgba(211,205,188,0.24) 7px 8px, rgba(34,41,35,0.76) 8px 25px),
+            linear-gradient(180deg, #111713 0%, #161d18 48%, #101512 100%);
           border-left: 1px solid rgba(198, 195, 178, 0.28);
           box-shadow: inset 14px 0 28px -26px rgba(228, 221, 201, 0.55);
         }
