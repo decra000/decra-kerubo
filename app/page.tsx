@@ -162,33 +162,34 @@ function Hero() {
 
         /* A CSS-built charcoal room: soft beam, quiet wall plane, and a vertical return beside the portrait. */
         .hero-set {
-          background: linear-gradient(90deg, #090a09 0%, #141615 44%, #292b28 74%, #1a1b19 100%);
+          background: linear-gradient(90deg, #090a09 0%, #111311 44%, #181a18 74%, #080908 100%);
           -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 53%, transparent 69%);
           mask-image: linear-gradient(90deg, #000 0%, #000 53%, transparent 69%);
         }
         .hero-set::before {
           content: ''; position: absolute; inset: -12%;
           background:
-            linear-gradient(112deg, transparent 52%, rgba(232,229,215,0.22) 59%, rgba(232,229,215,0.075) 64%, transparent 71%),
-            radial-gradient(ellipse 18% 72% at 63% 30%, rgba(206,207,192,0.22), transparent 76%);
+            radial-gradient(ellipse 25% 65% at 61% 28%, rgba(206,207,192,0.12), transparent 78%),
+            radial-gradient(ellipse 42% 65% at 47% 50%, rgba(30,38,33,0.28), transparent 78%);
         }
         .hero-set::after {
           content: ''; position: absolute; top: 0; right: 5%; width: 37%; height: 100%;
           clip-path: polygon(16% 0,100% 0,100% 100%,0 100%);
-          background: linear-gradient(90deg, rgba(232,230,215,0.16) 0%, rgba(131,134,123,0.21) 9%, rgba(37,40,37,0.22) 100%);
-          border-left: 1px solid rgba(235,232,218,0.18);
+          background: linear-gradient(90deg, rgba(232,230,215,0.055), transparent 35%);
+          border-left: 1px solid rgba(235,232,218,0.08);
         }
         .hero-light {
-          left: 50%; top: -8%; width: 18%; height: 90%;
-          clip-path: polygon(45% 0,100% 0,95% 100%,0 100%);
-          background: linear-gradient(180deg, rgba(239,236,220,0.22) 0%, rgba(219,217,204,0.10) 45%, rgba(219,217,204,0.025) 78%, transparent 100%);
-          filter: blur(38px); opacity: 0.78; mix-blend-mode: screen;
+          left: 34%; top: -14%; width: 49%; height: 118%;
+          clip-path: polygon(0 0,13% 0,100% 100%,55% 100%);
+          background: linear-gradient(155deg, rgba(239,236,220,0.20) 0%, rgba(219,217,204,0.10) 42%, rgba(219,217,204,0.025) 76%, transparent 100%);
+          filter: blur(42px); opacity: 0.72; mix-blend-mode: screen;
         }
         .hero-return {
           right: 0; top: 0; width: 10%; height: 100%;
-          background: linear-gradient(90deg, #62655d 0%, #363934 5%, #20231f 26%, #111311 100%);
-          border-left: 1px solid rgba(235,232,218,0.22);
-          box-shadow: -20px 0 54px rgba(0,0,0,0.28);
+          background-color: #030303;
+          background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.018) 0, rgba(255,255,255,0.018) 1px, transparent 1px, transparent 4px), linear-gradient(90deg, #080808, #020202 42%);
+          border-left: 1px solid rgba(235,232,218,0.10);
+          box-shadow: -20px 0 54px rgba(0,0,0,0.38);
         }
         /* Keep the original portrait crisp and shift its visual center to roughly three-quarters across the hero. */
         .hero-bg { background-image: url('/decra-hero-mobile.jpg'); background-size: auto 96%; background-position: 86% bottom; }
