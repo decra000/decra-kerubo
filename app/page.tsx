@@ -181,7 +181,12 @@ function Hero() {
           filter: blur(86px); opacity: 0.32; mix-blend-mode: screen;
         }
         .hero-return {
-          display: none;
+          display: block;
+          top: 0; right: 0; bottom: 0;
+          width: clamp(5rem, 9.1vw, 11rem);
+          background: linear-gradient(180deg, #111713 0%, #161d18 48%, #101512 100%);
+          border-left: 1px solid rgba(198, 195, 178, 0.28);
+          box-shadow: inset 14px 0 28px -26px rgba(228, 221, 201, 0.55);
         }
         /* Preserve the selected portrait as-is; its black background joins the right-side ink panel. */
         .hero-bg { background-image: url('/decra-hero-mobile.jpg'); background-size: auto 94%; background-position: 83% bottom; mix-blend-mode: lighten; }
