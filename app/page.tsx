@@ -186,7 +186,7 @@ function Hero() {
           width: clamp(5rem, 9.1vw, 11rem);
           background:
             linear-gradient(145deg, rgba(236,231,216,0.12) 0%, transparent 38%, rgba(0,0,0,0.16) 100%),
-            linear-gradient(90deg, #242c25 0 30%, #030504 30% 33%, rgba(225,219,199,0.52) 33% 34%, #242c25 34% 66%, #030504 66% 69%, rgba(225,219,199,0.52) 69% 70%, #242c25 70% 100%),
+            linear-gradient(90deg, #030504 0 30%, #242c25 30% 33%, rgba(225,219,199,0.52) 33% 34%, #030504 34% 66%, #242c25 66% 69%, rgba(225,219,199,0.52) 69% 70%, #030504 70% 100%),
             linear-gradient(180deg, #202820 0%, #29332b 48%, #1d251f 100%);
           border-left: 1px solid rgba(198, 195, 178, 0.28);
           box-shadow: inset 14px 0 28px -26px rgba(228, 221, 201, 0.55);
