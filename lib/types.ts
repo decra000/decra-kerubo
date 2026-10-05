@@ -51,8 +51,8 @@ export const CONSULTATION_TYPES: ConsultationType[] = [
   {
     id: "lpms-demo",
     label: "LPMS Demo",
-    duration: 30,
-    description: "A walkthrough of the Legal Practice Management System.",
+    duration: 7,
+    description: "A focused 7-minute walkthrough of the Legal Practice Management System.",
     price: 0,
   },
 ];
