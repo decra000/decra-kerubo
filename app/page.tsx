@@ -129,11 +129,10 @@ function Hero() {
         transition: "opacity 1.1s cubic-bezier(0.16,1,0.3,1) 0.3s, transform 1.1s cubic-bezier(0.16,1,0.3,1) 0.3s",
       }}>
         <div style={{ maxWidth: "57rem", textAlign: "left" }} className="hero-copy">
-          <p className="hero-kicker">Law <span>·</span> Technology <span>·</span> AI</p>
           <h1 style={{
             fontFamily: "var(--font-serif)", fontWeight: 400,
-            fontSize: "clamp(2.65rem,3.5vw,4.2rem)", color: "#F1F0EB",
-            lineHeight: 1.04, letterSpacing: "-0.035em", marginBottom: "1.8rem",
+            fontSize: "clamp(2.45rem,2.8vw,3.2rem)", color: "#F1F0EB",
+            lineHeight: 1.08, letterSpacing: "-0.025em", marginBottom: "1.8rem",
           }}>
             <span className="hero-title-line">Technical Product Counsel</span>
             <span className="hero-title-line">&amp; AI Engineer</span>
@@ -230,16 +229,15 @@ function Hero() {
           .hero-bg {
             background-image: url('/decra-hero-wide.jpg');
             background-size: cover;
-            background-position: center 47%;
+            background-position: center 26%;
             mix-blend-mode: normal;
           }
           .hero-overlay {
-            background: linear-gradient(90deg, rgba(9,10,8,0.44) 0%, rgba(9,10,8,0.3) 34%, rgba(9,10,8,0.13) 62%, rgba(9,10,8,0.18) 100%);
+            background: linear-gradient(90deg, rgba(8,8,7,0.38) 0%, rgba(8,8,7,0.29) 36%, rgba(8,8,7,0.18) 66%, rgba(8,8,7,0.26) 100%);
           }
           #hero-content { padding-top: 0 !important; }
-          .hero-copy { max-width: 27rem !important; }
-          .hero-copy h1 { font-size: clamp(2.25rem, 3.15vw, 3.4rem) !important; line-height: 1.08 !important; }
-          .hero-kicker { margin-bottom: 1.15rem; }
+          .hero-copy { max-width: 25rem !important; }
+          .hero-copy h1 { font-size: clamp(2.35rem, 2.8vw, 3.15rem) !important; line-height: 1.08 !important; }
         }
 
         /* Phone framing uses the portrait shot, with the copy kept in the dark lower third. */
@@ -722,11 +720,13 @@ function WorkWithDecra() {
           gap: "0.5rem", rowGap: "1.5rem",
           ...fade(vis, 0.08),
         }} className="wwd-row">
-          <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(1.5rem,2.4vw,2rem)", color: "var(--c-ink)", lineHeight: 1.05, marginRight: "1rem", whiteSpace: "nowrap" }}>Partners.</h2>
           <a href="https://www.linkedin.com/company/entrora/?viewAsMember=true" target="_blank" rel="noopener noreferrer" aria-label="Entrora on LinkedIn" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "0.75rem", minWidth: "11rem", height: "3.5rem", padding: "0.55rem 1rem", border: "1px solid var(--c-border)", background: "var(--c-surface)", textDecoration: "none" }}>
-            <img src="/entrora_logo.jpg" alt="" style={{ display: "block", maxWidth: "2.5rem", maxHeight: "2.35rem", width: "auto", height: "auto", objectFit: "contain" }} />
+            <img src="/partners/entrora-mark-source.png" alt="" style={{ display: "block", width: "3rem", height: "3rem", objectFit: "contain", borderRadius: "50%", background: "#fff" }} />
             <span style={{ fontFamily: "var(--font-serif)", fontSize: "1.02rem", color: "var(--c-ink)" }}>Entrora</span>
           </a>
+          <div role="img" aria-label="ATPRC, African Technology Product Risk Clinic" style={{ width: "clamp(12rem,18vw,17rem)", height: "3.5rem", overflow: "hidden", border: "1px solid var(--c-border)", background: "#030504", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <img src="/partners/atprc-brand-board.png" alt="" style={{ display: "block", width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", filter: "brightness(3.3) contrast(1.15) saturate(1.15)" }} />
+          </div>
           <span style={{ flex: 1, minWidth: "1.5rem" }} />
           <button
             onClick={openPartnerModal}
