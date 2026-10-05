@@ -27,16 +27,9 @@ export default function EngineeringPage() {
             }}
           >
             <img
-              src="/decra-about-portrait.jpg"
+              src="/decra-hero-mobile.jpg"
               alt="Decra Kerubo"
               style={{ width: "100%", height: "auto", display: "block" }}
-            />
-            <div
-              aria-hidden
-              style={{
-                position: "absolute", inset: 0, pointerEvents: "none",
-                background: "linear-gradient(to bottom, transparent 70%, var(--c-bg) 96%)",
-              }}
             />
           </div>
           <div style={{ flex: "1 1 320px", minWidth: 0 }}>
