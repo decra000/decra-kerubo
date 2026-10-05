@@ -141,9 +141,9 @@ function Hero() {
           <div className="hero-ctas">
             <button
               onClick={() => window.dispatchEvent(new CustomEvent(OPEN_PARTNER_MODAL_EVENT, { detail: PRODUCT_COUNSEL_GROUP }))}
-              style={{ ...lineBtn({ light: true }), background: "#F0EEE9", color: "#191918", borderColor: "#F0EEE9" }}
-              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "#D8D4CC"; (e.currentTarget as HTMLElement).style.borderColor = "#D8D4CC"; (e.currentTarget as HTMLElement).style.color = "#191918"; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "#F0EEE9"; (e.currentTarget as HTMLElement).style.borderColor = "#F0EEE9"; (e.currentTarget as HTMLElement).style.color = "#191918"; }}
+              style={{ ...lineBtn({ light: true }), background: "transparent", color: "#F0EEE9", borderColor: "rgba(240,238,233,0.72)" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "rgba(240,238,233,0.12)"; (e.currentTarget as HTMLElement).style.borderColor = "#F0EEE9"; (e.currentTarget as HTMLElement).style.color = "#FFFFFF"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "transparent"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(240,238,233,0.72)"; (e.currentTarget as HTMLElement).style.color = "#F0EEE9"; }}
             >
               Retain as Technical Product Counsel
             </button>
@@ -220,6 +220,26 @@ function Hero() {
           .hero-copy { max-width: 27rem !important; }
           .hero-copy h1 { font-size: clamp(2.35rem, 5vw, 3.1rem) !important; }
           .hero-kicker { font-size: 0.6rem; margin-bottom: 1.25rem; }
+        }
+
+        /* Desktop returns to the warm, full-bleed editorial portrait from the
+           reference. The photograph supplies its own background; no detached
+           portrait edge or added panel is visible at this size. */
+        @media (min-width: 901px) {
+          .hero-set, .hero-light, .hero-return { display: none; }
+          .hero-bg {
+            background-image: url('/decra-hero-wide.jpg');
+            background-size: cover;
+            background-position: center 47%;
+            mix-blend-mode: normal;
+          }
+          .hero-overlay {
+            background: linear-gradient(90deg, rgba(9,10,8,0.44) 0%, rgba(9,10,8,0.3) 34%, rgba(9,10,8,0.13) 62%, rgba(9,10,8,0.18) 100%);
+          }
+          #hero-content { padding-top: 0 !important; }
+          .hero-copy { max-width: 27rem !important; }
+          .hero-copy h1 { font-size: clamp(2.25rem, 3.15vw, 3.4rem) !important; line-height: 1.08 !important; }
+          .hero-kicker { margin-bottom: 1.15rem; }
         }
 
         /* Phone framing uses the portrait shot, with the copy kept in the dark lower third. */
@@ -513,7 +533,6 @@ Style: 2 sentences per reply outside the Tech Development flow. Warm and direct.
 
 function WorkWithDecra() {
   const { ref, vis } = useReveal();
-  const [selected, setSelected] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [active, setActive] = useState<string | null>(null);
   const [msgs, setMsgs] = useState<ChatMsg[]>([]);
@@ -593,10 +612,6 @@ function WorkWithDecra() {
 
   const openPartnerModal = () => {
     setModalOpen(true);
-    if (selected) {
-      const g = ENGAGE_GROUPS.find(g => g.key === selected);
-      if (g) startGroup(g.key, g.opening);
-    }
   };
 
   useEffect(() => {
@@ -701,81 +716,30 @@ function WorkWithDecra() {
   return (
     <section id="collaborate" ref={ref as React.RefObject<HTMLElement>} style={SEC}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-        {/* One row: title · item · item · item · item ···· Partner */}
+        {/* Partner credibility row: confirmed partner logo first, inquiry action last. */}
         <div style={{
           display: "flex", alignItems: "center", flexWrap: "wrap",
           gap: "0.5rem", rowGap: "1.5rem",
           ...fade(vis, 0.08),
         }} className="wwd-row">
-          <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(1.5rem,2.4vw,2rem)", color: "var(--c-ink)", lineHeight: 1.05, marginRight: "1rem", whiteSpace: "nowrap" }}>Who I work with.</h2>
-          {ENGAGE_GROUPS.map((g) => {
-            const isSelected = selected === g.key;
-            return (
-              <div key={g.key} style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                <span style={{ width: "1px", height: "10px", background: "var(--c-border)", display: "block" }} />
-                <button
-                  onClick={() => setSelected(g.key)}
-                  style={{
-                    display: "inline-flex", alignItems: "baseline", gap: "0.5rem",
-                    background: "none", border: "none", cursor: "pointer", padding: "0.5rem 0.25rem",
-                  }}
-                >
-                  <span style={{
-                    fontFamily: "var(--font-serif)", fontWeight: 400,
-                    fontSize: "clamp(0.95rem,1.3vw,1.1rem)",
-                    color: isSelected ? "var(--c-accent)" : "var(--c-ink)",
-                    borderBottom: isSelected ? "1px solid var(--c-accent)" : "1px solid transparent",
-                    lineHeight: 1.3, transition: "color 0.2s, border-color 0.2s",
-                  }}>{g.label}</span>
-                </button>
-              </div>
-            );
-          })}
+          <h2 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "clamp(1.5rem,2.4vw,2rem)", color: "var(--c-ink)", lineHeight: 1.05, marginRight: "1rem", whiteSpace: "nowrap" }}>Partners.</h2>
+          <a href="https://www.linkedin.com/company/entrora/?viewAsMember=true" target="_blank" rel="noopener noreferrer" aria-label="Entrora on LinkedIn" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "0.75rem", minWidth: "11rem", height: "3.5rem", padding: "0.55rem 1rem", border: "1px solid var(--c-border)", background: "var(--c-surface)", textDecoration: "none" }}>
+            <img src="/entrora_logo.jpg" alt="" style={{ display: "block", maxWidth: "2.5rem", maxHeight: "2.35rem", width: "auto", height: "auto", objectFit: "contain" }} />
+            <span style={{ fontFamily: "var(--font-serif)", fontSize: "1.02rem", color: "var(--c-ink)" }}>Entrora</span>
+          </a>
           <span style={{ flex: 1, minWidth: "1.5rem" }} />
-          {(() => {
-            const selectedGroup = ENGAGE_GROUPS.find(g => g.key === selected);
-            return (
-              <button
-                key={selected || "none"}
-                onClick={openPartnerModal}
-                className={selectedGroup ? "wwd-partner-btn is-active" : "wwd-partner-btn"}
-                style={{
-                  ...lineBtn(),
-                  position: "relative",
-                  ...(selectedGroup ? {
-                    background: "var(--c-accent)",
-                    borderColor: "var(--c-accent)",
-                    color: "var(--c-bg)",
-                  } : {}),
-                }}
-                onMouseEnter={e => { if (!selectedGroup) (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"; }}
-                onMouseLeave={e => { if (!selectedGroup) (e.currentTarget as HTMLElement).style.borderColor = "var(--c-border)"; }}
-              >
-                {selectedGroup && (
-                  <span className="wwd-partner-badge" aria-hidden="true">
-                    <span className="wwd-partner-badge-ping" />
-                    <span className="wwd-partner-badge-dot" />
-                  </span>
-                )}
-                Partner
-                <ArrowRight size={12} strokeWidth={1.5} />
-              </button>
-            );
-          })()}
+          <button
+            onClick={openPartnerModal}
+            className="wwd-partner-btn"
+            style={lineBtn()}
+            onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"}
+            onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--c-border)"}
+          >
+            Partner <ArrowRight size={12} strokeWidth={1.5} />
+          </button>
         </div>
         <style>{`
-          @keyframes wwdPartnerActivate { 0% { transform: scale(0.96); } 50% { transform: scale(1.04); } 100% { transform: scale(1); } }
-          .wwd-partner-btn.is-active { animation: wwdPartnerActivate 0.4s cubic-bezier(0.34,1.3,0.64,1); }
-
-          .wwd-partner-badge { position: absolute; top: -5px; right: -5px; width: 12px; height: 12px; }
-          .wwd-partner-badge-dot { position: absolute; inset: 0; border-radius: 50%; background: var(--c-gold); }
-          .wwd-partner-badge-ping { position: absolute; inset: 0; border-radius: 50%; background: var(--c-gold); animation: wwdPing 1.4s cubic-bezier(0,0,0.2,1) infinite; }
-          @keyframes wwdPing { 0% { transform: scale(1); opacity: 0.7; } 75%, 100% { transform: scale(2.2); opacity: 0; } }
-
-          @media (prefers-reduced-motion: reduce) {
-            .wwd-partner-btn.is-active { animation: none; }
-            .wwd-partner-badge-ping { animation: none; opacity: 0.5; }
-          }
+          .wwd-partner-btn { transition: border-color 0.2s ease, color 0.2s ease; }
         `}</style>
       </div>
 
@@ -931,7 +895,7 @@ function WorkWithDecra() {
                         {m.rateLimited && isLatest && !loading && !done && trailingFailures >= 1 && (
                           <div style={{ width: "100%", maxWidth: "92%", background: "var(--c-surface)", border: "1px solid var(--c-border-strong)", borderRadius: "10px", padding: "1rem", marginTop: "0.25rem" }}>
                             <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.76rem", color: "var(--c-ink-muted)", lineHeight: 1.6, marginBottom: "0.85rem" }}>
-                              The assistant is off right now, here are two ways to reach Decra directly instead:
+                              I’m having trouble responding right now. Here are two direct ways to reach Decra:
                             </p>
                             {!fallbackFormOpen && !fallbackSent && (
                               <div style={{ display: "flex", flexWrap: "wrap", gap: "0.6rem" }}>

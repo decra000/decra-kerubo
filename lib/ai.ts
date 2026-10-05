@@ -4,9 +4,8 @@
  * GitHub Models used to power this and has been retired, so nothing here
  * depends on it any more. The provider is chosen at runtime:
  *
- *   1. If AI_BASE_URL + AI_API_KEY are set, any OpenAI-compatible provider
- *      is used. Several have genuinely free tiers with no credit card —
- *      see .env.local for the exact URLs and model names.
+ *   1. If a provider key is set, use the configured OpenAI-compatible API.
+ *      GEMINI_API_KEY alone selects Google's documented compatible endpoint.
  *   2. Otherwise it falls back to a keyless public endpoint, so the site
  *      still answers with no key configured at all.
  *
@@ -34,13 +33,15 @@ const KEYLESS_MODEL = "openai-fast";
 const MAX_ATTEMPTS = 3;
 
 function resolveProvider() {
-  const key = process.env.AI_API_KEY;
+  const key = process.env.AI_API_KEY || process.env.GEMINI_API_KEY;
   const baseUrl = process.env.AI_BASE_URL;
 
-  if (key && baseUrl) {
+  if (key) {
     return {
-      endpoint: `${baseUrl.replace(/\/+$/, "")}/chat/completions`,
-      model: process.env.AI_MODEL || "gemini-2.0-flash",
+      endpoint: baseUrl
+        ? `${baseUrl.replace(/\/+$/, "")}/chat/completions`
+        : "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
+      model: process.env.AI_MODEL || "gemini-3.8-flash",
       key,
       keyless: false,
     };

@@ -19,14 +19,17 @@ export async function GET(req: NextRequest) {
   if (denied) return denied;
 
   const baseUrl = process.env.AI_BASE_URL;
-  const key = process.env.AI_API_KEY;
+  const key = process.env.AI_API_KEY || process.env.GEMINI_API_KEY;
+  const geminiKey = process.env.GEMINI_API_KEY;
   const model = process.env.AI_MODEL;
 
-  const configured = !!(baseUrl && key);
+  const configured = !!key;
   const endpoint = baseUrl
     ? `${baseUrl.replace(/\/+$/, "")}/chat/completions`
-    : "https://text.pollinations.ai/openai";
-  const effectiveModel = model || (configured ? "gemini-2.0-flash" : "openai-fast");
+    : geminiKey || key
+      ? "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
+      : "https://text.pollinations.ai/openai";
+  const effectiveModel = model || (configured ? "gemini-3.8-flash" : "openai-fast");
 
   const report: Record<string, unknown> = {
     configured,
@@ -36,13 +39,14 @@ export async function GET(req: NextRequest) {
     env: {
       AI_BASE_URL: baseUrl ? "set" : "MISSING",
       AI_API_KEY: key ? `set (${key.length} chars, starts "${key.slice(0, 4)}")` : "MISSING",
+      GEMINI_API_KEY: geminiKey ? "set" : "MISSING",
       AI_MODEL: model ? "set" : "not set (using default above)",
     },
   };
 
   if (!configured) {
     report.verdict =
-      "No AI_BASE_URL/AI_API_KEY on this deployment, so the site is falling back to the keyless endpoint, which now refuses almost every request. Set both and redeploy, env changes only apply to a new deployment.";
+      "No AI provider key is configured on this deployment, so the site is falling back to a shared keyless endpoint. Set GEMINI_API_KEY (or AI_BASE_URL and AI_API_KEY) and redeploy; environment changes only apply to a new deployment.";
     return NextResponse.json(report);
   }
 

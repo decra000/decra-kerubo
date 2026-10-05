@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowUpRight, Puzzle, Award, Download } from "lucide-react";
 import { engineeringProjects, type EngineeringProject } from "@/lib/engineering-projects";
 import { PAPERS } from "@/lib/papers";
 import { InlineResearchPanel } from "@/components/research/InlineResearchPanel";
+import { ProductRequestForm } from "@/components/engineering/ProductRequestForm";
 
 export async function generateStaticParams() {
   return engineeringProjects
@@ -52,6 +53,8 @@ export default async function EngineeringProjectPage({
   const paper = researchSide?.paperSlug ? PAPERS.find((p) => p.slug === researchSide.paperSlug) : undefined;
   const hasResearch = !!researchSide && !!paper;
   const hasProduct = !!productSide;
+  const requestProduct = productSide?.title === "Legal Chatbot" || productSide?.title === "Cyberbullying Detection Tool";
+  const requestProductLabel: "Teresya Extension" | "Cyberbullying Detection" = productSide?.title === "Legal Chatbot" ? "Teresya Extension" : "Cyberbullying Detection";
 
   const labelStyle = {
     display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "1.25rem",
@@ -166,7 +169,13 @@ export default async function EngineeringProjectPage({
               )}
 
               <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem", borderTop: "1px solid var(--c-border)", paddingTop: "2rem" }}>
-                {productSide.chromeUrl ? (
+                {requestProduct ? (
+                  <div style={{ width: "100%", maxWidth: "38rem", padding: "1.4rem", background: "var(--c-surface)", border: "1px solid var(--c-border)" }}>
+                    <span className="t-label" style={{ display: "block", marginBottom: "0.55rem" }}>Request access</span>
+                    <p className="t-body-sm" style={{ marginBottom: "1.1rem" }}>Leave your details and Decra will follow up about the {requestProductLabel}.</p>
+                    <ProductRequestForm product={requestProductLabel} />
+                  </div>
+                ) : productSide.chromeUrl ? (
                   <a href={productSide.chromeUrl} target="_blank" rel="noopener noreferrer" className="btn-primary">
                     <Puzzle size={13} /> Add to Chrome
                   </a>
@@ -192,7 +201,7 @@ export default async function EngineeringProjectPage({
                 )}
               </div>
 
-              {productSide.downloadUrl && !productSide.chromeUrl && (
+              {productSide.downloadUrl && !productSide.chromeUrl && !requestProduct && (
                 <div style={{ marginTop: "1.5rem", background: "var(--c-surface)", border: "1px solid var(--c-border)", borderRadius: "10px", padding: "1.5rem" }}>
                   <span className="t-label" style={{ display: "block", marginBottom: "0.85rem" }}>
                     How to install
