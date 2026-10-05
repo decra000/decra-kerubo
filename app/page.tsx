@@ -719,15 +719,6 @@ function WorkWithDecra() {
             <p style={{ ...LBL, marginBottom: "0.7rem" }}>Our network</p>
             <h2 style={{ ...SERIF("clamp(1.8rem,3vw,2.6rem)"), margin: 0 }}>Partners</h2>
           </div>
-          <button
-            onClick={openPartnerModal}
-            className="wwd-partner-btn"
-            style={lineBtn()}
-            onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"}
-            onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--c-border)"}
-          >
-            Become a Partner <ArrowRight size={12} strokeWidth={1.5} />
-          </button>
         </div>
         <div className="partners-grid" style={{ ...fade(vis, 0.1) }}>
           <a className="partner-card entrora-card" href="https://www.linkedin.com/company/entrora/?viewAsMember=true" target="_blank" rel="noopener noreferrer" aria-label="Entrora on LinkedIn">
@@ -739,6 +730,17 @@ function WorkWithDecra() {
             <span className="partner-logo atprc-logo"><img src="/partners/atprc-brand-board.png" alt="" /></span>
             <span className="partner-name">African Technology Product Risk Clinic</span>
           </div>
+        </div>
+        <div className="partners-action" style={{ ...fade(vis, 0.16) }}>
+          <button
+            onClick={openPartnerModal}
+            className="wwd-partner-btn"
+            style={lineBtn()}
+            onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"}
+            onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--c-border)"}
+          >
+            Become a Partner <ArrowRight size={12} strokeWidth={1.5} />
+          </button>
         </div>
         <style>{`
           .partners-heading { display:flex; align-items:flex-end; justify-content:space-between; gap:1.5rem; margin-bottom:1.75rem; }
@@ -753,6 +755,7 @@ function WorkWithDecra() {
           .partner-name { min-width:0; font-family:var(--font-serif); font-size:clamp(1.1rem,1.7vw,1.45rem); line-height:1.2; color:var(--c-ink); }
           .atprc-card .partner-name { max-width:12rem; }
           .partner-arrow { margin-left:auto; color:var(--c-ink-muted); }
+          .partners-action { display:flex; justify-content:flex-end; margin-top:1.25rem; }
           .wwd-partner-btn { transition:border-color .2s ease,color .2s ease; }
           @media(max-width:900px) {
             .partners-grid { grid-template-columns:1fr; }
@@ -765,6 +768,7 @@ function WorkWithDecra() {
             .atprc-logo { width:7.4rem; flex-basis:7.4rem; height:5rem; }
             .partner-name { font-size:1.08rem; }
             .atprc-card .partner-name { max-width:none; }
+            .partners-action { margin-top:1rem; }
             .wwd-partner-btn { width:100%; justify-content:center; }
           }
           @media(max-width:380px) { .atprc-logo { width:6.5rem; flex-basis:6.5rem; height:4.4rem; } }
