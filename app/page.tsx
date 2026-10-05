@@ -256,7 +256,8 @@ function Hero() {
             padding-top: 0 !important;
             padding-bottom: clamp(3rem, 9vh, 5rem) !important;
           }
-          .hero-copy { text-align: center !important; }
+          .hero-copy { width: 100% !important; text-align: center !important; }
+          .hero-ctas { align-items: center !important; width: 100%; }
           .hero-kicker { justify-content: center; }
           .hero-copy h1 { font-size: clamp(2.15rem, 8vw, 3rem) !important; }
           .hero-bg {
@@ -271,7 +272,7 @@ function Hero() {
               linear-gradient(180deg, rgba(0,0,0,0.60) 0%, rgba(0,0,0,0.12) 22%, rgba(0,0,0,0.18) 45%, rgba(0,0,0,0.62) 64%, rgba(0,0,0,0.88) 80%, rgba(0,0,0,0.96) 100%) !important;
           }
           #hero-content h1 { font-size: clamp(1.65rem, 7vw, 2.1rem) !important; margin-bottom: 1.5rem !important; }
-          #hero-content button { width: auto; max-width: 82%; white-space: normal; line-height: 1.5; }
+          #hero-content button { width: min(100%, 20rem); justify-content: center; text-align: center; white-space: normal; line-height: 1.5; margin-inline: auto; }
         }
       `}</style>
     </section>

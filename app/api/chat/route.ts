@@ -147,10 +147,13 @@ export async function POST(req: NextRequest) {
       const result = await generateReply(messages);
 
       if (!result.ok) {
+        const setupMissing = result.error.includes("No AI provider key is configured");
         return NextResponse.json({
           reply: result.retryable
             ? "Decra's assistant is getting more traffic than it can handle right this second. Please try sending that again in a moment, nothing you've typed so far has been lost."
-            : "I'm having trouble responding right now. Leave your details below and Decra will follow up directly.",
+            : setupMissing
+              ? "The assistant is being set up. Leave your details below and Decra will follow up directly."
+              : "I'm having trouble responding right now. Leave your details below and Decra will follow up directly.",
           rateLimited: result.retryable,
           // ContactBubble, BookingCTA, /partner and the homepage intake all
           // open their fallback form on `down`. The keyless rewrite dropped

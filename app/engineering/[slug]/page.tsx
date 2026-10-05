@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowUpRight, Puzzle, Award, Download } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Puzzle, Award } from "lucide-react";
 import { engineeringProjects, type EngineeringProject } from "@/lib/engineering-projects";
 import { PAPERS } from "@/lib/papers";
 import { InlineResearchPanel } from "@/components/research/InlineResearchPanel";
@@ -53,8 +53,15 @@ export default async function EngineeringProjectPage({
   const paper = researchSide?.paperSlug ? PAPERS.find((p) => p.slug === researchSide.paperSlug) : undefined;
   const hasResearch = !!researchSide && !!paper;
   const hasProduct = !!productSide;
-  const requestProduct = productSide?.title === "Legal Chatbot" || productSide?.title === "Cyberbullying Detection Tool";
-  const requestProductLabel: "Teresya Extension" | "Cyberbullying Detection" = productSide?.title === "Legal Chatbot" ? "Teresya Extension" : "Cyberbullying Detection";
+  const requestProductLabels = {
+    "Legal Chatbot": "Teresya Extension",
+    "Cyberbullying Detection Tool": "Cyberbullying Detection",
+    "AI Footprint Tracker": "AI Footprint Tracker",
+  } as const;
+  const requestProductLabel = productSide?.title
+    ? requestProductLabels[productSide.title as keyof typeof requestProductLabels]
+    : undefined;
+  const requestProduct = !!requestProductLabel;
 
   const labelStyle = {
     display: "flex", alignItems: "center", gap: "0.6rem", marginBottom: "1.25rem",
@@ -169,7 +176,7 @@ export default async function EngineeringProjectPage({
               )}
 
               <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem", borderTop: "1px solid var(--c-border)", paddingTop: "2rem" }}>
-                {requestProduct ? (
+                {requestProduct && requestProductLabel ? (
                   <div style={{ width: "100%", maxWidth: "38rem", padding: "1.4rem", background: "var(--c-surface)", border: "1px solid var(--c-border)" }}>
                     <span className="t-label" style={{ display: "block", marginBottom: "0.55rem" }}>Request access</span>
                     <p className="t-body-sm" style={{ marginBottom: "1.1rem" }}>Leave your details and Decra will follow up about the {requestProductLabel}.</p>
@@ -178,16 +185,6 @@ export default async function EngineeringProjectPage({
                 ) : productSide.chromeUrl ? (
                   <a href={productSide.chromeUrl} target="_blank" rel="noopener noreferrer" className="btn-primary">
                     <Puzzle size={13} /> Add to Chrome
-                  </a>
-                ) : productSide.downloadUrl ? (
-                  <a
-                    href={productSide.downloadUrl}
-                    {...(productSide.downloadUrl.startsWith("http")
-                      ? { target: "_blank", rel: "noopener noreferrer" }
-                      : { download: true })}
-                    className="btn-primary"
-                  >
-                    <Download size={13} /> Download Extension
                   </a>
                 ) : (
                   <span className="t-body-sm" style={{ display: "inline-flex", alignItems: "center" }}>
@@ -201,21 +198,6 @@ export default async function EngineeringProjectPage({
                 )}
               </div>
 
-              {productSide.downloadUrl && !productSide.chromeUrl && !requestProduct && (
-                <div style={{ marginTop: "1.5rem", background: "var(--c-surface)", border: "1px solid var(--c-border)", borderRadius: "10px", padding: "1.5rem" }}>
-                  <span className="t-label" style={{ display: "block", marginBottom: "0.85rem" }}>
-                    How to install
-                  </span>
-                  <ol className="t-body-sm" style={{ margin: 0, paddingLeft: "1.1rem", lineHeight: 1.9 }}>
-                    <li>Download the .zip above and unzip it.</li>
-                    <li>Open <code>chrome://extensions</code> in Chrome and turn on <strong>Developer mode</strong> (top right).</li>
-                    <li>Click <strong>Load unpacked</strong> and select the unzipped folder.</li>
-                  </ol>
-                  <p className="t-body-sm" style={{ marginTop: "0.85rem", marginBottom: 0 }}>
-                    Not yet on the Chrome Web Store, this is a direct, if less polished, way to try it today.
-                  </p>
-                </div>
-              )}
             </section>
           )}
         </div>

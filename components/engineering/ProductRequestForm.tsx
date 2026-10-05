@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ArrowRight, Check } from "lucide-react";
 
-export function ProductRequestForm({ product }: { product: "Teresya Extension" | "Cyberbullying Detection" }) {
+export function ProductRequestForm({ product }: { product: "Teresya Extension" | "Cyberbullying Detection" | "AI Footprint Tracker" }) {
   const [busy, setBusy] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");

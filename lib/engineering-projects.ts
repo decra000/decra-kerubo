@@ -13,13 +13,6 @@ export type EngineeringProject = {
   fellowship?: string;
   /** Chrome Web Store listing — set once the extension is actually published there. */
   chromeUrl?: string;
-  /**
-   * Direct .zip download (e.g. /downloads/<slug>.zip) for extensions not yet
-   * on the Web Store. Renders a "Download Extension" CTA plus a short
-   * "how to install" (Developer Mode / Load unpacked) block on the detail
-   * page — a real, if less polished, path to trying the extension today.
-   */
-  downloadUrl?: string;
   repoUrl?: string;
   /** Slug of another project this one is directly tied to (shown as "Related work"). */
   relatedSlug?: string;
@@ -67,9 +60,8 @@ export const engineeringProjects: EngineeringProject[] = [
     fellowship: "Bevisioneers × Mercedes-Benz Fellowship",
     relatedSlug: "ai-decarbonization-research",
     pairLabel: "Backed by research",
-    downloadUrl: "/downloads/ai-footprint-tracker.zip",
     image: "/engineering/ai-footprint-dashboard.png",
-    badge: "Free Public Benefit",
+    badge: "Request Access",
   },
   {
     categories: ["research", "ai"],
@@ -93,7 +85,6 @@ export const engineeringProjects: EngineeringProject[] = [
       "A Chrome extension that detects cyberbullying and flags harmful content in real time as people browse social media, inspecting page text and highlighting offensive or unsafe material as it's found. It's the applied counterpart to my published paper, \"Cyberbullying Detection: An Integrated Natural Language Processing and Machine Learning Approach for Cybersafety,\" below.",
     relatedSlug: "online-safety-research",
     pairLabel: "Backed by research",
-    downloadUrl: "https://drive.google.com/file/d/1cHUtX64mRS-C_W0WognfxAu1VfLxSRq6/view?usp=sharing",
     image: "/engineering/pure.png",
     badge: "Request Only",
   },

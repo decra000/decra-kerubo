@@ -28,12 +28,12 @@ export async function GET(req: NextRequest) {
     ? `${baseUrl.replace(/\/+$/, "")}/chat/completions`
     : geminiKey || key
       ? "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
-      : "https://text.pollinations.ai/openai";
-  const effectiveModel = model || (configured ? "gemini-3.8-flash" : "openai-fast");
+      : "not configured";
+  const effectiveModel = model || "gemini-3.8-flash";
 
   const report: Record<string, unknown> = {
     configured,
-    usingKeylessFallback: !configured,
+    usingKeylessFallback: false,
     endpoint,
     model: effectiveModel,
     env: {
@@ -46,7 +46,7 @@ export async function GET(req: NextRequest) {
 
   if (!configured) {
     report.verdict =
-      "No AI provider key is configured on this deployment, so the site is falling back to a shared keyless endpoint. Set GEMINI_API_KEY (or AI_BASE_URL and AI_API_KEY) and redeploy; environment changes only apply to a new deployment.";
+      "No AI provider key is configured on this deployment. Add GEMINI_API_KEY (or AI_BASE_URL and AI_API_KEY) to the deployment environment, then redeploy.";
     return NextResponse.json(report);
   }
 

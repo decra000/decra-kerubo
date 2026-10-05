@@ -27,13 +27,11 @@ const ENTRORA_LINKEDIN = "https://www.linkedin.com/company/entrora/";
 const NEWSLETTER_URL = "https://www.linkedin.com/build-relation/newsletter-follow?entityUrn=7241946044966592512";
 /** Demo bookings are taken on Calendly rather than through the host site. */
 const DEMO_URL = "https://calendly.com/decrakerubo/";
-const YNAI_URL = "https://www.ynai.co.ke/";
 
 const NAV = [
   { href: "#initiative", label: "About" },
   { href: "#solutions", label: "Solutions" },
   { href: "#platform", label: "Flagship" },
-  { href: "#partners", label: "Partners" },
   { href: "#newsletter", label: "Insights" },
   { href: "#contact", label: "Contact" },
 ];
@@ -167,7 +165,7 @@ function Header() {
     <header className="ent-header">
       <div className="ent-header-inner">
         <a href="#top" className="ent-brand">
-          <Image src="/entrora_logo.jpg" alt="" width={200} height={200} priority className="ent-brand-mark" />
+          <Image src="/entrora-textured-mark.webp" alt="" width={810} height={810} priority className="ent-brand-mark" />
           <span className="ent-brand-text">
             <strong>Entrora</strong>
             <em>Legal Engineering</em>
@@ -203,7 +201,6 @@ export default function EntroraPage() {
   const { ref: initRef, vis: initVis } = useReveal();
   const { ref: lpmsRef, vis: lpmsVis } = useReveal();
   const { ref: platRef, vis: platVis } = useReveal();
-  const { ref: partRef, vis: partVis } = useReveal();
   const { ref: newsRef, vis: newsVis } = useReveal();
   const { ref: contactRef, vis: contactVis } = useReveal();
 
@@ -313,7 +310,7 @@ export default function EntroraPage() {
 
             <div className="ent-prod ent-prod-wide">
               <div className="ent-prod-mark">
-                <Image src="/entrora_logo.jpg" alt="Entrora" width={200} height={200} className="ent-prod-img" />
+                <Image src="/entrora-textured-mark.webp" alt="Entrora" width={810} height={810} className="ent-prod-img" />
               </div>
               <h3>Entrora LPMS</h3>
               <span className="ent-prod-kicker">Legal Practice Management System</span>
@@ -378,33 +375,6 @@ export default function EntroraPage() {
         </div>
       </section>
 
-      {/* ── Partnership ── */}
-      <section className="ent-section ent-zone-ynai" id="partners">
-        <div ref={partRef as React.RefObject<HTMLDivElement>} className="ent-wrap" style={fade(partVis)}>
-          <Eyebrow text="In partnership" />
-          <div className="ent-partner">
-            <div className="ent-partner-art">
-              <Image src="/ynai-app.png" alt="The Ynai app, a Kenya Bar Exam study companion" width={1024} height={1536} className="ent-partner-img" />
-            </div>
-            <div>
-              <h2 className="ent-h2">Simplifying the Kenyan bar, with Ynai.</h2>
-              <p className="ent-body">
-                Ynai is a study companion for the Kenya Bar Exam: units, practice questions, mock exams and
-                progress tracking in one place. Entrora partners with Ynai on the same problem the LPMS
-                addresses from the other end, which is that the route into practice in this country is
-                harder to navigate than it needs to be.
-              </p>
-              <p className="ent-body ent-body-sm">
-                One side prepares people to qualify. The other gives them a practice worth walking into.
-              </p>
-              <a href={YNAI_URL} target="_blank" rel="noopener noreferrer" className="ent-pill ent-pill-solid">
-                Visit Ynai <ExternalLink size={12} strokeWidth={2} />
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ── Newsletter ── */}
       <section className="ent-section ent-zone-lex" id="newsletter">
         <div ref={newsRef as React.RefObject<HTMLDivElement>} className="ent-wrap" style={fade(newsVis)}>
@@ -464,17 +434,15 @@ export default function EntroraPage() {
       </footer>
 
       <style>{`
-        /* Entrora's own palette, scoped to this page so it never leaks into
-           the host site's tokens. Pink is the brand's second colour and has
-           no equivalent in the design system here. */
+        /* Entrora's own palette, scoped to this page. */
         .ent-page{
-          --ent-pink: #E1568A;
-          --ent-green: #14503C;
+          --ent-pink: #78836C;
+          --ent-green: #1D3A31;
           --ent-ink: var(--c-ink);
           background: var(--c-bg);
           padding-top: 0;
         }
-        [data-theme="dark"] .ent-page{ --ent-pink: #F07FA8; --ent-green: #3E8F73; }
+        [data-theme="dark"] .ent-page{ --ent-pink: #AAB39C; --ent-green: #426E5D; }
 
         .ent-wrap{ max-width: 68rem; margin: 0 auto; padding: 0 var(--space-x); width: 100%; }
         .ent-pink{ color: var(--ent-pink); }
@@ -492,9 +460,9 @@ export default function EntroraPage() {
           display: flex; align-items: center; gap: 1.5rem;
         }
         .ent-brand{ display: flex; align-items: center; gap: 0.65rem; text-decoration: none; margin-right: auto; }
-        .ent-brand-mark{ width: 34px; height: 34px; object-fit: contain; border-radius: 7px; }
+        .ent-brand-mark{ width: 38px; height: 38px; object-fit: cover; border-radius: 50%; }
         .ent-brand-text{ display: flex; flex-direction: column; line-height: 1.1; }
-        .ent-brand-text strong{ font-family: var(--font-sans); font-weight: 600; font-size: 1.05rem; color: var(--c-ink); letter-spacing: -0.01em; }
+        .ent-brand-text strong{ font-family: var(--font-serif); font-weight: 600; font-size: 1.08rem; color: var(--c-ink); letter-spacing: -0.01em; }
         .ent-brand-text em{ font-style: normal; font-family: var(--font-manjari); font-weight: 700; font-size: 0.46rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--c-ink-muted); }
 
         .ent-nav{ display: flex; gap: 2rem; }
@@ -515,7 +483,8 @@ export default function EntroraPage() {
         .ent-pill{
           display: inline-flex; align-items: center; gap: 0.5rem;
           font-family: var(--font-sans); font-weight: 600; font-size: 0.82rem;
-          padding: 0.7rem 1.4rem; border-radius: 999px; text-decoration: none;
+          padding: 0.78rem 1.3rem; border-radius: 2px; text-decoration: none;
+          font-size: 0.7rem; letter-spacing: 0.09em; text-transform: uppercase;
           border: 1px solid transparent; cursor: pointer;
           transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
         }
@@ -541,9 +510,9 @@ export default function EntroraPage() {
 
         .ent-h1{
           position: relative; z-index: 1;
-          font-family: var(--font-sans); font-weight: 700;
-          font-size: clamp(2.4rem, 6.4vw, 4.6rem); line-height: 1.04;
-          letter-spacing: -0.03em; color: var(--c-ink);
+          font-family: var(--font-serif); font-weight: 400;
+          font-size: clamp(2.7rem, 6.4vw, 5rem); line-height: 1.01;
+          letter-spacing: -0.035em; color: var(--c-ink);
           display: flex; flex-direction: column; margin-bottom: 1.75rem;
         }
         .ent-dashes{ display: flex; gap: 0.75rem; margin-bottom: 1.75rem; }
@@ -575,9 +544,9 @@ export default function EntroraPage() {
         .ent-rule{ display: inline-block; width: 1.5rem; height: 1px; background: var(--ent-pink); }
 
         .ent-h2{
-          font-family: var(--font-sans); font-weight: 700;
-          font-size: clamp(1.5rem, 3.2vw, 2.4rem); line-height: 1.15;
-          letter-spacing: -0.02em; color: var(--c-ink); margin-bottom: 1.1rem;
+          font-family: var(--font-serif); font-weight: 400;
+          font-size: clamp(1.75rem, 3.2vw, 2.65rem); line-height: 1.12;
+          letter-spacing: -0.025em; color: var(--c-ink); margin-bottom: 1.1rem;
         }
         .ent-h2-center{ text-align: center; }
         .ent-body{ font-family: var(--font-sans); font-size: 0.92rem; line-height: 1.7; color: var(--c-ink-mid); margin-bottom: 1.25rem; }
@@ -593,7 +562,7 @@ export default function EntroraPage() {
         .ent-center-p{ margin-left: auto; margin-right: auto; max-width: 34rem; }
         .ent-chip{
           display: inline-block; margin-bottom: 1.5rem;
-          border: 1px solid var(--c-border-strong); border-radius: 999px;
+          border: 1px solid var(--c-border-strong); border-radius: 2px;
           padding: 0.45rem 1.1rem;
           font-family: var(--font-manjari); font-weight: 700; font-size: 0.55rem;
           letter-spacing: 0.2em; text-transform: uppercase; color: var(--ent-green);
@@ -601,18 +570,18 @@ export default function EntroraPage() {
         [data-theme="dark"] .ent-chip{ color: var(--ent-pink); }
 
         .ent-evolution{ display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1.3fr); gap: clamp(1.25rem, 3vw, 2.5rem); align-items: center; margin-bottom: 3rem; }
-        .ent-prod{ border: 1px solid var(--c-border); border-radius: 14px; background: var(--c-bg); padding: 1.5rem; }
+        .ent-prod{ border: 1px solid var(--c-border); border-radius: 2px; background: var(--c-bg); padding: 1.5rem; }
         /* Both marks are 200px squares, so they sit in a small square frame
            at their own scale rather than being cropped to a 16:9 banner or
            blown up to panel width. */
         .ent-prod-mark{
           width: 4.75rem; height: 4.75rem; margin-bottom: 1.1rem;
-          border: 1px solid var(--c-border); border-radius: 12px;
+          border: 1px solid var(--c-border); border-radius: 50%;
           background: var(--c-surface); overflow: hidden;
           display: flex; align-items: center; justify-content: center;
         }
         .ent-prod-img{ width: 100%; height: 100%; object-fit: contain; display: block; }
-        .ent-prod h3{ font-family: var(--font-sans); font-weight: 700; font-size: 1.3rem; color: var(--c-ink); letter-spacing: -0.01em; }
+        .ent-prod h3{ font-family: var(--font-serif); font-weight: 400; font-size: 1.45rem; color: var(--c-ink); letter-spacing: -0.01em; }
         .ent-prod-kicker{ display: block; font-family: var(--font-manjari); font-weight: 700; font-size: 0.5rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--c-ink-muted); margin: 0.3rem 0 0.9rem; }
         .ent-prod p{ font-family: var(--font-sans); font-size: 0.85rem; line-height: 1.6; color: var(--c-ink-mid); }
         .ent-prod-wide{ border-color: var(--ent-pink); }
@@ -675,20 +644,6 @@ export default function EntroraPage() {
         .ent-zone-flagship .ent-stats-label{ color: #55606A; }
         .ent-zone-flagship .ent-shot{ border-color: rgba(20,24,27,0.10); background: #FFFFFF; }
 
-        /* Sampled from the Ynai screen: black with a green cast. */
-        .ent-zone-ynai{
-          background: linear-gradient(135deg, #000000 0%, #04120D 52%, #082016 100%);
-          color: #EDF3EF;
-        }
-        .ent-zone-ynai .ent-h2{ color: #FFFFFF; }
-        .ent-zone-ynai .ent-body{ color: #C3D2CA; }
-        .ent-zone-ynai .ent-body-sm{ color: #93A79C; }
-        .ent-zone-ynai .ent-eyebrow{ color: #7FCBA6; }
-        .ent-zone-ynai .ent-rule{ background: #3DDC84; }
-        .ent-zone-ynai .ent-partner-art{ border-color: rgba(255,255,255,0.12); }
-        .ent-zone-ynai .ent-pill-solid{ background: #1B7F52; color: #FFFFFF; }
-        .ent-zone-ynai .ent-pill-solid:hover{ background: #3DDC84; color: #04120D; }
-
         /* Sampled from the Lex & Latte mark: warm parchment. */
         .ent-zone-lex{
           background: linear-gradient(135deg, #F5EFE2 0%, #EADFC8 55%, #DCCBA9 100%);
@@ -736,11 +691,6 @@ export default function EntroraPage() {
         .ent-form-done h3{ font-family: var(--font-sans); font-weight: 600; font-size: 1.05rem; color: var(--c-ink); margin-bottom: 0.6rem; }
         .ent-form-done p{ font-family: var(--font-sans); font-size: 0.85rem; line-height: 1.6; color: var(--c-ink-muted); }
 
-        .ent-partner{ display: grid; grid-template-columns: minmax(0, 0.55fr) minmax(0, 1fr); gap: clamp(1.5rem, 5vw, 4rem); align-items: center; }
-        .ent-partner-art{ border: 1px solid var(--c-border); border-radius: 18px; overflow: hidden; background: #0A0A0A; }
-        .ent-partner-img{ width: 100%; height: auto; display: block; }
-
-
         /* ── Solutions ── */
         .ent-solutions{ display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1px; background: var(--c-border); border: 1px solid var(--c-border); border-radius: 14px; overflow: hidden; margin-top: 2rem; }
         .ent-solution{ background: var(--c-bg); padding: 1.85rem; }
@@ -761,6 +711,28 @@ export default function EntroraPage() {
         .ent-footer-links{ display: flex; gap: 1.75rem; flex-wrap: wrap; }
         .ent-footer-links a{ font-family: var(--font-sans); font-size: 0.8rem; color: var(--c-ink-muted); text-decoration: none; }
         .ent-footer-links a:hover{ color: var(--ent-pink); }
+
+        /* Quiet, institutional finish: editorial type, square rules and the
+           muted graphite/sage palette from the updated Entrora mark. */
+        .ent-hero{
+          background: linear-gradient(112deg, #F4F3EE 0%, #F8F8F5 58%, #EEF1EC 100%);
+          border-bottom: 1px solid rgba(29,58,49,0.13);
+        }
+        .ent-blob-green{ opacity: 0.22; }
+        .ent-blob-pink{ display: none; }
+        .ent-pillars{ max-width: 60rem; gap: 2.4rem; }
+        .ent-pillar h2{ font-family: var(--font-serif); font-size: 1.12rem; font-weight: 400; }
+        .ent-section{ border-top-color: rgba(29,58,49,0.13); }
+        .ent-grid-4{ gap: 2rem; }
+        .ent-principle{ border-top-color: rgba(29,58,49,0.24); }
+        .ent-chip{ text-transform: uppercase; letter-spacing: 0.16em; }
+        .ent-features{ border-radius: 2px; }
+        .ent-feature{ padding: 1.6rem; }
+        .ent-feature h4{ font-family: var(--font-serif); font-weight: 400; font-size: 1rem; }
+        .ent-shot, .ent-news-art{ border-radius: 2px; }
+        .ent-stat{ border-top-width: 1px; }
+        .ent-stat strong{ font-family: var(--font-serif); font-weight: 400; }
+        .ent-footer{ border-top-color: rgba(29,58,49,0.2); }
 
         @media(max-width:900px){
           /* Side by side, the headline was being squeezed into 164px on a
@@ -783,8 +755,6 @@ export default function EntroraPage() {
           .ent-news{ grid-template-columns: 1fr; }
           .ent-contact{ grid-template-columns: 1fr; }
           .ent-field-row{ grid-template-columns: 1fr; }
-          .ent-partner{ grid-template-columns: 1fr; }
-          .ent-partner-art{ max-width: 17rem; }
           .ent-news-art{ max-width: 11rem; }
           .ent-pill{ padding: 0.8rem 1.4rem; }
         }

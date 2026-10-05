@@ -6,14 +6,7 @@
  *
  *   1. If a provider key is set, use the configured OpenAI-compatible API.
  *      GEMINI_API_KEY alone selects Google's documented compatible endpoint.
- *   2. Otherwise it falls back to a keyless public endpoint, so the site
- *      still answers with no key configured at all.
- *
- * The keyless tier is best-effort by nature: it throttles hard and can
- * refuse outright when its free quota is exhausted, which is why every
- * failure here is reported honestly to the caller (see `retryable`) rather
- * than papered over. The chat UI turns that into a "try again" affordance
- * plus a plain contact form, so a dead model never costs Decra a lead.
+ *   2. Without a key, fail clearly and leave the contact form available.
  *
  * Note: no OpenAI `tools` array is ever sent. Free tiers commonly reject
  * tool calls even when plain completions are allowed, so tool use is done
@@ -26,34 +19,18 @@ export type AiResult =
   | { ok: true; content: string }
   | { ok: false; error: string; retryable: boolean };
 
-/** Public, no-account endpoint used when no key is configured. */
-const KEYLESS_ENDPOINT = "https://text.pollinations.ai/openai";
-const KEYLESS_MODEL = "openai-fast";
-
 const MAX_ATTEMPTS = 3;
 
 function resolveProvider() {
-  const key = process.env.AI_API_KEY || process.env.GEMINI_API_KEY;
   const baseUrl = process.env.AI_BASE_URL;
-
-  if (key) {
-    return {
-      endpoint: baseUrl
-        ? `${baseUrl.replace(/\/+$/, "")}/chat/completions`
-        : "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
-      model: process.env.AI_MODEL || "gemini-3.8-flash",
-      key,
-      keyless: false,
-    };
-  }
-
+  const key = process.env.AI_API_KEY || process.env.GEMINI_API_KEY;
+  if (!key) return null;
   return {
-    endpoint: process.env.AI_BASE_URL
-      ? `${process.env.AI_BASE_URL.replace(/\/+$/, "")}/chat/completions`
-      : KEYLESS_ENDPOINT,
-    model: process.env.AI_MODEL || KEYLESS_MODEL,
-    key: null,
-    keyless: true,
+    endpoint: baseUrl
+      ? `${baseUrl.replace(/\/+$/, "")}/chat/completions`
+      : "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
+    model: process.env.AI_MODEL || "gemini-3.8-flash",
+    key,
   };
 }
 
@@ -76,7 +53,15 @@ export async function generateReply(
   messages: AiMessage[],
   opts: { temperature?: number } = {},
 ): Promise<AiResult> {
-  const { endpoint, model, key } = resolveProvider();
+  const provider = resolveProvider();
+  if (!provider) {
+    return {
+      ok: false,
+      error: "No AI provider key is configured. Add GEMINI_API_KEY to the deployment environment.",
+      retryable: false,
+    };
+  }
+  const { endpoint, model, key } = provider;
 
   let lastError = "The assistant is unavailable.";
   let lastRetryable = true;
