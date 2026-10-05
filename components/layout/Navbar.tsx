@@ -11,7 +11,7 @@ import { useTheme } from "./ThemeProvider";
 // stays live and stays in the sitemap, it just isn't surfaced here either.
 const links = [
   { href: "/engineering",  label: "Innovation-Research" },
-  { href: "/#collaborate", label: "Partner" },
+  { href: "/#collaborate", label: "Partners" },
 ];
 
 const lk: React.CSSProperties = {
