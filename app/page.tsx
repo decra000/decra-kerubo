@@ -292,7 +292,7 @@ function About() {
           lineHeight: 1.6,
           ...reveal(vis, { dir: "scale", distance: 10, delay: 0.05 }),
         }}>
-I codevelop with and guide technology developers towards safe and compliant tech. I help investors and procurers buy compliant, safe and scalable tech, through immersive technical audits and legal health assurance.
+          I am a Nairobi-based Technical Product Counsel and AI Engineer with a Bachelor of Laws and a BSc in Computer Science (Artificial Intelligence). I work with product teams, founders, investors and technology procurers to connect how a product is designed and built with the legal, privacy and risk questions around it.
         </p>
       </div>
     </section>

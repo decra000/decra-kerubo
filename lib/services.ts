@@ -523,7 +523,7 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
     id: "embedded-product-counsel",
     label: "Embedded Product Counsel",
     description:
-      "Ongoing counsel from inside the product team rather than from outside it, reaching across the technical work, the legal work, and the compliance obligations at once, for as long as the engagement runs.",
+      "Technical Product Counsel is ongoing product and legal advice for technology teams, connecting product decisions with engineering, privacy, governance and risk. Based in Nairobi, Decra Kerubo brings a Bachelor of Laws and a BSc in Computer Science (Artificial Intelligence) to scoped engagements for teams building or assessing technology in Kenya and across Africa.",
     kind: "engagement",
     covers: [
       { categoryId: "technical-development", note: "Architecture, engineering, testing and audit decisions reviewed as they are made, not after they ship." },
@@ -532,9 +532,9 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
     ],
     howItWorks: [
       { title: "Retained, not per-matter", body: "A monthly retainer rather than a fee per question, so the thing you would hesitate to open a matter for is the thing you raise first." },
-      { title: "Inside the build", body: "In the specs, the standups and the pull request discussions, where a decision is still cheap to change." },
-      { title: "One person, both halves", body: "The same person reads the architecture and the agreement, so nothing is lost translating between your engineers and outside counsel." },
-      { title: "Scoped to a stage", body: "Engagements run for a defined stretch of the product, a build, a launch, a raise, and are reviewed at the end of it." },
+      { title: "Work alongside the product team", body: "Review product requirements, architecture choices, data flows and governance questions at the stage agreed with the team. Meeting cadence and access are set during scoping." },
+      { title: "Technical and legal context together", body: "Decra's training in Computer Science (AI) and Law helps connect system design decisions to their product, privacy and legal implications." },
+      { title: "Clear scope and boundaries", body: "Each engagement defines its deliverables, duration and working arrangements. Source-code, repository or pull-request review is included only when agreed in scope." },
     ],
     services: [],
   },

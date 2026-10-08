@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { SERVICE_GROUPS, type ServiceDef, type ServiceGroup } from "@/lib/services";
 import { PAPERS } from "@/lib/papers";
+import { SITE_URL } from "@/lib/site";
 
 /* A page per category.
    The four categories are not the same shape as each other, one is a
@@ -21,6 +22,17 @@ export async function generateMetadata({ params }: { params: Promise<{ category:
   const group = SERVICE_GROUPS.find((g) => g.id === category);
   if (!group) return {};
 
+  if (group.id === "embedded-product-counsel") {
+    const title = "Technical Product Counsel in Kenya";
+    const description = "Technical Product Counsel in Nairobi, Kenya. Decra Kerubo combines Law and Computer Science (AI) to advise technology teams on product decisions, engineering, privacy, governance and risk.";
+    return {
+      title,
+      description,
+      alternates: { canonical: `/services/${group.id}` },
+      openGraph: { title: `${title} | Decra Kerubo`, description, url: `/services/${group.id}` },
+    };
+  }
+
   const named = group.services.slice(0, 4).map((s) => s.label).join(", ");
   const description = named
     ? `${group.description} ${named} and more, from Decra Kerubo, technology lawyer and product counsel in Nairobi, Kenya.`
@@ -33,6 +45,33 @@ export async function generateMetadata({ params }: { params: Promise<{ category:
     openGraph: { title: `${group.label}, Decra Kerubo`, description: group.description, url: `/services/${group.id}` },
   };
 }
+
+const technicalCounselFaqs = [
+  {
+    question: "What is technical product counsel?",
+    answer: "Technical Product Counsel is ongoing, scoped advice that connects a technology product's design and engineering decisions with legal, privacy, governance and risk considerations while the product is being built or changed.",
+  },
+  {
+    question: "What does Decra Kerubo do as Technical Product Counsel?",
+    answer: "From Nairobi, Decra advises technology teams on product requirements, system and data-flow decisions, privacy, AI governance, intellectual property and commercialization. The exact deliverables, access and meeting cadence are agreed for each engagement.",
+  },
+  {
+    question: "Does the engagement include source-code or pull-request review?",
+    answer: "Only when that work is agreed in the engagement scope. Technical Product Counsel does not automatically mean repository access, code audits, pull-request approvals or attendance at every engineering meeting.",
+  },
+  {
+    question: "Is Decra Kerubo a practising advocate?",
+    answer: "Decra has a Bachelor of Laws and completed the Attorney Licensing Program at the Kenya School of Law, but is not currently a practising advocate. Her work is strategic product and technology advisory, not court representation or formal legal filings; she refers those matters to practising advocates.",
+  },
+  {
+    question: "Is Decra also an AI Engineer?",
+    answer: "Yes. Decra holds a BSc in Computer Science (Artificial Intelligence) and works on AI and software engineering. AI system development and technical product counsel can be scoped together or separately, depending on the team's needs.",
+  },
+  {
+    question: "Who is technical product counsel for?",
+    answer: "It is for founders and product or engineering teams building or assessing technology products, including AI, SaaS and data-intensive systems, who need technical choices considered alongside legal, privacy and product-risk questions.",
+  },
+];
 
 function ServiceEntry({ s, i }: { s: ServiceDef; i: number }) {
   return (
@@ -105,8 +144,20 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
   const nonce = (await headers()).get("x-nonce") || undefined;
   const others = SERVICE_GROUPS.filter((g) => g.id !== group.id);
 
-  const jsonLd = group.services.length
+  const jsonLd = group.id === "embedded-product-counsel"
     ? {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "@id": `${SITE_URL}/services/${group.id}#service`,
+        name: "Technical Product Counsel in Kenya",
+        description: group.description,
+        serviceType: ["Technical Product Counsel", "Product Governance", "Technology and Privacy Advisory"],
+        provider: { "@id": `${SITE_URL}#decra-kerubo` },
+        areaServed: [{ "@type": "Country", name: "Kenya" }, { "@type": "Continent", name: "Africa" }],
+        url: `${SITE_URL}/services/${group.id}`,
+      }
+    : group.services.length
+      ? {
         "@context": "https://schema.org",
         "@type": "ItemList",
         name: group.label,
@@ -124,11 +175,11 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
           },
         })),
       }
-    : null;
+      : null;
 
   return (
     <div style={{ background: "var(--c-bg)", paddingTop: "6rem" }}>
-      {jsonLd && <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />}
+      {jsonLd && <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />}
 
       {/* ── Header ── */}
       <section className="section page-x" style={{ borderBottom: "1px solid var(--c-border)" }}>
@@ -137,7 +188,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
             <span style={{ display: "inline-block", width: "1.5rem", height: "1px", background: "var(--c-gold)" }} />
             <Link href="/services" className="t-label" style={{ textDecoration: "none", color: "var(--c-ink-muted)" }}>Services</Link>
           </div>
-          <h1 className="t-display t-display-xl" style={{ marginBottom: "1.75rem" }}>{group.label}</h1>
+          <h1 className="t-display t-display-xl" style={{ marginBottom: "1.75rem" }}>{group.id === "embedded-product-counsel" ? "Technical Product Counsel in Kenya" : group.label}</h1>
           <p className="t-body" style={{ maxWidth: "46rem" }}>{group.description}</p>
         </div>
       </section>
@@ -146,6 +197,11 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
       {group.kind === "engagement" && (
         <section className="section page-x">
           <div className="inner">
+            {group.id === "embedded-product-counsel" && (
+              <p className="t-body" style={{ maxWidth: "48rem", marginBottom: "3rem" }}>
+                Technical Product Counsel connects product, engineering and legal judgment during the product lifecycle. Decra Kerubo is based in Nairobi and brings formal training in Law and Computer Science (Artificial Intelligence) to each engagement. The work is scoped with the team; it is strategic advisory, not court representation or formal legal filing.
+              </p>
+            )}
             <h2 className="t-label" style={{ marginBottom: "2rem" }}>How it works</h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(16rem, 1fr))", gap: "1.5rem", marginBottom: "4rem" }}>
               {group.howItWorks?.map((h) => (
@@ -170,6 +226,22 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
                 );
               })}
             </div>
+
+            {group.id === "embedded-product-counsel" && (
+              <section aria-labelledby="technical-counsel-faq-title" style={{ marginTop: "4rem", maxWidth: "52rem" }}>
+                <h2 id="technical-counsel-faq-title" className="t-display t-display-md" style={{ marginBottom: "1.5rem" }}>
+                  Technical Product Counsel: common questions
+                </h2>
+                <div>
+                  {technicalCounselFaqs.map((faq) => (
+                    <article key={faq.question} style={{ borderTop: "1px solid var(--c-border)", padding: "1.25rem 0" }}>
+                      <h3 style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.9rem", color: "var(--c-forest)", marginBottom: "0.5rem" }}>{faq.question}</h3>
+                      <p className="t-body-sm">{faq.answer}</p>
+                    </article>
+                  ))}
+                </div>
+              </section>
+            )}
           </div>
         </section>
       )}
