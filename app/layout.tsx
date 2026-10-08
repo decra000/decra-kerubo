@@ -111,7 +111,6 @@ const personJsonLd = {
     { "@type": "EducationalOccupationalCredential", credentialCategory: "certificate", name: "Ethical Hacker", recognizedBy: { "@type": "Organization", name: "Cisco" } },
   ],
   sameAs: [
-    "https://www.instagram.com/_little._d._/",
     "https://www.linkedin.com/in/decra/",
   ] as string[],
 };
@@ -164,8 +163,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <meta name="geo.placename" content="Nairobi" />
         <meta name="geo.position" content="-1.286389;36.817223" />
         <meta name="ICBM" content="-1.286389, 36.817223" />
-        <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }} />
-        <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: JSON.stringify(professionalServiceJsonLd) }} />
+        <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd).replace(/</g, "\\u003c") }} />
+        <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: JSON.stringify(professionalServiceJsonLd).replace(/</g, "\\u003c") }} />
         <Script
           id="theme-init"
           strategy="beforeInteractive"

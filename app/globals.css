@@ -28,7 +28,7 @@
 
   --space-x:       clamp(1.5rem, 5.5vw, 7rem);
   --space-page-x:  clamp(1.5rem, 6vw, 6rem);
-  --space-section: clamp(5rem, 9vw, 10rem);
+  --space-section: clamp(4.25rem, 7vw, 7.5rem);
   --max-w:         70rem;
 }
 
@@ -149,7 +149,7 @@ img { display: block; }
   .cases-grid  { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 640px) {
-  :root { --space-section: clamp(3.5rem, 14vw, 6rem); }
+  :root { --space-section: clamp(3rem, 10vw, 4.5rem); }
   .cases-grid  { grid-template-columns: 1fr; }
   .btn-primary, .btn-outline { width: 100%; padding: 0.85rem 1.25rem; }
 }
