@@ -715,13 +715,9 @@ function WorkWithDecra() {
   return (
     <section id="collaborate" ref={ref as React.RefObject<HTMLElement>} style={SEC}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-        <div className="partners-heading" style={{ ...fade(vis, 0.04) }}>
-          <div>
-            <p style={{ ...LBL, marginBottom: "0.7rem" }}>Our network</p>
-            <h2 style={{ ...SERIF("clamp(1.8rem,3vw,2.6rem)"), margin: 0 }}>Partners</h2>
-          </div>
-        </div>
-        <div className="partners-action" style={{ ...fade(vis, 0.16) }}>
+        <div className="wwd-row partners-row" style={{ ...fade(vis, 0.08) }}>
+          <h2 className="partners-title">Partners.</h2>
+          <span className="partners-spacer" aria-hidden="true" />
           <button
             onClick={openPartnerModal}
             className="wwd-partner-btn"
@@ -729,19 +725,14 @@ function WorkWithDecra() {
             onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"}
             onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--c-border)"}
           >
-            Become a Partner <ArrowRight size={12} strokeWidth={1.5} />
+            Partner <ArrowRight size={12} strokeWidth={1.5} />
           </button>
         </div>
         <style>{`
-          .partners-heading { display:flex; align-items:flex-end; justify-content:space-between; gap:1.5rem; margin-bottom:1.75rem; }
-          .partners-action { display:flex; justify-content:flex-start; margin-top:1.25rem; }
+          .partners-row { display:flex; align-items:center; flex-wrap:wrap; gap:.5rem; row-gap:1.25rem; }
+          .partners-title { font-family:var(--font-serif); font-weight:400; font-size:clamp(1.5rem,2.4vw,2rem); color:var(--c-ink); line-height:1.05; margin:0 1rem 0 0; white-space:nowrap; }
+          .partners-spacer { flex:1; min-width:1.5rem; }
           .wwd-partner-btn { transition:border-color .2s ease,color .2s ease; }
-          @media(max-width:680px) {
-            .partners-heading { align-items:flex-start; flex-direction:column; margin-bottom:1.25rem; }
-            .partners-action { margin-top:1rem; }
-            .wwd-partner-btn { width:100%; justify-content:center; }
-          }
-          @media(max-width:380px) { .atprc-logo { width:6.5rem; flex-basis:6.5rem; height:4.4rem; } }
         `}</style>
       </div>
 
