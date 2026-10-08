@@ -721,17 +721,6 @@ function WorkWithDecra() {
             <h2 style={{ ...SERIF("clamp(1.8rem,3vw,2.6rem)"), margin: 0 }}>Partners</h2>
           </div>
         </div>
-        <div className="partners-grid" style={{ ...fade(vis, 0.1) }}>
-          <a className="partner-card entrora-card" href="https://www.linkedin.com/company/entrora/?viewAsMember=true" target="_blank" rel="noopener noreferrer" aria-label="Entrora on LinkedIn">
-            <span className="partner-logo entrora-logo"><img src="/partners/entrora-mark-source.png" alt="" /></span>
-            <span className="partner-name">Entrora</span>
-            <span className="partner-arrow" aria-hidden="true"><ArrowRight size={15} strokeWidth={1.5} /></span>
-          </a>
-          <div className="partner-card atprc-card" role="img" aria-label="ATPRC, African Technology Product Risk Clinic">
-            <span className="partner-logo atprc-logo"><img src="/partners/atprc-brand-board.png" alt="" /></span>
-            <span className="partner-name">African Technology Product Risk Clinic</span>
-          </div>
-        </div>
         <div className="partners-action" style={{ ...fade(vis, 0.16) }}>
           <button
             onClick={openPartnerModal}
@@ -745,30 +734,10 @@ function WorkWithDecra() {
         </div>
         <style>{`
           .partners-heading { display:flex; align-items:flex-end; justify-content:space-between; gap:1.5rem; margin-bottom:1.75rem; }
-          .partners-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; }
-          .partner-card { min-width:0; min-height:10.5rem; display:flex; align-items:center; gap:1.35rem; padding:1.35rem 1.6rem; border:1px solid var(--c-border); background:var(--c-surface); text-decoration:none; transition:border-color .25s ease, transform .25s ease; }
-          a.partner-card:hover { border-color:var(--c-accent); transform:translateY(-2px); }
-          .partner-logo { width:6.5rem; height:6.5rem; flex:0 0 6.5rem; display:flex; align-items:center; justify-content:center; overflow:hidden; }
-          .entrora-logo { border-radius:50%; background:#fff; }
-          .entrora-logo img { display:block; width:145%; height:145%; flex:0 0 145%; object-fit:contain; border-radius:50%; }
-          .atprc-logo { width:9rem; flex-basis:9rem; height:7.5rem; background:#030504; }
-          .atprc-logo img { display:block; width:100%; height:100%; object-fit:cover; object-position:center 46%; filter:brightness(3.5) contrast(1.2) saturate(1.2); }
-          .partner-name { min-width:0; font-family:var(--font-serif); font-size:clamp(1.1rem,1.7vw,1.45rem); line-height:1.2; color:var(--c-ink); }
-          .atprc-card .partner-name { max-width:12rem; }
-          .partner-arrow { margin-left:auto; color:var(--c-ink-muted); }
-          .partners-action { display:flex; justify-content:flex-end; margin-top:1.25rem; }
+          .partners-action { display:flex; justify-content:flex-start; margin-top:1.25rem; }
           .wwd-partner-btn { transition:border-color .2s ease,color .2s ease; }
-          @media(max-width:900px) {
-            .partners-grid { grid-template-columns:1fr; }
-          }
           @media(max-width:680px) {
             .partners-heading { align-items:flex-start; flex-direction:column; margin-bottom:1.25rem; }
-            .partners-grid { grid-template-columns:1fr; gap:.75rem; }
-            .partner-card { min-height:8rem; padding:1rem; gap:1rem; }
-            .partner-logo { width:5.25rem; height:5.25rem; flex-basis:5.25rem; }
-            .atprc-logo { width:7.4rem; flex-basis:7.4rem; height:5rem; }
-            .partner-name { font-size:1.08rem; }
-            .atprc-card .partner-name { max-width:none; }
             .partners-action { margin-top:1rem; }
             .wwd-partner-btn { width:100%; justify-content:center; }
           }
