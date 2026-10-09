@@ -48,10 +48,10 @@ export default function EngineeringPage() {
               Building tech is the easy part. What&apos;s hard is what it&apos;s built on, and how it&apos;s built.
               I have reviewed 500+ tech products during my engagements with FELS, Eleva8or, ELP (defunct), MASK,
               and Startuponrise, and that work is what brought me here, into the infrastructure tech actually
-              runs on, and the algorithms sitting inside it.
+              runs on, and the architecture sitting underneath it.
             </h1>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "0.6rem", marginTop: "1.5rem" }}>
-              {["LLB (Hons), Africa Nazarene University", "BSc Computer Science (AI), African Leadership University"].map((deg) => (
+              {["LLB (Hons), Africa Nazarene University", "BSc Computer Science (AI, First Class Honours), African Leadership University"].map((deg) => (
                 <div key={deg} style={{
                   display: "inline-flex", alignItems: "center", gap: "0.4rem", width: "fit-content",
                   fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.02em",
