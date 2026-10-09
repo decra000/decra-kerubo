@@ -5,6 +5,7 @@ import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { ArrowRight, ChevronDown, X, Mic, Volume2, VolumeX, RefreshCw } from "lucide-react";
 import { useSpeech } from "@/hooks/useSpeech";
 import { SERVICE_GROUPS } from "@/lib/services";
+import { IntentPopup } from "@/components/home/IntentPopup";
 
 /* ── helpers ── */
 function useReveal() {
@@ -1179,6 +1180,7 @@ function TechDevSection() {
 export default function Home() {
   return (
     <>
+      <IntentPopup />
       <Hero />
       <About />
       <Services />
