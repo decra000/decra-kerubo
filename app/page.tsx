@@ -988,7 +988,7 @@ const CREDENTIALS: Cred[] = [
     key: "alu",
     src: "/logos/logo-alu.png",
     name: "African Leadership University",
-    detail: "BSc Computer Science (AI, First Class Honours)",
+    detail: "BSc Computer Science (AI), 1st Hons",
     tier: 1,
   },
   {

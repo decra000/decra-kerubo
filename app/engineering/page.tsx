@@ -51,7 +51,7 @@ export default function EngineeringPage() {
               runs on, and the architecture sitting underneath it.
             </h1>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "0.6rem", marginTop: "1.5rem" }}>
-              {["LLB (Hons), Africa Nazarene University", "BSc Computer Science (AI, First Class Honours), African Leadership University"].map((deg) => (
+              {["LLB (Hons), Africa Nazarene University", "BSc Computer Science (AI), African Leadership University (1st Hons)"].map((deg) => (
                 <div key={deg} style={{
                   display: "inline-flex", alignItems: "center", gap: "0.4rem", width: "fit-content",
                   fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.02em",
