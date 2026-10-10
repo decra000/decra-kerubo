@@ -995,6 +995,114 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
           .catalogue-section-header{gap:1rem}
           .svc-faq-question{font-size:.82rem}
         }
+
+        /* ─────────────────────────────────────────────
+           EDITORIAL REFINEMENT
+        ───────────────────────────────────────────── */
+        .svc-masthead{
+          padding-top:clamp(2.75rem,5vw,4.5rem);
+          padding-bottom:clamp(2.5rem,4.5vw,4rem);
+          background:
+            radial-gradient(ellipse at 82% 12%,rgba(95,169,143,.18),transparent 34%),
+            linear-gradient(115deg,color-mix(in srgb,var(--c-forest) 5%,var(--c-surface)),var(--c-bg) 68%);
+        }
+        .svc-breadcrumb{margin-bottom:clamp(1.5rem,3vw,2.5rem)}
+        .svc-kicker{margin-bottom:.75rem}
+        .svc-hero-title{font-size:clamp(2.35rem,5.2vw,4.7rem);max-width:42rem}
+        .svc-hero-lede{max-width:38rem;line-height:1.7}
+        .svc-hero-foot{margin-top:clamp(1.5rem,3vw,2.5rem)}
+        .svc-aside-num{color:var(--c-accent);opacity:.28}
+        .svc-index-inner{min-height:3.15rem}
+        .svc-index-link{font-size:.65rem}
+        .svc-section-eyebrow{margin-bottom:.6rem}
+        .svc-section-eyebrow-row{margin-bottom:clamp(1.5rem,3vw,2.25rem)}
+        .svc-positioning-section.section{padding-top:clamp(2.75rem,5vw,4.25rem);padding-bottom:clamp(2.75rem,5vw,4.25rem)}
+        .svc-positioning-layout{gap:clamp(1.5rem,4vw,3.5rem)}
+        .svc-positioning-left{max-width:19rem}
+        .svc-positioning-lead{margin-bottom:1.25rem;line-height:1.68}
+        .svc-positioning-cards{border:0;background:transparent;gap:.65rem;margin-bottom:1rem}
+        .svc-pos-card{
+          padding:1.1rem 1.2rem 1.15rem;
+          background:color-mix(in srgb,var(--c-accent) 5%,var(--c-surface));
+          border:1px solid color-mix(in srgb,var(--c-accent) 14%,var(--c-border));
+          font-size:.81rem;line-height:1.62;
+        }
+        .svc-pos-card--approach,.svc-pos-card--outputs{border-top:2px solid var(--c-accent)}
+        .svc-pos-card-label{margin-bottom:.55rem;color:var(--c-accent)}
+        .svc-boundary{padding-top:.8rem;font-size:.76rem}
+        .working-grid{gap:.65rem;border:0;background:transparent;margin-bottom:clamp(1.75rem,3.5vw,2.75rem)}
+        .working-note{
+          padding:1.2rem 1.25rem 1.25rem;
+          background:var(--c-surface);
+          border:1px solid var(--c-border);
+        }
+        .working-note-index{margin-bottom:.65rem}
+        .working-note h3{font-size:1.03rem;margin-bottom:.45rem}
+        .reach-grid{gap:.65rem}
+        .reach-card{
+          min-height:11rem;padding:1.2rem 1.25rem;
+          background:linear-gradient(145deg,color-mix(in srgb,var(--c-accent) 7%,var(--c-surface)),var(--c-bg) 76%);
+        }
+        .reach-card-index{margin-bottom:1rem}
+        .reach-card h3{font-size:1.15rem}
+        .reach-card-foot{margin-top:.85rem}
+        .svc-grid{gap:.65rem;border:0;background:transparent}
+        .svc-card{
+          padding:1.35rem 1.35rem 1.2rem;
+          background:var(--c-surface);
+          border:1px solid var(--c-border);
+        }
+        .svc-card::before{height:3px}
+        .svc-card-header{gap:.7rem;margin-bottom:.7rem}
+        .svc-card-index{
+          display:grid;place-items:center;width:1.75rem;height:1.75rem;
+          background:color-mix(in srgb,var(--c-accent) 11%,var(--c-bg));
+          border-radius:50%;letter-spacing:0;
+        }
+        .svc-card-title{font-size:clamp(.98rem,1.35vw,1.15rem)}
+        .svc-card-body{font-size:.81rem;line-height:1.62;margin-bottom:.9rem}
+        .svc-card-tags{gap:.3rem .35rem;margin-bottom:1rem}
+        .svc-tag{
+          padding:.22rem .5rem;border:0;border-radius:2px;
+          background:color-mix(in srgb,var(--c-accent) 7%,var(--c-bg));
+          color:var(--c-ink-mid);font-size:.67rem;
+        }
+        .svc-card:hover .svc-tag{background:color-mix(in srgb,var(--c-accent) 12%,var(--c-bg))}
+        .svc-card-cta{font-size:.56rem;padding-bottom:.25rem}
+        .catalogue-section{margin-bottom:clamp(2rem,4vw,3.5rem)}
+        .catalogue-section-header{margin-bottom:.9rem;padding-bottom:.9rem}
+        .catalogue-section-label{gap:.65rem}
+        .catalogue-section-blurb{font-size:.8rem;line-height:1.65}
+        .svc-sectors-section{
+          padding-top:clamp(1.75rem,3vw,2.75rem);
+          padding-bottom:clamp(1.75rem,3vw,2.75rem);
+          background:linear-gradient(90deg,color-mix(in srgb,var(--c-accent) 5%,transparent),transparent 72%);
+        }
+        .svc-sectors-tags{gap:.35rem}
+        .svc-sector-tag{padding:.38rem .75rem;border-radius:2px;font-size:.72rem}
+        .svc-papers-grid{gap:.65rem;border:0;background:transparent;margin-bottom:clamp(2rem,4vw,3rem)}
+        .svc-paper-card{padding:1.35rem 1.3rem;background:var(--c-surface);border:1px solid var(--c-border)}
+        .svc-paper-meta{color:var(--c-accent)}
+        .svc-policy-cta-block{padding:clamp(1.5rem,3vw,2.25rem);border-color:color-mix(in srgb,var(--c-accent) 25%,var(--c-border));background:linear-gradient(120deg,color-mix(in srgb,var(--c-accent) 8%,var(--c-surface)),var(--c-bg) 75%)}
+        .svc-faq-section.section{padding-top:clamp(2.75rem,5vw,4rem);padding-bottom:clamp(2.75rem,5vw,4rem)}
+        .svc-faq-layout{gap:clamp(1.5rem,4vw,3.5rem)}
+        .svc-faq-question{padding:.9rem 0;font-size:.82rem}
+        .svc-faq-answer{padding-bottom:1rem;font-size:.81rem;line-height:1.68}
+        .svc-cta-band{padding-top:clamp(2.25rem,4vw,3.5rem);padding-bottom:clamp(2.25rem,4vw,3.5rem);background:linear-gradient(110deg,var(--c-forest),color-mix(in srgb,var(--c-accent) 30%,var(--c-forest)))}
+        .svc-cta-band-btn{padding:.78rem 1.3rem}
+        .svc-other-grid{gap:.65rem;border:0;background:transparent}
+        .svc-other-card{padding:1.15rem 1.2rem;background:var(--c-surface);border:1px solid var(--c-border)}
+        .svc-other-body h3{font-size:.96rem}
+        .related-work-list{gap:.4rem}
+        .related-work-list a{padding:.8rem 1rem;font-size:.78rem}
+        @media(max-width:560px){
+          .svc-masthead{padding-top:2.2rem;padding-bottom:2.4rem}
+          .svc-hero-title{font-size:clamp(2.05rem,9vw,3rem)}
+          .svc-positioning-section.section,.svc-faq-section.section{padding-top:2.5rem;padding-bottom:2.5rem}
+          .svc-card{padding:1.2rem 1.1rem 1.1rem}
+          .svc-pos-card{padding:1rem}
+          .svc-sector-tag{font-size:.68rem}
+        }
       `}</style>
     </div>
   );
