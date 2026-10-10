@@ -17,7 +17,7 @@ export function ContactBubble() {
   const bottom = useRef<HTMLDivElement>(null);
   const panel = useRef<HTMLDivElement>(null);
   const inp = useRef<HTMLInputElement>(null);
-  const { listen, stopListening, listening, supported, speak, stopSpeaking, speaking, synthSupported } = useSpeech();
+  const { listen, stopListening, listening, supported, speechError, speak, stopSpeaking, speaking, synthSupported } = useSpeech();
 
   useEffect(() => {
     const fn = (e: MouseEvent) => { if (open && panel.current && !panel.current.contains(e.target as Node)) setOpen(false); };
@@ -107,6 +107,7 @@ export function ContactBubble() {
           <div ref={bottom} />
         </div>
 
+        {speechError && <p role="status" style={{ margin: "0.5rem 1rem", color: "#b54747", fontSize: "0.72rem", lineHeight: 1.45 }}>{speechError}</p>}
         <div style={{ display: "flex", borderTop: "1px solid var(--c-border)", alignItems: "center" }}>
           <input ref={inp} value={input} onChange={e => setInput(e.target.value)}
             onKeyDown={e => e.key === "Enter" && send()}

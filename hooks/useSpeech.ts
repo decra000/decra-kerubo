@@ -11,7 +11,7 @@ interface SpeechRecognitionLike extends EventTarget {
   stop: () => void;
   onresult: ((ev: { results: { [i: number]: { [j: number]: SpeechRecognitionResultLike } } }) => void) | null;
   onend: (() => void) | null;
-  onerror: (() => void) | null;
+  onerror: ((ev: { error?: string }) => void) | null;
 }
 declare global {
   interface Window {
@@ -30,6 +30,7 @@ declare global {
  */
 export function useSpeech() {
   const [listening, setListening] = useState(false);
+  const [speechError, setSpeechError] = useState("");
   const [speaking, setSpeaking] = useState(false);
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
 
@@ -46,18 +47,39 @@ export function useSpeech() {
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SR) return;
     const rec = new SR();
+    setSpeechError("");
+    // Use a widely supported recognition locale. The browser can still
+    // recognize Kenyan accents without requiring a less commonly installed
+    // en-KE model.
     rec.lang = "en-US";
     rec.interimResults = false;
     rec.maxAlternatives = 1;
     rec.onresult = (e) => {
       const text = e.results[0]?.[0]?.transcript;
-      if (text) onResult(text);
+      if (text?.trim()) onResult(text.trim());
+      else setSpeechError("I didn't catch that. Please try again or type your message.");
     };
     rec.onend = () => setListening(false);
-    rec.onerror = () => setListening(false);
+    rec.onerror = (event) => {
+      setListening(false);
+      const messages: Record<string, string> = {
+        "not-allowed": "Microphone access is blocked. Allow it in your browser's site settings, then try again.",
+        "service-not-allowed": "Browser speech recognition is unavailable. Check your browser settings or type your message.",
+        network: "Speech recognition could not connect. Check your connection or type your message.",
+        "audio-capture": "No microphone was detected. Check your microphone connection and permissions.",
+        "no-speech": "I didn't hear speech. Please try again or type your message.",
+        aborted: "Voice input was stopped. You can try again whenever you're ready.",
+      };
+      setSpeechError(messages[event.error || ""] || "Voice input failed. Please try again or type your message.");
+    };
     recognitionRef.current = rec;
     setListening(true);
-    rec.start();
+    try {
+      rec.start();
+    } catch {
+      setListening(false);
+      setSpeechError("The microphone could not start. Check browser permission and try again.");
+    }
   }, [supported, listening]);
 
   const stopSpeaking = useCallback(() => {
@@ -79,5 +101,5 @@ export function useSpeech() {
     window.speechSynthesis.speak(utter);
   }, [synthSupported]);
 
-  return { listen, stopListening, listening, supported, speak, stopSpeaking, speaking, synthSupported };
+  return { listen, stopListening, listening, supported, speechError, speak, stopSpeaking, speaking, synthSupported };
 }

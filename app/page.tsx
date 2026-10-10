@@ -577,7 +577,7 @@ function WorkWithDecra() {
   const [fallbackSent, setFallbackSent] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const { listen, stopListening, listening, supported, speak, stopSpeaking, speaking, synthSupported } = useSpeech();
+  const { listen, stopListening, listening, supported, speechError, speak, stopSpeaking, speaking, synthSupported } = useSpeech();
 
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [msgs, loading, streamingText]);
 
@@ -968,6 +968,7 @@ function WorkWithDecra() {
                       </div>
                     </div>
                   )}
+                  {speechError && <p role="status" style={{ margin: "0.5rem 1rem", color: "#b54747", fontSize: "0.75rem", lineHeight: 1.5 }}>{speechError}</p>}
                   <div ref={bottomRef} />
                 </div>
                 {!done ? (
