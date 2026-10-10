@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import { headers } from "next/headers";
 import Link from "next/link";
 import { SERVICE_GROUPS } from "@/lib/services";
 
 export const metadata: Metadata = {
-  title: "Capabilities",
+  title: "Technology, Product & Legal Advisory Services in Kenya",
   description:
-    "Technical development, structuring and audit; embedded product counsel; industry compliance; and tech policy contribution. Integrated technical and legal support from Decra Kerubo, technology lawyer and product counsel in Nairobi, Kenya.",
+    "Technical product development, AI and systems engineering, product counsel, technology transactions, compliance advisory and subcontract support from Decra Kerubo in Nairobi, Kenya.",
   // Without its own entry this inherited the root layout's canonical of "/",
   // so the page told Google it was a duplicate of the homepage and asked not
   // to be indexed — on the one page most likely to be searched for.
@@ -14,39 +13,16 @@ export const metadata: Metadata = {
 };
 
 const faqs = [
-  { q: "Who is this for?", a: "Developers, founders, investors, regulators, and technology procurers who need integrated technical and legal support, whether building a product, governing one, transacting on one, or assessing one." },
-  { q: "Do you work with clients outside Kenya?", a: "Yes. Based in Nairobi, I work across East Africa and internationally. Most sessions are via Google Meet." },
-  { q: "What does a typical engagement look like?", a: "It starts with a discovery call, followed by a scoped engagement based on your specific needs. Some clients engage for a single strategy session; others retain ongoing support." },
-  { q: "Are you a practising advocate?", a: "I hold a Bachelor of Laws and advise at a strategic level. For formal legal representation or filing, I refer to practising advocates within my network." },
-  { q: "I'm not sure which service I need.", a: "Book a discovery call. In 15 minutes we'll identify the right starting point, no pressure, no obligation." },
+  { q: "Who is this practice designed for?", a: "Founders, product and engineering leaders, investors, procurers, and professional firms working on technology products. The right starting point depends on whether the decision concerns building, reviewing, governing, commercializing or embedding support around a product." },
+  { q: "How do you decide which service is appropriate?", a: "Begin with the decision, deadline and evidence available. A defined product or transaction issue may call for a review; a continuing stream of product decisions may justify embedded counsel; a build or systems problem may call for engineering support." },
+  { q: "Can technical and legal work be combined?", a: "They can be scoped together where the work requires both, or separately where a team needs a defined technical or advisory deliverable. The engagement sets responsibilities, access, outputs and boundaries." },
+  { q: "Does this practice provide court representation or formal filings?", a: "No. The practice focuses on product, technology and engineering advisory. Formal legal representation and filings are referred to a practising advocate." },
+  { q: "Can a firm retain Decra for subcontracted support?", a: "Yes. A law firm, consultancy or project lead can request a defined technical and product-risk workstream, subject to agreement on supervision, conflicts, confidentiality, client contact and deliverables." },
 ];
 
-// Mirrors the FAQ block rendered below. Google reads this to build the
-// "People also ask"-style expandable results, which is the cheapest way onto
-// a results page already crowded with established firms.
-const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqs.map((f) => ({
-    "@type": "Question",
-    name: f.q,
-    acceptedAnswer: { "@type": "Answer", text: f.a },
-  })),
-};
-
-export default async function ServicesPage() {
-  // Same nonce plumbing as the root layout: CSP sets script-src with a
-  // per-request nonce, so an inline JSON-LD tag without it is blocked.
-  const nonce = (await headers()).get("x-nonce") || undefined;
-
+export default function ServicesPage() {
   return (
     <div style={{ background: "var(--c-bg)", paddingTop: "6rem" }}>
-      <script
-        type="application/ld+json"
-        nonce={nonce}
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-      />
-
       {/* ── Header ── */}
       <section className="section page-x" style={{ borderBottom: "1px solid var(--c-border)" }}>
         <div className="inner header-grid" style={{ alignItems: "end" }}>
@@ -55,17 +31,17 @@ export default async function ServicesPage() {
               <span style={{ display: "inline-block", width: "1.5rem", height: "1px", background: "var(--c-gold)" }} />
               <span className="t-label">Advisory Services</span>
             </div>
-            <h1 className="t-display t-display-xl">One practice, four ways in.</h1>
+            <h1 className="t-display t-display-xl">One practice, distinct ways to move a technology decision forward.</h1>
           </div>
           <div>
             <p className="t-body" style={{ marginBottom: "1.5rem" }}>
-              The technical work of building a product and proving it holds; ongoing counsel from inside the team rather than outside it; the compliance a sector actually judges you against; and published contribution to how technology gets governed in Africa.
+              Based in Nairobi, Decra Kerubo works across product engineering and technology advisory. Engagements are organized around the decision at hand: developing or assessing a system, reviewing product and transaction risk, translating obligations into controls, providing continuing counsel, or contributing specialist capacity to another firm’s work.
             </p>
           </div>
         </div>
       </section>
 
-      {/* ── The four categories ──
+      {/* ── The service areas ──
           Every category page is reachable from here. A page nothing links to
           is a page search engines treat as unimportant, however good it is. */}
       <section className="section page-x" style={{ borderTop: "1px solid var(--c-border)" }}>
@@ -74,13 +50,13 @@ export default async function ServicesPage() {
             <span style={{ display: "inline-block", width: "1.5rem", height: "1px", background: "var(--c-gold)" }} />
             <span className="t-label">How to engage</span>
           </div>
-          <h2 className="t-display t-display-md" style={{ marginBottom: "2.5rem" }}>Start where you actually are.</h2>
+          <h2 className="t-display t-display-md" style={{ marginBottom: "2.5rem" }}>Start with the decision in front of you.</h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(15rem, 1fr))", gap: "1.5rem" }}>
             {SERVICE_GROUPS.map((g) => (
               <Link key={g.id} href={`/services/${g.id}`} style={{ textDecoration: "none", border: "1px solid var(--c-border)", padding: "1.5rem", display: "block" }}>
                 <h3 style={{ fontFamily: "var(--font-serif)", fontWeight: 400, fontSize: "1.05rem", color: "var(--c-ink)", marginBottom: "0.6rem" }}>{g.label}</h3>
                 <p className="t-body-sm" style={{ marginBottom: "0.75rem" }}>{g.description}</p>
-                <span className="t-label" style={{ color: "var(--c-ink-muted)" }}>{g.kind === "policy" ? "Research & opinion" : g.kind === "engagement" ? "How Decra embeds" : `${g.services.length} services`}</span>
+                <span className="t-label" style={{ color: "var(--c-ink-muted)" }}>{g.kind === "policy" ? "Research & opinion" : g.id === "embedded-product-counsel" ? "Ongoing advisory" : g.id === "technical-legal-subcontractor" ? "Project-based collaboration" : g.id === "ai-and-systems-engineering" ? "Engineering engagement" : `${g.services.length} areas of work`}</span>
               </Link>
             ))}
           </div>

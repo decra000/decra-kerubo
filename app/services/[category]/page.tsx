@@ -7,11 +7,11 @@ import { SERVICE_GROUPS, type ServiceDef, type ServiceGroup } from "@/lib/servic
 import { PAPERS } from "@/lib/papers";
 import { SITE_URL } from "@/lib/site";
 
-/* A page per category.
-   The four categories are not the same shape as each other, one is a
+/* A page per service area.
+   The service areas are not the same shape as each other: some are a
    catalogue of work, one is an arrangement, one is scoped by sector, and one
    is published research rather than an offering, so this branches on `kind`
-   rather than rendering four identical lists. */
+   rather than rendering identical lists. */
 
 export function generateStaticParams() {
   return SERVICE_GROUPS.map((g) => ({ category: g.id }));
@@ -23,8 +23,8 @@ export async function generateMetadata({ params }: { params: Promise<{ category:
   if (!group) return {};
 
   if (group.id === "embedded-product-counsel") {
-    const title = "Technical Product Counsel in Kenya";
-    const description = "Technical Product Counsel in Nairobi, Kenya. Decra Kerubo combines Law and Computer Science (AI) to advise technology teams on product decisions, engineering, privacy, governance and risk.";
+    const title = group.searchTitle ?? "Technical Product Counsel in Kenya";
+    const description = group.searchDescription ?? group.description;
     return {
       title,
       description,
@@ -34,44 +34,17 @@ export async function generateMetadata({ params }: { params: Promise<{ category:
   }
 
   const named = group.services.slice(0, 4).map((s) => s.label).join(", ");
-  const description = named
-    ? `${group.description} ${named} and more, from Decra Kerubo, technology lawyer and product counsel in Nairobi, Kenya.`
-    : `${group.description} From Decra Kerubo, technology lawyer and product counsel in Nairobi, Kenya.`;
+  const description = group.searchDescription ?? (named
+    ? `${group.description} ${named}. Decra Kerubo, Nairobi, Kenya.`
+    : `${group.description} Decra Kerubo, Nairobi, Kenya.`);
 
   return {
-    title: group.label,
+    title: group.searchTitle ?? group.label,
     description: description.slice(0, 300),
     alternates: { canonical: `/services/${group.id}` },
-    openGraph: { title: `${group.label}, Decra Kerubo`, description: group.description, url: `/services/${group.id}` },
+    openGraph: { title: `${group.searchTitle ?? group.label} | Decra Kerubo`, description, url: `/services/${group.id}` },
   };
 }
-
-const technicalCounselFaqs = [
-  {
-    question: "What is technical product counsel?",
-    answer: "Technical Product Counsel is ongoing, scoped advice that connects a technology product's design and engineering decisions with legal, privacy, governance and risk considerations while the product is being built or changed.",
-  },
-  {
-    question: "What does Decra Kerubo do as Technical Product Counsel?",
-    answer: "From Nairobi, Decra advises technology teams on product requirements, system and data-flow decisions, privacy, AI governance, intellectual property and commercialization. The exact deliverables, access and meeting cadence are agreed for each engagement.",
-  },
-  {
-    question: "Does the engagement include source-code or pull-request review?",
-    answer: "Only when that work is agreed in the engagement scope. Technical Product Counsel does not automatically mean repository access, code audits, pull-request approvals or attendance at every engineering meeting.",
-  },
-  {
-    question: "Is Decra Kerubo a practising advocate?",
-    answer: "Decra has a Bachelor of Laws and completed the Attorney Licensing Program at the Kenya School of Law, but is not currently a practising advocate. Her work is strategic product and technology advisory, not court representation or formal legal filings; she refers those matters to practising advocates.",
-  },
-  {
-    question: "Is Decra also an AI Engineer?",
-    answer: "Yes. Decra holds a BSc in Computer Science (Artificial Intelligence) and works on AI and software engineering. AI system development and technical product counsel can be scoped together or separately, depending on the team's needs.",
-  },
-  {
-    question: "Who is technical product counsel for?",
-    answer: "It is for founders and product or engineering teams building or assessing technology products, including AI, SaaS and data-intensive systems, who need technical choices considered alongside legal, privacy and product-risk questions.",
-  },
-];
 
 function ServiceEntry({ s, i }: { s: ServiceDef; i: number }) {
   return (
@@ -146,14 +119,16 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
   const others = SERVICE_GROUPS.filter((g) => g.id !== group.id);
   const catalogueSections = group.sections ?? [];
 
-  const jsonLd = group.id === "embedded-product-counsel"
+  const jsonLd = group.kind === "engagement"
     ? {
         "@context": "https://schema.org",
         "@type": "Service",
         "@id": `${SITE_URL}/services/${group.id}#service`,
-        name: "Technical Product Counsel in Kenya",
+        name: group.id === "embedded-product-counsel" ? "Technical Product Counsel in Kenya" : group.label,
         description: group.description,
-        serviceType: ["Technical Product Counsel", "Product Governance", "Technology and Privacy Advisory"],
+        serviceType: group.id === "embedded-product-counsel"
+          ? ["Technical Product Counsel", "Product Governance", "Technology and Privacy Advisory"]
+          : [group.label],
         provider: { "@id": `${SITE_URL}#decra-kerubo` },
         areaServed: [{ "@type": "Country", name: "Kenya" }, { "@type": "Continent", name: "Africa" }],
         url: `${SITE_URL}/services/${group.id}`,
@@ -192,7 +167,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
             <p className="service-edition">DECRA KERUBO <span>·</span> TECHNOLOGY &amp; PRODUCT ADVISORY</p>
             <h1 className="t-display service-title">{group.id === "embedded-product-counsel" ? "Technical Product Counsel in Kenya" : group.label}</h1>
             <p className="t-body service-lede">{group.description}</p>
-            <div className="service-masthead-foot"><span>NAIROBI, KENYA</span><span>01 — 04</span></div>
+            <div className="service-masthead-foot"><span>NAIROBI, KENYA</span><span>{String(SERVICE_GROUPS.findIndex((item) => item.id === group.id) + 1).padStart(2, "0")} — {String(SERVICE_GROUPS.length).padStart(2, "0")}</span></div>
           </div>
           <div className="service-masthead-aside" aria-hidden="true">
             <span className="service-aside-number">{String(SERVICE_GROUPS.findIndex((item) => item.id === group.id) + 1).padStart(2, "0")}</span>
@@ -213,16 +188,33 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
         </nav>
       )}
 
+      {group.positioning && (
+        <section className="section page-x" aria-labelledby="service-approach-title">
+          <div className="inner service-content">
+            <div className="service-section-heading"><span>01</span><h2 id="service-approach-title" className="t-display t-display-md">The decision this work supports</h2><i /></div>
+            <p className="t-body service-positioning-lede">{group.positioning.decisionPoint}</p>
+            <div className="service-positioning-grid">
+              <article>
+                <h3 className="t-display">How the work is approached</h3>
+                <p className="t-body-sm">{group.positioning.approach}</p>
+              </article>
+              <article>
+                <h3 className="t-display">What it can produce</h3>
+                <ul className="service-outcomes">
+                  {group.positioning.outputs.map((output) => <li key={output}>{output}</li>)}
+                </ul>
+              </article>
+            </div>
+            <p className="service-boundary"><strong>Scope and limits.</strong> {group.positioning.boundaries}</p>
+          </div>
+        </section>
+      )}
+
       {/* ── Engagement: how the retainer works, and what it reaches into ── */}
       {group.kind === "engagement" && (
         <section className="section page-x">
           <div className="inner service-content">
-            {group.id === "embedded-product-counsel" && (
-              <p className="t-body service-opening-note">
-                Technical Product Counsel connects product, engineering and legal judgment during the product lifecycle. Decra Kerubo is based in Nairobi and brings formal training in Law and Computer Science (Artificial Intelligence) to each engagement. The work is scoped with the team; it is strategic advisory, not court representation or formal legal filing.
-              </p>
-            )}
-            <div className="service-section-heading"><span>01</span><h2 className="t-display t-display-md">How the work is arranged</h2><i /></div>
+            <div className="service-section-heading"><span>02</span><h2 className="t-display t-display-md">{group.arrangementHeading ?? "How the work is arranged"}</h2><i /></div>
             <div className="working-grid">
               {group.howItWorks?.map((h) => (
                 <div className="working-note" key={h.title}>
@@ -232,37 +224,61 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
               ))}
             </div>
 
-            <div className="service-section-heading"><span>02</span><h2 className="t-display t-display-md">Where the work reaches</h2><i /></div>
-            <div className="reach-grid">
-              {group.covers?.map((c) => {
-                const target = SERVICE_GROUPS.find((g) => g.id === c.categoryId);
-                if (!target) return null;
-                return (
-                  <Link key={c.categoryId} href={`/services/${target.id}`} className="reach-card">
-                    <span className="reach-card-index">0{SERVICE_GROUPS.findIndex((item) => item.id === target.id) + 1}</span>
-                    <h3>{target.label}</h3>
-                    <p className="t-body-sm">{c.note}</p>
-                    <span className="reach-card-foot">{target.services.length} areas of work <ArrowRight size={13} /></span>
-                  </Link>
-                );
-              })}
-            </div>
-
-            {group.id === "embedded-product-counsel" && (
-              <section aria-labelledby="technical-counsel-faq-title" style={{ marginTop: "4rem", maxWidth: "52rem" }}>
-                <h2 id="technical-counsel-faq-title" className="t-display t-display-md" style={{ marginBottom: "1.5rem" }}>
-                  Technical Product Counsel: common questions
-                </h2>
-                <div>
-                  {technicalCounselFaqs.map((faq) => (
-                    <article key={faq.question} style={{ borderTop: "1px solid var(--c-border)", padding: "1.25rem 0" }}>
-                      <h3 style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.9rem", color: "var(--c-forest)", marginBottom: "0.5rem" }}>{faq.question}</h3>
-                      <p className="t-body-sm">{faq.answer}</p>
-                    </article>
-                  ))}
+            {group.covers && group.covers.length > 0 && (
+              <>
+                <div className="service-section-heading"><span>03</span><h2 className="t-display t-display-md">Where the work reaches</h2><i /></div>
+                <div className="reach-grid">
+                  {group.covers.map((c) => {
+                    const target = SERVICE_GROUPS.find((g) => g.id === c.categoryId);
+                    if (!target) return null;
+                    return (
+                      <Link key={c.categoryId} href={`/services/${target.id}`} className="reach-card">
+                        <span className="reach-card-index">{String(SERVICE_GROUPS.findIndex((item) => item.id === target.id) + 1).padStart(2, "0")}</span>
+                        <h3>{target.label}</h3>
+                        <p className="t-body-sm">{c.note}</p>
+                        <span className="reach-card-foot">{target.services.length} areas of work <ArrowRight size={13} /></span>
+                      </Link>
+                    );
+                  })}
                 </div>
-              </section>
+              </>
             )}
+
+          </div>
+        </section>
+      )}
+
+      {group.relatedWork?.length ? (
+        <section className="section page-x" aria-labelledby="related-work-title">
+          <div className="inner">
+            <h2 id="related-work-title" className="t-display t-display-md" style={{ marginBottom: "1.5rem" }}>Selected research and engineering</h2>
+            <ul className="related-work-list">
+              {group.relatedWork.map((work) => (
+                <li key={work.href}><Link href={work.href}>{work.label}<ArrowRight size={13} /></Link></li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      ) : null}
+
+      {group.positioning?.faqs.length ? (
+        <section className="section page-x" aria-labelledby="service-faq-title">
+          <div className="inner" style={{ maxWidth: "52rem" }}>
+            <h2 id="service-faq-title" className="t-display t-display-md" style={{ marginBottom: "1.5rem" }}>Questions about {group.label.toLowerCase()}</h2>
+            {group.positioning.faqs.map((faq) => (
+              <article key={faq.question} style={{ borderTop: "1px solid var(--c-border)", padding: "1.25rem 0" }}>
+                <h3 style={{ fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.9rem", color: "var(--c-forest)", marginBottom: "0.5rem" }}>{faq.question}</h3>
+                <p className="t-body-sm">{faq.answer}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+      ) : null}
+
+      {group.positioning && (
+        <section className="page-x" style={{ paddingBottom: "var(--space-section)" }}>
+          <div className="inner">
+            <Link href="/start" className="stage-cta">Discuss this work <ArrowRight size={10} strokeWidth={1.5} /></Link>
           </div>
         </section>
       )}
@@ -370,6 +386,15 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
         .service-index a:hover,.service-index a:focus-visible{color:var(--c-accent)}
         .service-index a:hover svg,.service-index a:focus-visible svg{opacity:1;transform:none}
         .service-content{position:relative}
+        .service-positioning-lede{max-width:48rem;font-size:clamp(1rem,1.5vw,1.15rem);line-height:1.8}
+        .service-positioning-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(17rem,1fr));gap:clamp(2rem,5vw,4rem);margin:2.5rem 0}
+        .service-positioning-grid h3{font-size:1.35rem;line-height:1.2;margin-bottom:.8rem}
+        .service-outcomes{padding-left:1.15rem;margin:0;color:var(--c-ink-mid);font:400 .9rem/1.75 var(--font-sans)}
+        .service-outcomes li{padding:.25rem 0 .25rem .25rem}
+        .service-boundary{max-width:50rem;border-top:1px solid var(--c-border);padding-top:1.2rem;color:var(--c-ink-muted);font:400 .78rem/1.75 var(--font-sans)}
+        .related-work-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));gap:.75rem;padding:0;list-style:none}
+        .related-work-list a{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--c-border);color:var(--c-ink-mid);font:500 .82rem/1.5 var(--font-sans);text-decoration:none}
+        .related-work-list a:hover{color:var(--c-accent)}
         .service-opening-note{max-width:47rem!important;margin-bottom:clamp(3rem,6vw,5rem)!important;padding:1.5rem 0 1.5rem clamp(1.25rem,3vw,2.25rem);border-left:2px solid var(--c-accent);font-size:clamp(.92rem,1.35vw,1.08rem);line-height:1.8}
         .service-section-heading{display:grid;grid-template-columns:2.5rem auto minmax(2rem,1fr);align-items:center;gap:1rem;margin:clamp(2.75rem,6vw,4.5rem) 0 1.5rem}
         .service-section-heading>span{color:var(--c-accent);font:700 .6rem/1 var(--font-manjari);letter-spacing:.14em}

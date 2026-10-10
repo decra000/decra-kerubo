@@ -1,7 +1,6 @@
-// The services taxonomy: five categories, each presented differently because
-// they are doing different jobs. One is a catalogue of work, one is an
-// arrangement rather than a list, one is scoped by sector, and one is not a
-// commercial offering at all. `kind` is what the pages branch on.
+// Service areas are grouped by the kind of decision and engagement they serve.
+// `kind` controls the page structure; the positioning copy explains when each
+// area is useful, what it can produce, and where its scope ends.
 //
 // This lives outside app/page.tsx, which is a client component, because the
 // category pages and the sitemap both need it on the server.
@@ -30,6 +29,19 @@ export type ServiceGroup = {
   howItWorks?: { title: string; body: string }[];
   /** policy: the opening line behind "Ask for an opinion" */
   opinionOpening?: string;
+  /** Search title and description should describe this page, not a generic template. */
+  searchTitle?: string;
+  searchDescription?: string;
+  /** The decision this practice area helps a client make, its scope, and its limits. */
+  positioning?: {
+    decisionPoint: string;
+    approach: string;
+    outputs: string[];
+    boundaries: string;
+    faqs: { question: string; answer: string }[];
+  };
+  arrangementHeading?: string;
+  relatedWork?: { label: string; href: string }[];
 };
 
 export const SERVICE_GROUPS: ServiceGroup[] = [
@@ -40,22 +52,35 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
     id: "technical-development",
     label: "Technical Development, Structuring & Audit",
     description:
-      "Building the product, and proving it holds. Company and product structuring, the engineering itself, and the testing and audit work that shows what was built behaves the way it was specified to.",
+      "Technical product development and assurance for teams deciding what to build, how to structure it, and whether it is ready to operate, scale or withstand independent review.",
     kind: "catalogue",
+    searchTitle: "AI Systems Engineering & Technology Due Diligence in Kenya",
+    searchDescription: "Product engineering, AI systems, architecture, testing and technology due diligence for teams building, investing in or assessing technology in Kenya and across Africa.",
+    positioning: {
+      decisionPoint: "For founders, product leaders and investors who need a defensible view of what to build, buy, change or trust before committing further time or capital.",
+      approach: "Start with the decision and its constraints. Review the product, architecture, operating context and evidence available; then identify the trade-offs, failure modes and next steps that matter to that decision.",
+      outputs: ["Architecture and build-versus-buy recommendations", "Risk-ranked technical findings and remediation priorities", "System designs, prototypes or engineering deliverables agreed in scope"],
+      boundaries: "The scope defines systems reviewed, access, testing depth, environments and deliverables. A review is time- and evidence-bound; it is not a guarantee that a system is secure, compliant or free of defects.",
+      faqs: [
+        { question: "When should we commission a technical product or architecture review?", answer: "Before a major build, migration, launch, procurement or investment decision—when a clear view of the system and its constraints can still change the decision." },
+        { question: "Does a technical audit include penetration testing?", answer: "Only if the engagement specifically includes it. The proposal defines the systems, methods, access and test boundaries; a code or architecture review is not the same as an authorized penetration test." },
+        { question: "What does technology due diligence cover?", answer: "The agreed review may examine architecture, code, infrastructure, data, AI, security and technical operating risks. The findings are prioritized for the transaction or investment question, rather than presented as a generic checklist." },
+      ],
+    },
     sections: [
       {
         title: "Structure & Build",
-        blurb: "Standing up the company and the system, and deciding what gets built in what order.",
+        blurb: "Set the product direction, organizational foundations and technical architecture before committing to a build path.",
         serviceIds: ["product-strategy-roadmap", "startup-structuring-incorporation", "system-design-architecture", "web-application-engineering", "data-architecture", "api-integration-engineering", "cloud-infrastructure", "ai-systems-engineering", "algorithms-decision-systems", "iot-robotics-connected-systems"],
       },
       {
         title: "Test & Challenge",
-        blurb: "Establishing what the product actually does under load, under failure, and under attack.",
+        blurb: "Evaluate product behavior under representative workloads, failure conditions and adversarial use.",
         serviceIds: ["product-testing", "web-site-application-testing", "api-server-testing", "performance-scalability-testing", "failure-resilience-testing", "adversarial-product-testing", "ai-evaluation-testing", "security-assurance"],
       },
       {
         title: "Audit & Assure",
-        blurb: "The formal view, for a board, an acquirer, or an investor.",
+        blurb: "Independent technical findings to inform governance, investment, procurement and acquisition decisions.",
         serviceIds: ["technology-risk-assurance", "technology-due-diligence"],
       },
     ],
@@ -319,8 +344,21 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
     id: "product-legal-commercialization",
     label: "Legal Review, Audit & Commercialization",
     description:
-      "The product read as a legal object: what it promises the people using it, whether that holds up against the law it is actually subject to, who owns what inside it, and the agreements it reaches the market on.",
+      "Product-focused legal review and technology transactions for teams preparing to launch, commercialize, license, procure or invest in digital products.",
     kind: "catalogue",
+    searchTitle: "Technology Transactions, IP & Product Legal Review | Kenya",
+    searchDescription: "Product terms, privacy, software IP, AI and data ownership, technology contracts and regulatory gap reviews for digital businesses in Kenya and Africa.",
+    positioning: {
+      decisionPoint: "For product and commercial teams approaching launch, a material partnership, a procurement, a financing or an acquisition—and needing to understand the legal and ownership issues that could change the terms or timing.",
+      approach: "Read the product, data flows and commercial model alongside the relevant agreements. Separate launch-critical issues from matters that can be managed contractually or addressed over time, then set out practical next actions.",
+      outputs: ["Prioritized product, privacy and contract findings", "Ownership, licensing and open-source issue maps", "Drafting or transaction support defined in the engagement scope"],
+      boundaries: "This is product and technology advisory. Formal legal representation, court work and filings are outside scope and are referred to a practising advocate where required. Applicable law, markets and deliverables are agreed at intake.",
+      faqs: [
+        { question: "When is a product legal review most useful?", answer: "Before launch or a significant change to product features, data use, pricing or third-party integrations—especially when existing terms may no longer describe how the product works." },
+        { question: "Can you review technology agreements and ownership?", answer: "Yes. Scope can include SaaS, licensing, procurement, vendor, development and data-processing arrangements, as well as software, AI, data and contractor IP ownership." },
+        { question: "Does this include court representation or formal filings?", answer: "No. The practice focuses on product and technology advisory. Matters requiring formal representation or filings are referred to a practising advocate." },
+      ],
+    },
     sections: [
       {
         title: "Review & Audit",
@@ -445,8 +483,21 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
     id: "industry-compliance",
     label: "Industry Compliance",
     description:
-      "Meeting the rules a product is actually judged against: governance and standards, data protection, responsible AI, product safety, and security, read against the sector the product operates in.",
+      "Governance, privacy, AI, safety and security advisory that translates a product’s applicable obligations into controls, accountable owners and decisions a team can implement.",
     kind: "catalogue",
+    searchTitle: "AI Governance, Data Protection & Technology Compliance | Kenya",
+    searchDescription: "Practical technology governance, privacy, responsible AI, product safety and security support, mapped to product risks and sector obligations in Kenya and Africa.",
+    positioning: {
+      decisionPoint: "For teams whose products operate in a regulated or high-impact context, or whose customers and investors now expect evidence of governance—not just policy statements.",
+      approach: "Identify the jurisdictions, sector rules, contractual commitments and product-specific risks that actually apply. Translate them into proportionate controls, documentation, ownership and an implementation sequence.",
+      outputs: ["Applicability and obligation maps tied to products and markets", "Control gaps, risk priorities and accountable action plans", "Governance, privacy, AI and safety documentation scoped to the work"],
+      boundaries: "Compliance depends on the facts, applicable law and how controls operate in practice. Advisory identifies and helps address gaps; it does not certify compliance or replace required regulatory, security or legal approvals.",
+      faqs: [
+        { question: "How do you determine which technology rules apply?", answer: "The review starts with the product, data, users, operating model and target markets. It then distinguishes binding legal duties from standards, contracts and voluntary frameworks relevant to the engagement." },
+        { question: "Can governance work be made practical for an engineering team?", answer: "Yes. Findings can be translated into product requirements, technical controls, owners, evidence and a sequenced remediation plan, with implementation support agreed separately." },
+        { question: "Does an assessment certify that we are compliant?", answer: "No. It provides a scoped assessment and practical recommendations based on the information and systems reviewed. It is not a certification or guarantee of compliance." },
+      ],
+    },
     sectors: [
       "Fintech & payments", "Health & digital health", "Education technology",
       "E-commerce, logistics & mobility", "Agritech", "Public sector & govtech",
@@ -523,38 +574,89 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
     id: "embedded-product-counsel",
     label: "Embedded Product Counsel",
     description:
-      "Technical Product Counsel is ongoing product and legal advice for technology teams, connecting product decisions with engineering, privacy, governance and risk. Based in Nairobi, Decra Kerubo brings a Bachelor of Laws and a BSc in Computer Science (Artificial Intelligence) to scoped engagements for teams building or assessing technology in Kenya and across Africa.",
+      "Ongoing technical product counsel for technology teams that need product, engineering, privacy and governance decisions considered together throughout a defined stage of development or growth.",
     kind: "engagement",
+    arrangementHeading: "How ongoing product counsel works",
+    searchTitle: "Technical Product Counsel in Kenya | Embedded Product Advice",
+    searchDescription: "Ongoing, scoped technical product counsel in Nairobi for product and engineering teams navigating AI, privacy, governance, technology risk and commercialization.",
+    positioning: {
+      decisionPoint: "For founders and product leaders who face a continuing stream of consequential product decisions and want legal, privacy and risk considerations present while those decisions can still shape the build.",
+      approach: "Work to an agreed cadence and scope alongside the product team. Bring requirements, architecture, data use, vendor choices and commercialization questions into view early enough to inform the decision—not just document it later.",
+      outputs: ["Product and engineering decision advice within the agreed scope", "Reviews of requirements, data flows, AI use and commercial choices", "A defined cadence, access model, term and set of deliverables"],
+      boundaries: "This is a scoped advisory engagement, not general outside counsel or court representation. Repository access, code review, meeting attendance and formal legal work are included only when expressly agreed or referred to practising counsel.",
+      faqs: [
+        { question: "How is embedded product counsel different from a one-off review?", answer: "It provides continuity across a defined period or product stage, so decisions can be considered as they arise. A one-off review assesses a specific product, issue or milestone." },
+        { question: "Does embedded counsel join every engineering meeting or review code?", answer: "No. Cadence, access and deliverables are agreed at scoping. Repository, source-code or pull-request review is included only when explicitly agreed." },
+        { question: "Is this formal legal representation?", answer: "No. The work is strategic product and technology advisory. Court representation and formal filings are referred to a practising advocate." },
+        { question: "Is Decra Kerubo a practising advocate?", answer: "Decra holds a Bachelor of Laws and completed the Attorney Licensing Program at the Kenya School of Law, but is not currently a practising advocate. Her practice focuses on technology and product advisory; formal representation and filings are referred to a practising advocate." },
+      ],
+    },
     covers: [
       { categoryId: "technical-development", note: "Architecture, engineering, testing and audit decisions reviewed as they are made, not after they ship." },
       { categoryId: "product-legal-commercialization", note: "Review, audit, ownership and commercial agreements handled as the product changes, rather than redrafted or discovered at the end." },
       { categoryId: "industry-compliance", note: "Governance, data protection, responsible AI, safety and security obligations held continuously rather than revisited at audit time." },
     ],
     howItWorks: [
-      { title: "Retained, not per-matter", body: "A monthly retainer rather than a fee per question, so the thing you would hesitate to open a matter for is the thing you raise first." },
-      { title: "Work alongside the product team", body: "Review product requirements, architecture choices, data flows and governance questions at the stage agreed with the team. Meeting cadence and access are set during scoping." },
-      { title: "Technical and legal context together", body: "Decra's training in Computer Science (AI) and Law helps connect system design decisions to their product, privacy and legal implications." },
-      { title: "Clear scope and boundaries", body: "Each engagement defines its deliverables, duration and working arrangements. Source-code, repository or pull-request review is included only when agreed in scope." },
+      { title: "Continuity across product decisions", body: "A monthly retainer supports ongoing access across an agreed period, so product questions can be considered as they arise rather than only at a formal review point." },
+      { title: "Work alongside the product team", body: "Review requirements, architecture, data flows and governance questions at agreed points in the product lifecycle. Meeting cadence and access are set during scoping." },
+      { title: "Technical and legal context together", body: "Training in Computer Science (Artificial Intelligence) and Law supports integrated consideration of system design, product behavior and legal or privacy implications." },
+      { title: "Defined scope and boundaries", body: "Each engagement specifies its term, deliverables and working arrangements. Source-code, repository or pull-request review is included only when expressly agreed." },
     ],
     services: [],
   },
   {
     id: "technical-legal-subcontractor",
     label: "Technical Legal Subcontractor",
-    description: "Technical legal subcontracting support for technology teams, scoped to the needs of each engagement.",
+    description: "Specialist subcontracted support for firms and project teams working at the intersection of technology, product and legal risk.",
     kind: "engagement",
+    arrangementHeading: "How subcontract support is structured",
+    searchTitle: "Technical Legal Subcontractor in Kenya | Technology Projects",
+    searchDescription: "Scoped subcontract support in Kenya for firms and teams handling technology product, AI, privacy, governance and technical risk work.",
+    positioning: {
+      decisionPoint: "For law firms, consultancies and project leads who need additional technical product or AI capability on a matter, without presenting that support as a separate or unscoped client engagement.",
+      approach: "Agree the retaining organization’s brief, workstream, supervision, client-facing role, confidentiality, conflicts process, attribution and work product before work begins. Support can combine technical analysis with product and legal-risk context.",
+      outputs: ["Research, analysis and drafting for an agreed workstream", "Technical or AI product review supporting a broader matter", "Defined deliverables and coordination with the lead firm or project owner"],
+      boundaries: "The retaining organization remains responsible for its client relationship and supervision unless agreed otherwise. Scope, conflicts, confidentiality, attribution and any reserved legal work must be settled before commencement; this is not a substitute for a practising advocate where one is required.",
+      faqs: [
+        { question: "Who engages a technical legal subcontractor?", answer: "Typically a law firm, consultancy or project lead that needs defined technology, AI or product-risk capacity within a larger client matter or delivery." },
+        { question: "Can the work be client-facing?", answer: "That depends on the lead organization’s instructions and the agreed role. Client contact, attribution, supervision, confidentiality and responsibility should be explicit in the engagement terms." },
+        { question: "What can be included in the scope?", answer: "An agreed workstream may include technology and AI research, product or system analysis, governance and privacy review, or drafting support. The scope must identify deliverables, access and any work requiring a practising advocate." },
+      ],
+    },
     howItWorks: [
-      { title: "Scoped technical legal support", body: "Work alongside a technology team as a technical legal subcontractor, with responsibilities and deliverables agreed for each engagement." },
+      { title: "Defined workstream", body: "Responsibilities, supervision, client contact and deliverables are agreed with the retaining firm or project lead before work begins." },
+      { title: "Integrated technical context", body: "Support can connect product and systems evidence with the legal, privacy and governance questions raised by the broader matter." },
+      { title: "Clear professional boundaries", body: "Conflicts, confidentiality, attribution and any reserved legal work are addressed in the engagement terms." },
     ],
     services: [],
   },
   {
     id: "ai-and-systems-engineering",
     label: "AI and Systems Engineering",
-    description: "AI and systems engineering support for technology teams, scoped to the needs of each engagement.",
+    description: "AI and software systems designed around a defined operational need, with architecture, evaluation and implementation decisions made explicit.",
     kind: "engagement",
+    arrangementHeading: "How engineering engagements are scoped",
+    relatedWork: [
+      { label: "AI Footprint Tracker", href: "/engineering/ai-footprint-tracker" },
+      { label: "Democratization and Decarbonization of AI Solutions", href: "/engineering/ai-decarbonization-research" },
+    ],
+    searchTitle: "AI & Systems Engineering in Kenya | Technology Teams",
+    searchDescription: "AI engineering, system architecture, integrations and evaluation for teams building or improving digital products in Kenya and across Africa.",
+    positioning: {
+      decisionPoint: "For teams moving from an AI concept or prototype to a system that must work within real workflows, data constraints, user expectations and operating budgets.",
+      approach: "Begin with the use case and failure cost. Establish whether AI is appropriate, define system boundaries and data flows, select an architecture, and evaluate performance against real tasks before expanding deployment.",
+      outputs: ["AI and software system architecture or implementation", "Integrations, data workflows and human review paths", "Evaluation criteria, test evidence and deployment recommendations"],
+      boundaries: "The statement of work defines the system, environments, data access, deployment responsibilities and acceptance criteria. Model performance, safety and operating cost depend on the data and conditions available for evaluation; they are not guaranteed by the design alone.",
+      faqs: [
+        { question: "When should a team use AI rather than conventional software?", answer: "When the task benefits from probabilistic inference and the expected value justifies the added cost, uncertainty and oversight needs. The use case, fallback path and evaluation method should be established before choosing a model." },
+        { question: "Can you take an AI prototype into a production system?", answer: "Potentially, if the agreed scope includes the required engineering, data, integration, evaluation and deployment work. A prototype is assessed first for reliability, security, cost and operational fit." },
+        { question: "Can AI engineering and product counsel be combined?", answer: "Yes. Engineering and advisory can be scoped together or separately, with responsibilities, deliverables and any review boundaries made explicit." },
+      ],
+    },
     howItWorks: [
-      { title: "AI and Systems Engineering", body: "Technical support for AI and systems engineering, scoped to the needs of each team and engagement." },
+      { title: "Start with the use case", body: "Define the task, users, constraints and consequences of error before selecting a model or architecture." },
+      { title: "Design the whole system", body: "Account for data, integrations, permissions, human review, evaluation and operations—not just the model call." },
+      { title: "Validate against real work", body: "Set evaluation criteria and test the system against representative tasks and failure cases before expanding its role." },
     ],
     services: [],
   },
