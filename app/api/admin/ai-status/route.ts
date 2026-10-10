@@ -29,7 +29,7 @@ export async function GET(req: NextRequest) {
     : geminiKey || key
       ? "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
       : "not configured";
-  const effectiveModel = model || "gemini-3.8-flash";
+  const effectiveModel = model || "gemini-3.5-flash-lite";
 
   const report: Record<string, unknown> = {
     configured,

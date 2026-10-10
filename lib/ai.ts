@@ -19,6 +19,12 @@ export type AiResult =
   | { ok: true; content: string }
   | { ok: false; error: string; retryable: boolean };
 
+type GenerateReplyOptions = {
+  temperature?: number;
+  reasoningEffort?: "low" | "medium" | "high";
+  onToken?: (token: string) => void;
+};
+
 const MAX_ATTEMPTS = 3;
 
 function resolveProvider() {
@@ -29,7 +35,7 @@ function resolveProvider() {
     endpoint: baseUrl
       ? `${baseUrl.replace(/\/+$/, "")}/chat/completions`
       : "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
-    model: process.env.AI_MODEL || "gemini-3.8-flash",
+    model: process.env.AI_MODEL || "gemini-3.5-flash-lite",
     key,
   };
 }
@@ -51,7 +57,7 @@ const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
  */
 export async function generateReply(
   messages: AiMessage[],
-  opts: { temperature?: number } = {},
+  opts: GenerateReplyOptions = {},
 ): Promise<AiResult> {
   const provider = resolveProvider();
   if (!provider) {
@@ -80,6 +86,8 @@ export async function generateReply(
         body: JSON.stringify({
           model,
           messages,
+          ...(opts.reasoningEffort ? { reasoning_effort: opts.reasoningEffort } : {}),
+          ...(opts.onToken ? { stream: true } : {}),
           ...(opts.temperature != null ? { temperature: opts.temperature } : {}),
         }),
       });
@@ -92,6 +100,43 @@ export async function generateReply(
     }
 
     if (res.ok) {
+      if (opts.onToken && res.body) {
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = "";
+        let content = "";
+        const consumeLine = (line: string) => {
+          if (!line.startsWith("data:")) return;
+          const data = line.slice(5).trim();
+          if (!data || data === "[DONE]") return;
+          try {
+            const event = JSON.parse(data) as { choices?: { delta?: { content?: unknown } }[] };
+            const token = event.choices?.[0]?.delta?.content;
+            if (typeof token === "string" && token) {
+              content += token;
+              opts.onToken?.(token);
+            }
+          } catch { /* ignore non-JSON keepalive events */ }
+        };
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split(/\r?\n/);
+          buffer = lines.pop() || "";
+          lines.forEach(consumeLine);
+        }
+        buffer += decoder.decode();
+        if (buffer) consumeLine(buffer);
+
+        const streamedContent = stripThinking(content);
+        if (streamedContent) return { ok: true, content: streamedContent };
+        lastError = "The assistant returned an empty reply.";
+        lastRetryable = true;
+        continue;
+      }
+
       let data: {
         choices?: { message?: { content?: string | null } }[];
       };

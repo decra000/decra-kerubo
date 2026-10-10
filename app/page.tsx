@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { ArrowRight, ChevronDown, X, Mic, Volume2, VolumeX, RefreshCw } from "lucide-react";
+import { ArrowRight, ChevronDown, X, Mic, Volume2, VolumeX } from "lucide-react";
 import { useSpeech } from "@/hooks/useSpeech";
 import { SERVICE_GROUPS } from "@/lib/services";
 
@@ -446,6 +446,36 @@ function Services() {
 
 /* ── Section 3+7: Who I work with & How to work with Decra, unified ── */
 type ChatMsg = { role: "user" | "assistant"; text: string; options?: { items: string[]; multi: boolean }; rateLimited?: boolean };
+type ChatStreamResult = { type: "result"; reply: string; rateLimited?: boolean; down?: boolean };
+
+async function readChatStream(response: Response, onText: (text: string) => void): Promise<ChatStreamResult> {
+  if (!response.ok || !response.body) throw new Error("The assistant stream could not be opened.");
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "";
+  let result: ChatStreamResult | null = null;
+
+  const consumeBlock = (block: string) => {
+    const data = block.split(/\r?\n/).filter(line => line.startsWith("data:")).map(line => line.slice(5).trim()).join("\n");
+    if (!data) return;
+    const event = JSON.parse(data) as { type: string; text?: string; reply?: string; rateLimited?: boolean; down?: boolean };
+    if (event.type === "delta" && event.text) onText(event.text);
+    if (event.type === "result") result = event as ChatStreamResult;
+  };
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    const blocks = buffer.split(/\r?\n\r?\n/);
+    buffer = blocks.pop() || "";
+    blocks.forEach(consumeBlock);
+  }
+  buffer += decoder.decode();
+  if (buffer.trim()) consumeBlock(buffer);
+  if (!result) throw new Error("The assistant stream ended without a result.");
+  return result;
+}
 
 /* Parses a trailing <options>[...]</options> or <multi_options>[...]</multi_options> block out of an
    assistant reply so it can be rendered as clickable chips instead of raw JSON text. */
@@ -537,11 +567,10 @@ function WorkWithDecra() {
   const [msgs, setMsgs] = useState<ChatMsg[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [streamingText, setStreamingText] = useState("");
   const [done, setDone] = useState(false);
   const [voiceOn, setVoiceOn] = useState(false);
   const [chipSelections, setChipSelections] = useState<Record<number, string[]>>({});
-  const [lastOpening, setLastOpening] = useState<{ key: string; opening: string } | null>(null);
-  const [lastUserText, setLastUserText] = useState("");
   const [fallbackFormOpen, setFallbackFormOpen] = useState(false);
   const [fallbackForm, setFallbackForm] = useState({ name: "", email: "", message: "" });
   const [fallbackSending, setFallbackSending] = useState(false);
@@ -550,7 +579,7 @@ function WorkWithDecra() {
   const inputRef = useRef<HTMLInputElement>(null);
   const { listen, stopListening, listening, supported, speak, stopSpeaking, speaking, synthSupported } = useSpeech();
 
-  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [msgs, loading]);
+  useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [msgs, loading, streamingText]);
 
   useEffect(() => {
     if (!modalOpen) return;
@@ -585,7 +614,6 @@ function WorkWithDecra() {
   }, [active, msgs]);
 
   const startGroup = async (groupKey: string, opening: string) => {
-    setLastOpening({ key: groupKey, opening });
     setActive(groupKey); setDone(false); setInput(""); setChipSelections({});
     setFallbackFormOpen(false); setFallbackSent(false); setFallbackForm({ name: "", email: "", message: "" });
 
@@ -594,17 +622,18 @@ function WorkWithDecra() {
     const cached = loadConversation(groupKey);
     if (cached) { setMsgs(cached); setLoading(false); setTimeout(() => inputRef.current?.focus(), 150); return; }
 
-    setMsgs([]); setLoading(true);
+    setMsgs([]); setStreamingText(""); setLoading(true);
     try {
       const res = await fetch("/api/chat", { method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: opening, history: [], system: ENGAGE_SYSTEM }) });
-      const data = await res.json();
+        body: JSON.stringify({ message: opening, history: [], system: ENGAGE_SYSTEM, stream: true }) });
+      const data = await readChatStream(res, chunk => setStreamingText(current => current + chunk));
       const rawReply = data.reply || "Something went wrong. Email decrakerry@gmail.com.";
       const { text: reply, options } = extractOptions(rawReply);
       const failed = !!data.rateLimited || !!data.down;
+      setStreamingText("");
       setMsgs([{ role: "assistant", text: reply, options, rateLimited: failed }]);
       if (voiceOn && !failed) speak(reply);
-    } catch { setMsgs([{ role: "assistant", text: "Something went wrong. Your spot in the conversation is saved, try again in a moment.", rateLimited: true }]); }
+    } catch { setStreamingText(""); setMsgs([{ role: "assistant", text: "Something went wrong. Your spot in the conversation is saved, try again in a moment.", rateLimited: true }]); }
     setLoading(false);
     setTimeout(() => inputRef.current?.focus(), 150);
   };
@@ -676,16 +705,17 @@ function WorkWithDecra() {
   const send = async (overrideText?: string) => {
     const text = (overrideText ?? input).trim();
     if (!text || loading || done) return;
-    const userText = text; setInput(""); setLastUserText(userText);
+    const userText = text; setInput("");
     const next = [...msgs, { role: "user" as const, text: userText }];
     setMsgs(next); setLoading(true);
     try {
       // Rate-limit apology messages are UI-only, never feed them back to the
       // model as if they were something it actually said.
       const historyForModel = msgs.filter(m => !m.rateLimited);
+      setStreamingText("");
       const res = await fetch("/api/chat", { method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: userText, history: historyForModel, system: ENGAGE_SYSTEM }) });
-      const data = await res.json();
+        body: JSON.stringify({ message: userText, history: historyForModel, system: ENGAGE_SYSTEM, stream: true }) });
+      const data = await readChatStream(res, chunk => setStreamingText(current => current + chunk));
       let reply: string = data.reply || "";
       if (reply.includes("<intake_complete>")) {
         const m = reply.match(/<intake_complete>([\s\S]*?)<\/intake_complete>/);
@@ -696,15 +726,11 @@ function WorkWithDecra() {
       }
       const { text: cleanReply, options } = extractOptions(reply);
       const failed = !!data.rateLimited || !!data.down;
+      setStreamingText("");
       setMsgs([...next, { role: "assistant", text: cleanReply, options, rateLimited: failed }]);
       if (voiceOn && !failed) speak(cleanReply);
-    } catch { setMsgs([...next, { role: "assistant", text: "Something went wrong. Your message is saved, try again in a moment.", rateLimited: true }]); }
+    } catch { setStreamingText(""); setMsgs([...next, { role: "assistant", text: "Something went wrong. Your message is saved, try again in a moment.", rateLimited: true }]); }
     setLoading(false);
-  };
-
-  const retryLast = () => {
-    if (lastUserText) { send(lastUserText); return; }
-    if (lastOpening) { startGroup(lastOpening.key, lastOpening.opening); }
   };
 
   const handleMic = () => {
@@ -870,21 +896,6 @@ function WorkWithDecra() {
                             )}
                           </div>
                         )}
-                        {m.rateLimited && isLatest && !loading && !done && (
-                          <button
-                            onClick={retryLast}
-                            style={{
-                              display: "inline-flex", alignItems: "center", gap: "0.4rem",
-                              background: "none", color: "var(--c-accent)",
-                              border: "1px solid var(--c-accent)", borderRadius: 0,
-                              padding: "0.4rem 0.9rem", cursor: "pointer",
-                              fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.62rem",
-                              letterSpacing: "0.08em", textTransform: "uppercase",
-                            }}
-                          >
-                            <RefreshCw size={11} strokeWidth={1.5} /> Try again
-                          </button>
-                        )}
                         {m.rateLimited && isLatest && !loading && !done && trailingFailures >= 1 && (
                           <div style={{ width: "100%", maxWidth: "92%", background: "var(--c-surface)", border: "1px solid var(--c-border-strong)", borderRadius: "10px", padding: "1rem", marginTop: "0.25rem" }}>
                             <p style={{ fontFamily: "var(--font-sans)", fontSize: "0.76rem", color: "var(--c-ink-muted)", lineHeight: 1.6, marginBottom: "0.85rem" }}>
@@ -943,6 +954,13 @@ function WorkWithDecra() {
                     );
                   });
                   })()}
+                  {loading && streamingText && (
+                    <div style={{ display: "flex", justifyContent: "flex-start" }}>
+                      <div style={{ maxWidth: "80%", padding: "0.7rem 1rem", background: "var(--c-surface)", color: "var(--c-ink)", fontFamily: "var(--font-sans)", fontWeight: 400, fontSize: "0.84rem", lineHeight: 1.7 }}>
+                        {streamingText}
+                      </div>
+                    </div>
+                  )}
                   {loading && (
                     <div style={{ display: "flex", justifyContent: "flex-start" }}>
                       <div style={{ padding: "0.7rem 1rem", background: "var(--c-surface)", display: "flex", gap: "4px", alignItems: "center" }}>

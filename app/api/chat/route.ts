@@ -121,7 +121,7 @@ function extractAction(raw: string): { text: string; action: ParsedAction | null
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { message, history = [], system } = body;
+    const { message, history = [], system, stream } = body;
 
     if (!message) {
       return NextResponse.json({ reply: "What can I help you with?" });
@@ -137,6 +137,75 @@ export async function POST(req: NextRequest) {
     ];
 
     const usingDefaultAdvisor = !system;
+
+    // The homepage intake opts into token streaming. Other chat surfaces keep
+    // the existing JSON contract, and the intake's machine-readable suffixes
+    // are withheld until the final event is parsed by the client.
+    if (stream === true && system) {
+      const encoder = new TextEncoder();
+      const responseStream = new ReadableStream<Uint8Array>({
+        async start(controller) {
+          const emit = (event: Record<string, unknown>) => {
+            controller.enqueue(encoder.encode(`data: ${JSON.stringify(event)}\n\n`));
+          };
+          let pendingText = "";
+          let emittedLength = 0;
+          let protocolStarted = false;
+          const protocolTags = ["<multi_options>", "<intake_complete>", "<options>", "<action>"];
+          const onToken = (token: string) => {
+            if (protocolStarted) return;
+            pendingText += token;
+            const marker = protocolTags
+              .map((tag) => pendingText.indexOf(tag))
+              .filter((index) => index >= 0)
+              .sort((a, b) => a - b)[0];
+            const safeEnd = marker ?? Math.max(emittedLength, pendingText.length - 20);
+            if (safeEnd > emittedLength) {
+              emit({ type: "delta", text: pendingText.slice(emittedLength, safeEnd) });
+              emittedLength = safeEnd;
+            }
+            if (marker !== undefined) protocolStarted = true;
+          };
+
+          try {
+            const result = await generateReply(messages, { onToken });
+            if (!result.ok) {
+              const setupMissing = result.error.includes("No AI provider key is configured");
+              emit({
+                type: "result",
+                reply: result.retryable
+                  ? "Decra's assistant is getting more traffic than it can handle right this second. Please try sending that again in a moment, nothing you've typed so far has been lost."
+                  : setupMissing
+                    ? "The assistant is being set up. Leave your details below and Decra will follow up directly."
+                    : "I'm having trouble responding right now. Leave your details below and Decra will follow up directly.",
+                rateLimited: result.retryable,
+                down: !result.retryable,
+              });
+            } else {
+              emit({ type: "result", reply: extractAction(result.content).text });
+            }
+          } catch (error) {
+            console.error("Streaming chat error:", error);
+            emit({
+              type: "result",
+              reply: "I'm having trouble responding right now. Leave your details below and Decra will follow up directly.",
+              down: true,
+            });
+          } finally {
+            controller.close();
+          }
+        },
+      });
+
+      return new Response(responseStream, {
+        headers: {
+          "Content-Type": "text/event-stream; charset=utf-8",
+          "Cache-Control": "no-cache, no-transform",
+          Connection: "keep-alive",
+          "X-Accel-Buffering": "no",
+        },
+      });
+    }
 
     let finalReply: string | null = null;
     let redirect: { url: string } | null = null;
