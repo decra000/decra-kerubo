@@ -1,4 +1,4 @@
-// The services taxonomy: four categories, each presented differently because
+// The services taxonomy: five categories, each presented differently because
 // they are doing different jobs. One is a catalogue of work, one is an
 // arrangement rather than a list, one is scoped by sector, and one is not a
 // commercial offering at all. `kind` is what the pages branch on.
@@ -535,6 +535,26 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
       { title: "Work alongside the product team", body: "Review product requirements, architecture choices, data flows and governance questions at the stage agreed with the team. Meeting cadence and access are set during scoping." },
       { title: "Technical and legal context together", body: "Decra's training in Computer Science (AI) and Law helps connect system design decisions to their product, privacy and legal implications." },
       { title: "Clear scope and boundaries", body: "Each engagement defines its deliverables, duration and working arrangements. Source-code, repository or pull-request review is included only when agreed in scope." },
+    ],
+    services: [],
+  },
+  {
+    id: "technical-legal-subcontractor",
+    label: "Technical Legal Subcontractor",
+    description: "Technical legal subcontracting support for technology teams, scoped to the needs of each engagement.",
+    kind: "engagement",
+    howItWorks: [
+      { title: "Scoped technical legal support", body: "Work alongside a technology team as a technical legal subcontractor, with responsibilities and deliverables agreed for each engagement." },
+    ],
+    services: [],
+  },
+  {
+    id: "ai-and-systems-engineering",
+    label: "AI and Systems Engineering",
+    description: "AI and systems engineering support for technology teams, scoped to the needs of each engagement.",
+    kind: "engagement",
+    howItWorks: [
+      { title: "AI and Systems Engineering", body: "Technical support for AI and systems engineering, scoped to the needs of each team and engagement." },
     ],
     services: [],
   },
