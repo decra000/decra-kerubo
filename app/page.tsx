@@ -192,6 +192,17 @@ function Hero() {
         }
         /* Preserve the selected portrait as-is; its black background joins the right-side ink panel. */
         .hero-bg { background-image: url('/decra-hero-mobile.jpg'); background-size: auto 94%; background-position: 83% bottom; mix-blend-mode: lighten; }
+        /* A restrained film-grain finish gives the desktop portrait a tactile,
+           editorial quality without competing with the face or headline. */
+        @media (min-width: 901px) {
+          .hero-bg::after {
+            content: ''; position: absolute; inset: 0; pointer-events: none;
+            opacity: 0.14; mix-blend-mode: soft-light;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.76' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='.32'/%3E%3C/svg%3E");
+            background-size: 220px 220px;
+            mask-image: linear-gradient(90deg, #000 0%, #000 60%, transparent 100%);
+          }
+        }
         .hero-overlay {
           background:
             linear-gradient(90deg, rgba(10,13,11,0.12) 0%, rgba(10,13,11,0.06) 38%, transparent 61%),
