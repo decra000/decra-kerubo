@@ -1018,7 +1018,7 @@ const CREDENTIALS: Cred[] = [
     key: "nazarene",
     src: "/logos/logo-nazarene.png",
     name: "Africa Nazarene University",
-    detail: "Bachelor of Laws (LLB)",
+    detail: "Bachelor of Laws (LLB Hons)",
     tier: 1,
   },
   {

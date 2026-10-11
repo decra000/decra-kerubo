@@ -103,7 +103,7 @@ const personJsonLd = {
   ],
   hasCredential: [
     { "@type": "EducationalOccupationalCredential", credentialCategory: "degree", name: "BSc Computer Science (Artificial Intelligence), 1st Hons", recognizedBy: { "@type": "CollegeOrUniversity", name: "African Leadership University" } },
-    { "@type": "EducationalOccupationalCredential", credentialCategory: "degree", name: "Bachelor of Laws (LLB)", recognizedBy: { "@type": "CollegeOrUniversity", name: "Africa Nazarene University" } },
+    { "@type": "EducationalOccupationalCredential", credentialCategory: "degree", name: "Bachelor of Laws (LLB Hons)", recognizedBy: { "@type": "CollegeOrUniversity", name: "Africa Nazarene University" } },
     { "@type": "EducationalOccupationalCredential", credentialCategory: "certificate", name: "Attorney Licensing Program", recognizedBy: { "@type": "EducationalOrganization", name: "Kenya School of Law" } },
     { "@type": "EducationalOccupationalCredential", credentialCategory: "certificate", name: "AI, Justice, and the Rule of Law", recognizedBy: { "@type": "CollegeOrUniversity", name: "Saïd Business School, University of Oxford" } },
     { "@type": "EducationalOccupationalCredential", credentialCategory: "certificate", name: "IoT", recognizedBy: { "@type": "CollegeOrUniversity", name: "Carnegie Mellon University" } },
