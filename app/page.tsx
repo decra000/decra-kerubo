@@ -576,6 +576,7 @@ function WorkWithDecra() {
   const [modalOpen, setModalOpen] = useState(false);
   const [active, setActive] = useState<string | null>(null);
   const [selectedPartner, setSelectedPartner] = useState<PartnerGroup | null>(PARTNER_GROUPS[0] ?? null);
+  const [partnerActionPulse, setPartnerActionPulse] = useState(0);
   const [msgs, setMsgs] = useState<ChatMsg[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -758,10 +759,11 @@ function WorkWithDecra() {
               key={group.key}
               href="#partner-category-row"
               aria-current={selectedPartner?.key === group.key ? "true" : undefined}
-              onClick={event => { event.preventDefault(); setSelectedPartner(group); }}
+              onClick={event => { event.preventDefault(); setSelectedPartner(group); setPartnerActionPulse(pulse => pulse + 1); }}
             >{group.label}</a>
           ))}
           <button
+            key={partnerActionPulse}
             type="button"
             className="partner-action-button"
             onClick={() => {
@@ -779,7 +781,8 @@ function WorkWithDecra() {
           .partner-category-row a::after{content:'';position:absolute;left:0;right:100%;bottom:0;height:1px;background:var(--c-accent);transition:right .2s}
           .partner-category-row a:hover,.partner-category-row a[aria-current="true"]{color:var(--c-ink)}
           .partner-category-row a[aria-current="true"]::after,.partner-category-row a:hover::after{right:0}
-          .partner-action-button{display:inline-flex;align-items:center;gap:.65rem;flex:0 0 auto;margin-left:auto;padding:.65rem 1rem;border:1px solid var(--c-accent);background:var(--c-accent);color:var(--c-bg);cursor:pointer;font:700 .62rem var(--font-manjari);letter-spacing:.16em;text-transform:uppercase;transition:filter .2s,transform .2s}
+          .partner-action-button{display:inline-flex;align-items:center;gap:.65rem;flex:0 0 auto;margin-left:auto;padding:.65rem 1rem;border:1px solid var(--c-accent);background:var(--c-accent);color:var(--c-bg);cursor:pointer;font:700 .62rem var(--font-manjari);letter-spacing:.16em;text-transform:uppercase;transition:filter .2s,transform .2s;animation:partnerActionPop .42s cubic-bezier(.2,.85,.35,1)}
+          @keyframes partnerActionPop{0%{transform:scale(1)}38%{transform:scale(1.07)}72%{transform:scale(.98)}100%{transform:scale(1)}}
           .partner-action-button:hover{filter:brightness(1.12);transform:translateY(-1px)}
           .partner-action-button:focus-visible{outline:2px solid var(--c-accent);outline-offset:3px}
           @media(max-width:560px){.partner-category-row{gap:0 1.25rem}.partner-category-row a{font-size:.84rem}.partner-action-button{margin:0 0 .35rem auto;padding:.6rem .8rem}}

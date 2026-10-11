@@ -62,7 +62,7 @@ export function Footer() {
     <footer className="site-footer">
       <div id="request-build" className="site-footer-top">
         <p className="site-footer-kicker">TECHNOLOGY · LAW · PRODUCT</p>
-        <button className="site-footer-email" type="button" onClick={() => { setSubmitted(false); setError(""); setBuildOpen(true); }}>Request a tech product build <span aria-hidden="true">↗</span></button>
+        <button className="site-footer-email" type="button" onClick={() => { setSubmitted(false); setError(""); setBuildOpen(true); }}>Build <span aria-hidden="true">↗</span></button>
       </div>
 
       <div className="site-footer-bottom">
@@ -71,7 +71,6 @@ export function Footer() {
         </div>
         <nav className="site-footer-links" aria-label="Footer navigation">
           {LINKS.map(([href, label]) => <Link key={href} href={href}>{label}</Link>)}
-          <button type="button" onClick={() => { setSubmitted(false); setError(""); setBuildOpen(true); }}>Request a tech product build</button>
         </nav>
         <div className="site-footer-socials">
           {SOCIALS.map(({ label, url }) => (
@@ -112,7 +111,7 @@ export function Footer() {
         .site-footer{overflow:hidden;background:#050606;color:#eeeae0;border-top:1px solid rgba(238,234,224,.22)}
         .site-footer-top{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;padding:1.6rem var(--space-x);border-bottom:1px solid rgba(238,234,224,.18)}
         .site-footer-kicker{margin:0;color:var(--c-accent);font:700 .58rem/1.5 var(--font-manjari);letter-spacing:.2em;text-transform:uppercase}
-        .site-footer-email{display:flex;align-items:center;gap:.6rem;padding:0;border:0;background:none;color:#eeeae0;font:500 .72rem/1.4 var(--font-sans);text-decoration:none;cursor:pointer;transition:color .2s}
+        .site-footer-email{display:flex;align-items:center;gap:.6rem;padding:0;border:0;background:none;color:rgba(238,234,224,.72);font:500 .6rem/1.5 var(--font-manjari);letter-spacing:.09em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:color .2s}
         .site-footer-email:hover{color:var(--c-accent)}
         .site-footer-email span{color:var(--c-accent);font-size:1rem}
         .site-footer-bottom{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:2rem;padding:1.6rem var(--space-x) 1.9rem;border-top:1px solid rgba(238,234,224,.18)}
