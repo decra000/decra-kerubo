@@ -512,8 +512,7 @@ const ENGAGE_GROUPS = [
   { key: "innovation-ecosystems", label: "Innovation Ecosystems", opening: "Hi, I'm with an investor, incubator, accelerator, or ecosystem body and would like to discuss legal support or partnership opportunities." },
 ];
 
-/* Full set offered inside the Partner modal picker, includes Events & Conferences,
-   which is intentionally left off the "Who I work with" pill row on the homepage. */
+/* Categories shown directly below the Partners heading, including Events & Conferences. */
 const PARTNER_GROUPS = [...ENGAGE_GROUPS, EVENTS_GROUP];
 
 const ENGAGE_SYSTEM = `You are Decra Kerubo's AI intake advisor on decrakerubo.com.
@@ -649,10 +648,6 @@ function WorkWithDecra() {
     setTimeout(() => inputRef.current?.focus(), 150);
   };
 
-  const openPartnerModal = () => {
-    setModalOpen(true);
-  };
-
   useEffect(() => {
     const onExternalOpen = (e: Event) => {
       const detail = (e as CustomEvent<{ key: string; label: string; opening: string }>).detail;
@@ -754,22 +749,24 @@ function WorkWithDecra() {
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
         <div className="wwd-row partners-row" style={{ ...fade(vis, 0.08) }}>
           <h2 className="partners-title">Partners.</h2>
-          <span className="partners-spacer" aria-hidden="true" />
-          <button
-            onClick={openPartnerModal}
-            className="wwd-partner-btn"
-            style={lineBtn()}
-            onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"}
-            onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--c-border)"}
-          >
-            Partner <ArrowRight size={12} strokeWidth={1.5} />
-          </button>
         </div>
+        <nav className="partner-category-row" aria-label="Choose a partner category" style={fade(vis, 0.14)}>
+          {PARTNER_GROUPS.map(group => (
+            <button key={group.key} type="button" onClick={() => { setModalOpen(true); startGroup(group.key, group.opening); }}>
+              {group.label}<ArrowRight size={13} strokeWidth={1.4} aria-hidden="true" />
+            </button>
+          ))}
+        </nav>
         <style>{`
           .partners-row { display:flex; align-items:center; flex-wrap:wrap; gap:.5rem; row-gap:1.25rem; }
           .partners-title { font-family:var(--font-serif); font-weight:400; font-size:clamp(1.5rem,2.4vw,2rem); color:var(--c-ink); line-height:1.05; margin:0 1rem 0 0; white-space:nowrap; }
-          .partners-spacer { flex:1; min-width:1.5rem; }
-          .wwd-partner-btn { transition:border-color .2s ease,color .2s ease; }
+          .partner-category-row{display:flex;align-items:stretch;gap:0;margin-top:1.6rem;border-top:1px solid var(--c-border);border-bottom:1px solid var(--c-border)}
+          .partner-category-row button{display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex:1;min-width:0;padding:1rem .9rem;border:0;border-right:1px solid var(--c-border);background:transparent;color:var(--c-ink);text-align:left;cursor:pointer;font:400 .9rem/1.35 var(--font-serif);transition:background .2s,color .2s}
+          .partner-category-row button:last-child{border-right:0}
+          .partner-category-row button svg{flex:none;color:var(--c-ink-muted);transition:transform .2s,color .2s}
+          .partner-category-row button:hover{background:var(--c-surface);color:var(--c-accent)}
+          .partner-category-row button:hover svg{transform:translateX(3px);color:var(--c-accent)}
+          @media(max-width:760px){.partner-category-row{overflow-x:auto;scrollbar-width:thin}.partner-category-row button{flex:0 0 auto;min-width:180px;padding:1rem}.partner-category-row button:last-child{border-right:1px solid var(--c-border)}}
         `}</style>
       </div>
 
@@ -821,25 +818,7 @@ function WorkWithDecra() {
             )}
 
             {!active ? (
-              <div style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-                <p style={{ ...BODY, fontSize: "0.82rem", marginBottom: "0.5rem" }}>Tell me a bit about who you are, so I can point you the right way:</p>
-                {PARTNER_GROUPS.map(g => (
-                  <button
-                    key={g.key}
-                    onClick={() => startGroup(g.key, g.opening)}
-                    style={{
-                      display: "flex", alignItems: "center", justifyContent: "space-between",
-                      textAlign: "left", background: "none", border: "1px solid var(--c-border)",
-                      padding: "0.9rem 1.1rem", cursor: "pointer", transition: "border-color 0.2s",
-                    }}
-                    onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--c-accent)"}
-                    onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = "var(--c-border)"}
-                  >
-                    <span style={{ fontFamily: "var(--font-serif)", fontSize: "0.95rem", color: "var(--c-ink)" }}>{g.label}</span>
-                    <ArrowRight size={13} strokeWidth={1.5} color="var(--c-ink-muted)" />
-                  </button>
-                ))}
-              </div>
+              <div style={{ padding: "1.5rem" }}><p style={{ ...BODY, fontSize: "0.82rem" }}>Choose a partner category on the page to start a conversation.</p></div>
             ) : (
               <>
                 <div style={{ flex: 1, overflowY: "auto", padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
@@ -1102,8 +1081,8 @@ function CredCard({ c, i, vis, size = "sm" }: { c: Cred; i: number; vis: boolean
             objectFit: "contain",
             borderRadius: "3px",
             filter: hover
-              ? "grayscale(1) brightness(0) invert(1) opacity(1)"
-              : "grayscale(1) brightness(0) invert(1) opacity(0.68)",
+              ? "grayscale(1) contrast(1.2) opacity(1)"
+              : "grayscale(1) contrast(1.1) opacity(0.86)",
             transition: "filter 0.4s cubic-bezier(0.16,1,0.3,1)",
           }}
         />
@@ -1133,8 +1112,7 @@ function Accreditations() {
     <section ref={ref as React.RefObject<HTMLElement>} className="education-wall">
       <div className="education-wall-inner">
         <p className="education-wall-label" style={fade(vis)}>Education &amp; Training</p>
-        <h2 className="education-wall-title" style={fade(vis, 0.06)}>A foundation across law, technology &amp; AI.</h2>
-        <p className="education-wall-intro" style={fade(vis, 0.12)}>The institutions and programmes behind my work.</p>
+        <p className="education-wall-intro" style={fade(vis, 0.06)}>The institutions and programmes behind my work.</p>
         <div style={{
           display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
         }} className="cred-grid education-wall-grid education-wall-primary">
@@ -1152,8 +1130,7 @@ function Accreditations() {
         .education-wall::before{content:'';position:absolute;inset:0;pointer-events:none;opacity:.12;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E")}
         .education-wall-inner{position:relative;z-index:1;max-width:var(--max-w);margin:0 auto}
         .education-wall-label{margin:0 0 1rem;color:#c2a46a;font:700 .58rem/1.4 var(--font-manjari);letter-spacing:.24em;text-transform:uppercase}
-        .education-wall-title{max-width:46rem;margin:0;color:#f0ede5;font:400 clamp(1.8rem,3.5vw,3rem)/1.15 var(--font-serif)}
-        .education-wall-intro{margin:.8rem 0 3.1rem;color:rgba(238,234,224,.58);font:400 .85rem/1.7 var(--font-sans)}
+        .education-wall-intro{margin:0 0 3.1rem;color:rgba(238,234,224,.58);font:400 .85rem/1.7 var(--font-sans)}
         .education-wall-grid{gap:0}
         .education-wall-primary{padding-bottom:2rem;border-bottom:1px solid rgba(238,234,224,.15)}
         .education-wall-secondary{padding-top:2rem}
@@ -1161,9 +1138,9 @@ function Accreditations() {
         .cred-card:nth-child(4n){border-right:0}
         .cred-card .cred-logo-box{width:100%;justify-content:center;margin-bottom:1rem!important}
         .cred-card .cred-logo-img{max-width:min(100%,180px)!important}
-        .cred-card:hover .cred-logo-img{filter:grayscale(1) brightness(0) invert(1) opacity(1)!important}
+        .cred-card:hover .cred-logo-img{filter:grayscale(1) contrast(1.2) opacity(1)!important}
         @media(max-width:820px){.education-wall-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.cred-card:nth-child(4n){border-right:1px solid rgba(238,234,224,.08)}.cred-card:nth-child(2n){border-right:0}.education-wall-primary{padding-bottom:1.25rem}.education-wall-secondary{padding-top:1.25rem}}
-        @media(max-width:560px){.education-wall{padding-block:4rem}.education-wall-intro{margin-bottom:2rem}.education-wall-title{font-size:clamp(1.75rem,8vw,2.35rem)}.cred-card{min-height:130px;padding:.85rem .45rem}.cred-card .cred-logo-box{height:52px!important;margin-bottom:.7rem!important}.cred-card .cred-logo-img{max-width:130px!important}.cred-card .cred-text p:first-child{font-size:.8rem!important}.cred-card .cred-text p:last-child{font-size:.62rem!important}}
+        @media(max-width:560px){.education-wall{padding-block:4rem}.education-wall-intro{margin-bottom:2rem}.cred-card{min-height:130px;padding:.85rem .45rem}.cred-card .cred-logo-box{height:52px!important;margin-bottom:.7rem!important}.cred-card .cred-logo-img{max-width:130px!important}.cred-card .cred-text p:first-child{font-size:.8rem!important}.cred-card .cred-text p:last-child{font-size:.62rem!important}}
         @media(prefers-reduced-motion:reduce){.cred-card,.cred-logo-img{transition:none!important}}
       `}</style>
     </section>
