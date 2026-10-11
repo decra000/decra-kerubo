@@ -108,9 +108,9 @@ export function Footer() {
         .site-footer-bottom{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:2rem;padding:1.6rem var(--space-x) 1.9rem;border-top:1px solid rgba(238,234,224,.18)}
         .site-footer-meta{display:flex;flex-direction:column;gap:.35rem;color:rgba(238,234,224,.53);font:400 .65rem/1.5 var(--font-sans)}
         .site-footer-links{display:flex;justify-content:center;flex-wrap:wrap;gap:clamp(.8rem,2vw,1.8rem)}
-        .site-footer-links a,.site-footer-socials{color:rgba(238,234,224,.72);font:500 .6rem/1.5 var(--font-manjari);letter-spacing:.09em;text-transform:uppercase}
+        .site-footer-links a,.site-footer-links button,.site-footer-socials{color:rgba(238,234,224,.72);font:500 .6rem/1.5 var(--font-manjari);letter-spacing:.09em;text-transform:uppercase}
         .site-footer-links a,.site-footer-links button{text-decoration:none;transition:color .2s}
-        .site-footer-links button{padding:0;border:0;background:none;color:rgba(238,234,224,.72);font:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer}
+        .site-footer-links button{padding:0;border:0;background:none;cursor:pointer}
         .site-footer-links a:hover,.site-footer-links button:hover,.site-footer-socials a:hover{color:var(--c-accent)}
         .site-footer-socials{display:flex;align-items:center;justify-content:flex-end;gap:1rem}
         .site-footer-socials a{display:flex;align-items:center;gap:.55rem;color:rgba(238,234,224,.72);line-height:0;text-decoration:none;transition:color .2s}
