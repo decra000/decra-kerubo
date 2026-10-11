@@ -575,7 +575,7 @@ function WorkWithDecra() {
   const { ref, vis } = useReveal();
   const [modalOpen, setModalOpen] = useState(false);
   const [active, setActive] = useState<string | null>(null);
-  const [selectedPartner, setSelectedPartner] = useState<PartnerGroup | null>(null);
+  const [selectedPartner, setSelectedPartner] = useState<PartnerGroup | null>(PARTNER_GROUPS[0] ?? null);
   const [msgs, setMsgs] = useState<ChatMsg[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -761,13 +761,16 @@ function WorkWithDecra() {
               onClick={event => { event.preventDefault(); setSelectedPartner(group); }}
             >{group.label}</a>
           ))}
+          <button
+            type="button"
+            className="partner-action-button"
+            onClick={() => {
+              if (!selectedPartner) return;
+              setModalOpen(true);
+              startGroup(selectedPartner.key, selectedPartner.opening);
+            }}
+          >Partner <ArrowRight size={13} strokeWidth={1.5} /></button>
         </nav>
-        {selectedPartner && (
-          <div className="partner-action-row">
-            <span>Selected: {selectedPartner.label}</span>
-            <button type="button" onClick={() => { setModalOpen(true); startGroup(selectedPartner.key, selectedPartner.opening); }}>Partner <ArrowRight size={13} strokeWidth={1.5} /></button>
-          </div>
-        )}
         <style>{`
           .partners-row { display:flex; align-items:center; flex-wrap:wrap; gap:.5rem; row-gap:1.25rem; }
           .partners-title { font-family:var(--font-serif); font-weight:400; font-size:clamp(1.5rem,2.4vw,2rem); color:var(--c-ink); line-height:1.05; margin:0 1rem 0 0; white-space:nowrap; }
@@ -776,11 +779,10 @@ function WorkWithDecra() {
           .partner-category-row a::after{content:'';position:absolute;left:0;right:100%;bottom:0;height:1px;background:var(--c-accent);transition:right .2s}
           .partner-category-row a:hover,.partner-category-row a[aria-current="true"]{color:var(--c-ink)}
           .partner-category-row a[aria-current="true"]::after,.partner-category-row a:hover::after{right:0}
-          .partner-action-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;min-height:4.2rem}
-          .partner-action-row span{color:var(--c-ink-muted);font:400 .75rem var(--font-sans)}
-          .partner-action-row button{display:inline-flex;align-items:center;gap:.65rem;padding:.7rem 1.3rem;border:1px solid var(--c-accent);background:var(--c-accent);color:var(--c-bg);cursor:pointer;font:700 .62rem var(--font-manjari);letter-spacing:.16em;text-transform:uppercase;transition:filter .2s}
-          .partner-action-row button:hover{filter:brightness(1.12)}
-          @media(max-width:560px){.partner-category-row{gap:0 1.25rem}.partner-category-row a{font-size:.84rem}.partner-action-row{min-height:4rem}}
+          .partner-action-button{display:inline-flex;align-items:center;gap:.65rem;flex:0 0 auto;margin-left:auto;padding:.65rem 1rem;border:1px solid var(--c-accent);background:var(--c-accent);color:var(--c-bg);cursor:pointer;font:700 .62rem var(--font-manjari);letter-spacing:.16em;text-transform:uppercase;transition:filter .2s,transform .2s}
+          .partner-action-button:hover{filter:brightness(1.12);transform:translateY(-1px)}
+          .partner-action-button:focus-visible{outline:2px solid var(--c-accent);outline-offset:3px}
+          @media(max-width:560px){.partner-category-row{gap:0 1.25rem}.partner-category-row a{font-size:.84rem}.partner-action-button{margin:0 0 .35rem auto;padding:.6rem .8rem}}
         `}</style>
       </div>
 
