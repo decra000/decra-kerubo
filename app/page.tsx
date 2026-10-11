@@ -1102,8 +1102,8 @@ function CredCard({ c, i, vis, size = "sm" }: { c: Cred; i: number; vis: boolean
             objectFit: "contain",
             borderRadius: "3px",
             filter: hover
-              ? "saturate(1) opacity(1)"
-              : "saturate(0.7) contrast(0.96) opacity(0.9)",
+              ? "grayscale(1) brightness(0) invert(1) opacity(1)"
+              : "grayscale(1) brightness(0) invert(1) opacity(0.68)",
             transition: "filter 0.4s cubic-bezier(0.16,1,0.3,1)",
           }}
         />
@@ -1112,12 +1112,12 @@ function CredCard({ c, i, vis, size = "sm" }: { c: Cred; i: number; vis: boolean
         <p style={{
           fontFamily: "var(--font-serif)", fontWeight: 400,
           fontSize: nameSize,
-          color: "var(--c-ink)", lineHeight: 1.3, marginBottom: "0.3rem",
+          color: "#eeeae0", lineHeight: 1.3, marginBottom: "0.45rem",
         }}>{c.name}</p>
         <p style={{
           fontFamily: "var(--font-sans)", fontWeight: 400,
           fontSize: "0.72rem",
-          color: "var(--c-ink-muted)", lineHeight: 1.5,
+          color: "rgba(238,234,224,0.58)", lineHeight: 1.5,
         }} dangerouslySetInnerHTML={{ __html: c.detail }} />
       </div>
     </div>
@@ -1130,35 +1130,41 @@ function Accreditations() {
   const row1 = [CREDENTIALS[0], CREDENTIALS[1], CREDENTIALS[3], CREDENTIALS[2]]; // ALU, Nazarene, Oxford, KSL
   const row2 = [CREDENTIALS[4], CREDENTIALS[5], CREDENTIALS[6], CREDENTIALS[7]]; // CMU, Cisco, HKUST, Qualys
   return (
-    <section ref={ref as React.RefObject<HTMLElement>} style={SEC}>
-      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-        <p style={{ ...LBL, marginBottom: "2rem", ...fade(vis) }}>Credentials &amp; Training</p>
+    <section ref={ref as React.RefObject<HTMLElement>} className="education-wall">
+      <div className="education-wall-inner">
+        <p className="education-wall-label" style={fade(vis)}>Education &amp; Training</p>
+        <h2 className="education-wall-title" style={fade(vis, 0.06)}>A foundation across law, technology &amp; AI.</h2>
+        <p className="education-wall-intro" style={fade(vis, 0.12)}>The institutions and programmes behind my work.</p>
         <div style={{
-          display: "grid", gridTemplateColumns: "repeat(4, 1fr)",
-          gap: "clamp(1.75rem,3vw,2.75rem)",
-          marginBottom: "clamp(2.25rem,4vw,3.25rem)",
-          paddingBottom: "clamp(2.25rem,4vw,3.25rem)",
-          borderBottom: "1px solid var(--c-border)",
-        }} className="cred-grid">
+          display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
+        }} className="cred-grid education-wall-grid education-wall-primary">
           {row1.map((c, i) => <CredCard key={c.key} c={c} i={i} vis={vis} size="md" />)}
         </div>
 
         <div style={{
-          display: "grid", gridTemplateColumns: "repeat(4, 1fr)",
-          gap: "clamp(1.75rem,3vw,2.75rem)",
-        }} className="cred-grid">
+          display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
+        }} className="cred-grid education-wall-grid education-wall-secondary">
           {row2.map((c, i) => <CredCard key={c.key} c={c} i={i} vis={vis} size="md" />)}
         </div>
       </div>
       <style>{`
-        @media(max-width:820px){.cred-grid{grid-template-columns:repeat(2,1fr)!important}}
-        @media(max-width:560px){
-          .cred-grid{grid-template-columns:1fr!important; gap:1.5rem!important}
-          .cred-card{display:flex!important; align-items:center; gap:1rem}
-          .cred-card .cred-logo-box{flex-shrink:0; width:60px!important; height:60px!important; margin-bottom:0!important; background:var(--c-surface); border-radius:6px; justify-content:center; padding:0.4rem}
-          .cred-card .cred-logo-img{max-height:100%!important; max-width:100%!important}
-          .cred-card .cred-text{flex:1; min-width:0}
-        }
+        .education-wall{position:relative;overflow:hidden;padding:clamp(4.5rem,9vw,8rem) var(--space-x);background:radial-gradient(ellipse at 50% 0%,rgba(92,99,82,.13),transparent 58%),#080909;color:#eeeae0}
+        .education-wall::before{content:'';position:absolute;inset:0;pointer-events:none;opacity:.12;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E")}
+        .education-wall-inner{position:relative;z-index:1;max-width:var(--max-w);margin:0 auto}
+        .education-wall-label{margin:0 0 1rem;color:#c2a46a;font:700 .58rem/1.4 var(--font-manjari);letter-spacing:.24em;text-transform:uppercase}
+        .education-wall-title{max-width:46rem;margin:0;color:#f0ede5;font:400 clamp(1.8rem,3.5vw,3rem)/1.15 var(--font-serif)}
+        .education-wall-intro{margin:.8rem 0 3.1rem;color:rgba(238,234,224,.58);font:400 .85rem/1.7 var(--font-sans)}
+        .education-wall-grid{gap:0}
+        .education-wall-primary{padding-bottom:2rem;border-bottom:1px solid rgba(238,234,224,.15)}
+        .education-wall-secondary{padding-top:2rem}
+        .cred-card{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-width:0;min-height:155px;padding:1rem clamp(.5rem,2vw,1.5rem);border-right:1px solid rgba(238,234,224,.08);text-align:center}
+        .cred-card:nth-child(4n){border-right:0}
+        .cred-card .cred-logo-box{width:100%;justify-content:center;margin-bottom:1rem!important}
+        .cred-card .cred-logo-img{max-width:min(100%,180px)!important}
+        .cred-card:hover .cred-logo-img{filter:grayscale(1) brightness(0) invert(1) opacity(1)!important}
+        @media(max-width:820px){.education-wall-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.cred-card:nth-child(4n){border-right:1px solid rgba(238,234,224,.08)}.cred-card:nth-child(2n){border-right:0}.education-wall-primary{padding-bottom:1.25rem}.education-wall-secondary{padding-top:1.25rem}}
+        @media(max-width:560px){.education-wall{padding-block:4rem}.education-wall-intro{margin-bottom:2rem}.education-wall-title{font-size:clamp(1.75rem,8vw,2.35rem)}.cred-card{min-height:130px;padding:.85rem .45rem}.cred-card .cred-logo-box{height:52px!important;margin-bottom:.7rem!important}.cred-card .cred-logo-img{max-width:130px!important}.cred-card .cred-text p:first-child{font-size:.8rem!important}.cred-card .cred-text p:last-child{font-size:.62rem!important}}
+        @media(prefers-reduced-motion:reduce){.cred-card,.cred-logo-img{transition:none!important}}
       `}</style>
     </section>
   );
