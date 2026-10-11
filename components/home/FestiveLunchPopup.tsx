@@ -54,49 +54,121 @@ export function FestiveLunchPopup() {
 
   if (!open) return null;
 
-  const inputStyle: React.CSSProperties = {
-    width: "100%", boxSizing: "border-box", padding: "0.8rem 0.9rem",
-    border: "1px solid #d6c8a5", background: "#fffdf7",
-    color: "#20392d", font: "inherit", fontSize: "0.85rem", outlineColor: "#b7892f",
-  };
-
   return (
     <div
       role="presentation"
       onMouseDown={event => { if (event.target === event.currentTarget) dismiss(); }}
-      style={{ position: "fixed", inset: 0, zIndex: 10000, display: "grid", placeItems: "center", padding: "1rem", background: "rgba(8,28,20,0.78)", backdropFilter: "blur(8px)" }}
+      className="festive-lunch-screen"
     >
-      <section role="dialog" aria-modal="true" aria-labelledby="festive-lunch-title" style={{ position: "relative", width: "min(100%, 470px)", maxHeight: "min(90vh, 760px)", overflowY: "auto", background: "#fff8e9", color: "#20392d", border: "3px solid #c94d3e", outline: "1px solid #d4aa4c", outlineOffset: "-9px", boxShadow: "0 24px 80px rgba(0,0,0,0.45)", padding: "clamp(1.7rem, 6vw, 2.9rem)" }}>
-        <div aria-hidden="true" style={{ position: "absolute", inset: "0 0 auto", height: "8px", background: "linear-gradient(90deg,#1f704e 0 33%,#d4aa4c 33% 66%,#c94d3e 66%)" }} />
-        <button type="button" onClick={dismiss} aria-label="Close invitation" style={{ position: "absolute", top: "1.1rem", right: "1.1rem", border: 0, background: "transparent", color: "#52675b", cursor: "pointer", padding: "0.35rem" }}><X size={18} /></button>
-        <p style={{ margin: "0 2rem 1.1rem 0", fontSize: "0.62rem", letterSpacing: "0.2em", textTransform: "uppercase", color: "#a87920", fontWeight: 700 }}>✦ A little festive get-together ✦</p>
-        <h2 id="festive-lunch-title" style={{ margin: "0 0 0.85rem", fontFamily: "var(--font-serif)", fontSize: "clamp(1.8rem, 7vw, 2.45rem)", lineHeight: 1.08, fontWeight: 400, color: "#214c38" }}>Hey, want to have lunch with me this festive season?</h2>
-        <p style={{ margin: "0 0 1.5rem", color: "#52675b", fontSize: "0.92rem", lineHeight: 1.75 }}>I’m hosting a cosy lunch at my place with four other friends. Good food, easy conversation, and no pressure at all. I’d love to see you there!</p>
+      <section role="dialog" aria-modal="true" aria-labelledby="festive-lunch-title" className="festive-lunch-dialog">
+        <button type="button" onClick={dismiss} aria-label="Close invitation" className="festive-lunch-close"><X size={19} /></button>
+        <div className="festive-lunch-frame" aria-hidden="true" />
+        <div className="festive-lunch-inner">
+          <div className="festive-lunch-copy">
+            <p className="festive-lunch-kicker"><span>✦</span> A festive invitation <span>✦</span></p>
+            <p className="festive-lunch-eyebrow">DECEMBER · GOOD FOOD · GOOD COMPANY</p>
+            <h2 id="festive-lunch-title">A seat at my table<br /><em>would be lovely.</em></h2>
+            <p className="festive-lunch-message">Hey, want to have lunch with me this festive season? I’m hosting a cosy afternoon at my place with four other friends. Good food, easy conversation, and no pressure at all. I’d love to see you there.</p>
+            <div className="festive-lunch-rule"><span /> <span className="festive-lunch-diamond">◆</span> <span /></div>
+            <p className="festive-lunch-note">A small table. A long lunch. Room for you.</p>
+          </div>
+
+          <div className="festive-lunch-action">
+            <p className="festive-lunch-action-label">THE GATHERING</p>
+            <p className="festive-lunch-seat">04 <span>friends invited</span></p>
+            <p className="festive-lunch-action-copy">Just a few friends around the table this festive season.</p>
 
         {sent ? (
-          <div role="status" style={{ padding: "1.1rem", background: "#e7f1e7", borderLeft: "3px solid #1f704e" }}>
-            <p style={{ margin: "0 0 0.35rem", fontFamily: "var(--font-serif)", fontSize: "1.25rem", color: "#214c38" }}>Yay, I got your RSVP! 💛</p>
-            <p style={{ margin: 0, color: "#52675b", fontSize: "0.82rem", lineHeight: 1.6 }}>I’ll be in touch with the details soon. Can’t wait!</p>
-            <button type="button" onClick={dismiss} style={{ marginTop: "1rem", padding: 0, border: 0, background: "none", color: "#1f704e", cursor: "pointer", fontWeight: 700 }}>Close</button>
+          <div role="status" className="festive-lunch-success">
+            <p className="festive-lunch-success-title">You’re on the list.</p>
+            <p className="festive-lunch-success-copy">I’ll be in touch with the details soon. Can’t wait to see you.</p>
+            <button type="button" onClick={dismiss} className="festive-lunch-submit">Close invitation</button>
           </div>
         ) : showForm ? (
-          <form onSubmit={submit} style={{ display: "grid", gap: "0.85rem" }}>
-            <label style={{ display: "grid", gap: "0.35rem", fontSize: "0.75rem", color: "#52675b" }}>Your name<input required autoComplete="name" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} style={inputStyle} /></label>
-            <label style={{ display: "grid", gap: "0.35rem", fontSize: "0.75rem", color: "#52675b" }}>Email address<input required type="email" autoComplete="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} style={inputStyle} /></label>
-            <label style={{ display: "grid", gap: "0.35rem", fontSize: "0.75rem", color: "#52675b" }}>Phone number<input required type="tel" autoComplete="tel" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} style={inputStyle} /></label>
-            <label style={{ display: "grid", gap: "0.35rem", fontSize: "0.75rem", color: "#52675b" }}>Any dietary needs? <span style={{ fontWeight: 400 }}>(optional)</span><input value={form.dietary} onChange={e => setForm({ ...form, dietary: e.target.value })} style={inputStyle} /></label>
-            {error && <p role="alert" style={{ margin: 0, color: "#b4473c", fontSize: "0.82rem" }}>{error}</p>}
-            <button disabled={sending} type="submit" style={{ marginTop: "0.25rem", padding: "0.95rem 1rem", border: 0, background: "#1f704e", color: "#fff8e9", cursor: sending ? "wait" : "pointer", fontWeight: 700 }}>{sending ? "Sending your RSVP…" : "Send my RSVP ✨"}</button>
-            <button type="button" onClick={() => setShowForm(false)} style={{ padding: "0.5rem", border: 0, background: "transparent", color: "#52675b", cursor: "pointer" }}>Back to invitation</button>
+          <form onSubmit={submit} className="festive-lunch-form">
+            <label>Your name<input required autoComplete="name" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} /></label>
+            <label>Email address<input required type="email" autoComplete="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} /></label>
+            <label>Phone number<input required type="tel" autoComplete="tel" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} /></label>
+            <label>Dietary needs <span>(optional)</span><input value={form.dietary} onChange={e => setForm({ ...form, dietary: e.target.value })} /></label>
+            {error && <p role="alert" className="festive-lunch-error">{error}</p>}
+            <button disabled={sending} type="submit" className="festive-lunch-submit">{sending ? "Sending your RSVP…" : "Send my RSVP"}<span>↗</span></button>
+            <button type="button" onClick={() => setShowForm(false)} className="festive-lunch-back">Back to invitation</button>
           </form>
         ) : (
-          <div style={{ display: "grid", gap: "0.7rem" }}>
-            <button type="button" onClick={() => setShowForm(true)} style={{ padding: "1rem", border: 0, background: "#1f704e", color: "#fff8e9", cursor: "pointer", fontWeight: 700, fontSize: "0.9rem" }}>I’m in! Save me a seat</button>
-            <button type="button" onClick={dismiss} style={{ padding: "0.75rem", border: "1px solid #c94d3e", background: "#fff8e9", color: "#a53c32", cursor: "pointer" }}>Maybe another time</button>
-            <p style={{ margin: "0.25rem 0 0", textAlign: "center", color: "#52675b", fontSize: "0.7rem" }}>Your details are only used to follow up about lunch.</p>
+          <div className="festive-lunch-buttons">
+            <button type="button" onClick={() => setShowForm(true)} className="festive-lunch-submit">I’d love to come<span>↗</span></button>
+            <button type="button" onClick={dismiss} className="festive-lunch-decline">Maybe another time</button>
+            <p>Your details are only used to follow up about lunch.</p>
           </div>
         )}
+          </div>
+        </div>
+        <p className="festive-lunch-footer">WITH WARMTH &amp; GOOD COMPANY <span>·</span> NAIROBI</p>
       </section>
+      <style>{`
+        .festive-lunch-screen { position:fixed; inset:0; z-index:10000; width:100vw; height:100vh; height:100dvh; overflow:auto; background:#050706; color:#eee9dc; }
+        .festive-lunch-dialog { position:relative; display:flex; align-items:center; justify-content:center; box-sizing:border-box; min-height:100%; width:100%; padding:clamp(4.5rem,9vh,7rem) clamp(1.25rem,7vw,7.5rem); background:radial-gradient(ellipse at 19% 23%,rgba(62,75,57,.18),transparent 44%),radial-gradient(ellipse at 83% 82%,rgba(105,80,39,.11),transparent 36%),#050706; }
+        .festive-lunch-frame { position:absolute; inset:16px; border:1px solid rgba(190,163,105,.38); pointer-events:none; }
+        .festive-lunch-frame::after { content:''; position:absolute; inset:6px; border:1px solid rgba(190,163,105,.09); }
+        .festive-lunch-close { position:absolute; z-index:2; top:clamp(2rem,5vh,3.5rem); right:clamp(2rem,5vw,5rem); display:grid; place-items:center; width:44px; height:44px; border:1px solid rgba(190,163,105,.45); border-radius:50%; color:#d7c69e; background:transparent; cursor:pointer; transition:background .2s,color .2s; }
+        .festive-lunch-close:hover { background:#c2a46a; color:#080a08; }
+        .festive-lunch-inner { position:relative; z-index:1; display:grid; grid-template-columns:minmax(0,1.1fr) minmax(310px,.72fr); align-items:center; gap:clamp(3rem,9vw,9rem); width:min(100%,1160px); margin:0 auto; }
+        .festive-lunch-copy { max-width:650px; }
+        .festive-lunch-kicker,.festive-lunch-eyebrow,.festive-lunch-action-label,.festive-lunch-footer { color:#c2a46a; font:700 .62rem/1.4 var(--font-manjari); letter-spacing:.22em; text-transform:uppercase; }
+        .festive-lunch-kicker { display:flex; align-items:center; gap:.7rem; margin:0 0 2.7rem; }
+        .festive-lunch-kicker span { font-size:.75rem; }
+        .festive-lunch-eyebrow { margin:0 0 1.2rem; color:#8b8c7e; font-size:.55rem; letter-spacing:.19em; }
+        .festive-lunch-copy h2 { margin:0; color:#f0ede5; font:400 clamp(2.8rem,6vw,5.6rem)/.99 var(--font-serif); letter-spacing:-.035em; }
+        .festive-lunch-copy h2 em { color:#cbb889; font-weight:400; }
+        .festive-lunch-message { max-width:34rem; margin:1.7rem 0 0; color:#b7b8ae; font:400 clamp(.9rem,1.2vw,1rem)/1.9 var(--font-sans); }
+        .festive-lunch-rule { display:flex; align-items:center; gap:.7rem; width:min(190px,45%); margin:2rem 0 1rem; color:#c2a46a; }
+        .festive-lunch-rule span:not(.festive-lunch-diamond) { height:1px; flex:1; background:rgba(194,164,106,.42); }
+        .festive-lunch-diamond { font-size:.52rem; }
+        .festive-lunch-note { margin:0; color:#d5d0c1; font:italic 1rem/1.6 var(--font-serif); }
+        .festive-lunch-action { padding:clamp(1.5rem,3vw,2.5rem); border:1px solid rgba(194,164,106,.28); background:linear-gradient(145deg,rgba(255,255,255,.035),rgba(255,255,255,.008)); box-shadow:0 20px 80px rgba(0,0,0,.2); }
+        .festive-lunch-action-label { margin:0 0 1.1rem; color:#9a8a66; font-size:.55rem; }
+        .festive-lunch-seat { margin:0; color:#e8e0ce; font:400 clamp(2.2rem,4vw,3.3rem)/1 var(--font-serif); }
+        .festive-lunch-seat span { color:#8f8c7d; font:400 .7rem var(--font-sans); }
+        .festive-lunch-action-copy { margin:.75rem 0 1.5rem; color:#a9aaa0; font:400 .78rem/1.7 var(--font-sans); }
+        .festive-lunch-buttons,.festive-lunch-form { display:grid; gap:.8rem; }
+        .festive-lunch-form label { display:grid; gap:.4rem; color:#d4d0c5; font:600 .67rem/1.4 var(--font-sans); }
+        .festive-lunch-form label span { display:inline; color:#85877f; font-weight:400; }
+        .festive-lunch-form input { box-sizing:border-box; width:100%; min-height:44px; padding:.7rem .8rem; border:1px solid #45463d; border-radius:0; outline-color:#c2a46a; background:#0b0e0c; color:#f2efe6; font:400 .85rem var(--font-sans); }
+        .festive-lunch-form input:focus { border-color:#c2a46a; }
+        .festive-lunch-submit { display:flex; align-items:center; justify-content:space-between; width:100%; min-height:52px; padding:.9rem 1rem; border:1px solid #c2a46a; background:#c2a46a; color:#11130f; cursor:pointer; font:700 .66rem var(--font-manjari); letter-spacing:.12em; text-transform:uppercase; transition:background .2s,color .2s; }
+        .festive-lunch-submit:hover { background:#d2bd8b; }
+        .festive-lunch-submit:disabled { opacity:.65; cursor:wait; }
+        .festive-lunch-decline,.festive-lunch-back { min-height:42px; border:1px solid rgba(220,216,204,.22); background:transparent; color:#b7b8ae; cursor:pointer; font:600 .62rem var(--font-manjari); letter-spacing:.1em; text-transform:uppercase; }
+        .festive-lunch-decline:hover,.festive-lunch-back:hover { border-color:#c2a46a; color:#e8e0ce; }
+        .festive-lunch-buttons p { margin:.25rem 0 0; color:#898b82; text-align:center; font:400 .65rem/1.5 var(--font-sans); }
+        .festive-lunch-error { margin:0; color:#e58b7e; font:400 .78rem/1.5 var(--font-sans); }
+        .festive-lunch-success { padding:1.1rem; border-left:2px solid #c2a46a; background:rgba(194,164,106,.08); }
+        .festive-lunch-success-title { margin:0 0 .4rem; color:#e9dfc7; font:400 1.45rem var(--font-serif); }
+        .festive-lunch-success-copy { margin:0 0 1rem; color:#b7b8ae; font:400 .82rem/1.7 var(--font-sans); }
+        .festive-lunch-footer { position:absolute; bottom:clamp(2rem,5vh,3.5rem); left:50%; transform:translateX(-50%); width:max-content; max-width:calc(100% - 4rem); margin:0; color:#85806f; text-align:center; font-size:.5rem; letter-spacing:.18em; }
+        .festive-lunch-footer span { padding:0 .45rem; color:#c2a46a; }
+        @media(max-width:760px) {
+          .festive-lunch-dialog { align-items:flex-start; padding:6.5rem 1.5rem 5rem; }
+          .festive-lunch-frame { inset:9px; }
+          .festive-lunch-frame::after { inset:4px; }
+          .festive-lunch-close { top:1.5rem; right:1.5rem; width:40px; height:40px; }
+          .festive-lunch-inner { grid-template-columns:1fr; gap:2rem; width:min(100%,460px); }
+          .festive-lunch-kicker { margin-bottom:1.8rem; }
+          .festive-lunch-copy h2 { font-size:clamp(2.7rem,12vw,4.2rem); }
+          .festive-lunch-message { margin-top:1rem; font-size:.88rem; }
+          .festive-lunch-rule { margin:1.25rem 0 .7rem; }
+          .festive-lunch-action { padding:1.2rem; }
+          .festive-lunch-seat { font-size:2.3rem; }
+          .festive-lunch-action-copy { margin:.5rem 0 1rem; }
+          .festive-lunch-footer { bottom:1.5rem; font-size:.44rem; }
+        }
+        @media(max-height:700px) and (min-width:761px) {
+          .festive-lunch-dialog { padding-top:4rem; padding-bottom:4rem; }
+          .festive-lunch-kicker { margin-bottom:1.5rem; }
+          .festive-lunch-copy h2 { font-size:clamp(2.5rem,5vw,4.5rem); }
+          .festive-lunch-message { margin-top:1rem; }
+        }
+      `}</style>
     </div>
   );
 }
