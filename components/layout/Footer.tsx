@@ -60,17 +60,13 @@ export function Footer() {
 
   return (
     <footer className="site-footer">
-      <div id="request-build" className="site-footer-top">
-        <p className="site-footer-kicker">TECHNOLOGY · LAW · PRODUCT</p>
-        <button className="site-footer-email" type="button" onClick={() => { setSubmitted(false); setError(""); setBuildOpen(true); }}>Build <span aria-hidden="true">↗</span></button>
-      </div>
-
       <div className="site-footer-bottom">
         <div className="site-footer-meta">
-          <span>© {new Date().getFullYear()} Decra Kerubo</span>
+          <span>© Decra Kerubo</span>
         </div>
         <nav className="site-footer-links" aria-label="Footer navigation">
           {LINKS.map(([href, label]) => <Link key={href} href={href}>{label}</Link>)}
+          <button type="button" onClick={() => { setSubmitted(false); setError(""); setBuildOpen(true); }}>Build</button>
         </nav>
         <div className="site-footer-socials">
           {SOCIALS.map(({ label, url }) => (
@@ -109,11 +105,6 @@ export function Footer() {
 
       <style>{`
         .site-footer{overflow:hidden;background:#050606;color:#eeeae0;border-top:1px solid rgba(238,234,224,.22)}
-        .site-footer-top{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;padding:1.6rem var(--space-x);border-bottom:1px solid rgba(238,234,224,.18)}
-        .site-footer-kicker{margin:0;color:var(--c-accent);font:700 .58rem/1.5 var(--font-manjari);letter-spacing:.2em;text-transform:uppercase}
-        .site-footer-email{display:flex;align-items:center;gap:.6rem;padding:0;border:0;background:none;color:rgba(238,234,224,.72);font:500 .6rem/1.5 var(--font-manjari);letter-spacing:.09em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:color .2s}
-        .site-footer-email:hover{color:var(--c-accent)}
-        .site-footer-email span{color:var(--c-accent);font-size:1rem}
         .site-footer-bottom{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:2rem;padding:1.6rem var(--space-x) 1.9rem;border-top:1px solid rgba(238,234,224,.18)}
         .site-footer-meta{display:flex;flex-direction:column;gap:.35rem;color:rgba(238,234,224,.53);font:400 .65rem/1.5 var(--font-sans)}
         .site-footer-links{display:flex;justify-content:center;flex-wrap:wrap;gap:clamp(.8rem,2vw,1.8rem)}
@@ -145,7 +136,7 @@ export function Footer() {
         .build-modal-success h3{margin:1rem 0 .6rem;font:400 1.8rem var(--font-serif)}
         .build-modal-success p{margin:0;color:#666861;font:400 .85rem/1.7 var(--font-sans)}
         @media(max-width:860px){.site-footer-bottom{grid-template-columns:1fr auto}.site-footer-links{grid-column:1/-1;grid-row:2;justify-content:flex-start;padding-top:1rem;border-top:1px solid rgba(238,234,224,.1)}.site-footer-socials{grid-column:2;grid-row:1}}
-        @media(max-width:560px){.site-footer-top{align-items:flex-start;flex-direction:column;padding-block:1.25rem}.site-footer-bottom{grid-template-columns:1fr;gap:1.25rem;padding-block:1.2rem 1.5rem}.site-footer-meta{flex-direction:row;justify-content:space-between}.site-footer-links{grid-column:1;grid-row:2;justify-content:flex-start;gap:.8rem 1.1rem;padding-top:1rem}.site-footer-socials{grid-column:1;grid-row:3;justify-content:flex-start}.build-modal-fields{grid-template-columns:1fr}.build-modal-project{grid-column:auto}}
+        @media(max-width:560px){.site-footer-bottom{grid-template-columns:1fr;gap:1.25rem;padding-block:1.2rem 1.5rem}.site-footer-meta{flex-direction:row;justify-content:space-between}.site-footer-links{grid-column:1;grid-row:2;justify-content:flex-start;gap:.8rem 1.1rem;padding-top:1rem}.site-footer-socials{grid-column:1;grid-row:3;justify-content:flex-start}.build-modal-fields{grid-template-columns:1fr}.build-modal-project{grid-column:auto}}
         @media(prefers-reduced-motion:reduce){.site-footer a{transition:none}}
       `}</style>
     </footer>

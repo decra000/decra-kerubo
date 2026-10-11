@@ -748,11 +748,8 @@ function WorkWithDecra() {
   };
 
   return (
-    <section id="collaborate" ref={ref as React.RefObject<HTMLElement>} style={SEC}>
+    <section id="collaborate" ref={ref as React.RefObject<HTMLElement>} className="partners-section" style={SEC}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-        <div className="wwd-row partners-row" style={{ ...fade(vis, 0.08) }}>
-          <h2 className="partners-title">Partners.</h2>
-        </div>
         <nav id="partner-category-row" className="partner-category-row" aria-label="Partner categories" style={fade(vis, 0.14)}>
           {PARTNER_GROUPS.map(group => (
             <a
@@ -774,9 +771,8 @@ function WorkWithDecra() {
           >Partner <ArrowRight size={13} strokeWidth={1.5} /></button>
         </nav>
         <style>{`
-          .partners-row { display:flex; align-items:center; flex-wrap:wrap; gap:.5rem; row-gap:1.25rem; }
-          .partners-title { font-family:var(--font-serif); font-weight:400; font-size:clamp(1.5rem,2.4vw,2rem); color:var(--c-ink); line-height:1.05; margin:0 1rem 0 0; white-space:nowrap; }
-          .partner-category-row{display:flex;align-items:center;flex-wrap:wrap;gap:0 1.8rem;margin-top:1.35rem;padding:0 0 .85rem;border-bottom:1px solid var(--c-border)}
+          .partners-section{--c-bg:#080909;--c-surface:#111111;--c-ink:#eeeae0;--c-ink-muted:#a9aaa0;--c-border:rgba(238,234,224,.16);--c-border-strong:rgba(238,234,224,.24);background:#080909;color:#eeeae0}
+          .partner-category-row{display:flex;align-items:center;flex-wrap:wrap;gap:0 1.8rem;margin-top:1.35rem;padding:0 0 .85rem}
           .partner-category-row a{position:relative;padding:.45rem 0;color:var(--c-ink-muted);text-decoration:none;font:400 .9rem/1.5 var(--font-serif);transition:color .2s}
           .partner-category-row a::after{content:'';position:absolute;left:0;right:100%;bottom:0;height:1px;background:var(--c-accent);transition:right .2s}
           .partner-category-row a:hover,.partner-category-row a[aria-current="true"]{color:var(--c-ink)}
