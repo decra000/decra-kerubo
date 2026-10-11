@@ -1139,116 +1139,21 @@ function Accreditations() {
         </div>
       </div>
       <style>{`
-        .education-wall{position:relative;overflow:hidden;padding:clamp(4.5rem,9vw,8rem) var(--space-x);background:radial-gradient(ellipse at 50% 0%,rgba(92,99,82,.13),transparent 58%),#080909;color:#eeeae0}
+        .education-wall{position:relative;overflow:hidden;padding:clamp(3rem,5vw,4.25rem) var(--space-x);background:radial-gradient(ellipse at 50% 0%,rgba(92,99,82,.13),transparent 58%),#080909;color:#eeeae0}
         .education-wall::before{content:'';position:absolute;inset:0;pointer-events:none;opacity:.12;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E")}
         .education-wall-inner{position:relative;z-index:1;max-width:var(--max-w);margin:0 auto}
-        .education-wall-label{margin:0 0 1rem;color:#c2a46a;font:700 .58rem/1.4 var(--font-manjari);letter-spacing:.24em;text-transform:uppercase}
+        .education-wall-label{margin:0 0 .75rem;color:var(--c-accent);font:700 .58rem/1.4 var(--font-manjari);letter-spacing:.24em;text-transform:uppercase}
         .education-wall-grid{gap:0}
-        .education-wall-primary{padding-bottom:2rem;border-bottom:1px solid rgba(238,234,224,.15)}
-        .education-wall-secondary{padding-top:2rem}
-        .cred-card{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-width:0;min-height:155px;padding:1rem clamp(.5rem,2vw,1.5rem);border-right:1px solid rgba(238,234,224,.08);text-align:center}
+        .education-wall-primary{padding-bottom:1.4rem;border-bottom:1px solid rgba(238,234,224,.15)}
+        .education-wall-secondary{padding-top:1.4rem}
+        .cred-card{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-width:0;min-height:128px;padding:.75rem clamp(.5rem,2vw,1.5rem);border-right:1px solid rgba(238,234,224,.08);text-align:center}
         .cred-card:nth-child(4n){border-right:0}
-        .cred-card .cred-logo-box{width:100%;justify-content:center;margin-bottom:1rem!important}
-        .cred-card .cred-logo-img{max-width:min(100%,180px)!important}
+        .cred-card .cred-logo-box{width:100%;justify-content:center;margin-bottom:.7rem!important}
+        .cred-card .cred-logo-img{max-width:min(100%,165px)!important}
         .cred-card:hover .cred-logo-img{filter:grayscale(1) contrast(1.2) opacity(1)!important}
-        @media(max-width:820px){.education-wall-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.cred-card:nth-child(4n){border-right:1px solid rgba(238,234,224,.08)}.cred-card:nth-child(2n){border-right:0}.education-wall-primary{padding-bottom:1.25rem}.education-wall-secondary{padding-top:1.25rem}}
-        @media(max-width:560px){.education-wall{padding-block:4rem}.cred-card{min-height:130px;padding:.85rem .45rem}.cred-card .cred-logo-box{height:52px!important;margin-bottom:.7rem!important}.cred-card .cred-logo-img{max-width:130px!important}.cred-card .cred-text p:first-child{font-size:.8rem!important}.cred-card .cred-text p:last-child{font-size:.62rem!important}}
+        @media(max-width:820px){.education-wall-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.cred-card:nth-child(4n){border-right:1px solid rgba(238,234,224,.08)}.cred-card:nth-child(2n){border-right:0}.education-wall-primary{padding-bottom:1rem}.education-wall-secondary{padding-top:1rem}}
+        @media(max-width:560px){.education-wall{padding-block:2.75rem}.cred-card{min-height:118px;padding:.7rem .45rem}.cred-card .cred-logo-box{height:52px!important;margin-bottom:.6rem!important}.cred-card .cred-logo-img{max-width:130px!important}.cred-card .cred-text p:first-child{font-size:.8rem!important}.cred-card .cred-text p:last-child{font-size:.68rem!important}}
         @media(prefers-reduced-motion:reduce){.cred-card,.cred-logo-img{transition:none!important}}
-      `}</style>
-    </section>
-  );
-}
-
-/* ── Section: Tech Development ── */
-function TechDevSection() {
-  const { ref, vis } = useReveal();
-  const [sending, setSending] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState("");
-
-  async function submitBuildRequest(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (sending) return;
-    setSending(true);
-    setError("");
-    const fields = new FormData(event.currentTarget);
-    try {
-      const response = await fetch("/api/intake", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          engagement: "tech-development",
-          name: String(fields.get("name") || "").trim(),
-          email: String(fields.get("email") || "").trim(),
-          org: String(fields.get("organization") || "").trim(),
-          timeline: String(fields.get("timeline") || "").trim(),
-          summary: String(fields.get("project") || "").trim(),
-        }),
-      });
-      if (!response.ok) throw new Error("Your request couldn’t be sent. Please try again.");
-      setSubmitted(true);
-    } catch (submitError) {
-      setError(submitError instanceof Error ? submitError.message : "Your request couldn’t be sent. Please try again.");
-    } finally {
-      setSending(false);
-    }
-  }
-
-  return (
-    <section id="request-build" ref={ref as React.RefObject<HTMLElement>} className="request-build-section">
-      <div className="request-build-inner" style={reveal(vis, { dir: "up", distance: 18 })}>
-        <div className="request-build-copy">
-          <p className="request-build-label">Product &amp; Engineering</p>
-          <h2>Have an idea?<br /><em>Let’s build it.</em></h2>
-          <p>Share a little about what you need. I’ll review it and follow up with a clear next step and a scoped quote.</p>
-          <span className="request-build-aside">Websites · Web apps · Product MVPs</span>
-        </div>
-
-        {submitted ? (
-          <div className="request-build-success" role="status">
-            <span>Request received</span>
-            <h3>Thank you. I’ll be in touch.</h3>
-            <p>Your project details are with me. Expect a follow-up by email within 48 hours.</p>
-          </div>
-        ) : (
-          <form className="request-build-form" onSubmit={submitBuildRequest}>
-            <div className="request-build-fields">
-              <label>Your name<input name="name" required maxLength={120} autoComplete="name" placeholder="Name" /></label>
-              <label>Email address<input name="email" required type="email" maxLength={254} autoComplete="email" placeholder="you@example.com" /></label>
-              <label>Company or project <span>(optional)</span><input name="organization" maxLength={160} autoComplete="organization" placeholder="What should I call it?" /></label>
-              <label>When are you hoping to start? <span>(optional)</span><input name="timeline" maxLength={120} placeholder="e.g. This quarter" /></label>
-              <label className="request-build-project">What would you like to build?<textarea name="project" required maxLength={4000} rows={4} placeholder="Tell me about the product, who it is for, and what you need." /></label>
-            </div>
-            {error && <p className="request-build-error" role="alert">{error}</p>}
-            <button type="submit" disabled={sending}>{sending ? "Sending request…" : "Request a build"}<ArrowRight size={14} /></button>
-            <p className="request-build-privacy">Your details are only used to follow up about this project.</p>
-          </form>
-        )}
-      </div>
-      <style>{`
-        .request-build-section{scroll-margin-top:6rem;padding:clamp(4rem,8vw,7rem) var(--space-x);border-top:1px solid var(--c-border);background:var(--c-surface)}
-        .request-build-inner{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:start;gap:clamp(2.5rem,8vw,8rem);max-width:var(--max-w);margin:0 auto}
-        .request-build-label{margin:0 0 1.3rem;color:var(--c-accent);font:700 .58rem/1.4 var(--font-manjari);letter-spacing:.22em;text-transform:uppercase}
-        .request-build-copy h2{margin:0;color:var(--c-ink);font:400 clamp(2.4rem,5vw,4.4rem)/1.03 var(--font-serif);letter-spacing:-.025em}
-        .request-build-copy h2 em{color:var(--c-accent);font-weight:400}
-        .request-build-copy>p:not(.request-build-label){max-width:30rem;margin:1.35rem 0;color:var(--c-ink-muted);font:400 .9rem/1.8 var(--font-sans)}
-        .request-build-aside{color:var(--c-ink-muted);font:700 .57rem/1.5 var(--font-manjari);letter-spacing:.14em;text-transform:uppercase}
-        .request-build-form{display:grid;gap:1rem}
-        .request-build-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
-        .request-build-fields label{display:grid;align-content:start;gap:.4rem;color:var(--c-ink);font:600 .7rem/1.4 var(--font-sans)}
-        .request-build-fields label span{display:inline;color:var(--c-ink-muted);font-weight:400}
-        .request-build-fields input,.request-build-fields textarea{box-sizing:border-box;width:100%;padding:.8rem .85rem;border:1px solid var(--c-border-strong);border-radius:0;outline-color:var(--c-accent);background:var(--c-bg);color:var(--c-ink);font:400 .82rem/1.5 var(--font-sans)}
-        .request-build-fields textarea{resize:vertical;min-height:118px}
-        .request-build-project{grid-column:1/-1}
-        .request-build-form>button{display:flex;align-items:center;justify-content:space-between;gap:1rem;width:100%;padding:1rem 1.1rem;border:0;background:var(--c-accent);color:var(--c-bg);cursor:pointer;font:700 .65rem var(--font-manjari);letter-spacing:.16em;text-transform:uppercase;transition:opacity .2s}
-        .request-build-form>button:hover{opacity:.86}.request-build-form>button:disabled{opacity:.6;cursor:wait}
-        .request-build-privacy{margin:0;color:var(--c-ink-muted);font:400 .68rem/1.5 var(--font-sans)}
-        .request-build-error{margin:0;color:#a33131;font:400 .78rem/1.5 var(--font-sans)}
-        .request-build-success{padding:clamp(1.5rem,4vw,2.5rem);border:1px solid var(--c-border-strong);background:var(--c-bg)}
-        .request-build-success>span{color:var(--c-accent);font:700 .58rem var(--font-manjari);letter-spacing:.18em;text-transform:uppercase}
-        .request-build-success h3{margin:1rem 0 .6rem;color:var(--c-ink);font:400 1.7rem var(--font-serif)}
-        .request-build-success p{margin:0;color:var(--c-ink-muted);font:400 .85rem/1.7 var(--font-sans)}
-        @media(max-width:760px){.request-build-inner{grid-template-columns:1fr;gap:2.5rem}.request-build-fields{grid-template-columns:1fr}.request-build-project{grid-column:auto}}
       `}</style>
     </section>
   );
@@ -1263,7 +1168,6 @@ export default function Home() {
       <Services />
       <Accreditations />
       <WorkWithDecra />
-      <TechDevSection />
     </>
   );
 }

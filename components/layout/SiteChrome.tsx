@@ -4,7 +4,6 @@ import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
 import { ContactBubble } from "./ContactBubble";
 import { ScrollProgress } from "./ScrollProgress";
-import { FestiveLunchPopup } from "@/components/home/FestiveLunchPopup";
 
 /**
  * Entrora is presented as its own property rather than a page of this site,
@@ -23,7 +22,6 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
       {!standalone && <ScrollProgress />}
       {!standalone && <Navbar />}
       <main>{children}</main>
-      {pathname === "/" && <FestiveLunchPopup />}
       {!standalone && <Footer />}
       {!standalone && <ContactBubble />}
     </>
