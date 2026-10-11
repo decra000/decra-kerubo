@@ -771,7 +771,8 @@ function WorkWithDecra() {
           >Partner <ArrowRight size={13} strokeWidth={1.5} /></button>
         </nav>
         <style>{`
-          .partners-section{--c-bg:#080909;--c-surface:#111111;--c-ink:#eeeae0;--c-ink-muted:#a9aaa0;--c-border:rgba(238,234,224,.16);--c-border-strong:rgba(238,234,224,.24);background:#080909;color:#eeeae0}
+          .partners-section{background:var(--c-bg);color:var(--c-ink)}
+          [data-theme="dark"] .partners-section{--c-bg:#080909;--c-surface:#111111;--c-ink:#eeeae0;--c-ink-muted:#a9aaa0;--c-border:rgba(238,234,224,.16);--c-border-strong:rgba(238,234,224,.24);background:#080909;color:#eeeae0}
           .partner-category-row{display:flex;align-items:center;flex-wrap:wrap;gap:0 1.8rem;margin-top:1.35rem;padding:0 0 .85rem}
           .partner-category-row a{position:relative;padding:.45rem 0;color:var(--c-ink-muted);text-decoration:none;font:400 .9rem/1.5 var(--font-serif);transition:color .2s}
           .partner-category-row a::after{content:'';position:absolute;left:0;right:100%;bottom:0;height:1px;background:var(--c-accent);transition:right .2s}
@@ -1106,12 +1107,12 @@ function CredCard({ c, i, vis, size = "sm" }: { c: Cred; i: number; vis: boolean
         <p style={{
           fontFamily: "var(--font-serif)", fontWeight: 400,
           fontSize: nameSize,
-          color: "#eeeae0", lineHeight: 1.3, marginBottom: "0.45rem",
+          color: "var(--c-ink)", lineHeight: 1.3, marginBottom: "0.45rem",
         }}>{c.name}</p>
         <p style={{
           fontFamily: "var(--font-sans)", fontWeight: 400,
           fontSize: "0.72rem",
-          color: "rgba(238,234,224,0.58)", lineHeight: 1.5,
+          color: "var(--c-ink-muted)", lineHeight: 1.5,
         }} dangerouslySetInnerHTML={{ __html: c.detail }} />
       </div>
     </div>
@@ -1140,8 +1141,10 @@ function Accreditations() {
         </div>
       </div>
       <style>{`
-        .education-wall{position:relative;overflow:hidden;padding:clamp(3rem,5vw,4.25rem) var(--space-x);background:radial-gradient(ellipse at 50% 0%,rgba(92,99,82,.13),transparent 58%),#080909;color:#eeeae0}
-        .education-wall::before{content:'';position:absolute;inset:0;pointer-events:none;opacity:.12;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E")}
+        .education-wall{position:relative;overflow:hidden;padding:clamp(3rem,5vw,4.25rem) var(--space-x);background:radial-gradient(ellipse at 50% 0%,rgba(92,99,82,.05),transparent 58%),var(--c-bg);color:var(--c-ink)}
+        [data-theme="dark"] .education-wall{background:radial-gradient(ellipse at 50% 0%,rgba(92,99,82,.13),transparent 58%),#080909;color:#eeeae0}
+        .education-wall::before{content:'';position:absolute;inset:0;pointer-events:none;opacity:.04;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E")}
+        [data-theme="dark"] .education-wall::before{opacity:.12}
         .education-wall-inner{position:relative;z-index:1;max-width:var(--max-w);margin:0 auto}
         .education-wall-label{margin:0 0 .75rem;color:var(--c-accent);font:700 .58rem/1.4 var(--font-manjari);letter-spacing:.24em;text-transform:uppercase}
         .education-wall-grid{gap:0}
