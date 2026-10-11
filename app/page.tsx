@@ -1068,7 +1068,7 @@ const CREDENTIALS: Cred[] = [
 
 function CredCard({ c, i, vis, size = "sm" }: { c: Cred; i: number; vis: boolean; size?: "lg" | "md" | "sm" }) {
   const [hover, setHover] = useState(false);
-  const logoHeight = size === "lg" ? "clamp(64px,8vw,88px)" : size === "md" ? "clamp(54px,6.5vw,72px)" : "clamp(44px,5vw,56px)";
+  const logoHeight = size === "lg" ? "clamp(64px,8vw,88px)" : size === "md" ? "clamp(42px,4.8vw,56px)" : "clamp(40px,4.5vw,50px)";
   const nameSize = size === "lg" ? "clamp(1rem,1.4vw,1.15rem)" : size === "md" ? "clamp(0.92rem,1.25vw,1.05rem)" : "clamp(0.85rem,1.15vw,0.95rem)";
   return (
     <div
@@ -1145,15 +1145,14 @@ function Accreditations() {
         .education-wall-inner{position:relative;z-index:1;max-width:var(--max-w);margin:0 auto}
         .education-wall-label{margin:0 0 .75rem;color:var(--c-accent);font:700 .58rem/1.4 var(--font-manjari);letter-spacing:.24em;text-transform:uppercase}
         .education-wall-grid{gap:0}
-        .education-wall-primary{padding-bottom:1.4rem;border-bottom:1px solid rgba(238,234,224,.15)}
+        .education-wall-primary{padding-bottom:1.1rem}
         .education-wall-secondary{padding-top:1.4rem}
-        .cred-card{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-width:0;min-height:128px;padding:.75rem clamp(.5rem,2vw,1.5rem);border-right:1px solid rgba(238,234,224,.08);text-align:center}
-        .cred-card:nth-child(4n){border-right:0}
+        .cred-card{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-width:0;min-height:116px;padding:.65rem clamp(.5rem,2vw,1.5rem);text-align:center}
         .cred-card .cred-logo-box{width:100%;justify-content:center;margin-bottom:.7rem!important}
-        .cred-card .cred-logo-img{max-width:min(100%,165px)!important}
+        .cred-card .cred-logo-img{max-width:min(100%,140px)!important}
         .cred-card:hover .cred-logo-img{filter:grayscale(1) contrast(1.2) opacity(1)!important}
-        @media(max-width:820px){.education-wall-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.cred-card:nth-child(4n){border-right:1px solid rgba(238,234,224,.08)}.cred-card:nth-child(2n){border-right:0}.education-wall-primary{padding-bottom:1rem}.education-wall-secondary{padding-top:1rem}}
-        @media(max-width:560px){.education-wall{padding-block:2.75rem}.cred-card{min-height:118px;padding:.7rem .45rem}.cred-card .cred-logo-box{height:52px!important;margin-bottom:.6rem!important}.cred-card .cred-logo-img{max-width:130px!important}.cred-card .cred-text p:first-child{font-size:.8rem!important}.cred-card .cred-text p:last-child{font-size:.68rem!important}}
+        @media(max-width:820px){.education-wall-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.education-wall-primary{padding-bottom:.9rem}.education-wall-secondary{padding-top:.9rem}}
+        @media(max-width:560px){.education-wall{padding-block:2.75rem}.cred-card{min-height:108px;padding:.6rem .45rem}.cred-card .cred-logo-box{height:44px!important;margin-bottom:.55rem!important}.cred-card .cred-logo-img{max-width:112px!important}.cred-card .cred-text p:first-child{font-size:.8rem!important}.cred-card .cred-text p:last-child{font-size:.68rem!important}}
         @media(prefers-reduced-motion:reduce){.cred-card,.cred-logo-img{transition:none!important}}
       `}</style>
     </section>
