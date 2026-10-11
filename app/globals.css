@@ -157,3 +157,6 @@ img { display: block; }
   .consult-grid { grid-template-columns: 1fr !important; }
   .time-grid    { grid-template-columns: repeat(2, 1fr) !important; }
 }
+
+/* Use square corners consistently across the site. */
+*, *::before, *::after { border-radius: 0 !important; }

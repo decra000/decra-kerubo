@@ -6,20 +6,13 @@ const LINKS = [
   ["/#collaborate", "Partners"],
   ["/#services", "Services"],
   ["/engineering", "Research"],
-  ["/?engage=tech-development#collaborate", "Request a Build"],
+  ["/#request-build", "Request a Build"],
 ];
 
 const SOCIALS = [
   {
     label: "LinkedIn",
     url: "https://www.linkedin.com/in/decra/",
-    icon: (
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-        <rect x="2" y="9" width="4" height="12" />
-        <circle cx="4" cy="4" r="2" />
-      </svg>
-    ),
   },
 ];
 
@@ -34,14 +27,13 @@ export function Footer() {
       <div className="site-footer-bottom">
         <div className="site-footer-meta">
           <span>© {new Date().getFullYear()} Decra Kerubo</span>
-          <span>Nairobi, Kenya</span>
         </div>
         <nav className="site-footer-links" aria-label="Footer navigation">
           {LINKS.map(([href, label]) => <Link key={href} href={href}>{label}</Link>)}
         </nav>
         <div className="site-footer-socials">
-          {SOCIALS.map(({ label, url, icon }) => (
-            <a key={label} href={url} target="_blank" rel="noopener noreferrer" aria-label={label}>{icon}<span>{label}</span></a>
+          {SOCIALS.map(({ label, url }) => (
+            <a key={label} href={url} target="_blank" rel="noopener noreferrer" aria-label={label}>{label}</a>
           ))}
         </div>
       </div>
