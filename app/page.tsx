@@ -603,18 +603,45 @@ function WorkWithDecra() {
     return () => { document.removeEventListener("keydown", onKey); document.body.style.overflow = prevOverflow; };
   }, [modalOpen]);
 
-  // Persist the in-progress conversation so a dropped connection, rate limit,
-  // or accidental tab close doesn't erase what someone already typed.
+  // Persist the in-progress conversation so an accidental tab close doesn't
+  // erase completed turns. Failed assistant replies are transient UI state.
   const storageKey = (groupKey: string) => `decra-chat:${groupKey}`;
+  const conversationForStorage = (messages: ChatMsg[]) => {
+    // Failed replies are transient UI state. If the conversation ended on a
+    // failure, also drop that unanswered turn so reopening doesn't show an
+    // orphaned user message with no response.
+    let saved = messages;
+    if (saved.at(-1)?.role === "assistant" && saved.at(-1)?.rateLimited) {
+      let lastSuccessfulAssistant = -1;
+      for (let i = saved.length - 1; i >= 0; i--) {
+        if (saved[i].role === "assistant" && !saved[i].rateLimited) {
+          lastSuccessfulAssistant = i;
+          break;
+        }
+      }
+      saved = lastSuccessfulAssistant >= 0 ? saved.slice(0, lastSuccessfulAssistant + 1) : [];
+    }
+    return saved.filter(m => !(m.role === "assistant" && m.rateLimited));
+  };
   const saveConversation = (groupKey: string, messages: ChatMsg[]) => {
-    try { window.localStorage.setItem(storageKey(groupKey), JSON.stringify(messages)); } catch { /* storage unavailable, non-fatal */ }
+    try {
+      const saved = conversationForStorage(messages);
+      if (saved.length) window.localStorage.setItem(storageKey(groupKey), JSON.stringify(saved));
+      else window.localStorage.removeItem(storageKey(groupKey));
+    } catch { /* storage unavailable, non-fatal */ }
   };
   const loadConversation = (groupKey: string): ChatMsg[] | null => {
     try {
       const raw = window.localStorage.getItem(storageKey(groupKey));
       if (!raw) return null;
       const parsed = JSON.parse(raw);
-      return Array.isArray(parsed) && parsed.length > 0 ? parsed : null;
+      if (!Array.isArray(parsed) || parsed.length === 0) return null;
+      const restored = conversationForStorage(parsed);
+      if (restored.length !== parsed.length) {
+        if (restored.length) window.localStorage.setItem(storageKey(groupKey), JSON.stringify(restored));
+        else window.localStorage.removeItem(storageKey(groupKey));
+      }
+      return restored.length > 0 ? restored : null;
     } catch { return null; }
   };
   const clearConversation = (groupKey: string) => {
