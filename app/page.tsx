@@ -1184,10 +1184,10 @@ function Accreditations() {
         </div>
       </div>
       <style>{`
-        .education-wall{--c-ink:#07210f;--c-ink-muted:#0f3a1c;position:relative;overflow:hidden;padding:clamp(1.75rem,3vw,2.5rem) var(--space-x);background:radial-gradient(ellipse at 50% 0%,rgba(255,255,255,.14),transparent 58%),#8f967e;color:#07210f}
-        .education-wall::before{content:'';position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:multiply;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.28'/%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg viewBox='0 0 600 600' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.012 .02' numOctaves='3' seed='7'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)' opacity='.22'/%3E%3C/svg%3E")}
+        .education-wall{--c-ink:#eeeae0;--c-ink-muted:#c9cdbd;position:relative;overflow:hidden;padding:clamp(1.75rem,3vw,2.5rem) var(--space-x);background:radial-gradient(ellipse at 50% 0%,rgba(143,150,126,.18),transparent 58%),linear-gradient(165deg,#080909 0%,#161a15 35%,#4a5142 72%,#8f967e 112%);color:#eeeae0}
+        .education-wall::before{content:'';position:absolute;inset:0;pointer-events:none;opacity:.35;mix-blend-mode:soft-light;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.28'/%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg viewBox='0 0 600 600' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.012 .02' numOctaves='3' seed='7'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)' opacity='.22'/%3E%3C/svg%3E")}
         .education-wall-inner{position:relative;z-index:1;max-width:var(--max-w);margin:0 auto}
-        .education-wall-label{margin:0 0 .4rem;color:#0f3a1c;font:700 .58rem/1.4 var(--font-manjari);letter-spacing:.24em;text-transform:uppercase}
+        .education-wall-label{margin:0 0 .4rem;color:#b9c4a8;font:700 .58rem/1.4 var(--font-manjari);letter-spacing:.24em;text-transform:uppercase}
         .education-wall-grid{gap:0}
         .education-wall-primary{padding-bottom:.5rem}
         .education-wall-secondary{padding-top:.6rem}
