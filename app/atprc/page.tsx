@@ -74,12 +74,6 @@ export default function AtprcPage() {
     }
   }
 
-  const apply = (
-    <button type="button" className="atprc-apply" onClick={() => openForm()}>
-      Apply to the clinic <ArrowRight size={14} strokeWidth={1.5} aria-hidden />
-    </button>
-  );
-
   return (
     <main style={{ background: "var(--c-bg)", color: "var(--c-ink)" }}>
       {/* Hero */}
@@ -92,8 +86,7 @@ export default function AtprcPage() {
           <p style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(1.15rem,1.6vw,1.4rem)", lineHeight: 1.6, maxWidth: "40rem", marginBottom: "2rem" }}>
             A free product review for technology startups: two every quarter, across the technical and legal questions that decide whether a product is safe to build on.
           </p>
-          {apply}
-          <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", color: "var(--c-ink-muted)", marginTop: "2.25rem", fontSize: "1.05rem" }}>
+          <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", color: "var(--c-ink-muted)", fontSize: "1.05rem" }}>
             Better decisions. Stronger foundations.
           </p>
         </div>
