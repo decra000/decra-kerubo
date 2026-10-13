@@ -296,15 +296,20 @@ function About() {
   return (
     <section id="about" ref={ref as React.RefObject<HTMLElement>} style={SEC}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-        <p style={{ ...LBL, marginBottom: "1.25rem", ...fade(vis) }}>Parallel Technical & Legal Direction</p>
-        <p style={{
+        <p style={{ ...LBL, marginBottom: "1.25rem", ...fade(vis) }}>Parallel technical and legal intervention</p>
+        <div style={{
           ...SERIF("clamp(1.2rem,1.7vw,1.45rem)"),
           maxWidth: "820px",
           lineHeight: 1.6,
           ...reveal(vis, { dir: "scale", distance: 10, delay: 0.05 }),
         }}>
-          I&rsquo;m a <span className="ab-ul ab-ul-gold">Technical Product Counsel</span> and <span className="ab-ul ab-ul-blue">AI Engineer</span> based in Nairobi. I build software, work with development teams to make sound <span className="ab-ul ab-ul-green">architectural and implementation decisions</span>, and <span className="ab-ul ab-ul-red">audit existing systems for technical and legal gaps</span>. I also help founders and investors evaluate technology products, from how they&rsquo;re built to whether they&rsquo;re <span className="ab-ul ab-ul-violet">ready to launch, scale, and operate across different jurisdictions</span>.
-        </p>
+          <p style={{ margin: "0 0 1.25rem" }}>
+            I build software, work with development teams on <span className="ab-ul ab-ul-green">architecture and implementation</span>, and <span className="ab-ul ab-ul-red">audit existing systems for technical and legal gaps</span>.
+          </p>
+          <p style={{ margin: 0 }}>
+            I help founders and investors evaluate technology products, from how they&rsquo;re built to whether they&rsquo;re <span className="ab-ul ab-ul-violet">ready to launch, scale, and operate across different jurisdictions</span>.
+          </p>
+        </div>
       </div>
       <style>{`
         /* Hand-underlined emphasis, like a reader working through a printed page
