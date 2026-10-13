@@ -6,7 +6,7 @@ import { ArrowRight, X } from "lucide-react";
 const LINKS = [
   ["/#about", "About"],
   ["/#collaborate", "Partners"],
-  ["/#services", "Services"],
+  ["/services", "Services"],
   ["/engineering", "Research"],
 ];
 

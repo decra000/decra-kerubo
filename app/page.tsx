@@ -1218,7 +1218,6 @@ export default function Home() {
     <>
       <Hero />
       <About />
-      <Services />
       <Accreditations />
       <WorkWithDecra />
     </>
