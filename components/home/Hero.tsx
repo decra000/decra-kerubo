@@ -51,7 +51,7 @@ export function Hero({ intent }: { intent: Intent }) {
           lineHeight: 1,
           marginBottom: "0.85rem",
           fontWeight: 400,
-        }}>Decra Kerubo</p>
+        }}>Decra</p>
 
         <p style={{
           fontFamily: "var(--font-manjari)",

@@ -62,7 +62,7 @@ export function Footer() {
     <footer className="site-footer">
       <div className="site-footer-bottom">
         <div className="site-footer-meta">
-          <span>© Decra Kerubo</span>
+          <span>© Decra</span>
         </div>
         <nav className="site-footer-links" aria-label="Footer navigation">
           {LINKS.map(([href, label]) => <Link key={href} href={href}>{label}</Link>)}

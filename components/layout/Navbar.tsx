@@ -75,7 +75,7 @@ export function Navbar() {
       }}>
         <div style={{ maxWidth: "var(--max-w)", margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <Link href="/" style={{ textDecoration: "none" }}>
-            <span className="nav-logo" style={{ fontFamily: "var(--font-serif)", fontSize: "1.1rem", color: onHome && !scrolled ? "#29231E" : "var(--c-ink)" }}>Decra Kerubo</span>
+            <span className="nav-logo" style={{ fontFamily: "var(--font-serif)", fontSize: "1.1rem", color: onHome && !scrolled ? "#29231E" : "var(--c-ink)" }}>Decra</span>
           </Link>
 
           <nav className="nav-links">

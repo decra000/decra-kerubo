@@ -165,7 +165,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
               <span className="svc-breadcrumb-sep" aria-hidden="true" />
               <Link href="/services">All areas</Link>
             </nav>
-            <p className="svc-kicker">DECRA KERUBO · NAIROBI, KENYA</p>
+            <p className="svc-kicker">DECRA · NAIROBI, KENYA</p>
             <h1 className="svc-hero-title">
               {group.id === "embedded-product-counsel" ? "Technical Product Counsel in Kenya" : group.label}
             </h1>
