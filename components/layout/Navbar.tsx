@@ -12,6 +12,7 @@ import { useTheme } from "./ThemeProvider";
 const links = [
   { href: "/engineering",  label: "Innovation-Research" },
   { href: "/#collaborate", label: "Partners" },
+  { href: "/atprc", label: "ATPRC" },
 ];
 
 const lk: React.CSSProperties = {
