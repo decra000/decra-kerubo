@@ -79,7 +79,7 @@ export default function AtprcPage() {
         <div className="atprc-wrap">
           <p style={{ ...LBL, marginBottom: "2rem" }}>ATPRC Initiative</p>
           <h1 className="atprc-title">African Tech Product Risk Clinic</h1>
-          <p className="atprc-lede">A free product review for technology startups.</p>
+          <p className="atprc-lede">A quarterly complimentary product review for technology startups.</p>
         </div>
       </section>
 
