@@ -1184,10 +1184,10 @@ function Accreditations() {
         </div>
       </div>
       <style>{`
-        .education-wall{--c-ink:#eeeae0;--c-ink-muted:#c3d4cc;position:relative;overflow:hidden;padding:clamp(3rem,5vw,4.25rem) var(--space-x);background:radial-gradient(ellipse at 50% 0%,rgba(255,255,255,.07),transparent 58%),#2F5D50;color:#eeeae0}
+        .education-wall{--c-ink:#07210f;--c-ink-muted:#0f3a1c;position:relative;overflow:hidden;padding:clamp(3rem,5vw,4.25rem) var(--space-x);background:radial-gradient(ellipse at 50% 0%,rgba(255,255,255,.18),transparent 58%),rgba(29,185,84,.8);color:#07210f}
         .education-wall::before{content:'';position:absolute;inset:0;pointer-events:none;opacity:.12;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E")}
         .education-wall-inner{position:relative;z-index:1;max-width:var(--max-w);margin:0 auto}
-        .education-wall-label{margin:0 0 .75rem;color:#cfe3da;font:700 .58rem/1.4 var(--font-manjari);letter-spacing:.24em;text-transform:uppercase}
+        .education-wall-label{margin:0 0 .75rem;color:#0f3a1c;font:700 .58rem/1.4 var(--font-manjari);letter-spacing:.24em;text-transform:uppercase}
         .education-wall-grid{gap:0}
         .education-wall-primary{padding-bottom:1.1rem}
         .education-wall-secondary{padding-top:1.4rem}
