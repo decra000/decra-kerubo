@@ -303,9 +303,29 @@ function About() {
           lineHeight: 1.6,
           ...reveal(vis, { dir: "scale", distance: 10, delay: 0.05 }),
         }}>
-          I am a Nairobi-based Technical Product Counsel and AI Engineer with a Bachelor of Laws and a BSc in Computer Science (Artificial Intelligence). I work with product teams, founders, investors and technology procurers to connect how a product is designed and built with the legal, privacy and risk questions around it.
+          I&rsquo;m a <span className="ab-ul ab-ul-gold">Technical Product Counsel</span> and <span className="ab-ul ab-ul-blue">AI Engineer</span> based in Nairobi. I build software, work with development teams to make sound <span className="ab-ul ab-ul-green">architectural and implementation decisions</span>, and <span className="ab-ul ab-ul-red">audit existing systems for technical and legal gaps</span>. I also help founders and investors evaluate technology products, from how they&rsquo;re built to whether they&rsquo;re <span className="ab-ul ab-ul-violet">ready to launch, scale, and operate across different jurisdictions</span>.
         </p>
       </div>
+      <style>{`
+        /* Hand-underlined emphasis, like a reader working through a printed page
+           with coloured pens: a loose, slightly slanted stroke under the text
+           rather than a box-style highlight. */
+        .ab-ul{
+          --ul: #c9a227;
+          background-image: linear-gradient(var(--ul), var(--ul));
+          background-repeat: no-repeat;
+          background-size: 100% 0.14em;
+          background-position: 0 96%;
+          padding-bottom: 0.06em;
+          -webkit-box-decoration-break: clone;
+          box-decoration-break: clone;
+        }
+        .ab-ul-gold{ --ul: #d4a72c; }
+        .ab-ul-blue{ --ul: #3b82c4; }
+        .ab-ul-green{ --ul: #3f9b6a; }
+        .ab-ul-red{ --ul: #d1495b; }
+        .ab-ul-violet{ --ul: #8b6bc9; }
+      `}</style>
     </section>
   );
 }
