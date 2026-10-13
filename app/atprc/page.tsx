@@ -22,8 +22,8 @@ const FIELD_LBL: React.CSSProperties = {
 
 const STEPS = [
   { Icon: ClipboardList, title: "How it works", text: "Apply with a short introduction to your startup and choose the division you want reviewed." },
-  { Icon: Target, title: "What you get", text: "A free product review in your chosen division, from Decra directly." },
-  { Icon: Users, title: "Who it is for", text: "Technology startups building products for African markets." },
+  { Icon: Target, title: "What you get", text: "A complimentary 45–60 minute consultation in your chosen division, ending in practical next steps." },
+  { Icon: Users, title: "Who it is for", text: "Early-stage founders working through questions about technology, product, AI, and law." },
   { Icon: CalendarDays, title: "Every quarter", text: "Two startups are selected each quarter from the applications received." },
 ];
 
@@ -133,14 +133,20 @@ export default function AtprcPage() {
       <section className="atprc-panel" style={{ padding: "clamp(3rem,6vw,5rem) var(--space-x)" }}>
         <div className="atprc-panel-grid" style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
           <div>
-            <span className="atprc-pill">Special initiative</span>
-            <h2 className="t-display t-display-lg" style={{ margin: "1.1rem 0 1.25rem", maxWidth: "14ch" }}>
-              Two free startup reviews every quarter
+            <span className="atprc-pill">A complimentary initiative</span>
+            <h2 className="t-display t-display-lg" style={{ margin: "1.1rem 0 1.25rem", maxWidth: "16ch" }}>
+              Good ideas deserve a stronger foundation.
             </h2>
-            <p className="t-body" style={{ maxWidth: "30rem", marginBottom: "2rem" }}>
-              The ATPRC Initiative is a standing commitment: each quarter, two technology startups are selected for a free review in the division they apply under.
+            <p className="t-body" style={{ maxWidth: "32rem", marginBottom: "1rem" }}>
+              I offer two complimentary consultations each quarter to early-stage founders working through important questions about technology, product, AI, and law.
             </p>
-            {apply}
+            <p className="t-body" style={{ maxWidth: "32rem", marginBottom: "2rem" }}>
+              Bring a challenge you&rsquo;re facing. We&rsquo;ll work through it together and identify practical next steps.
+            </p>
+            <button type="button" className="atprc-apply" onClick={() => openForm()}>
+              Apply for a consultation <ArrowRight size={14} strokeWidth={1.5} aria-hidden />
+            </button>
+            <p className="t-body-sm" style={{ marginTop: "1.25rem" }}>Two startups per quarter &middot; 45&ndash;60 minutes</p>
           </div>
           <ul className="atprc-steps">
             {STEPS.map(({ Icon, title, text }) => (
