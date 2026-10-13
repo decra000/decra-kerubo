@@ -15,6 +15,7 @@ const routes: { path: string; priority: number; changeFrequency: "weekly" | "mon
   { path: "/partner", priority: 0.7, changeFrequency: "monthly" },
   { path: "/start", priority: 0.7, changeFrequency: "monthly" },
   { path: "/book", priority: 0.7, changeFrequency: "monthly" },
+  { path: "/atprc", priority: 0.6, changeFrequency: "monthly" },
   { path: "/the-1000", priority: 0.7, changeFrequency: "weekly" },
   { path: "/entrora", priority: 0.6, changeFrequency: "monthly" },
   { path: "/art", priority: 0.5, changeFrequency: "monthly" },

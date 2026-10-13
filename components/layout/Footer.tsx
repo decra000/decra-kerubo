@@ -8,6 +8,7 @@ const LINKS = [
   ["/#collaborate", "Partners"],
   ["/services", "Commitments"],
   ["/engineering", "Research"],
+  ["/atprc", "ATPRC"],
 ];
 
 const SOCIALS = [
