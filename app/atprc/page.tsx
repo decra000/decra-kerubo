@@ -1,15 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, Check, Compass, Cpu, Layers, Scale, ShieldCheck, X, CalendarDays, Users, Target, ClipboardList } from "lucide-react";
+import { ArrowRight, Check, X, CalendarDays, Users, Target, ClipboardList } from "lucide-react";
 import { ATPRC_DIVISIONS, ATPRC_STAGES } from "@/lib/atprc";
-
-const ICONS: Record<string, React.ComponentType<{ size?: number; strokeWidth?: number; "aria-hidden"?: boolean }>> = {
-  architecture: Layers,
-  "ai-risk": Cpu,
-  "data-protection": ShieldCheck,
-  compliance: Scale,
-  "early-stage": Compass,
-};
 
 const LBL: React.CSSProperties = {
   fontFamily: "var(--font-manjari)", fontWeight: 700, fontSize: "0.58rem",
@@ -104,28 +96,6 @@ export default function AtprcPage() {
           <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", color: "var(--c-ink-muted)", marginTop: "2.25rem", fontSize: "1.05rem" }}>
             Better decisions. Stronger foundations.
           </p>
-        </div>
-      </section>
-
-      {/* Divisions */}
-      <section style={{ padding: "clamp(2.5rem,5vw,4rem) var(--space-x)", borderTop: "1px solid var(--c-border)" }}>
-        <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-          <h2 className="t-display t-display-lg" style={{ marginBottom: "0.75rem" }}>Choose a division</h2>
-          <p className="t-body" style={{ maxWidth: "40rem", marginBottom: "2.5rem" }}>
-            Each application is for one division. Pick the area where a review would help you most.
-          </p>
-          <div className="atprc-cards">
-            {ATPRC_DIVISIONS.map((d) => {
-              const Icon = ICONS[d.id];
-              return (
-                <button key={d.id} type="button" className="atprc-card" onClick={() => openForm(d.id)}>
-                  <span className="atprc-ico"><Icon size={22} strokeWidth={1.5} aria-hidden /></span>
-                  <span className="atprc-card-title">{d.label}</span>
-                  <span className="atprc-card-text">{d.blurb}</span>
-                </button>
-              );
-            })}
-          </div>
         </div>
       </section>
 
@@ -274,17 +244,8 @@ export default function AtprcPage() {
           transition:filter .2s, transform .2s;
         }
         .atprc-apply:hover{ filter:brightness(1.12); transform:translateY(-1px); }
-        .atprc-apply:focus-visible, .atprc-card:focus-visible{ outline:2px solid var(--c-accent); outline-offset:3px; }
+        .atprc-apply:focus-visible{ outline:2px solid var(--c-accent); outline-offset:3px; }
 
-        .atprc-cards{ display:grid; grid-template-columns:repeat(5, minmax(0,1fr)); gap:1.25rem; }
-        .atprc-card{
-          display:flex; flex-direction:column; align-items:flex-start; gap:.75rem; text-align:left; cursor:pointer;
-          padding:1.4rem 1.2rem; border:1px solid var(--c-border); border-radius:10px; background:transparent; color:var(--c-ink);
-          transition:border-color .2s, background .2s, transform .2s;
-        }
-        .atprc-card:hover{ border-color:var(--c-accent); background:var(--c-surface); transform:translateY(-2px); }
-        .atprc-card-title{ font-family:var(--font-serif); font-size:1.05rem; line-height:1.3; }
-        .atprc-card-text{ font-size:.8rem; line-height:1.65; color:var(--c-ink-muted); }
         .atprc-ico{
           display:inline-flex; align-items:center; justify-content:center; width:46px; height:46px; border-radius:50%;
           color:var(--c-accent); background:color-mix(in srgb, var(--c-accent) 14%, transparent);
@@ -316,9 +277,8 @@ export default function AtprcPage() {
         .atprc-grid{ display:grid; grid-template-columns:1fr 1fr; gap:1.1rem; }
         .atprc-div:hover{ border-color:var(--c-accent) !important; }
 
-        @media (max-width: 1100px){ .atprc-cards{ grid-template-columns:repeat(2, minmax(0,1fr)); } }
         @media (max-width: 860px){ .atprc-panel-grid{ grid-template-columns:1fr; } .atprc-steps{ padding-left:0; border-left:none; } }
-        @media (max-width: 640px){ .atprc-cards{ grid-template-columns:1fr; } .atprc-grid{ grid-template-columns:1fr; } .atprc-apply{ width:100%; justify-content:center; } }
+        @media (max-width: 640px){ .atprc-grid{ grid-template-columns:1fr; } .atprc-apply{ width:100%; justify-content:center; } }
       `}</style>
     </main>
   );
