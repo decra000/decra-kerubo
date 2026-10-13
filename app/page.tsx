@@ -297,6 +297,7 @@ function About() {
     <section id="about" ref={ref as React.RefObject<HTMLElement>} style={SEC}>
       <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
         <p style={{ ...LBL, marginBottom: "1.25rem", ...fade(vis) }}>Parallel technical and legal intervention</p>
+        <div className="about-row">
         <div style={{
           ...SERIF("clamp(1.2rem,1.7vw,1.45rem)"),
           maxWidth: "820px",
@@ -304,33 +305,21 @@ function About() {
           ...reveal(vis, { dir: "scale", distance: 10, delay: 0.05 }),
         }}>
           <p style={{ margin: "0 0 1.25rem" }}>
-            I build software, work with development teams on <span className="ab-ul ab-ul-green">architecture and implementation</span>, and <span className="ab-ul ab-ul-red">audit existing systems for technical and legal gaps</span>.
+            I build software, work with development teams on architecture and implementation, and audit existing systems for technical and legal gaps.
           </p>
           <p style={{ margin: 0 }}>
-            I help founders and investors evaluate technology products, from how they&rsquo;re built to whether they&rsquo;re <span className="ab-ul ab-ul-violet">ready to launch, scale, and operate across different jurisdictions</span>.
+            I help founders and investors evaluate technology products, from how they&rsquo;re built to whether they&rsquo;re ready to launch, scale, and operate across different jurisdictions.
           </p>
         </div>
-      </div>
       <style>{`
-        /* Hand-underlined emphasis, like a reader working through a printed page
-           with coloured pens: a loose, slightly slanted stroke under the text
-           rather than a box-style highlight. */
-        .ab-ul{
-          --ul: #c9a227;
-          background-image: linear-gradient(var(--ul), var(--ul));
-          background-repeat: no-repeat;
-          background-size: 100% 0.14em;
-          background-position: 0 96%;
-          padding-bottom: 0.06em;
-          -webkit-box-decoration-break: clone;
-          box-decoration-break: clone;
-        }
-        .ab-ul-gold{ --ul: #d4a72c; }
-        .ab-ul-blue{ --ul: #3b82c4; }
-        .ab-ul-green{ --ul: #3f9b6a; }
-        .ab-ul-red{ --ul: #d1495b; }
-        .ab-ul-violet{ --ul: #8b6bc9; }
+        .about-row{ display:flex; align-items:flex-end; justify-content:space-between; gap:2rem; }
+        .about-me-btn{ flex:none; display:inline-flex; align-items:center; gap:0.6rem; padding:0.85rem 1.4rem; border:1px solid var(--c-ink); color:var(--c-ink); font-family:var(--font-manjari); font-weight:700; font-size:0.62rem; letter-spacing:0.22em; text-transform:uppercase; text-decoration:none; transition:background .25s ease,color .25s ease; }
+        .about-me-btn:hover{ background:var(--c-ink); color:var(--c-bg,#fff); }
+        @media (max-width: 760px){ .about-row{ flex-direction:column; align-items:flex-start; } }
       `}</style>
+        <a href="#education" className="about-me-btn" style={fade(vis)}>About me <ArrowRight size={13} strokeWidth={1.5} /></a>
+        </div>
+      </div>
     </section>
   );
 }
@@ -341,6 +330,8 @@ function About() {
    with every category visible there was nothing left to switch between,
    and the per-service detail they used to reveal now lives on the
    /services/<stage> pages. */
+
+const HOME_SERVICE_IDS = ["embedded-product-counsel", "technical-legal-subcontractor", "technical-development", "product-legal-commercialization"];
 
 function Services() {
   const { ref, vis } = useReveal();
@@ -357,7 +348,7 @@ function Services() {
         <p style={{ ...LBL, marginBottom: "1.5rem", ...fade(vis) }}>Services</p>
 
         <div className="svc-acc" style={{ ...reveal(vis, { delay: 0.05, dir: "up", distance: 22 }) }}>
-          {SERVICE_GROUPS.map((g) => {
+          {HOME_SERVICE_IDS.map((id) => SERVICE_GROUPS.find((g) => g.id === id)!).map((g) => {
             const isOpen = g.id === openId;
             return (
               <div key={g.id} className="svc-acc-item">
@@ -1177,7 +1168,7 @@ function Accreditations() {
   const row1 = [CREDENTIALS[0], CREDENTIALS[1], CREDENTIALS[3], CREDENTIALS[2]]; // ALU, Nazarene, Oxford, KSL
   const row2 = [CREDENTIALS[4], CREDENTIALS[5], CREDENTIALS[6], CREDENTIALS[7]]; // CMU, Cisco, HKUST, Qualys
   return (
-    <section ref={ref as React.RefObject<HTMLElement>} className="education-wall">
+    <section ref={ref as React.RefObject<HTMLElement>} id="education" className="education-wall">
       <div className="education-wall-inner">
         <p className="education-wall-label" style={fade(vis)}>Education &amp; Training</p>
         <div style={{
@@ -1218,6 +1209,7 @@ export default function Home() {
     <>
       <Hero />
       <About />
+      <Services />
       <Accreditations />
       <WorkWithDecra />
     </>

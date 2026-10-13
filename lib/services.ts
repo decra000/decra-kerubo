@@ -574,7 +574,7 @@ export const SERVICE_GROUPS: ServiceGroup[] = [
     id: "embedded-product-counsel",
     label: "Embedded Product Counsel",
     description:
-      "Ongoing technical product counsel for technology teams that need product, engineering, privacy and governance decisions considered together throughout a defined stage of development or growth.",
+      "I engage as a fractional or project-based AI and technology analyst and guide, steering teams toward technical stability and legal compliance continuity, including QA, system design, industry compliance, and jurisdictional and global compliance.",
     kind: "engagement",
     arrangementHeading: "How ongoing product counsel works",
     searchTitle: "Technical Product Counsel in Kenya | Embedded Product Advice",
