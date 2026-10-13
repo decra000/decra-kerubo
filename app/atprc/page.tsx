@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, Check, X, CalendarDays, Users, Target, ClipboardList } from "lucide-react";
+import { ArrowRight, Check, X } from "lucide-react";
 import { ATPRC_DIVISIONS, ATPRC_STAGES } from "@/lib/atprc";
 
 const LBL: React.CSSProperties = {
@@ -13,10 +13,9 @@ const FIELD_LBL: React.CSSProperties = {
 };
 
 const STEPS = [
-  { Icon: ClipboardList, title: "How it works", text: "Apply with a short introduction to your startup and choose the division you want reviewed." },
-  { Icon: Target, title: "What you get", text: "A complimentary 45–60 minute consultation in your chosen division, ending in practical next steps." },
-  { Icon: Users, title: "Who it is for", text: "Early-stage founders working through questions about technology, product, AI, and law." },
-  { Icon: CalendarDays, title: "Every quarter", text: "Two startups are selected each quarter from the applications received." },
+  { title: "Apply to join", text: "Tell me about your startup and choose the division you would like reviewed." },
+  { title: "Two startups are admitted each quarter", text: "I read every application and select who joins the clinic." },
+  { title: "I review what you share", text: "Once you have joined, you show me your product and I evaluate it in your chosen division." },
 ];
 
 export default function AtprcPage() {
@@ -76,52 +75,35 @@ export default function AtprcPage() {
 
   return (
     <main style={{ background: "var(--c-bg)", color: "var(--c-ink)" }}>
-      {/* Hero */}
-      <section style={{ padding: "clamp(7rem,12vw,10rem) var(--space-x) clamp(3rem,6vw,5rem)" }}>
-        <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
-          <p style={{ ...LBL, marginBottom: "1.25rem" }}>Technology / Risk / Africa</p>
-          <h1 className="t-display t-display-xl" style={{ maxWidth: "15ch", marginBottom: "1.5rem" }}>
-            African Tech Product Risk Clinic
-          </h1>
-          <p style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(1.15rem,1.6vw,1.4rem)", lineHeight: 1.6, maxWidth: "40rem", marginBottom: "2rem" }}>
-            A free product review for technology startups: two every quarter, across the technical and legal questions that decide whether a product is safe to build on.
-          </p>
-          <p style={{ fontFamily: "var(--font-serif)", fontStyle: "italic", color: "var(--c-ink-muted)", fontSize: "1.05rem" }}>
-            Better decisions. Stronger foundations.
-          </p>
+      <section className="atprc-hero">
+        <div className="atprc-wrap">
+          <p style={{ ...LBL, marginBottom: "2rem" }}>ATPRC Initiative</p>
+          <h1 className="atprc-title">African Tech Product Risk Clinic</h1>
+          <p className="atprc-lede">A free product review for technology startups.</p>
         </div>
       </section>
 
-      {/* Initiative panel */}
-      <section className="atprc-panel" style={{ padding: "clamp(3rem,6vw,5rem) var(--space-x)" }}>
-        <div className="atprc-panel-grid" style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
+      <section className="atprc-body">
+        <div className="atprc-wrap atprc-cols">
           <div>
-            <span className="atprc-pill">A complimentary initiative</span>
-            <h2 className="t-display t-display-lg" style={{ margin: "1.1rem 0 1.25rem", maxWidth: "16ch" }}>
-              Good ideas deserve a stronger foundation.
-            </h2>
-            <p className="t-body" style={{ maxWidth: "32rem", marginBottom: "1rem" }}>
-              I offer two complimentary consultations each quarter to early-stage founders working through important questions about technology, product, AI, and law.
-            </p>
-            <p className="t-body" style={{ maxWidth: "32rem", marginBottom: "2rem" }}>
-              Bring a challenge you&rsquo;re facing. We&rsquo;ll work through it together and identify practical next steps.
+            <p className="atprc-copy">
+              The clinic is open to technology startups that want a second, independent look at what they are building. Startups that join share their product with me, and I review it in the division they choose.
             </p>
             <button type="button" className="atprc-apply" onClick={() => openForm()}>
-              Apply for a consultation <ArrowRight size={14} strokeWidth={1.5} aria-hidden />
+              Join the clinic <ArrowRight size={14} strokeWidth={1.5} aria-hidden />
             </button>
-            <p className="t-body-sm" style={{ marginTop: "1.25rem" }}>Two startups per quarter &middot; 45&ndash;60 minutes</p>
           </div>
-          <ul className="atprc-steps">
-            {STEPS.map(({ Icon, title, text }) => (
+          <ol className="atprc-steps">
+            {STEPS.map(({ title, text }, i) => (
               <li key={title}>
-                <span className="atprc-ico atprc-ico-sm"><Icon size={18} strokeWidth={1.5} aria-hidden /></span>
+                <span className="atprc-num" aria-hidden>{String(i + 1).padStart(2, "0")}</span>
                 <span>
                   <strong>{title}</strong>
                   <span>{text}</span>
                 </span>
               </li>
             ))}
-          </ul>
+          </ol>
         </div>
       </section>
 
@@ -136,18 +118,18 @@ export default function AtprcPage() {
                 <p id="atprc-form-title" style={{ display: "flex", alignItems: "center", gap: "0.6rem", fontFamily: "var(--font-serif)", fontSize: "1.5rem", marginBottom: "0.75rem" }}>
                   <Check size={20} aria-hidden /> Application received
                 </p>
-                <p className="t-body">A confirmation has been sent to your email. You will hear from Decra once this quarter&rsquo;s applications have been considered.</p>
+                <p className="t-body">A confirmation has been sent to your email. I will be in touch once this quarter&rsquo;s applications have been considered.</p>
                 <button type="button" className="btn-outline" style={{ marginTop: "1.5rem" }} onClick={closeForm}>Close</button>
               </div>
             ) : (
               <form onSubmit={onSubmit} style={{ display: "grid", gap: "1.4rem" }}>
                 <div>
-                  <p style={{ ...LBL, marginBottom: "0.5rem" }}>ATPRC application</p>
-                  <h2 id="atprc-form-title" className="t-display t-display-md">Apply for a free review</h2>
+                  <p style={{ ...LBL, marginBottom: "0.5rem" }}>African Tech Product Risk Clinic</p>
+                  <h2 id="atprc-form-title" className="t-display t-display-md">Apply to join the clinic</h2>
                 </div>
 
                 <fieldset style={{ border: "none", padding: 0, margin: 0 }}>
-                  <legend style={{ ...FIELD_LBL, marginBottom: "0.75rem" }}>Division to be reviewed *</legend>
+                  <legend style={{ ...FIELD_LBL, marginBottom: "0.75rem" }}>Division you would like reviewed *</legend>
                   <div style={{ display: "grid", gap: "0.5rem" }}>
                     {ATPRC_DIVISIONS.map((d) => {
                       const on = division === d.id;
@@ -230,32 +212,29 @@ export default function AtprcPage() {
       )}
 
       <style>{`
+        .atprc-wrap{ max-width:var(--max-w); margin:0 auto; }
+        .atprc-hero{ padding:clamp(8rem,16vw,13rem) var(--space-x) clamp(3rem,6vw,5rem); }
+        .atprc-title{
+          font-family:var(--font-serif); font-weight:400; letter-spacing:-0.015em; line-height:1.02;
+          font-size:clamp(2.8rem,8vw,6.4rem); max-width:12ch; margin:0 0 2rem;
+        }
+        .atprc-lede{ font-family:var(--font-serif); font-size:clamp(1.25rem,2.2vw,1.8rem); line-height:1.4; margin:0; color:var(--c-ink-muted); }
+        .atprc-body{ padding:clamp(2.5rem,5vw,4rem) var(--space-x) clamp(4rem,8vw,7rem); border-top:1px solid var(--c-border); }
+        .atprc-cols{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(2.5rem,7vw,7rem); align-items:start; }
+        .atprc-copy{ font-size:1.02rem; line-height:1.85; color:var(--c-ink); max-width:30rem; margin:0 0 2.25rem; }
         .atprc-apply{
           display:inline-flex; align-items:center; gap:.7rem; padding:.95rem 1.6rem; cursor:pointer;
-          border:1px solid var(--c-accent); background:var(--c-accent); color:var(--c-bg);
+          border:1px solid var(--c-ink); background:var(--c-ink); color:var(--c-bg);
           font:700 .64rem var(--font-manjari); letter-spacing:.18em; text-transform:uppercase;
-          transition:filter .2s, transform .2s;
+          transition:opacity .2s, transform .2s;
         }
-        .atprc-apply:hover{ filter:brightness(1.12); transform:translateY(-1px); }
+        .atprc-apply:hover{ opacity:.85; transform:translateY(-1px); }
         .atprc-apply:focus-visible{ outline:2px solid var(--c-accent); outline-offset:3px; }
-
-        .atprc-ico{
-          display:inline-flex; align-items:center; justify-content:center; width:46px; height:46px; border-radius:50%;
-          color:var(--c-accent); background:color-mix(in srgb, var(--c-accent) 14%, transparent);
-        }
-        .atprc-ico-sm{ width:38px; height:38px; flex:none; }
-
-        .atprc-panel{ background:color-mix(in srgb, var(--c-accent) 9%, var(--c-bg)); border-top:1px solid var(--c-border); }
-        .atprc-panel-grid{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(2rem,6vw,5rem); align-items:center; }
-        .atprc-pill{
-          display:inline-block; padding:.35rem .8rem; border-radius:999px; font:700 .58rem var(--font-manjari);
-          letter-spacing:.16em; text-transform:uppercase; color:var(--c-accent);
-          background:color-mix(in srgb, var(--c-accent) 16%, transparent);
-        }
-        .atprc-steps{ list-style:none; margin:0; padding:0 0 0 clamp(1rem,3vw,2.5rem); display:grid; gap:1.5rem; border-left:1px solid var(--c-border); }
-        .atprc-steps li{ display:flex; gap:1rem; align-items:flex-start; }
-        .atprc-steps li > span:last-child{ display:flex; flex-direction:column; gap:.2rem; font-size:.88rem; line-height:1.6; color:var(--c-ink-muted); }
-        .atprc-steps strong{ font-family:var(--font-sans); font-weight:600; color:var(--c-ink); }
+        .atprc-steps{ list-style:none; margin:0; padding:0; border-top:1px solid var(--c-border); }
+        .atprc-steps li{ display:flex; gap:1.5rem; align-items:baseline; padding:1.5rem 0; border-bottom:1px solid var(--c-border); }
+        .atprc-num{ flex:none; font-family:var(--font-manjari); font-weight:700; font-size:.62rem; letter-spacing:.2em; color:var(--c-accent); }
+        .atprc-steps li > span:last-child{ display:flex; flex-direction:column; gap:.35rem; font-size:.9rem; line-height:1.7; color:var(--c-ink-muted); }
+        .atprc-steps strong{ font-family:var(--font-serif); font-weight:400; font-size:1.2rem; line-height:1.3; color:var(--c-ink); }
 
         .atprc-overlay{
           position:fixed; inset:0; z-index:200; display:flex; align-items:flex-start; justify-content:center;
@@ -270,7 +249,7 @@ export default function AtprcPage() {
         .atprc-grid{ display:grid; grid-template-columns:1fr 1fr; gap:1.1rem; }
         .atprc-div:hover{ border-color:var(--c-accent) !important; }
 
-        @media (max-width: 860px){ .atprc-panel-grid{ grid-template-columns:1fr; } .atprc-steps{ padding-left:0; border-left:none; } }
+        @media (max-width: 860px){ .atprc-cols{ grid-template-columns:1fr; } }
         @media (max-width: 640px){ .atprc-grid{ grid-template-columns:1fr; } .atprc-apply{ width:100%; justify-content:center; } }
       `}</style>
     </main>
